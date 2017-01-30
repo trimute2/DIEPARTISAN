@@ -28,7 +28,5 @@ namespace GDAPSIIGame
             this.weapon = weapon;
             this.texture = texture;
         }
-
-        
     }
 }
