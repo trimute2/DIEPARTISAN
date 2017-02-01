@@ -20,7 +20,7 @@ namespace GDAPSIIGame
         /// <param name="texture"></param>
         /// <param name="position"></param>
         /// <param name="direction"></param>
-        public Projectile(Texture2D texture, Rectangle position, Vector2 direction) : base(texture, position)
+        public Projectile(Texture2D texture, Vector2 position, Vector2 direction, Rectangle boundingBox) : base(texture, position, boundingBox)
         {
             this.direction = direction;
         }

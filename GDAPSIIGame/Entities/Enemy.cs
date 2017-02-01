@@ -10,13 +10,13 @@ namespace GDAPSIIGame.Entities
 {
     class Enemy : Entity
     {
-        public Enemy(int health, int moveSpeed, Texture2D texture, Rectangle position) : base(health, moveSpeed, texture, position)
+        public Enemy(int health, int moveSpeed, Texture2D texture, Vector2 position, Rectangle boundingBox) : base(health, moveSpeed, texture, position, boundingBox)
         {
         }
 
         public void Move(GameObject thingToMoveTo)
         {
-            
+            //Position - thingToMoveTo.Position;
         } 
     }
 }

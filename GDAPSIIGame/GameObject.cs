@@ -13,25 +13,27 @@ namespace GDAPSIIGame
     public class GameObject
     {
         private Texture2D texture;
-        private Rectangle position;
+        private Vector2 position;
+        private Rectangle boundingBox;
 
-        public GameObject(Texture2D texture, Rectangle position) {
+        public GameObject(Texture2D texture, Vector2 position, Rectangle boundingBox) {
             this.texture = texture;
             this.position = position;
+            this.boundingBox = boundingBox;
         }
 
-        public int X {
+        public float X {
             get { return position.X; }
             set { position.X = value; }
         }
 
-        public int Y
+        public float Y
         {
             get { return position.Y; }
             set { position.Y = value; }
         }
 
-        public Rectangle Position
+        public Vector2 Position
         {
             get { return position; }
         }
@@ -45,6 +47,7 @@ namespace GDAPSIIGame
             sb.Draw(
                 texture,
                 position,
+                boundingBox,
                 Color.White);
         }
 
