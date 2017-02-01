@@ -39,10 +39,12 @@ namespace GDAPSIIGame
 
         }
 
-        protected override void Update(GameTime gameTime)
-        {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
+		protected override void Update(GameTime gameTime)
+		{
+			if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+				Exit();
+
+			ScreenWrap(player);
 			previousKbState = kbState;
 			kbState = Keyboard.GetState();
 
@@ -65,9 +67,29 @@ namespace GDAPSIIGame
 			}
 
 			base.Update(gameTime);
-        }
+		}
 
-        protected override void Draw(GameTime gameTime)
+		private void ScreenWrap(GameObject objToWrap)
+		{
+			if (objToWrap.X < 0)
+			{
+				objToWrap.X = GraphicsDevice.Viewport.Width - objToWrap.X;
+			}
+			else if (objToWrap.X > GraphicsDevice.Viewport.Width)
+			{
+				objToWrap.X = objToWrap.X - GraphicsDevice.Viewport.Width;
+			}
+			if (objToWrap.Y < 0)
+			{
+				objToWrap.Y = GraphicsDevice.Viewport.Height - objToWrap.Y;
+			}
+			else if (objToWrap.Y > GraphicsDevice.Viewport.Height)
+			{
+				objToWrap.Y = objToWrap.Y - GraphicsDevice.Viewport.Height;
+			}
+		}
+
+		protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 			spriteBatch.Begin();
