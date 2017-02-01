@@ -21,7 +21,7 @@ namespace GDAPSIIGame
 
         protected override void Initialize()
         {
-			player = new GameObject(playerTexture,new Rectangle(0,0,5,5)); 
+			player = new GameObject(playerTexture,new Rectangle(0,0,50,50)); 
 			kbState = new KeyboardState();
 			previousKbState = kbState;
 			base.Initialize();
@@ -31,6 +31,7 @@ namespace GDAPSIIGame
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
 			playerTexture = Content.Load<Texture2D>("player");
+			player.Texture = playerTexture;
         }
 
         protected override void UnloadContent()
@@ -42,6 +43,8 @@ namespace GDAPSIIGame
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
+			previousKbState = kbState;
+			kbState = Keyboard.GetState();
 
 			if (kbState.IsKeyDown(Keys.W) || kbState.IsKeyDown(Keys.Up))
 			{
@@ -67,7 +70,9 @@ namespace GDAPSIIGame
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-
+			spriteBatch.Begin();
+			player.Draw(spriteBatch);
+			spriteBatch.End();
             base.Draw(gameTime);
         }
     }
