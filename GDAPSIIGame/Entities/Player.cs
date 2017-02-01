@@ -14,12 +14,9 @@ namespace GDAPSIIGame
     {
         private Weapon weapon;
 
-        public Player(Weapon weapon, int health, int moveSpeed, Texture2D texture, Rectangle position) : base(health, moveSpeed, texture, position)
+        public Player(Weapon weapon, int health, int moveSpeed, Texture2D texture, Vector2 position, Rectangle boundingBox) : base(health, moveSpeed, texture, position, boundingBox)
         {
             this.weapon = weapon;
         }
-
-
-        
     }
 }

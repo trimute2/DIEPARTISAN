@@ -12,7 +12,7 @@ namespace GDAPSIIGame.Entities
     {
         private int health;
         private int moveSpeed;
-        public Entity(int health, int moveSpeed, Texture2D texture, Rectangle position) : base(texture, position)
+        public Entity(int health, int moveSpeed, Texture2D texture, Vector2 position, Rectangle boundingBox) : base(texture, position, boundingBox)
         {
             this.health = health;
             this.moveSpeed = moveSpeed;

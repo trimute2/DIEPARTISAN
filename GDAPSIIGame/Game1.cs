@@ -24,7 +24,7 @@ namespace GDAPSIIGame
 
         protected override void Initialize()
         {
-			player = new GameObject(playerTexture,new Rectangle(0,0,50,50)); 
+			player = new GameObject(playerTexture,new Vector2(5,5), new Rectangle(10,10,50,50)); 
 			kbState = new KeyboardState();
 			previousKbState = kbState;
 			allObjs = new List<GameObject>();
