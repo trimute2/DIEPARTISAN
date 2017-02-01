@@ -110,7 +110,7 @@ namespace GDAPSIIGame
 
 		private void FirstChunk()
 		{
-			float fourthWidth = GraphicsDevice.Viewport.Width / 4;
+			float fourthWidth = GraphicsDevice.Viewport.Width / 2;
 			float halfHieght = GraphicsDevice.Viewport.Height / 2;
 			foreach (GameObject obj in allObjs)
 			{
