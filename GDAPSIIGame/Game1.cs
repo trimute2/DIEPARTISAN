@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.Collections.Generic;
 
 namespace GDAPSIIGame
 {
@@ -12,6 +13,8 @@ namespace GDAPSIIGame
 		Texture2D playerTexture;
 		KeyboardState kbState;
 		KeyboardState previousKbState;
+		List<GameObject> allObjs;
+		List<List<GameObject>> chunks;
 
 		public Game1()
         {
@@ -24,6 +27,13 @@ namespace GDAPSIIGame
 			player = new GameObject(playerTexture,new Rectangle(0,0,50,50)); 
 			kbState = new KeyboardState();
 			previousKbState = kbState;
+			allObjs = new List<GameObject>();
+			chunks = new List<List<GameObject>>();
+			for (int i = 0; i < 8; i++)
+			{
+				chunks.Add(new List<GameObject>());
+			}
+
 			base.Initialize();
         }
 
@@ -97,5 +107,15 @@ namespace GDAPSIIGame
 			spriteBatch.End();
             base.Draw(gameTime);
         }
+
+		private void FirstChunk()
+		{
+			float fourthWidth = GraphicsDevice.Viewport.Width / 4;
+			float halfHieght = GraphicsDevice.Viewport.Height / 2;
+			foreach (GameObject obj in allObjs)
+			{
+				int chunk = 0;
+			}
+		}
     }
 }
