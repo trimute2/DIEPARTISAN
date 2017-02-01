@@ -6,27 +6,20 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using GDAPSIIGame.Entities;
 
 namespace GDAPSIIGame
 {
-    class Player
+    class Player : Entity
     {
-        private string name;
-        private int x, y;
-        private float health;
-        private float speed;
         private Weapon weapon;
-        private Texture2D texture;
 
-        public Player(string name, int x, int y, float health, float speed, Weapon weapon, Texture2D texture)
+        public Player(Weapon weapon, int health, int moveSpeed, Texture2D texture, Rectangle position) : base(health, moveSpeed, texture, position)
         {
-            this.name = name;
-            this.x = x;
-            this.y = y;
-            this.health = health;
-            this.speed = speed;
             this.weapon = weapon;
-            this.texture = texture;
         }
+
+
+        
     }
 }
