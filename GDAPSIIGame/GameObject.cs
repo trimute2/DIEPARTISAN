@@ -15,11 +15,16 @@ namespace GDAPSIIGame
         private Texture2D texture;
         private Vector2 position;
         private Rectangle boundingBox;
+        private Vector2 scale;
 
         public GameObject(Texture2D texture, Vector2 position, Rectangle boundingBox) {
             this.texture = texture;
             this.position = position;
             this.boundingBox = boundingBox;
+            Console.WriteLine(texture.Width);
+            Console.WriteLine(boundingBox.Width);
+            scale = new Vector2((float)boundingBox.Width/texture.Width,  (float)boundingBox.Height/texture.Height);
+            Console.WriteLine(scale);
         }
 
         public float X {
@@ -49,10 +54,15 @@ namespace GDAPSIIGame
 		}
 
         public virtual void Draw(SpriteBatch sb) {
-            sb.Draw(
-                texture,
+            sb.Draw(texture,
                 position,
-                Color.White);
+                null,
+                null,
+                Vector2.Zero,
+                0.0f,
+                scale,
+                null,
+                0);
         }
 
     }
