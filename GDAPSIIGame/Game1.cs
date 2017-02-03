@@ -13,12 +13,17 @@ namespace GDAPSIIGame
 		Texture2D playerTexture;
 		KeyboardState kbState;
 		KeyboardState previousKbState;
-		Rectangle upLeft;
-		Rectangle upRight;
-		Rectangle lowLeft;
-		Rectangle lowRight;
+		Chunk[] chunks;
+		const int chunkNum = 4;
+		/// <summary>
+		/// number of rows of chunks
+		/// </summary>
+		int numRows;
+		/// <summary>
+		/// number of chunks per row
+		/// </summary>
+		int cpr;
 		List<GameObject> allObjs;
-		List<List<GameObject>> chunks;
 
 		public Game1()
         {
@@ -28,20 +33,25 @@ namespace GDAPSIIGame
 
         protected override void Initialize()
         {
-			float halfWidth = GraphicsDevice.Viewport.Width / 2;
-			float halfHieght = GraphicsDevice.Viewport.Height / 2;
-			upLeft = new Rectangle(0, 0, (int)halfWidth, (int)halfHieght);
-			upRight = new Rectangle((int)halfWidth, 0, (int)halfWidth, (int)halfHieght);
-			lowLeft = new Rectangle(0, (int)halfHieght, (int)halfWidth, (int)halfHieght);
-			//lowRight = new Rectangle((int)halfWidth, (int)halfHieght, (int)halfWidth, (int)halfHieght);
+			cpr = 2;
+			numRows = chunkNum / cpr;
+			chunks = new Chunk[chunkNum];
+			int chunkWidth = GraphicsDevice.Viewport.Width / cpr;
+			int chunkHieght = GraphicsDevice.Viewport.Height / numRows;
+			int ID = 0;
+			for(int i = 0; i < numRows; i++)
+			{
+				for (int j = 0; j< cpr; j++)
+				{
+					chunks[ID] = new Chunk(
+						new Rectangle(chunkWidth * j, chunkHieght * i, chunkWidth, chunkHieght),
+						cpr, ID);
+					ID++;
+				}
+			}
 			kbState = new KeyboardState();
 			previousKbState = kbState;
 			allObjs = new List<GameObject>();
-			chunks = new List<List<GameObject>>();
-			for (int i = 0; i < 4; i++)
-			{
-				chunks.Add(new List<GameObject>());
-			}
 
 			base.Initialize();
         }
@@ -121,34 +131,56 @@ namespace GDAPSIIGame
 		/// <summary>
 		/// adds game objects to chunks when the game is first initialized
 		/// </summary>
-		//could be handled better will change latter
+		//has yet to be tested
 		private void FirstChunk()
 		{
-			
-			foreach (GameObject obj in allObjs)
+			foreach(GameObject obj in allObjs)
 			{
-				if (upLeft.Contains(obj.Position))
+				for(int i = 0; i < chunkNum; i++)
 				{
-					chunks[0].Add(obj);
-				}else if (upRight.Contains(obj.Position))
-				{
-					chunks[1].Add(obj);
-				}else if (lowLeft.Contains(obj.Position))
-				{
-					chunks[2].Add(obj);
-				}else
-				{
-					chunks[3].Add(obj);
+					if (chunks[i].Contains(obj.Position))
+					{
+						chunks[i].Add(obj);
+						i = chunkNum;
+					}
 				}
 			}
 		}
 
+		/// <summary>
+		/// checks what chunks objects are in and moves them between chunks
+		/// </summary>
+		// has yet to be tested
 		private void ChunkIt()
 		{
-			foreach(List<GameObject> objList in chunks)
+			GameObject obj = null;
+			int offset = 0;
+			for (int i = 0; i < chunkNum; i++)
 			{
-				
+				//cant use a foreach because sometime objects are removed, 
+				for(int j = chunks[i].Objects.Count-1; j >= 0; j--)
+				{
+					obj = chunks[i].Objects[j];
+					if (!chunks[i].Contains(obj.Position))
+					{
+						offset = chunks[i].CheckAdjacency(obj.Position);
+						if (i != offset) // in the case that somehow the objects offset is the chunk that its in do nothing
+						{
+							if (offset >= chunkNum)
+							{
+								//incase the offset is greater than the number of chunks
+								//subtract the number of chunks from the offset
+								//this is essentially how the chunks handle screen wrapping
+								offset -= chunkNum;
+							}
+							chunks[offset].Add(obj);
+							chunks[i].Remove(obj);
+						}
+					}
+				}
 			}
 		}
+
+
     }
 }
