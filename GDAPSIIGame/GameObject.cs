@@ -52,7 +52,6 @@ namespace GDAPSIIGame
             sb.Draw(
                 texture,
                 position,
-                boundingBox,
                 Color.White);
         }
 
