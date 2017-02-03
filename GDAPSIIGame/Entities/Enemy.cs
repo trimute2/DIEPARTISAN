@@ -16,7 +16,24 @@ namespace GDAPSIIGame.Entities
 
         public void Move(GameObject thingToMoveTo)
         {
-            //Position - thingToMoveTo.Position;
+            Vector2 diff = Position - thingToMoveTo.Position;
+            if (diff.X > 0)
+            {
+                X--;
+            }
+            else
+            {
+                X++;
+            }
+
+            if (diff.Y > 0)
+            {
+                Y--;
+            }
+            else
+            {
+                Y++;
+            }
         } 
     }
 }
