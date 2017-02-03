@@ -28,12 +28,18 @@ namespace GDAPSIIGame
             this.direction = direction;
         }
 
-        public void Update(GameTime gameTime)
+        public void Update(GameTime gameTime, GameObject player)
         {
             //Update the projectile's position based on the vector's values
             //Multiply it by the elapsed game time since last update in milliseconds
-            this.X += (int)direction.X * gameTime.ElapsedGameTime.Milliseconds;
-            this.Y += (int)direction.Y * gameTime.ElapsedGameTime.Milliseconds;
+            this.X += direction.X * gameTime.ElapsedGameTime.Milliseconds;
+            this.Y += direction.Y * gameTime.ElapsedGameTime.Milliseconds;
+
+            if (BoundingBox.Intersects(player.BoundingBox))
+            {
+                Console.WriteLine("hit");
+            }
+            else Console.WriteLine("miss");
         }
         
     }

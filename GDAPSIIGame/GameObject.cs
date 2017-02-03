@@ -65,5 +65,20 @@ namespace GDAPSIIGame
                 0);
         }
 
+        public void Update(GameTime gameTime)
+        {
+            boundingBox.X = (int)position.X;
+            boundingBox.Y = (int)position.Y;
+        }
+
+        public bool Collide(Vector2 pos)
+        {
+            if (pos.X < position.X) { return false; }
+            if (pos.X > (position.X + boundingBox.Width)) { return false; }
+            if (pos.Y < position.Y) { return false; }
+            if (pos.Y > (position.Y + boundingBox.Height)) { return false; }
+            return true;
+        }
+
     }
 }
