@@ -24,7 +24,6 @@ namespace GDAPSIIGame
 
         protected override void Initialize()
         {
-			player = new GameObject(playerTexture,new Vector2(5,5), new Rectangle(10,10,50,50)); 
 			kbState = new KeyboardState();
 			previousKbState = kbState;
 			allObjs = new List<GameObject>();
@@ -41,7 +40,8 @@ namespace GDAPSIIGame
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
 			playerTexture = Content.Load<Texture2D>("player");
-			player.Texture = playerTexture;
+			//player.Texture = playerTexture;
+            player = new GameObject(playerTexture, new Vector2(playerTexture.Width, playerTexture.Height), new Rectangle(playerTexture.Width, playerTexture.Height, 50, 50));
         }
 
         protected override void UnloadContent()
