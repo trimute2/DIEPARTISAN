@@ -29,7 +29,7 @@ namespace GDAPSIIGame
 			previousKbState = kbState;
 			allObjs = new List<GameObject>();
 			chunks = new List<List<GameObject>>();
-			for (int i = 0; i < 8; i++)
+			for (int i = 0; i < 4; i++)
 			{
 				chunks.Add(new List<GameObject>());
 			}
@@ -108,13 +108,32 @@ namespace GDAPSIIGame
             base.Draw(gameTime);
         }
 
+		/// <summary>
+		/// adds game objects to chunks when the game is first initialized
+		/// </summary>
+		//could be handled better will change latter
 		private void FirstChunk()
 		{
-			float fourthWidth = GraphicsDevice.Viewport.Width / 2;
+			float halfWidth = GraphicsDevice.Viewport.Width / 2;
 			float halfHieght = GraphicsDevice.Viewport.Height / 2;
+			Rectangle upLeft = new Rectangle(0, 0, (int)halfWidth, (int)halfHieght);
+			Rectangle upRight = new Rectangle((int)halfWidth, 0, (int)halfWidth, (int)halfHieght);
+			Rectangle lowLeft = new Rectangle(0, (int)halfHieght, (int)halfWidth, (int)halfHieght);
 			foreach (GameObject obj in allObjs)
 			{
-				int chunk = 0;
+				if (upLeft.Contains(obj.Position))
+				{
+					chunks[0].Add(obj);
+				}else if (upRight.Contains(obj.Position))
+				{
+					chunks[1].Add(obj);
+				}else if (lowLeft.Contains(obj.Position))
+				{
+					chunks[2].Add(obj);
+				}else
+				{
+					chunks[3].Add(obj);
+				}
 			}
 		}
     }

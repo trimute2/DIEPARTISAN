@@ -11,7 +11,10 @@ namespace GDAPSIIGame
     class Projectile : GameObject
     {
         //Fields
-        Vector2 direction;
+        private Vector2 direction;
+
+        //Properties
+        public Vector2 Direction { get { return direction; } set { direction = value; } }
 
         //Constructor
         /// <summary>
@@ -20,7 +23,7 @@ namespace GDAPSIIGame
         /// <param name="texture"></param>
         /// <param name="position"></param>
         /// <param name="direction"></param>
-        public Projectile(Texture2D texture, Vector2 position, Vector2 direction, Rectangle boundingBox) : base(texture, position, boundingBox)
+        public Projectile(Texture2D texture, Vector2 position, Rectangle boundingBox, Vector2 direction) : base(texture, position, boundingBox)
         {
             this.direction = direction;
         }
