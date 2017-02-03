@@ -13,6 +13,10 @@ namespace GDAPSIIGame
 		Texture2D playerTexture;
 		KeyboardState kbState;
 		KeyboardState previousKbState;
+		Rectangle upLeft;
+		Rectangle upRight;
+		Rectangle lowLeft;
+		Rectangle lowRight;
 		List<GameObject> allObjs;
 		List<List<GameObject>> chunks;
 
@@ -24,6 +28,12 @@ namespace GDAPSIIGame
 
         protected override void Initialize()
         {
+			float halfWidth = GraphicsDevice.Viewport.Width / 2;
+			float halfHieght = GraphicsDevice.Viewport.Height / 2;
+			upLeft = new Rectangle(0, 0, (int)halfWidth, (int)halfHieght);
+			upRight = new Rectangle((int)halfWidth, 0, (int)halfWidth, (int)halfHieght);
+			lowLeft = new Rectangle(0, (int)halfHieght, (int)halfWidth, (int)halfHieght);
+			//lowRight = new Rectangle((int)halfWidth, (int)halfHieght, (int)halfWidth, (int)halfHieght);
 			kbState = new KeyboardState();
 			previousKbState = kbState;
 			allObjs = new List<GameObject>();
@@ -114,11 +124,7 @@ namespace GDAPSIIGame
 		//could be handled better will change latter
 		private void FirstChunk()
 		{
-			float halfWidth = GraphicsDevice.Viewport.Width / 2;
-			float halfHieght = GraphicsDevice.Viewport.Height / 2;
-			Rectangle upLeft = new Rectangle(0, 0, (int)halfWidth, (int)halfHieght);
-			Rectangle upRight = new Rectangle((int)halfWidth, 0, (int)halfWidth, (int)halfHieght);
-			Rectangle lowLeft = new Rectangle(0, (int)halfHieght, (int)halfWidth, (int)halfHieght);
+			
 			foreach (GameObject obj in allObjs)
 			{
 				if (upLeft.Contains(obj.Position))
@@ -134,6 +140,14 @@ namespace GDAPSIIGame
 				{
 					chunks[3].Add(obj);
 				}
+			}
+		}
+
+		private void ChunkIt()
+		{
+			foreach(List<GameObject> objList in chunks)
+			{
+				
 			}
 		}
     }
