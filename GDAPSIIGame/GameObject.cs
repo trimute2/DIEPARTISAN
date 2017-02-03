@@ -43,6 +43,11 @@ namespace GDAPSIIGame
             set { texture = value; }
         }
 
+		public Rectangle BoundingBox
+		{
+			get { return boundingBox; }
+		}
+
         public virtual void Draw(SpriteBatch sb) {
             sb.Draw(
                 texture,
