@@ -13,7 +13,6 @@ namespace GDAPSIIGame
     class Player : Entity
     {
         private Weapon weapon;
-
         public Player(Weapon weapon, int health, int moveSpeed, Texture2D texture, Vector2 position, Rectangle boundingBox) : base(health, moveSpeed, texture, position, boundingBox)
         {
             this.weapon = weapon;
