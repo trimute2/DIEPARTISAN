@@ -116,6 +116,7 @@
             this.ImportTilesetButton.TabIndex = 4;
             this.ImportTilesetButton.Text = "Import Tileset...";
             this.ImportTilesetButton.UseVisualStyleBackColor = true;
+            this.ImportTilesetButton.Click += new System.EventHandler(this.ImportTilesetButton_Click);
             // 
             // panel2
             // 
@@ -192,6 +193,8 @@
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabControl tabControl1;
+
+        
     }
 }
 

@@ -15,8 +15,12 @@ namespace LevelEditor
         public LevelEditor()
         {
             InitializeComponent();
-
             
+        }
+
+        private void ImportTilesetButton_Click(object sender, System.EventArgs e)
+        {
+
         }
     }
 }
