@@ -10,11 +10,17 @@ using System.Windows.Forms;
 
 namespace LevelEditor
 {
-    public partial class Form1 : Form
+    public partial class LevelEditor : Form
     {
-        public Form1()
+        public LevelEditor()
         {
             InitializeComponent();
+            
+        }
+
+        private void ImportTilesetButton_Click(object sender, System.EventArgs e)
+        {
+
         }
     }
 }
