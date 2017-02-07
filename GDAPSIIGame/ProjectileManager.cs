@@ -12,18 +12,23 @@ namespace GDAPSIIGame
 {
     class ProjectileManager
     {
+        //Fields-----------------
+        List<Projectile> projectiles;
+
         //Properties-------------
 
         /// <summary>
         /// A List of all projectiles
         /// </summary>
-        public List<Projectile> Projectiles { get; set; }
+        public List<Projectile> Projectiles { get { return projectiles; } set { projectiles = value; } }
 
 
         //Methods----------------
 
         public ProjectileManager()
-        { }
+        {
+            projectiles = new List<Projectile>();
+        }
 
         /// <summary>
         /// Load in sprites
@@ -31,7 +36,7 @@ namespace GDAPSIIGame
         internal void LoadContent(ContentManager Content)
         {
             Texture2D texture = Content.Load<Texture2D>("player");
-            Projectiles.Add(new Projectile(texture, new Vector2(texture.Width, texture.Height), new Rectangle(texture.Width, texture.Height, 50, 50), new Vector2(-0.1f, -0.1f)));
+            Projectiles.Add(new Projectile(texture, new Vector2(texture.Width, texture.Height), new Rectangle(texture.Width, texture.Height, 25, 25), new Vector2(-0.05f, -0.05f)));
         }
 
         /// <summary>

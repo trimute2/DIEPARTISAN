@@ -65,7 +65,7 @@ namespace GDAPSIIGame
                 0);
         }
 
-        public void Update(GameTime gameTime)
+        public virtual void Update(GameTime gameTime)
         {
             boundingBox.X = (int)position.X;
             boundingBox.Y = (int)position.Y;

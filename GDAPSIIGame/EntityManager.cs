@@ -12,12 +12,15 @@ namespace GDAPSIIGame
 {
     class EntityManager
     {
+        //Fields-----------------
+        List<Entities.Entity> enemies;
+
         //Properties-------------
 
         /// <summary>
         /// The list of all enemies
         /// </summary>
-        public List<Entities.Entity> Enemies { get; set; }
+        public List<Entities.Entity> Enemies { get { return enemies; } set { enemies = value; } }
 
         /// <summary>
         /// The player object
@@ -28,7 +31,9 @@ namespace GDAPSIIGame
         //Methods----------------
 
         public EntityManager()
-        { }
+        {
+            enemies = new List<Entities.Entity>();
+        }
 
         /// <summary>
         /// Load in sprites
