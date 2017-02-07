@@ -34,7 +34,8 @@ namespace GDAPSIIGame
             //Multiply it by the elapsed game time since last update in milliseconds
             this.X += direction.X * gameTime.ElapsedGameTime.Milliseconds;
             this.Y += direction.Y * gameTime.ElapsedGameTime.Milliseconds;
-
+            
+            
             if (BoundingBox.Intersects(player.BoundingBox))
             {
                 Console.WriteLine("hit");

@@ -17,5 +17,26 @@ namespace GDAPSIIGame
         {
             this.weapon = weapon;
         }
+
+        public void Update(KeyboardState previousKbState, KeyboardState kbState)
+        {
+            if (kbState.IsKeyDown(Keys.W) || kbState.IsKeyDown(Keys.Up))
+            {
+                this.Y -= 5;
+            }
+            else if (kbState.IsKeyDown(Keys.S) || kbState.IsKeyDown(Keys.Down))
+            {
+                this.Y += 5;
+            }
+
+            if (kbState.IsKeyDown(Keys.D) || kbState.IsKeyDown(Keys.Right))
+            {
+                this.X += 5;
+            }
+            else if (kbState.IsKeyDown(Keys.A) || kbState.IsKeyDown(Keys.Left))
+            {
+                this.X -= 5;
+            }
+        }
     }
 }

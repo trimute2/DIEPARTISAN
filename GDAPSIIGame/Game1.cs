@@ -7,11 +7,12 @@ namespace GDAPSIIGame
 {
     public class Game1 : Game
     {
-		GameObject player;
+        //Fields
+        EntityManager entityManager;
+        ProjectileManager projectileManager;
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-		Texture2D playerTexture;
-		KeyboardState kbState;
+        KeyboardState kbState;
 		KeyboardState previousKbState;
 		Chunk[] chunks;
 		const int chunkNum = 4;
@@ -33,6 +34,12 @@ namespace GDAPSIIGame
 
         protected override void Initialize()
         {
+            //Initialize entity manager
+            entityManager = new EntityManager();
+
+            //Initialize projectile manager
+            projectileManager = new ProjectileManager();
+
 			cpr = 2;
 			numRows = chunkNum / cpr;
 			chunks = new Chunk[chunkNum];
@@ -49,19 +56,23 @@ namespace GDAPSIIGame
 					ID++;
 				}
 			}
-			kbState = new KeyboardState();
-			previousKbState = kbState;
-			allObjs = new List<GameObject>();
 
+            allObjs = new List<GameObject>();
+
+            //Initialize keyboards
+            kbState = new KeyboardState();
+			previousKbState = kbState;
+            
 			base.Initialize();
         }
 
         protected override void LoadContent()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
-			playerTexture = Content.Load<Texture2D>("player");
-			//player.Texture = playerTexture;
-            player = new GameObject(playerTexture, new Vector2(playerTexture.Width, playerTexture.Height), new Rectangle(playerTexture.Width, playerTexture.Height, 50, 50));
+            //Load entities
+            entityManager.LoadContent(Content);
+            //Load projectiles
+            projectileManager.LoadContent(Content);
         }
 
         protected override void UnloadContent()
@@ -74,27 +85,15 @@ namespace GDAPSIIGame
 			if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
 				Exit();
 
-			ScreenWrap(player);
+			//ScreenWrap(player);
 			previousKbState = kbState;
 			kbState = Keyboard.GetState();
 
-			if (kbState.IsKeyDown(Keys.W) || kbState.IsKeyDown(Keys.Up))
-			{
-				player.Y -= 5;
-			}
-			else if (kbState.IsKeyDown(Keys.S) || kbState.IsKeyDown(Keys.Down))
-			{
-				player.Y += 5;
-			}
+            //Update entities
+            entityManager.Update(gameTime, previousKbState, kbState);
 
-			if (kbState.IsKeyDown(Keys.D) || kbState.IsKeyDown(Keys.Right))
-			{
-				player.X += 5;
-			}
-			else if (kbState.IsKeyDown(Keys.A) || kbState.IsKeyDown(Keys.Left))
-			{
-				player.X -= 5;
-			}
+            //Update projectiles
+            projectileManager.Update(gameTime, previousKbState, kbState);
 
 			base.Update(gameTime);
 		}
@@ -122,9 +121,19 @@ namespace GDAPSIIGame
 		protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
+
+            //Begin SpriteBatch
 			spriteBatch.Begin();
-			player.Draw(spriteBatch);
+
+            //Draw entities
+			entityManager.Draw(gameTime, spriteBatch);
+
+            //Draw projectiles
+            projectileManager.Draw(gameTime, spriteBatch);
+
+            //End SpriteBatch
 			spriteBatch.End();
+
             base.Draw(gameTime);
         }
 
