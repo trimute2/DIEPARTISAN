@@ -39,6 +39,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Chunk.cs" />
+    <Compile Include="ChunkManager.cs" />
     <Compile Include="Entities\Enemy.cs" />
     <Compile Include="Entities\Entity.cs" />
     <Compile Include="EntityManager.cs" />
