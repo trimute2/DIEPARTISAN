@@ -12,10 +12,19 @@ namespace GDAPSIIGame
 {
     class Player : Entity
     {
+        static Player instance;
         private Weapon weapon;
-        public Player(Weapon weapon, int health, int moveSpeed, Texture2D texture, Vector2 position, Rectangle boundingBox) : base(health, moveSpeed, texture, position, boundingBox)
+        private Player(Weapon weapon, int health, int moveSpeed, Texture2D texture, Vector2 position, Rectangle boundingBox) : base(health, moveSpeed, texture, position, boundingBox)
         {
             this.weapon = weapon;
+        }
+
+        static public Player Instantiate(Weapon weapon, int health, int moveSpeed, Texture2D texture, Vector2 position, Rectangle boundingBox)
+        {
+            if (instance == null) {
+                instance = new Player(weapon, health, moveSpeed, texture, position, boundingBox);
+            }
+            return instance;
         }
 
         public void Update(KeyboardState previousKbState, KeyboardState kbState)
