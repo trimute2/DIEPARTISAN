@@ -14,6 +14,7 @@ namespace GDAPSIIGame
     {
         //Fields-----------------
         List<Entities.Entity> enemies;
+        static private EntityManager instance;
 
         //Properties-------------
 
@@ -25,23 +26,45 @@ namespace GDAPSIIGame
         /// <summary>
         /// The player object
         /// </summary>
-        public Player Player { get; set; }
+        public Player Player {
+            get;
+            set;
+        }
 
 
         //Methods----------------
 
-        public EntityManager()
+        /// <summary>
+        /// Singleton Constructor
+        /// </summary>
+        private EntityManager()
         {
             enemies = new List<Entities.Entity>();
         }
 
+        /// <summary>
+        /// Singleton access
+        /// </summary>
+        /// <returns></returns>
+        static public EntityManager Instance
+        {
+            get
+            {
+                if (instance == null)
+                {
+                    instance = new EntityManager();
+                }
+                return instance;
+            }
+        }
+        
         /// <summary>
         /// Load in sprites
         /// </summary>
         internal void LoadContent(ContentManager Content)
         {
             Texture2D playerTexture = Content.Load<Texture2D>("player");
-            Player = new Player(null, 100, 1, playerTexture, new Vector2(playerTexture.Width, playerTexture.Height), new Rectangle(playerTexture.Width, playerTexture.Height, 50, 50));
+            Player = Player.Instantiate(null, 100, 1, playerTexture, new Vector2(playerTexture.Width, playerTexture.Height), new Rectangle(playerTexture.Width, playerTexture.Height, 50, 50));
         }
 
         /// <summary>

@@ -12,7 +12,7 @@ namespace GDAPSIIGame
 {
     class Player : Entity
     {
-        static Player instance;
+        static private Player instance;
         private Weapon weapon;
         private Player(Weapon weapon, int health, int moveSpeed, Texture2D texture, Vector2 position, Rectangle boundingBox) : base(health, moveSpeed, texture, position, boundingBox)
         {
@@ -25,6 +25,11 @@ namespace GDAPSIIGame
                 instance = new Player(weapon, health, moveSpeed, texture, position, boundingBox);
             }
             return instance;
+        }
+
+        static public Player Instance
+        {
+            get { return instance; }
         }
 
         public void Update(KeyboardState previousKbState, KeyboardState kbState)
