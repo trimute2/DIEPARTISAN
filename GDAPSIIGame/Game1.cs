@@ -5,6 +5,8 @@ using System.Collections.Generic;
 
 namespace GDAPSIIGame
 {
+    enum GameState { Main_Menu, Gameplay, Pause_Menu}
+
     public class Game1 : Game
     {
         //Fields
