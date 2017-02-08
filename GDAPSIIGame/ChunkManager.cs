@@ -39,6 +39,10 @@ namespace GDAPSIIGame
 			FirstChunk(allObjs);
 		}
 
+		/// <summary>
+		/// adds game objects to chunks when the game is first initialized
+		/// </summary>
+		//has yet to be tested
 		private void FirstChunk(List<GameObject> allObjs)
 		{
 			foreach (GameObject obj in allObjs)
@@ -88,6 +92,14 @@ namespace GDAPSIIGame
 			}
 		}
 
+		public void Upadate()
+		{
+			ChunkIt();
+			foreach(Chunk chunk in chunks)
+			{
+				chunk.CollideObjects();
+			}
+		}
 
 	}
 }
