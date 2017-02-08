@@ -37,10 +37,10 @@ namespace GDAPSIIGame
         protected override void Initialize()
         {
             //Initialize entity manager
-            entityManager = new EntityManager();
+            entityManager = EntityManager.Instance;
 
             //Initialize projectile manager
-            projectileManager = new ProjectileManager();
+            projectileManager = ProjectileManager.Instance;
 
 			cpr = 2;
 			numRows = chunkNum / cpr;

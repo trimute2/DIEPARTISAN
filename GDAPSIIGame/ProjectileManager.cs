@@ -13,7 +13,8 @@ namespace GDAPSIIGame
     class ProjectileManager
     {
         //Fields-----------------
-        List<Projectile> projectiles;
+        static ProjectileManager instance;
+        private static List<Projectile> projectiles;
 
         //Properties-------------
 
@@ -25,9 +26,21 @@ namespace GDAPSIIGame
 
         //Methods----------------
 
-        public ProjectileManager()
+        private ProjectileManager()
         {
             projectiles = new List<Projectile>();
+        }
+
+        public static ProjectileManager Instance
+        {
+            get
+            {
+                if (instance == null)
+                {
+                    instance = new ProjectileManager();
+                }
+                return instance;
+            }
         }
 
         /// <summary>
