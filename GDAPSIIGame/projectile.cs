@@ -12,9 +12,11 @@ namespace GDAPSIIGame
     {
         //Fields
         private Vector2 direction;
+        private float damage;
 
         //Properties
         public Vector2 Direction { get { return direction; } set { direction = value; } }
+        public float Damage { get { return damage; } set { damage = value; } }
 
         //Constructor
         /// <summary>
@@ -23,9 +25,10 @@ namespace GDAPSIIGame
         /// <param name="texture"></param>
         /// <param name="position"></param>
         /// <param name="direction"></param>
-        public Projectile(Texture2D texture, Vector2 position, Rectangle boundingBox, Vector2 direction) : base(texture, position, boundingBox)
+        public Projectile(Texture2D texture, Vector2 position, Rectangle boundingBox, Vector2 direction, float damage) : base(texture, position, boundingBox)
         {
             this.direction = direction;
+            this.damage = damage;
         }
 
         public override void Update(GameTime gameTime)
