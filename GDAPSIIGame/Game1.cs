@@ -2,11 +2,11 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
-
+using System;
 namespace GDAPSIIGame
 {
     enum GameState { Main_Menu, Gameplay, Pause_Menu}
-
+    
     public class Game1 : Game
     {
         //Fields
@@ -16,8 +16,9 @@ namespace GDAPSIIGame
         SpriteBatch spriteBatch;
         KeyboardState kbState;
 		KeyboardState previousKbState;
+        //Projectile newthing;
 		Chunk[] chunks;
-		const int chunkNum = 4;
+        const int chunkNum = 4;
 		/// <summary>
 		/// number of rows of chunks
 		/// </summary>
@@ -38,10 +39,14 @@ namespace GDAPSIIGame
         {
             //Initialize entity manager
             entityManager = EntityManager.Instance;
+            
+
 
             //Initialize projectile manager
             projectileManager = ProjectileManager.Instance;
 
+            //Give player their weapon
+            //Player.Instance.Weapon = new Weapon();
 			cpr = 2;
 			numRows = chunkNum / cpr;
 			chunks = new Chunk[chunkNum];
@@ -75,6 +80,16 @@ namespace GDAPSIIGame
             entityManager.LoadContent(Content);
             //Load projectiles
             projectileManager.LoadContent(Content);
+
+
+            //Rectangle pls = new Rectangle(0, 0, 0, 0);
+            //Vector2 aids = Vector2.Zero;
+            //Texture2D why = Content.Load<Texture2D>("player");
+            //Projectile p = new Projectile(why, Vector2.Zero, new Rectangle(0, 0, 0, 0), Vector2.Zero);
+            //Console.WriteLine(why);
+            //newthing = (Projectile)p.GetType().GetConstructor(new System.Type[] { why.GetType(), aids.GetType(), pls.GetType(), aids.GetType() }).Invoke(new object[] {why, new Vector2(2,2), new Rectangle(0, 0, 10, 10), new Vector2(.01f, .01f) });
+
+            //Console.WriteLine(newthing.Direction);
         }
 
         protected override void UnloadContent()
@@ -123,7 +138,7 @@ namespace GDAPSIIGame
 		protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-
+            //newthing.Draw();
             //Begin SpriteBatch
 			spriteBatch.Begin();
 

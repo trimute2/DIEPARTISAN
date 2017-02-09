@@ -21,10 +21,10 @@ namespace GDAPSIIGame
             this.texture = texture;
             this.position = position;
             this.boundingBox = boundingBox;
-            Console.WriteLine(texture.Width);
-            Console.WriteLine(boundingBox.Width);
+            //Console.WriteLine(texture.Width);
+            //Console.WriteLine(boundingBox.Width);
             scale = new Vector2((float)boundingBox.Width/texture.Width,  (float)boundingBox.Height/texture.Height);
-            Console.WriteLine(scale);
+            //Console.WriteLine(scale);
         }
 
         public float X {
