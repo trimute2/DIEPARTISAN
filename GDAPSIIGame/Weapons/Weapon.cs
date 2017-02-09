@@ -33,7 +33,7 @@ namespace GDAPSIIGame
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            
+
         }
     }
 }

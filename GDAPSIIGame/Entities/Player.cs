@@ -12,8 +12,13 @@ namespace GDAPSIIGame
 {
     class Player : Entity
     {
+        //Fields
         static private Player instance;
         private Weapon weapon;
+
+
+        //Singleton
+
         private Player(Weapon weapon, int health, int moveSpeed, Texture2D texture, Vector2 position, Rectangle boundingBox) : base(health, moveSpeed, texture, position, boundingBox)
         {
             this.weapon = weapon;
@@ -27,11 +32,22 @@ namespace GDAPSIIGame
             return instance;
         }
 
+
+        //Properties
+
         static public Player Instance
         {
             get { return instance; }
         }
 
+        public Weapon Weapon
+        {
+            get { return Weapon; }
+            set { Weapon = value; }
+        }
+
+
+        //Methods
         public void Update(KeyboardState previousKbState, KeyboardState kbState)
         {
             if (kbState.IsKeyDown(Keys.W) || kbState.IsKeyDown(Keys.Up))
