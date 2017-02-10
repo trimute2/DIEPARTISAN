@@ -72,7 +72,7 @@ namespace GDAPSIIGame
         /// </summary>
         internal void Update(GameTime gameTime, KeyboardState previousKbState, KeyboardState kbState)
         {
-            Player.Update(previousKbState, kbState);
+            Player.Update(gameTime, previousKbState, kbState);
         }
 
         /// <summary>
