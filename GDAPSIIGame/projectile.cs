@@ -41,9 +41,8 @@ namespace GDAPSIIGame
             this.Y += direction.Y * gameTime.ElapsedGameTime.Milliseconds;
         }
 
-        public Projectile Clone(Vector2 position, Vector2 direction) {
-            ProjectileManager.Instance.new Projectile(this.Texture, position, this.BoundingBox, direction, this.damage);
-
+        public void Clone(Vector2 position, Vector2 direction) {
+            ProjectileManager.Instance.Add(new Projectile(this.Texture, position, this.BoundingBox, direction, this.damage));
         }
         
     }

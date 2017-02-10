@@ -22,7 +22,7 @@ namespace GDAPSIIGame
         /// </summary>
         private int cpr = 4;
 
-        public ChunkManager()
+        private ChunkManager()
         {
 			chunks = new Chunk[chunkNum];
 			int ID = 0;
@@ -55,7 +55,7 @@ namespace GDAPSIIGame
 		/// adds an object to chunks
 		/// </summary>
 		/// <param name="obj">the object to be added</param>
-		public void AddObj(GameObject obj)
+		public void Add(GameObject obj)
 		{
 			for(int i = 0; i < chunkNum; i++)
 			{
