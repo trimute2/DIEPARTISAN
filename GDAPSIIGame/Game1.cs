@@ -16,8 +16,7 @@ namespace GDAPSIIGame
         SpriteBatch spriteBatch;
         KeyboardState kbState;
 		KeyboardState previousKbState;
-		ChunkManager chunkaroo;
-		List<GameObject> allObjs;
+		ChunkManager chunkManager;
 
 		public Game1()
         {
@@ -27,12 +26,11 @@ namespace GDAPSIIGame
 
         protected override void Initialize()
         {
+			this.IsMouseVisible = true;
             //Initialize entity manager
             entityManager = EntityManager.Instance;
 
-			allObjs = new List<GameObject>();
-
-			
+			chunkManager = ChunkManager.Instance;
 
             //Initialize projectile manager
             projectileManager = ProjectileManager.Instance;
@@ -51,15 +49,6 @@ namespace GDAPSIIGame
             entityManager.LoadContent(Content);
             //Load projectiles
             projectileManager.LoadContent(Content);
-
-			foreach (GameObject en in entityManager.Enemies)
-			{
-				allObjs.Add(en);
-			}
-
-			allObjs.Add(entityManager.Player);
-
-			chunkaroo = new ChunkManager(GraphicsDevice.Viewport.Width / 4, GraphicsDevice.Viewport.Height / 2, allObjs);
 
 
 			//Rectangle pls = new Rectangle(0, 0, 0, 0);
@@ -92,7 +81,7 @@ namespace GDAPSIIGame
             //Update projectiles
             projectileManager.Update(gameTime, previousKbState, kbState);
 
-			chunkaroo.Upadate();
+			chunkManager.Upadate();
 			base.Update(gameTime);
 		}
 
