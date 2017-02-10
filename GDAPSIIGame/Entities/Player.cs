@@ -85,8 +85,11 @@ namespace GDAPSIIGame
             MouseState mouseState = Mouse.GetState();
 
             //Looking down
-            double angle = Math.Atan((mouseState.X - Position.X) / (mouseState.Y - Position.Y));
+            Vector2 mouseVector = new Vector2(mouseState.X, mouseState.Y);
+            //double angle = Math.Atan((Position*mouseVector)/(Position.Length * mouseVector.Length));
             Console.WriteLine(angle);
+
+            
 
             //if ((mouseState.Y > Position.Y)
             //    && (mouseState.X < (BoundingBox.X + BoundingBox.Width))
