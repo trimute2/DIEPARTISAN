@@ -84,35 +84,47 @@ namespace GDAPSIIGame
             //Get the mouse's state
             MouseState mouseState = Mouse.GetState();
 
-            //Looking down
-            Vector2 mouseVector = new Vector2(mouseState.X, mouseState.Y);
-            //double angle = Math.Atan((Position*mouseVector)/(Position.Length * mouseVector.Length));
-            //Console.WriteLine(angle);
+            //Calculates the angle between the player and the mouse
+            //See below
+            //   180
+            //-90   90
+            //    0
+            float angle = MathHelper.ToDegrees((float)Math.Atan2(mouseState.X - Position.X, mouseState.Y - Position.Y));
 
-            
-
-            //if ((mouseState.Y > Position.Y)
-            //    && (mouseState.X < (BoundingBox.X + BoundingBox.Width))
-            //    && (mouseState.X > (BoundingBox.X - BoundingBox.Width))
-            //    && (dir != Player_Dir.Down))
-            //{
-            //    dir = Player_Dir.Down;
-            //}
-            //else dir = Player_Dir.Up;
-
-            //else if ((mouseState.Y < Position.Y) && dir != Player_Dir.Up)
-            //{
-            //    dir = Player_Dir.Up;
-            //}
-            //if ((mouseState.X > Position.X) && dir != Player_Dir.Right)
-            //{
-            //    dir = Player_Dir.Right;
-            //}
-            //else if ((mouseState.X < Position.X) && dir != Player_Dir.Left)
-            //{
-            //    dir = Player_Dir.Left;
-            //}
-            //Console.WriteLine(dir);
+            //Use angle to find player direction
+            if ((angle < -157.5) || (angle > 157.5))
+            {
+                dir = Player_Dir.Up;
+            }
+            else if ((angle < 157.5) && (angle > 112.5))
+            {
+                dir = Player_Dir.UpRight;
+            }
+            else if ((angle < 112.5) && (angle > 67.5))
+            {
+                dir = Player_Dir.Right;
+            }
+            else if ((angle < 67.5) && (angle > 22.5))
+            {
+                dir = Player_Dir.DownRight;
+            }
+            else if ((angle < -22.5) && (angle > -67.5))
+            {
+                dir = Player_Dir.DownLeft;
+            }
+            else if ((angle < -67.5) && (angle > -112.5))
+            {
+                dir = Player_Dir.Left;
+            }
+            else if ((angle < -112.5) && (angle > -157.5))
+            {
+                dir = Player_Dir.UpLeft;
+            }
+            else if ((angle < 22.5) || (angle > -22.5))
+            {
+                dir = Player_Dir.Down;
+            }
+            Console.WriteLine(dir);            
         }
 
         /// <summary>
