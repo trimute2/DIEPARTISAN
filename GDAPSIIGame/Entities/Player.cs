@@ -85,26 +85,41 @@ namespace GDAPSIIGame
             MouseState mouseState = Mouse.GetState();
 
             //Looking down
-            if ((mouseState.Y > Position.Y)
-                && (mouseState.X < (BoundingBox.X+BoundingBox.Width))
-                && (mouseState.X > (BoundingBox.X-BoundingBox.Width))
-                && (dir != Player_Dir.Down))
-            {
-                dir = Player_Dir.Down;
-            }
-            else if ((mouseState.Y < Position.Y) && dir != Player_Dir.Up)
-            {
-                dir = Player_Dir.Up;
-            }
-            if ((mouseState.X > Position.X) && dir != Player_Dir.Right)
-            {
-                dir = Player_Dir.Right;
-            }
-            else if ((mouseState.X < Position.X) && dir != Player_Dir.Left)
-            {
-                dir = Player_Dir.Left;
-            }
-            Console.WriteLine(BoundingBox.X);
+            double angle = Math.Atan((mouseState.X - Position.X) / (mouseState.Y - Position.Y));
+            Console.WriteLine(angle);
+
+            //if ((mouseState.Y > Position.Y)
+            //    && (mouseState.X < (BoundingBox.X + BoundingBox.Width))
+            //    && (mouseState.X > (BoundingBox.X - BoundingBox.Width))
+            //    && (dir != Player_Dir.Down))
+            //{
+            //    dir = Player_Dir.Down;
+            //}
+            //else dir = Player_Dir.Up;
+
+            //else if ((mouseState.Y < Position.Y) && dir != Player_Dir.Up)
+            //{
+            //    dir = Player_Dir.Up;
+            //}
+            //if ((mouseState.X > Position.X) && dir != Player_Dir.Right)
+            //{
+            //    dir = Player_Dir.Right;
+            //}
+            //else if ((mouseState.X < Position.X) && dir != Player_Dir.Left)
+            //{
+            //    dir = Player_Dir.Left;
+            //}
+            //Console.WriteLine(dir);
+        }
+
+        /// <summary>
+        /// Fires the player's weapon
+        /// </summary>
+        /// <param name="position"></param>
+        /// <param name="direction"></param>
+        public void Fire(Vector2 position, Vector2 direction)
+        {
+            weapon.Fire(position, direction);
         }
     }
 }
