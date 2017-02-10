@@ -86,10 +86,11 @@ namespace GDAPSIIGame
 		//	}
 		//}
 
+
+		//feel free to rename
 		/// <summary>
 		/// checks what chunks objects are in and moves them between chunks
 		/// </summary>
-		// has yet to be tested
 		private void ChunkIt()
 		{
 			GameObject obj = null;

@@ -65,6 +65,7 @@ namespace GDAPSIIGame
         {
             Texture2D playerTexture = Content.Load<Texture2D>("player");
             Player = Player.Instantiate(null, 100, 1, playerTexture, new Vector2(playerTexture.Width, playerTexture.Height), new Rectangle(playerTexture.Width, playerTexture.Height, 50, 50));
+			ChunkManager.Instance.AddObj(Player);
         }
 
         /// <summary>
