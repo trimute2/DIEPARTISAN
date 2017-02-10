@@ -84,5 +84,9 @@ namespace GDAPSIIGame
             Player.Draw(spriteBatch);
         }
 
+        internal void Add(Entities.Entity e)
+        {
+            enemies.Add(e);
+        }
     }
 }
