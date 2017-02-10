@@ -87,7 +87,7 @@ namespace GDAPSIIGame
             //Looking down
             Vector2 mouseVector = new Vector2(mouseState.X, mouseState.Y);
             //double angle = Math.Atan((Position*mouseVector)/(Position.Length * mouseVector.Length));
-            Console.WriteLine(angle);
+            //Console.WriteLine(angle);
 
             
 
