@@ -77,6 +77,7 @@ namespace GDAPSIIGame
         internal void Add(Projectile p)
         {
             projectiles.Add(p);
+            ChunkManager.Instance.Add(p);
         }
     }
 }
