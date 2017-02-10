@@ -16,17 +16,7 @@ namespace GDAPSIIGame
         SpriteBatch spriteBatch;
         KeyboardState kbState;
 		KeyboardState previousKbState;
-        //Projectile newthing;
-		Chunk[] chunks;
-        const int chunkNum = 4;
-		/// <summary>
-		/// number of rows of chunks
-		/// </summary>
-		int numRows;
-		/// <summary>
-		/// number of chunks per row
-		/// </summary>
-		int cpr;
+		ChunkManager chunkaroo;
 		List<GameObject> allObjs;
 
 		public Game1()
@@ -39,32 +29,13 @@ namespace GDAPSIIGame
         {
             //Initialize entity manager
             entityManager = EntityManager.Instance;
-            
 
+			allObjs = new List<GameObject>();
+
+			
 
             //Initialize projectile manager
             projectileManager = ProjectileManager.Instance;
-
-            //Give player their weapon
-            //Player.Instance.Weapon = new Weapon();
-			cpr = 2;
-			numRows = chunkNum / cpr;
-			chunks = new Chunk[chunkNum];
-			int chunkWidth = GraphicsDevice.Viewport.Width / cpr;
-			int chunkHieght = GraphicsDevice.Viewport.Height / numRows;
-			int ID = 0;
-			for(int i = 0; i < numRows; i++)
-			{
-				for (int j = 0; j< cpr; j++)
-				{
-					chunks[ID] = new Chunk(
-						new Rectangle(chunkWidth * j, chunkHieght * i, chunkWidth, chunkHieght),
-						cpr, ID);
-					ID++;
-				}
-			}
-
-            allObjs = new List<GameObject>();
 
             //Initialize keyboards
             kbState = new KeyboardState();
@@ -81,16 +52,25 @@ namespace GDAPSIIGame
             //Load projectiles
             projectileManager.LoadContent(Content);
 
+			foreach (GameObject en in entityManager.Enemies)
+			{
+				allObjs.Add(en);
+			}
 
-            //Rectangle pls = new Rectangle(0, 0, 0, 0);
-            //Vector2 aids = Vector2.Zero;
-            //Texture2D why = Content.Load<Texture2D>("player");
-            //Projectile p = new Projectile(why, Vector2.Zero, new Rectangle(0, 0, 0, 0), Vector2.Zero);
-            //Console.WriteLine(why);
-            //newthing = (Projectile)p.GetType().GetConstructor(new System.Type[] { why.GetType(), aids.GetType(), pls.GetType(), aids.GetType() }).Invoke(new object[] {why, new Vector2(2,2), new Rectangle(0, 0, 10, 10), new Vector2(.01f, .01f) });
+			allObjs.Add(entityManager.Player);
 
-            //Console.WriteLine(newthing.Direction);
-        }
+			chunkaroo = new ChunkManager(GraphicsDevice.Viewport.Width / 4, GraphicsDevice.Viewport.Height / 2, allObjs);
+
+
+			//Rectangle pls = new Rectangle(0, 0, 0, 0);
+			//Vector2 aids = Vector2.Zero;
+			//Texture2D why = Content.Load<Texture2D>("player");
+			//Projectile p = new Projectile(why, Vector2.Zero, new Rectangle(0, 0, 0, 0), Vector2.Zero);
+			//Console.WriteLine(why);
+			//newthing = (Projectile)p.GetType().GetConstructor(new System.Type[] { why.GetType(), aids.GetType(), pls.GetType(), aids.GetType() }).Invoke(new object[] {why, new Vector2(2,2), new Rectangle(0, 0, 10, 10), new Vector2(.01f, .01f) });
+
+			//Console.WriteLine(newthing.Direction);
+		}
 
         protected override void UnloadContent()
         {
@@ -112,6 +92,7 @@ namespace GDAPSIIGame
             //Update projectiles
             projectileManager.Update(gameTime, previousKbState, kbState);
 
+			chunkaroo.Upadate();
 			base.Update(gameTime);
 		}
 
@@ -153,59 +134,6 @@ namespace GDAPSIIGame
 
             base.Draw(gameTime);
         }
-
-		/// <summary>
-		/// adds game objects to chunks when the game is first initialized
-		/// </summary>
-		//has yet to be tested
-		private void FirstChunk()
-		{
-			foreach(GameObject obj in allObjs)
-			{
-				for(int i = 0; i < chunkNum; i++)
-				{
-					if (chunks[i].Contains(obj.Position))
-					{
-						chunks[i].Add(obj);
-						i = chunkNum;
-					}
-				}
-			}
-		}
-
-		/// <summary>
-		/// checks what chunks objects are in and moves them between chunks
-		/// </summary>
-		// has yet to be tested
-		private void ChunkIt()
-		{
-			GameObject obj = null;
-			int offset = 0;
-			for (int i = 0; i < chunkNum; i++)
-			{
-				//cant use a foreach because sometime objects are removed, 
-				for(int j = chunks[i].Objects.Count-1; j >= 0; j--)
-				{
-					obj = chunks[i].Objects[j];
-					if (!chunks[i].Contains(obj.Position))
-					{
-						offset = chunks[i].CheckAdjacency(obj.Position);
-						if (i != offset) // in the case that somehow the objects offset is the chunk that its in do nothing
-						{
-							if (offset >= chunkNum)
-							{
-								//incase the offset is greater than the number of chunks
-								//subtract the number of chunks from the offset
-								//this is essentially how the chunks handle screen wrapping
-								offset -= chunkNum;
-							}
-							chunks[offset].Add(obj);
-							chunks[i].Remove(obj);
-						}
-					}
-				}
-			}
-		}
 
 
     }

@@ -83,6 +83,9 @@ namespace GDAPSIIGame
 								//subtract the number of chunks from the offset
 								//this is essentially how the chunks handle screen wrapping
 								offset -= chunkNum;
+							}else if(offset < 0)
+							{
+								offset += chunkNum;
 							}
 							chunks[offset].Add(obj);
 							chunks[i].Remove(obj);
