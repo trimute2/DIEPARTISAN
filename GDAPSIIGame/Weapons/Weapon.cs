@@ -35,5 +35,10 @@ namespace GDAPSIIGame
         {
 
         }
+
+        public void Fire(Vector2 position, Vector2 direction)
+        {
+            Bullet.Clone(position, direction);
+        }
     }
 }

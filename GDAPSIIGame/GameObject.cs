@@ -45,6 +45,7 @@ namespace GDAPSIIGame
 
         public Texture2D Texture
         {
+            get { return texture; }
             set { texture = value; }
         }
 
