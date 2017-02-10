@@ -42,7 +42,8 @@ namespace GDAPSIIGame
         }
 
         public Projectile Clone(Vector2 position, Vector2 direction) {
-            return new Projectile(this.Texture, position, this.BoundingBox, direction, this.damage);
+            ProjectileManager.Instance.new Projectile(this.Texture, position, this.BoundingBox, direction, this.damage);
+
         }
         
     }

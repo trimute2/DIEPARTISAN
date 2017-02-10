@@ -73,5 +73,10 @@ namespace GDAPSIIGame
                 p.Draw(spriteBatch);
             }
         }
+
+        internal void Add(Projectile p)
+        {
+            projectiles.Add(p);
+        }
     }
 }

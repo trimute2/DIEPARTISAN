@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace GDAPSIIGame.Entities
 {
-    class Entity : GameObject
+    public class Entity : GameObject
     {
         private int health;
         private int moveSpeed;
