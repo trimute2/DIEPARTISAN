@@ -127,12 +127,77 @@ namespace GDAPSIIGame
             Console.WriteLine(dir);            
         }
 
-        /// <summary>
-        /// Fires the player's weapon
-        /// </summary>
-        /// <param name="position"></param>
-        /// <param name="direction"></param>
-        public void Fire(Vector2 position, Vector2 direction)
+
+		public void Update(GameTime gameTime, GamePadState previousKbState, GamePadState gpState)
+		{
+			base.Update(gameTime);
+
+			//Basic keyboard movement
+			Vector2 direction = gpState.ThumbSticks.Left;
+			if (direction != Vector2.Zero)
+			{
+				direction.Normalize();
+				direction.Y *= -5;
+				direction.X *= 5;
+				this.Y += direction.Y;
+				this.X += direction.X;
+			}
+
+
+			MouseState mouseState = Mouse.GetState();
+
+			//Calculates the angle between the player and the mouse
+			//See below
+			//   180
+			//-90   90
+			//    0
+
+
+			if (gpState.ThumbSticks.Right != Vector2.Zero)
+			{
+				float angle = MathHelper.ToDegrees((float)Math.Atan2(gpState.ThumbSticks.Right.X, gpState.ThumbSticks.Right.Y*-1));
+				//Use angle to find player direction
+				if ((angle < -157.5) || (angle > 157.5))
+				{
+					dir = Player_Dir.Up;
+				}
+				else if ((angle < 157.5) && (angle > 112.5))
+				{
+					dir = Player_Dir.UpRight;
+				}
+				else if ((angle < 112.5) && (angle > 67.5))
+				{
+					dir = Player_Dir.Right;
+				}
+				else if ((angle < 67.5) && (angle > 22.5))
+				{
+					dir = Player_Dir.DownRight;
+				}
+				else if ((angle < -22.5) && (angle > -67.5))
+				{
+					dir = Player_Dir.DownLeft;
+				}
+				else if ((angle < -67.5) && (angle > -112.5))
+				{
+					dir = Player_Dir.Left;
+				}
+				else if ((angle < -112.5) && (angle > -157.5))
+				{
+					dir = Player_Dir.UpLeft;
+				}
+				else if ((angle < 22.5) || (angle > -22.5))
+				{
+					dir = Player_Dir.Down;
+				}
+			}
+			Console.WriteLine(dir);
+		}
+		/// <summary>
+		/// Fires the player's weapon
+		/// </summary>
+		/// <param name="position"></param>
+		/// <param name="direction"></param>
+		public void Fire(Vector2 position, Vector2 direction)
         {
             weapon.Fire(position, direction);
         }

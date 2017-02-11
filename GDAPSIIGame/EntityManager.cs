@@ -76,6 +76,11 @@ namespace GDAPSIIGame
             Player.Update(gameTime, previousKbState, kbState);
         }
 
+		internal void Update(GameTime gameTime, GamePadState previousGpState, GamePadState gpState)
+		{
+			Player.Update(gameTime, previousGpState, gpState);
+		}
+
         /// <summary>
         /// Draw entities
         /// </summary>

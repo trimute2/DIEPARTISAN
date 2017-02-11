@@ -16,6 +16,8 @@ namespace GDAPSIIGame
         SpriteBatch spriteBatch;
         KeyboardState kbState;
 		KeyboardState previousKbState;
+		GamePadState gpState;
+		GamePadState previousGpState;
 		ChunkManager chunkManager;
 
 		public Game1()
@@ -38,7 +40,10 @@ namespace GDAPSIIGame
             //Initialize keyboards
             kbState = new KeyboardState();
 			previousKbState = kbState;
-            
+
+			gpState = new GamePadState();
+			previousGpState = gpState;
+
 			base.Initialize();
         }
 
@@ -74,9 +79,18 @@ namespace GDAPSIIGame
 			//ScreenWrap(player);
 			previousKbState = kbState;
 			kbState = Keyboard.GetState();
-
-            //Update entities
-            entityManager.Update(gameTime, previousKbState, kbState);
+			previousGpState = gpState;
+			gpState = GamePad.GetState(PlayerIndex.One, GamePadDeadZone.Circular);
+			
+			//Update entities
+			if (gpState.IsConnected)
+			{
+				entityManager.Update(gameTime, previousGpState, gpState);
+			}
+			else
+			{
+				entityManager.Update(gameTime, previousKbState, kbState);
+			}
 
             //Update projectiles
             projectileManager.Update(gameTime, previousKbState, kbState);
