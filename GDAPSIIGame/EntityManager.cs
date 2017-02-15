@@ -15,6 +15,7 @@ namespace GDAPSIIGame
         //Fields-----------------
         List<Entities.Entity> enemies;
         static private EntityManager instance;
+        static private Player player;
 
         //Properties-------------
 
@@ -27,8 +28,7 @@ namespace GDAPSIIGame
         /// The player object
         /// </summary>
         public Player Player {
-            get;
-            set;
+            get { return player; }
         }
 
 
@@ -64,7 +64,7 @@ namespace GDAPSIIGame
         internal void LoadContent(ContentManager Content)
         {
             Texture2D playerTexture = Content.Load<Texture2D>("player");
-            Player = Player.Instantiate(null, 100, 1, playerTexture, new Vector2(playerTexture.Width, playerTexture.Height), new Rectangle(playerTexture.Width, playerTexture.Height, 50, 50));
+            player = Player.Instantiate(null, 100, 1, playerTexture, new Vector2(playerTexture.Width, playerTexture.Height), new Rectangle(playerTexture.Width, playerTexture.Height, 50, 50));
 			ChunkManager.Instance.Add(Player);
         }
 

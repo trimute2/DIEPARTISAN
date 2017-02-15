@@ -46,8 +46,8 @@ namespace GDAPSIIGame
 
         public Weapon Weapon
         {
-            get { return Weapon; }
-            set { Weapon = value; }
+            get { return weapon; }
+            set { weapon = value; }
         }
 
         public Player_Dir Dir
@@ -79,6 +79,11 @@ namespace GDAPSIIGame
             else if (kbState.IsKeyDown(Keys.A) || kbState.IsKeyDown(Keys.Left))
             {
                 this.X -= 5;
+            }
+
+            if (kbState.IsKeyDown(Keys.Space))
+            {
+                ProjectileManager.Instance.Clone(weapon.ProjType, Position, new Vector2(0f, 1f));
             }
 
             //Get the mouse's state

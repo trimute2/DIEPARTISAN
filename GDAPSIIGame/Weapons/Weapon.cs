@@ -10,20 +10,20 @@ namespace GDAPSIIGame
 {
     class Weapon : GameObject
     {
-        Projectile bullet;
+        ProjectileType projType;
 
-        public Weapon(Projectile projectile, Texture2D texture, Vector2 position, Rectangle boundingBox) : base(texture, position, boundingBox)
+        public Weapon(ProjectileType pT, Texture2D texture, Vector2 position, Rectangle boundingBox) : base(texture, position, boundingBox)
         {
-            this.bullet = projectile;
+            this.projType = pT;
         }
 
         /// <summary>
         /// The bullet the weapon fires
         /// </summary>
-        public Projectile Bullet
+        public ProjectileType ProjType
         {
-            get { return bullet; }
-            set { bullet = value; }
+            get { return projType; }
+            set { projType = value; }
         }
 
         public override void Update(GameTime gameTime)
@@ -38,7 +38,7 @@ namespace GDAPSIIGame
 
         public void Fire(Vector2 position, Vector2 direction)
         {
-            Bullet.Clone(position, direction);
+            ProjectileManager.Instance.Clone(projType, position, direction);
         }
     }
 }

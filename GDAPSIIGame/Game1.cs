@@ -38,7 +38,6 @@ namespace GDAPSIIGame
             //Initialize keyboards
             kbState = new KeyboardState();
 			previousKbState = kbState;
-            
 			base.Initialize();
         }
 
@@ -50,16 +49,15 @@ namespace GDAPSIIGame
             //Load projectiles
             projectileManager.LoadContent(Content);
 
-
-			//Rectangle pls = new Rectangle(0, 0, 0, 0);
-			//Vector2 aids = Vector2.Zero;
-			//Texture2D why = Content.Load<Texture2D>("player");
-			//Projectile p = new Projectile(why, Vector2.Zero, new Rectangle(0, 0, 0, 0), Vector2.Zero);
-			//Console.WriteLine(why);
-			//newthing = (Projectile)p.GetType().GetConstructor(new System.Type[] { why.GetType(), aids.GetType(), pls.GetType(), aids.GetType() }).Invoke(new object[] {why, new Vector2(2,2), new Rectangle(0, 0, 10, 10), new Vector2(.01f, .01f) });
-
-			//Console.WriteLine(newthing.Direction);
-		}
+            Player.Instance.Weapon = new Weapon(ProjectileType.DEFAULT, Player.Instance.Texture, Player.Instance.Position, Player.Instance.BoundingBox);
+            //Rectangle pls = new Rectangle(0, 0, 0, 0);
+            //Vector2 aids = Vector2.Zero;
+            //Texture2D why = Content.Load<Texture2D>("player");
+            //Projectile p = new Projectile(why, Vector2.Zero, new Rectangle(0, 0, 0, 0), Vector2.Zero);
+            //Console.WriteLine(why);
+            //newthing = (Projectile)p.GetType().GetConstructor(new System.Type[] { why.GetType(), aids.GetType(), pls.GetType(), aids.GetType() }).Invoke(new object[] {why, new Vector2(2,2), new Rectangle(0, 0, 10, 10), new Vector2(.01f, .01f) });
+            //Console.WriteLine(newthing.Direction);
+        }
 
         protected override void UnloadContent()
         {

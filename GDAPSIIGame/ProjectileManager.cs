@@ -10,11 +10,18 @@ using Microsoft.Xna.Framework.Input;
 
 namespace GDAPSIIGame
 {
+    enum ProjectileType {
+        DEFAULT = 1
+    }
     class ProjectileManager
     {
         //Fields-----------------
+        //Singleton Instance of ProjectileManager
         static ProjectileManager instance;
+        //List of Projectiles in game
         private static List<Projectile> projectiles;
+        //List of one of every projectile type for cloning
+        private static List<Projectile> hiddenProjectiles;
 
         //Properties-------------
 
@@ -29,6 +36,7 @@ namespace GDAPSIIGame
         private ProjectileManager()
         {
             projectiles = new List<Projectile>();
+            hiddenProjectiles = new List<Projectile>();
         }
 
         public static ProjectileManager Instance
@@ -50,6 +58,7 @@ namespace GDAPSIIGame
         {
             Texture2D texture = Content.Load<Texture2D>("player");
             Projectiles.Add(new Projectile(texture, new Vector2(texture.Width, texture.Height), new Rectangle(texture.Width, texture.Height, 25, 25), new Vector2(-0.05f, -0.05f), 1));
+            hiddenProjectiles.Add(new Projectile(texture, new Vector2(-100, -100), new Rectangle(texture.Width, texture.Height, 25, 25), new Vector2(0f, 0f), 1));
         }
 
         /// <summary>
@@ -78,6 +87,16 @@ namespace GDAPSIIGame
         {
             projectiles.Add(p);
             ChunkManager.Instance.Add(p);
+        }
+
+        internal Projectile Clone(ProjectileType pT, Vector2 currPosition, Vector2 currDirection) {
+            switch (pT)
+            {
+                case ProjectileType.DEFAULT:
+                    return hiddenProjectiles[(int)pT - 1].Clone(currPosition, currDirection);
+                    break;
+            }
+            return null;
         }
     }
 }
