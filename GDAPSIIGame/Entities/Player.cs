@@ -141,7 +141,7 @@ namespace GDAPSIIGame
                 {
                     lock (ProjectileManager.Instance.Projectiles)
                     {
-						Vector2 direction = new Vector2((mouseState.X - instance.X), (mouseState.Y - instance.Y));
+						Vector2 direction = new Vector2((mouseState.X - instance.X)/1000, (mouseState.Y - instance.Y)/1000);
 						this.Weapon.Fire(Position, direction);
                     }
                 }
