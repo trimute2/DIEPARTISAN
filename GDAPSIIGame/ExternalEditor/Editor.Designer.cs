@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.newLevelCollisionButton = new System.Windows.Forms.Button();
             this.openLevelXTilesLabel = new System.Windows.Forms.Label();
             this.openLevelYTilesLabel = new System.Windows.Forms.Label();
@@ -52,14 +51,6 @@
             this.createOpenLevelGroup.SuspendLayout();
             this.currentLevelGroup.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // statusStrip1
-            // 
-            this.statusStrip1.Location = new System.Drawing.Point(0, 539);
-            this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(904, 22);
-            this.statusStrip1.TabIndex = 0;
-            this.statusStrip1.Text = "statusStrip1";
             // 
             // newLevelCollisionButton
             // 
@@ -260,7 +251,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(904, 561);
+            this.ClientSize = new System.Drawing.Size(904, 538);
             this.Controls.Add(this.currentLevelGroup);
             this.Controls.Add(this.CurrentToolLabel);
             this.Controls.Add(this.enemyToolButton);
@@ -269,7 +260,6 @@
             this.Controls.Add(this.wallToolButton);
             this.Controls.Add(this.levelEditingGroup);
             this.Controls.Add(this.createOpenLevelGroup);
-            this.Controls.Add(this.statusStrip1);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "Editor";
             this.Text = "Level Collision Editor";
@@ -283,8 +273,6 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.Button newLevelCollisionButton;
         private System.Windows.Forms.Label openLevelXTilesLabel;
         private System.Windows.Forms.Label openLevelYTilesLabel;
