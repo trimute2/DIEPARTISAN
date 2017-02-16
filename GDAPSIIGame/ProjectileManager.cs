@@ -102,7 +102,6 @@ namespace GDAPSIIGame
             {
                 case ProjectileType.DEFAULT:
                     return hiddenProjectiles[(int)pT - 1].Clone(currPosition, currDirection);
-                    break;
             }
             return null;
         }

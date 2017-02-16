@@ -20,6 +20,8 @@ namespace GDAPSIIGame
         private Weapon weapon;
         private Player_Dir dir;
         private Thread inputThread;
+		private MouseState mouseState;
+		private MouseState prevMouseState;
 
         //Singleton
 
@@ -28,6 +30,8 @@ namespace GDAPSIIGame
             this.weapon = weapon;
             dir = Player_Dir.Down;
             inputThread = null;
+			mouseState = Mouse.GetState();
+			prevMouseState = Mouse.GetState();
         }
 
         static public Player Instantiate(Weapon weapon, int health, int moveSpeed, Texture2D texture, Vector2 position, Rectangle boundingBox)
@@ -61,9 +65,11 @@ namespace GDAPSIIGame
 
 
         //Methods
-        public void Update(GameTime gameTime, KeyboardState previousKbState, KeyboardState kbState)
+        public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
+			weapon.Update(gameTime);
+
             if (inputThread == null)
             {
                 inputThread = new Thread(() => parseInput(gameTime));
@@ -93,16 +99,20 @@ namespace GDAPSIIGame
         /// <param name="kbState">KeyboardState</param>
         public void parseInput(GameTime gameTime)
         {
-
-            KeyboardState kbState;
             float currTime = 0;
             float prevTime = 0;
             float deltaTime = 0;
+			KeyboardState kbState = Keyboard.GetState();
+			KeyboardState prevKbState = Keyboard.GetState();
             while (true)
             {
+				//Update keyboards
+				prevKbState = kbState;
+				kbState = Keyboard.GetState();
+
                 //currTime = (float)gameTime.ElapsedGameTime.Milliseconds / 1000;
                 //deltaTime = currTime - prevTime;
-                kbState = Keyboard.GetState();
+
                 //Basic keyboard movement
                 if (kbState.IsKeyDown(Keys.W) || kbState.IsKeyDown(Keys.Up))
                 {
@@ -122,18 +132,25 @@ namespace GDAPSIIGame
                     this.X -= 5;
                 }
 
-                MouseState mouseState = Mouse.GetState();
+				//Mouse state
+				prevMouseState = mouseState;
+				mouseState = Mouse.GetState();
 
-                if (kbState.IsKeyDown(Keys.Space))
+				//Fire weapon only if previous frame didn't have left button being pressed
+                if (mouseState.LeftButton == ButtonState.Pressed && prevMouseState.LeftButton == ButtonState.Released)
                 {
                     lock (ProjectileManager.Instance.Projectiles)
                     {
-                        ProjectileManager.Instance.Clone(weapon.ProjType, Position, new Vector2((mouseState.X - instance.X) / 1000, (mouseState.Y - instance.Y) / 1000));
+						Vector2 direction = new Vector2((mouseState.X - instance.X), (mouseState.Y - instance.Y));
+						this.Weapon.Fire(Position, direction);
                     }
-                    Console.WriteLine("SPACEEE");
                 }
 
-                //Get the mouse's state
+                //Player reloading
+				if (kbState.IsKeyDown(Keys.R) && prevKbState.IsKeyUp(Keys.R))
+				{
+					this.weapon.Reload();
+				}
 
 
                 //Calculates the angle between the player and the mouse
@@ -176,9 +193,9 @@ namespace GDAPSIIGame
                 {
                     dir = Player_Dir.Down;
                 }
-                Thread.Sleep(16);
-                Console.WriteLine(angle);
-                Console.WriteLine(dir);
+                Thread.Sleep((int)gameTime.ElapsedGameTime.TotalMilliseconds);
+                //Console.WriteLine(angle);
+                //Console.WriteLine(dir);
                 prevTime = currTime;
             }
         }
