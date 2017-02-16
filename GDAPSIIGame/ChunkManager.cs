@@ -124,6 +124,47 @@ namespace GDAPSIIGame
 			}
 		}
 
+		/// <summary>
+		/// checks objects that overlap one or more chunks
+		/// </summary>
+		public void ChunkOverlap()
+		{
+			int offset = 0;
+			List<GameObject> gol = null;
+			for(int i = 0; i < chunkNum; i++)
+			{
+				offset = Offset(i + 1);
+				gol = chunks[i].GetOverlap(chunks[offset]);
+				if (gol.Count > 0)
+				{
+					chunks[offset].CollideAgainst(gol);
+				}
+				offset = Offset(i + cpr);
+				gol = chunks[i].GetOverlap(chunks[offset]);
+				if (gol.Count > 0)
+				{
+					chunks[offset].CollideAgainst(gol);
+				}
+			}
+		}
+
+		/// <summary>
+		/// makes sure a number is within bounds of the chunks array
+		/// </summary>
+		/// <param name="off">the number to check against</param>
+		/// <returns></returns>
+		private int Offset(int off)
+		{
+			if(off >= chunkNum)
+			{
+				return off - chunkNum;
+			}else if(off < 0)
+			{
+				return off + chunkNum;
+			}
+			return off;
+		}
+
 		public void Upadate()
 		{
 			ChunkIt();
@@ -131,6 +172,7 @@ namespace GDAPSIIGame
 			{
 				chunk.CollideObjects();
 			}
+			ChunkOverlap();
 		}
 
 	}

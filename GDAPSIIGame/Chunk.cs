@@ -57,6 +57,16 @@ namespace GDAPSIIGame
 		{
 			return area.Contains(pos);
 		}
+		
+		/// <summary>
+		/// checks wheather a bounding box is contained within the area of the chunk
+		/// </summary>
+		/// <param name="rec">the bounding box to be checked</param>
+		/// <returns>if the bounding box overlaps the chunk</returns>
+		public bool Contains(Rectangle rec)
+		{
+			return area.Contains(rec);
+		}
 
 		/// <summary>
 		/// takes in a point and determins the ID of the chunk that contains it
@@ -114,10 +124,58 @@ namespace GDAPSIIGame
 				{
 					if (objects[i].Collide(objects[j]))
 					{
-						//for adding collision shit
+						
 					}
 				}
 			}
 		}
+
+		/// <summary>
+		/// checks an object not included in the chunk against objects in the chunk
+		/// this is for cases where objects overlap two chunks
+		/// </summary>
+		/// <param name="obj">an object to check against</param>
+		public void CollideAgainst(GameObject obj)
+		{
+			foreach(GameObject io in objects)
+			{
+				if (io.Collide(obj))
+				{
+
+				}
+			}
+		}
+
+		/// <summary>
+		/// checks a list of objects not included in the chunk against objects in the chunk
+		/// this is for cases where objects overlap two chunks
+		/// </summary>
+		/// <param name="obj">the list of objects to check against</param>
+		public void CollideAgainst(List<GameObject> objs)
+		{
+			foreach(GameObject obj in objs)
+			{
+				CollideAgainst(obj);
+			}
+		}
+
+		/// <summary>
+		/// gets objects that in this chunk that overlaos with another chunk
+		/// </summary>
+		/// <param name="ch">a chunk to check against</param>
+		/// <returns>a list of objects that collide with both chunks</returns>
+		public List<GameObject> GetOverlap(Chunk ch)
+		{
+			List<GameObject> overlap = new List<GameObject>();
+			foreach(GameObject obj in Objects)
+			{
+				if (ch.Contains(obj.BoundingBox))
+				{
+					overlap.Add(obj);
+				}
+			}
+			return overlap;
+		}
+
 	}
 }
