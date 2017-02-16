@@ -10,11 +10,17 @@ using System.Windows.Forms;
 
 namespace ExternalEditor
 {
-    public partial class Form1 : Form
+    public partial class Editor : Form
     {
-        public Form1()
+        public Editor()
         {
             InitializeComponent();
+            InitializeButtons();
+        }
+
+        public void InitializeButtons()
+        {
+
         }
     }
 }

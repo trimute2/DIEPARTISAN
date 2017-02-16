@@ -71,9 +71,9 @@ namespace GDAPSIIGame
         /// <summary>
         /// Update entities
         /// </summary>
-        internal void Update(GameTime gameTime, KeyboardState previousKbState, KeyboardState kbState)
+        internal void Update(GameTime gameTime)
         {
-            Player.Update(gameTime, previousKbState, kbState);
+            Player.Update(gameTime);
         }
 
         /// <summary>
