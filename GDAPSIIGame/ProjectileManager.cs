@@ -10,7 +10,8 @@ using Microsoft.Xna.Framework.Input;
 
 namespace GDAPSIIGame
 {
-    enum ProjectileType {
+    enum ProjectileType
+    {
         DEFAULT = 1
     }
     class ProjectileManager
@@ -19,7 +20,7 @@ namespace GDAPSIIGame
         //Singleton Instance of ProjectileManager
         static ProjectileManager instance;
         //List of Projectiles in game
-        private static List<Projectile> projectiles;
+        volatile private static List<Projectile> projectiles;
         //List of one of every projectile type for cloning
         private static List<Projectile> hiddenProjectiles;
 
@@ -66,9 +67,12 @@ namespace GDAPSIIGame
         /// </summary>
         internal void Update(GameTime gameTime, KeyboardState previousKbState, KeyboardState kbState)
         {
-            foreach (Projectile p in Projectiles)
+            lock (Projectiles)
             {
-                p.Update(gameTime);
+                foreach (Projectile p in Projectiles)
+                {
+                    p.Update(gameTime);
+                }
             }
         }
 
@@ -77,9 +81,12 @@ namespace GDAPSIIGame
         /// </summary>
         internal void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            foreach (Projectile p in Projectiles)
+            lock (Projectiles)
             {
-                p.Draw(spriteBatch);
+                foreach (Projectile p in Projectiles)
+                {
+                    p.Draw(spriteBatch);
+                }
             }
         }
 
@@ -89,12 +96,12 @@ namespace GDAPSIIGame
             ChunkManager.Instance.Add(p);
         }
 
-        internal Projectile Clone(ProjectileType pT, Vector2 currPosition, Vector2 currDirection) {
+        internal Projectile Clone(ProjectileType pT, Vector2 currPosition, Vector2 currDirection)
+        {
             switch (pT)
             {
                 case ProjectileType.DEFAULT:
                     return hiddenProjectiles[(int)pT - 1].Clone(currPosition, currDirection);
-                    break;
             }
             return null;
         }
