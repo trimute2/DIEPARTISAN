@@ -61,6 +61,7 @@
             this.newLevelCollisionButton.TabIndex = 1;
             this.newLevelCollisionButton.Text = "New Level Collision...";
             this.newLevelCollisionButton.UseVisualStyleBackColor = true;
+            this.newLevelCollisionButton.Click += new System.EventHandler(this.newLevelCollisionButton_Click);
             // 
             // openLevelXTilesLabel
             // 
@@ -261,6 +262,8 @@
             this.Controls.Add(this.levelEditingGroup);
             this.Controls.Add(this.createOpenLevelGroup);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
             this.Name = "Editor";
             this.Text = "Level Collision Editor";
             this.createOpenLevelGroup.ResumeLayout(false);
