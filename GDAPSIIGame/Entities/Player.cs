@@ -13,72 +13,92 @@ namespace GDAPSIIGame
 {
     enum Player_Dir { Up, UpLeft, Left, DownLeft, Down, DownRight, Right, UpRight }
 
-    class Player : Entity
-    {
-        //Fields
-        static private Player instance;
-        private Weapon weapon;
-        private Player_Dir dir;
-        private Thread inputThread;
+	class Player : Entity
+	{
+		//Fields
+		static private Player instance;
+		private Weapon weapon;
+		private Player_Dir dir;
+		private Thread inputThread;
 		private MouseState mouseState;
 		private MouseState prevMouseState;
+		private GameTime currentTime;
 
-        //Singleton
+		//Singleton
 
-        private Player(Weapon weapon, int health, int moveSpeed, Texture2D texture, Vector2 position, Rectangle boundingBox) : base(health, moveSpeed, texture, position, boundingBox)
-        {
-            this.weapon = weapon;
-            dir = Player_Dir.Down;
-            inputThread = null;
+		private Player(Weapon weapon, int health, int moveSpeed, Texture2D texture, Vector2 position, Rectangle boundingBox) : base(health, moveSpeed, texture, position, boundingBox)
+		{
+			this.weapon = weapon;
+			dir = Player_Dir.Down;
+			inputThread = null;
 			mouseState = Mouse.GetState();
 			prevMouseState = Mouse.GetState();
-        }
+		}
 
-        static public Player Instantiate(Weapon weapon, int health, int moveSpeed, Texture2D texture, Vector2 position, Rectangle boundingBox)
-        {
-            if (instance == null)
-            {
-                instance = new Player(weapon, health, moveSpeed, texture, position, boundingBox);
-            }
-            return instance;
-        }
-
-
-        //Properties
-
-        static public Player Instance
-        {
-            get { return instance; }
-        }
-
-        public Weapon Weapon
-        {
-            get { return weapon; }
-            set { weapon = value; }
-        }
-
-        public Player_Dir Dir
-        {
-            get { return dir; }
-            private set { dir = value; }
-        }
+		static public Player Instantiate(Weapon weapon, int health, int moveSpeed, Texture2D texture, Vector2 position, Rectangle boundingBox)
+		{
+			if (instance == null)
+			{
+				instance = new Player(weapon, health, moveSpeed, texture, position, boundingBox);
+			}
+			return instance;
+		}
 
 
+		//Properties
+
+		static public Player Instance
+		{
+			get { return instance; }
+		}
+
+		public Weapon Weapon
+		{
+			get { return weapon; }
+			set { weapon = value; }
+		}
+
+		public Player_Dir Dir
+		{
+			get { return dir; }
+			private set { dir = value; }
+		}
+
+		public GameTime CurrentTime
+		{
+			get { return currentTime; }
+			set { currentTime = value; }
+		}
         //Methods
         public override void Update(GameTime gameTime)
         {
+			currentTime = gameTime;
             base.Update(gameTime);
 			weapon.Update(gameTime);
 
             if (inputThread == null)
             {
                 inputThread = new Thread(() => parseInput(gameTime));
+				inputThread.IsBackground = true;
                 inputThread.Start();
             }
 
-        }
+			//Mouse state
+			prevMouseState = mouseState;
+			mouseState = Mouse.GetState();
 
-        public override void Draw(SpriteBatch spriteBatch)
+			//Fire weapon only if previous frame didn't have left button being pressed
+			if (mouseState.LeftButton == ButtonState.Pressed && prevMouseState.LeftButton == ButtonState.Released)
+			{
+					Vector2 direction = new Vector2((mouseState.X - instance.X) / 1000, (mouseState.Y - instance.Y) / 1000);
+					direction.Normalize();
+					this.Weapon.Fire(Position, direction);
+			}
+
+
+		}
+
+		public override void Draw(SpriteBatch spriteBatch)
         {
             base.Draw(spriteBatch);
         }
@@ -110,42 +130,28 @@ namespace GDAPSIIGame
 				prevKbState = kbState;
 				kbState = Keyboard.GetState();
 
-                //currTime = (float)gameTime.ElapsedGameTime.Milliseconds / 1000;
-                //deltaTime = currTime - prevTime;
+                //currTime = (float)CurrentTime.ElapsedGameTime.TotalMilliseconds / 1000000;
 
                 //Basic keyboard movement
                 if (kbState.IsKeyDown(Keys.W) || kbState.IsKeyDown(Keys.Up))
                 {
-                    this.Y -= 5;
+                    this.Y -= 5f;
                 }
                 else if (kbState.IsKeyDown(Keys.S) || kbState.IsKeyDown(Keys.Down))
                 {
-                    this.Y += 5;
+                    this.Y += 5f ;
                 }
 
                 if (kbState.IsKeyDown(Keys.D) || kbState.IsKeyDown(Keys.Right))
                 {
-                    this.X += 5;
+                    this.X += 5f ;
                 }
                 else if (kbState.IsKeyDown(Keys.A) || kbState.IsKeyDown(Keys.Left))
                 {
-                    this.X -= 5;
+                    this.X -= 5f ;
                 }
 
-				//Mouse state
-				prevMouseState = mouseState;
-				mouseState = Mouse.GetState();
-
-				//Fire weapon only if previous frame didn't have left button being pressed
-                if (mouseState.LeftButton == ButtonState.Pressed && prevMouseState.LeftButton == ButtonState.Released)
-                {
-                    lock (ProjectileManager.Instance.Projectiles)
-                    {
-						Vector2 direction = new Vector2((mouseState.X - instance.X)/1000, (mouseState.Y - instance.Y)/1000);
-						this.Weapon.Fire(Position, direction);
-                    }
-                }
-
+				
                 //Player reloading
 				if (kbState.IsKeyDown(Keys.R) && prevKbState.IsKeyUp(Keys.R))
 				{
@@ -193,10 +199,10 @@ namespace GDAPSIIGame
                 {
                     dir = Player_Dir.Down;
                 }
-                Thread.Sleep(16);
+                Thread.Sleep(CurrentTime.ElapsedGameTime.Milliseconds);
                 //Console.WriteLine(angle);
                 //Console.WriteLine(dir);
-                prevTime = currTime;
+                //prevTime = currTime;
             }
         }
     }

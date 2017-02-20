@@ -67,13 +67,10 @@ namespace GDAPSIIGame
         /// </summary>
         internal void Update(GameTime gameTime, KeyboardState previousKbState, KeyboardState kbState)
         {
-            lock (Projectiles)
-            {
                 foreach (Projectile p in Projectiles)
                 {
                     p.Update(gameTime);
                 }
-            }
         }
 
         /// <summary>
@@ -81,13 +78,10 @@ namespace GDAPSIIGame
         /// </summary>
         internal void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            lock (Projectiles)
-            {
                 foreach (Projectile p in Projectiles)
                 {
                     p.Draw(spriteBatch);
                 }
-            }
         }
 
         internal void Add(Projectile p)
