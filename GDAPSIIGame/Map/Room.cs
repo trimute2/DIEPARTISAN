@@ -30,19 +30,19 @@ namespace GDAPSIIGame.Map
     class Room
     {
         //The literal tilemap of the room
-        private TileType[][] tileLayout;
+        private TileType[,] tileLayout;
         int connections;
 
-        public Room(TileType[][] tileLayout)
+        public Room(TileType[,] tileLayout)
         {
             this.tileLayout = tileLayout;
-            connections = 0;
+            this.connections = 0;
         }
 
         /// <summary>
         /// Matrix of Tiles belonging to this room
         /// </summary>
-        public TileType[][] TileLayout
+        public TileType[,] TileLayout
         {
             get { return tileLayout; }
         }
