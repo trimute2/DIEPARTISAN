@@ -193,7 +193,7 @@ namespace GDAPSIIGame
                 {
                     dir = Player_Dir.Down;
                 }
-                Thread.Sleep((int)gameTime.ElapsedGameTime.TotalMilliseconds);
+                Thread.Sleep(16);
                 //Console.WriteLine(angle);
                 //Console.WriteLine(dir);
                 prevTime = currTime;
