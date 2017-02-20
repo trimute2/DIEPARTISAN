@@ -139,16 +139,16 @@ namespace GDAPSIIGame
                 }
                 else if (kbState.IsKeyDown(Keys.S) || kbState.IsKeyDown(Keys.Down))
                 {
-                    this.Y += 5f ;
+                    this.Y += 5f;
                 }
 
                 if (kbState.IsKeyDown(Keys.D) || kbState.IsKeyDown(Keys.Right))
                 {
-                    this.X += 5f ;
+                    this.X += 5f;
                 }
                 else if (kbState.IsKeyDown(Keys.A) || kbState.IsKeyDown(Keys.Left))
                 {
-                    this.X -= 5f ;
+                    this.X -= 5f;
                 }
 
 				

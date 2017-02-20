@@ -49,7 +49,6 @@ namespace GDAPSIIGame
             //Load projectiles
             projectileManager.LoadContent(Content);
 
-            Player.Instance.Weapon = new Weapon(ProjectileType.DEFAULT, Player.Instance.Texture, Player.Instance.Position, Player.Instance.BoundingBox, 0.5f, 10f, 2f);
             //Rectangle pls = new Rectangle(0, 0, 0, 0);
             //Vector2 aids = Vector2.Zero;
             //Texture2D why = Content.Load<Texture2D>("player");
