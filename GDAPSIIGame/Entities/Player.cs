@@ -23,6 +23,8 @@ namespace GDAPSIIGame
 		private MouseState mouseState;
 		private MouseState prevMouseState;
 		private GameTime currentTime;
+        private float hurting;
+        private Color color;
 
 		//Singleton
 
@@ -33,6 +35,8 @@ namespace GDAPSIIGame
 			inputThread = null;
 			mouseState = Mouse.GetState();
 			prevMouseState = Mouse.GetState();
+            hurting = 0;
+            color = Color.White;
 		}
 
 		static public Player Instantiate(Weapon weapon, int health, int moveSpeed, Texture2D texture, Vector2 position, Rectangle boundingBox)
@@ -64,11 +68,21 @@ namespace GDAPSIIGame
 			private set { dir = value; }
 		}
 
+        /// <summary>
+        /// Whether the player is hurting or not
+        /// </summary>
+        public bool IsHurting
+        {
+            get { return hurting > 0; }
+            set { if (value) { hurting = 0.5f; } }
+        }
+
 		public GameTime CurrentTime
 		{
 			get { return currentTime; }
 			set { currentTime = value; }
 		}
+
         //Methods
         public override void Update(GameTime gameTime)
         {
@@ -90,17 +104,54 @@ namespace GDAPSIIGame
 			//Fire weapon only if previous frame didn't have left button being pressed
 			if (mouseState.LeftButton == ButtonState.Pressed && prevMouseState.LeftButton == ButtonState.Released)
 			{
-					Vector2 direction = new Vector2((mouseState.X - instance.X) / 1000, (mouseState.Y - instance.Y) / 1000);
-					direction.Normalize();
-					this.Weapon.Fire(Position, direction);
+				Vector2 direction = new Vector2((mouseState.X - instance.X) / 1000, (mouseState.Y - instance.Y) / 1000);
+				direction.Normalize();
+				this.Weapon.Fire(Position, direction);
 			}
 
+            //Find the right sprite to draw
+            //Determine player direction and get the corresponding sprite
+            switch (dir)
+            {
+                case Player_Dir.Up:
+                    break;
+                case Player_Dir.UpLeft:
+                    break;
+                case Player_Dir.Left:
+                    break;
+                case Player_Dir.DownLeft:
+                    break;
+                case Player_Dir.Down:
+                    break;
+                case Player_Dir.DownRight:
+                    break;
+                case Player_Dir.Right:
+                    break;
+                case Player_Dir.UpRight:
+                    break;
+                default:
+                    break;
+            }
 
-		}
+            //Determine if the player hurting color should be playing
+            if (hurting > 0)
+            {
+                //Subtract from the hurting timer if the player is hurting
+                hurting -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+            }
+        }
 
 		public override void Draw(SpriteBatch spriteBatch)
         {
-            base.Draw(spriteBatch);
+            spriteBatch.Draw(this.Texture,
+                this.Position,
+                null,
+                null,
+                Vector2.Zero,
+                0.0f,
+                this.Scale,
+                color,
+                0);
         }
 
         /// <summary>

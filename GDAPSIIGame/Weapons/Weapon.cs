@@ -78,7 +78,28 @@ namespace GDAPSIIGame
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-
+            Player_Dir dir = Player.Instance.Dir;
+            switch (dir)
+            {
+                case Player_Dir.Up:
+                    break;
+                case Player_Dir.UpLeft:
+                    break;
+                case Player_Dir.Left:
+                    break;
+                case Player_Dir.DownLeft:
+                    break;
+                case Player_Dir.Down:
+                    break;
+                case Player_Dir.DownRight:
+                    break;
+                case Player_Dir.Right:
+                    break;
+                case Player_Dir.UpRight:
+                    break;
+                default:
+                    break;
+            }
         }
 
 		/// <summary>

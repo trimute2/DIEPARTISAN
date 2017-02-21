@@ -54,6 +54,12 @@ namespace GDAPSIIGame
 			get { return boundingBox; }
 		}
 
+        public Vector2 Scale
+        {
+            get { return scale; }
+            set { scale = value; }
+        }
+
         public virtual void Draw(SpriteBatch spriteBatch) {
             spriteBatch.Draw(texture,
                 position,
