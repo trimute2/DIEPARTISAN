@@ -10,6 +10,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace GDAPSIIGame
 {
+	
     public class GameObject
     {
         private Texture2D texture;
@@ -17,7 +18,7 @@ namespace GDAPSIIGame
         private Rectangle boundingBox;
         private Vector2 scale;
 
-        public GameObject(Texture2D texture, Vector2 position, Rectangle boundingBox) {
+		public GameObject(Texture2D texture, Vector2 position, Rectangle boundingBox) {
             this.texture = texture;
             this.position = position;
             this.boundingBox = boundingBox;
@@ -85,9 +86,9 @@ namespace GDAPSIIGame
         /// <returns>True if the rectangles collide, false otherwise</returns>
         public bool Collide(GameObject obj)
         {
-            if (this.BoundingBox.Intersects(obj.BoundingBox)) { return true; }
-            else return false;
+            return this.BoundingBox.Intersects(obj.BoundingBox));
         }
+
 
     }
 }

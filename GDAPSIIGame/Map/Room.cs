@@ -55,16 +55,18 @@ namespace GDAPSIIGame.Map
         {
             int numRooms = r.Next(15) + 1;
             int dirToConnect = 0;
+
             do
             {
                 dirToConnect = r.Next(4) + 1;
                 while ((connections & dirToConnect) == dirToConnect)
                 {
-                    dirToConnect = r.Next(4) + 1;
+                    dirToConnect = (int)Math.Pow(2, r.Next(4));
                 }
-                connections = dirToConnect;
+                connections += dirToConnect;
                 numRooms <<= 1;
             } while ((numRooms & 8) == 0);
+            
         }
 
 
