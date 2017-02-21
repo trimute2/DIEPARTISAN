@@ -13,16 +13,16 @@ namespace GDAPSIIGame
     class EntityManager
     {
         //Fields-----------------
-        List<Entities.Entity> enemies;
+        List<Entities.Entity> entities;
         static private EntityManager instance;
         static private Player player;
 
         //Properties-------------
 
         /// <summary>
-        /// The list of all enemies
+        /// The list of all entities
         /// </summary>
-        public List<Entities.Entity> Enemies { get { return enemies; } set { enemies = value; } }
+        public List<Entities.Entity> Entities { get { return entities; } set { entities = value; } }
 
         /// <summary>
         /// The player object
@@ -39,7 +39,7 @@ namespace GDAPSIIGame
         /// </summary>
         private EntityManager()
         {
-            enemies = new List<Entities.Entity>();
+            entities = new List<Entities.Entity>();
         }
 
         /// <summary>
@@ -66,6 +66,7 @@ namespace GDAPSIIGame
             Texture2D playerTexture = Content.Load<Texture2D>("player");
             player = Player.Instantiate(null, 100, 1, playerTexture, new Vector2(playerTexture.Width, playerTexture.Height), new Rectangle(playerTexture.Width, playerTexture.Height, 50, 50));
             Player.Instance.Weapon = new Weapon(ProjectileType.DEFAULT, Player.Instance.Texture, Player.Instance.Position, Player.Instance.BoundingBox, 0.5f, 10f, 2f);
+            entities.Add(player);
             ChunkManager.Instance.Add(Player);
         }
 
@@ -73,9 +74,12 @@ namespace GDAPSIIGame
         /// Update entities
         /// </summary>
         internal void Update(GameTime gameTime)
-        {
-            Player.Update(gameTime);
-        }
+		{
+			foreach (Entities.Entity e in entities)
+			{
+				e.Update(gameTime);
+			}
+		}
 
         /// <summary>
         /// Draw entities
@@ -87,7 +91,7 @@ namespace GDAPSIIGame
 
         internal void Add(Entities.Entity e)
         {
-            enemies.Add(e);
+            entities.Add(e);
         }
     }
 }
