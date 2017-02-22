@@ -86,7 +86,7 @@ namespace GDAPSIIGame
         /// <returns>True if the rectangles collide, false otherwise</returns>
         public bool Collide(GameObject obj)
         {
-            return this.BoundingBox.Intersects(obj.BoundingBox));
+            return this.BoundingBox.Intersects(obj.BoundingBox);
         }
 
 

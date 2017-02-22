@@ -22,5 +22,9 @@ namespace GDAPSIIGame.ICollidabe
 		Rectangle BoundingBox { get; }
 
 		void CollisionReaction(Rectangle bb, CollisionType ct);
+
+		bool Collide(ICollidable obj);
+
+		bool Collide(Rectangle box);
 	}
 }
