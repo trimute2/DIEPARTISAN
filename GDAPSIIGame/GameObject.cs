@@ -6,8 +6,6 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-
-
 namespace GDAPSIIGame
 {
 	
@@ -86,9 +84,13 @@ namespace GDAPSIIGame
         /// <returns>True if the rectangles collide, false otherwise</returns>
         public bool Collide(GameObject obj)
         {
-            return this.BoundingBox.Intersects(obj.BoundingBox));
+            return this.BoundingBox.Intersects(obj.BoundingBox);
         }
 
-
+		/// <summary>
+		/// What happens when an object collides with another object
+		/// </summary>
+		/// <param name="obj">The object that collides</param>
+		public virtual void OnCollide(GameObject obj) { Console.WriteLine("work?"); }
     }
 }

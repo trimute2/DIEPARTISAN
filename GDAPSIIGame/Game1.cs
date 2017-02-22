@@ -27,9 +27,11 @@ namespace GDAPSIIGame
         protected override void Initialize()
         {
 			this.IsMouseVisible = true;
+
             //Initialize entity manager
             entityManager = EntityManager.Instance;
 
+			//Initialize the chunk manager
 			chunkManager = ChunkManager.Instance;
 
             //Initialize projectile manager
@@ -80,7 +82,9 @@ namespace GDAPSIIGame
             //Update projectiles
             projectileManager.Update(gameTime, previousKbState, kbState);
 
-			chunkManager.Upadate();
+			//Update chunks
+			chunkManager.Update();
+
 			base.Update(gameTime);
 		}
 
