@@ -44,6 +44,14 @@ namespace GDAPSIIGame.Entities
             get { return moveSpeed; }
         }
 
+		/// <summary>
+		/// The direction the entity is facing
+		/// </summary>
+		public Entity_Dir Dir
+		{
+			get { return dir; }
+			set { dir = value; }
+		}
 		public override void OnCollision(Rectangle bb, CollisionType ct)
 		{
 			switch (ct)
@@ -100,15 +108,6 @@ namespace GDAPSIIGame.Entities
 					}
 					break;
 			}
-		}
-
-		/// <summary>
-		/// The direction the entity is facing
-		/// </summary>
-		public Entity_Dir Dir
-		{
-			get { return dir; }
-			set { dir = value; }
 		}
 		
 
