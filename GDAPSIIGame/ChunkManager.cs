@@ -165,7 +165,7 @@ namespace GDAPSIIGame
 			return off;
 		}
 
-		public void Upadate()
+		public void Update()
 		{
 			ChunkIt();
 			foreach(Chunk chunk in chunks)

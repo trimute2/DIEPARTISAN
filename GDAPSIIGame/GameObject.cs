@@ -6,8 +6,6 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-
-
 namespace GDAPSIIGame
 {
 	
@@ -89,6 +87,10 @@ namespace GDAPSIIGame
             return this.BoundingBox.Intersects(obj.BoundingBox);
         }
 
-
+		/// <summary>
+		/// What happens when an object collides with another object
+		/// </summary>
+		/// <param name="obj">The object that collides</param>
+		public virtual void OnCollide(GameObject obj) { Console.WriteLine("work?"); }
     }
 }

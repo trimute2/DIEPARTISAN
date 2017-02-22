@@ -138,7 +138,7 @@ namespace GDAPSIIGame
             {
                 //Subtract from the hurting timer if the player is hurting
                 hurting -= (float)gameTime.ElapsedGameTime.TotalSeconds;
-            }
+			}
         }
 
 		public override void Draw(SpriteBatch spriteBatch)
