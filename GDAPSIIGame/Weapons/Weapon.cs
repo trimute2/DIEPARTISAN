@@ -8,6 +8,11 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace GDAPSIIGame
 {
+	/// <summary>
+	/// The direction the weapon sprite is facing
+	/// </summary>
+	enum Weapon_Dir { Up, UpLeft, Left, DownLeft, Down, DownRight, Right, UpRight }
+
     class Weapon : GameObject
     {
         //Fields
@@ -20,6 +25,7 @@ namespace GDAPSIIGame
         private bool fired;
 		private bool reload;
 		private float reloadTimer;
+		private Weapon_Dir dir;
 
         public Weapon(ProjectileType pT, Texture2D texture, Vector2 position, Rectangle boundingBox, float fireRate, float clipSize, float reloadSpeed) : base(texture, position, boundingBox)
         {
@@ -32,6 +38,7 @@ namespace GDAPSIIGame
 			this.reloadTimer = 0; //The timer used to increment a reload
             this.fireTimer = 0; //The timer used to control weapon fire rates
 			this.fired = false; //Whether the weapon has fired
+			dir = Weapon_Dir.Down; //The direction of the weapon for drawing
         }
 
         /// <summary>
@@ -43,6 +50,15 @@ namespace GDAPSIIGame
             set { projType = value; }
         }
 
+		/// <summary>
+		/// The orientation of the weapon
+		/// </summary>
+		public Weapon_Dir Dir
+		{
+			get { return dir; }
+			set { dir = value; }
+		}
+
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
@@ -51,7 +67,7 @@ namespace GDAPSIIGame
             if (fired)
             {
 				//Increment fireTimer
-				fireTimer = fireTimer + (float)gameTime.ElapsedGameTime.TotalSeconds;
+				fireTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
 				//Check if fireTimer meets the threshold
 				if (fireTimer >= fireRate)
 				{
@@ -64,7 +80,7 @@ namespace GDAPSIIGame
 			if (reload)
 			{
 				//Inrement reloadTimer
-				reloadTimer = reloadTimer + (float)gameTime.ElapsedGameTime.TotalSeconds;
+				reloadTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
 				//Check if reloadTimer meets the threshold
 				if (reloadTimer >= reloadSpeed)
 				{
@@ -78,29 +94,28 @@ namespace GDAPSIIGame
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            Player_Dir dir = Player.Instance.Dir;
-            switch (dir)
-            {
-                case Player_Dir.Up:
-                    break;
-                case Player_Dir.UpLeft:
-                    break;
-                case Player_Dir.Left:
-                    break;
-                case Player_Dir.DownLeft:
-                    break;
-                case Player_Dir.Down:
-                    break;
-                case Player_Dir.DownRight:
-                    break;
-                case Player_Dir.Right:
-                    break;
-                case Player_Dir.UpRight:
-                    break;
-                default:
-                    break;
-            }
-        }
+			switch (dir)
+			{
+				case Weapon_Dir.Up:
+					break;
+				case Weapon_Dir.UpLeft:
+					break;
+				case Weapon_Dir.Left:
+					break;
+				case Weapon_Dir.DownLeft:
+					break;
+				case Weapon_Dir.Down:
+					break;
+				case Weapon_Dir.DownRight:
+					break;
+				case Weapon_Dir.Right:
+					break;
+				case Weapon_Dir.UpRight:
+					break;
+				default:
+					break;
+			}
+		}
 
 		/// <summary>
 		/// Tell the weapon it is time to reload
