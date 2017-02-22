@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 
-namespace GDAPSIIGame.ICollidabe
+namespace GDAPSIIGame.Interface
 {
 	public enum CollisionType
 	{
@@ -17,11 +17,11 @@ namespace GDAPSIIGame.ICollidabe
 	/// </summary>
 	/// <param name="bb">the bounding box that the entitiy is colliding with</param>
 	/// <param name="ct">the collision type</param>
-	interface ICollidable
+	public interface ICollidable
 	{
 		Rectangle BoundingBox { get; }
 
-		void CollisionReaction(Rectangle bb, CollisionType ct);
+		void OnCollision(Rectangle bb, CollisionType ct);
 
 		bool Collide(ICollidable obj);
 

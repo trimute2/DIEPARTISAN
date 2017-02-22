@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GDAPSIIGame.Interface;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace GDAPSIIGame
 {
 	
-    public class GameObject
+    public class GameObject : ICollidable
     {
         private Texture2D texture;
         private Vector2 position;
@@ -82,15 +83,33 @@ namespace GDAPSIIGame
         /// </summary>
         /// <param name="obj">The object to check</param>
         /// <returns>True if the rectangles collide, false otherwise</returns>
-        public bool Collide(GameObject obj)
+        public bool Collide(ICollidable obj)
         {
-            return this.BoundingBox.Intersects(obj.BoundingBox);
+            return BoundingBox.Intersects(obj.BoundingBox);
         }
+
+		/// <summary>
+		/// Check if the boundingboxes of two rectangles collide
+		/// </summary>
+		/// <param name="box">The rectangle to check</param>
+		/// <returns>if the two rectangles collide</returns>
+		public bool Collide(Rectangle box)
+		{
+			return BoundingBox.Intersects(box);
+		}
 
 		/// <summary>
 		/// What happens when an object collides with another object
 		/// </summary>
 		/// <param name="obj">The object that collides</param>
 		public virtual void OnCollide(GameObject obj) { Console.WriteLine("work?"); }
-    }
+
+
+		public virtual void OnCollision(Rectangle bb, CollisionType ct)
+		{
+			throw new NotImplementedException();
+		}
+
+		
+	}
 }
