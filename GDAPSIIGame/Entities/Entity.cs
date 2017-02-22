@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using GDAPSIIGame.Interface;
 
 namespace GDAPSIIGame.Entities
 {
@@ -28,8 +29,64 @@ namespace GDAPSIIGame.Entities
             get { return moveSpeed; }
         }
 
+		public override void OnCollision(Rectangle bb, CollisionType ct)
+		{
+			switch (ct)
+			{
+				case CollisionType.Wall:
+					//top left &...
+					if (bb.Contains(BoundingBox.Left, BoundingBox.Top))
+					{
+						// top right
+						if (bb.Contains(BoundingBox.Right, BoundingBox.Top))
+						{
+							this.Y += 5;
+						}
+						else // bottom left
+						if (bb.Contains(BoundingBox.Left, BoundingBox.Bottom))
+						{
+							this.X += 5;
+						}
+						else // nothing
+						{
+							this.X += 5;
+							this.Y += 5;
+						}
+					}
+					else //bottom right &...
+					if (bb.Contains(BoundingBox.Right, BoundingBox.Bottom))
+					{
+						// top right
+						if (bb.Contains(BoundingBox.Right, BoundingBox.Top))
+						{
+							this.X -= 5;
+						}
+						else // bottom left
+						if (bb.Contains(BoundingBox.Left, BoundingBox.Bottom))
+						{
+							this.Y -= 5;
+						}
+						else // nothing
+						{
+							this.X -= 5;
+							this.Y -= 5;
+						}
+					}
+					else // bottom left
+					if (bb.Contains(BoundingBox.Left, BoundingBox.Bottom))
+					{
+						this.X += 5;
+						this.Y -= 5;
+					}
+					else // top right
+					{
+						this.X -= 5;
+						this.Y += 5;
+					}
+					break;
+			}
+		}
 
-		
 
 	}
 }
