@@ -52,6 +52,7 @@ namespace GDAPSIIGame.Entities
 			get { return dir; }
 			set { dir = value; }
 		}
+
 		public override void OnCollision(Rectangle bb, CollisionType ct)
 		{
 			switch (ct)
@@ -109,7 +110,5 @@ namespace GDAPSIIGame.Entities
 					break;
 			}
 		}
-		
-
 	}
 }

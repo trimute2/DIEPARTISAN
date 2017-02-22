@@ -177,25 +177,25 @@ namespace GDAPSIIGame
 				prevKbState = kbState;
 				kbState = Keyboard.GetState();
 
-                //currTime = (float)CurrentTime.ElapsedGameTime.TotalMilliseconds / 1000000;
+                deltaTime = (float)CurrentTime.ElapsedGameTime.TotalSeconds / ((float)1/60);
 
                 //Basic keyboard movement
                 if (kbState.IsKeyDown(Keys.W) || kbState.IsKeyDown(Keys.Up))
                 {
-                    this.Y -= 5f;
+                    this.Y -= 5f * deltaTime;
                 }
                 else if (kbState.IsKeyDown(Keys.S) || kbState.IsKeyDown(Keys.Down))
                 {
-                    this.Y += 5f;
+                    this.Y += 5f * deltaTime;
                 }
 
                 if (kbState.IsKeyDown(Keys.D) || kbState.IsKeyDown(Keys.Right))
                 {
-                    this.X += 5f;
+                    this.X += 5f * deltaTime;
                 }
                 else if (kbState.IsKeyDown(Keys.A) || kbState.IsKeyDown(Keys.Left))
                 {
-                    this.X -= 5f;
+                    this.X -= 5f * deltaTime;
                 }
 				
                 //Player reloading
