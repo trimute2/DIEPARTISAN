@@ -64,17 +64,17 @@ namespace GDAPSIIGame.Entities
 						// top right
 						if (bb.Contains(BoundingBox.Right, BoundingBox.Top))
 						{
-							this.Y += 5;
+							this.Y += bb.Bottom- BoundingBox.Top;
 						}
 						else // bottom left
 						if (bb.Contains(BoundingBox.Left, BoundingBox.Bottom))
 						{
-							this.X += 5;
+							this.X += bb.Right-BoundingBox.Left;
 						}
 						else // nothing
 						{
-							this.X += 5;
-							this.Y += 5;
+							this.X += bb.Bottom - BoundingBox.Top;
+							this.Y += bb.Right - BoundingBox.Left;
 						}
 					}
 					else //bottom right &...
@@ -83,29 +83,29 @@ namespace GDAPSIIGame.Entities
 						// top right
 						if (bb.Contains(BoundingBox.Right, BoundingBox.Top))
 						{
-							this.X -= 5;
+							this.X -= BoundingBox.Right-bb.Left;
 						}
 						else // bottom left
 						if (bb.Contains(BoundingBox.Left, BoundingBox.Bottom))
 						{
-							this.Y -= 5;
+							this.Y -= BoundingBox.Bottom-bb.Top;
 						}
 						else // nothing
 						{
-							this.X -= 5;
-							this.Y -= 5;
+							this.X -= BoundingBox.Right - bb.Left;
+							this.Y -= BoundingBox.Bottom - bb.Top;
 						}
 					}
 					else // bottom left
 					if (bb.Contains(BoundingBox.Left, BoundingBox.Bottom))
 					{
-						this.X += 5;
-						this.Y -= 5;
+						this.X += bb.Bottom - BoundingBox.Top;
+						this.Y -= BoundingBox.Bottom - bb.Top;
 					}
 					else // top right
 					{
-						this.X -= 5;
-						this.Y += 5;
+						this.X -= BoundingBox.Right - bb.Left;
+						this.Y += bb.Right - BoundingBox.Left;
 					}
 					break;
 			}
