@@ -98,12 +98,6 @@ namespace GDAPSIIGame
 			return BoundingBox.Intersects(box);
 		}
 
-		/// <summary>
-		/// What happens when an object collides with another object
-		/// </summary>
-		/// <param name="obj">The object that collides</param>
-		public virtual void OnCollide(GameObject obj) { Console.WriteLine("work?"); }
-
 
 		public virtual void OnCollision(Rectangle bb, CollisionType ct)
 		{

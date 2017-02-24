@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using GDAPSIIGame.Entities;
 using System.Threading;
+using System.Runtime.CompilerServices;
 
 namespace GDAPSIIGame
 {
@@ -20,7 +21,9 @@ namespace GDAPSIIGame
 		private MouseState mouseState;
 		private MouseState prevMouseState;
 		private GameTime currentTime;
-        private float hurting;
+		private KeyboardState currentState;
+		private KeyboardState prevState;
+		private float hurting;
         private Color color;
 
 		//Singleton
@@ -73,14 +76,37 @@ namespace GDAPSIIGame
             set { if (value) { hurting = 0.5f; } }
         }
 
+		/// <summary>
+		/// The current GameTime
+		/// </summary>
 		public GameTime CurrentTime
 		{
 			get { return currentTime; }
 			set { currentTime = value; }
 		}
 
-        //Methods
-        public override void Update(GameTime gameTime)
+		/// <summary>
+		/// The current state of the keyboard
+		/// </summary>
+		public KeyboardState CurrentState
+		{
+			[MethodImpl(MethodImplOptions.Synchronized)]
+			get { return currentState; }
+			set { currentState = value; }
+		}
+
+		/// <summary>
+		/// The previous state of the keyboard
+		/// </summary>
+		public KeyboardState PrevState
+		{
+			[MethodImpl(MethodImplOptions.Synchronized)]
+			get { return prevState; }
+			set { prevState = value; }
+		}
+
+		//Methods
+		public override void Update(GameTime gameTime)
         {
 			currentTime = gameTime;
             base.Update(gameTime);
@@ -96,6 +122,10 @@ namespace GDAPSIIGame
 			//Mouse state
 			prevMouseState = mouseState;
 			mouseState = Mouse.GetState();
+
+			//Current keyboard state
+			PrevState = CurrentState;
+			currentState = Keyboard.GetState();
 
 			//Fire weapon only if previous frame didn't have left button being pressed
 			if (mouseState.LeftButton == ButtonState.Pressed && prevMouseState.LeftButton == ButtonState.Released)
@@ -174,28 +204,30 @@ namespace GDAPSIIGame
             while (true)
             {
 				//Update keyboards
-				prevKbState = kbState;
-				kbState = Keyboard.GetState();
+				prevKbState = PrevState;
+				kbState = CurrentState;
 
-                deltaTime = (float)CurrentTime.ElapsedGameTime.TotalSeconds / ((float)1/60);
+                deltaTime = (float)CurrentTime.ElapsedGameTime.TotalSeconds/200;
+				//Console.WriteLine(deltaTime);
+				//Console.WriteLine(CurrentTime.ElapsedGameTime.TotalSeconds);
 
                 //Basic keyboard movement
                 if (kbState.IsKeyDown(Keys.W) || kbState.IsKeyDown(Keys.Up))
                 {
-                    this.Y -= 5f * deltaTime;
+                    this.Y -= deltaTime;
                 }
                 else if (kbState.IsKeyDown(Keys.S) || kbState.IsKeyDown(Keys.Down))
                 {
-                    this.Y += 5f * deltaTime;
+                    this.Y += deltaTime;
                 }
 
                 if (kbState.IsKeyDown(Keys.D) || kbState.IsKeyDown(Keys.Right))
                 {
-                    this.X += 5f * deltaTime;
+                    this.X += deltaTime;
                 }
                 else if (kbState.IsKeyDown(Keys.A) || kbState.IsKeyDown(Keys.Left))
                 {
-                    this.X -= 5f * deltaTime;
+                    this.X -= deltaTime;
                 }
 				
                 //Player reloading
@@ -252,7 +284,7 @@ namespace GDAPSIIGame
                     this.Dir = Entity_Dir.Down;
 					weapon.Dir = Weapon_Dir.Down;
 				}
-                Thread.Sleep(CurrentTime.ElapsedGameTime.Milliseconds);
+                //Thread.Sleep(1);
                 //Console.WriteLine(angle);
                 //Console.WriteLine(this.Dir);
             }

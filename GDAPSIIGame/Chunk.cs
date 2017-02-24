@@ -141,7 +141,7 @@ namespace GDAPSIIGame
 			{
 				if (io.Collide(obj))
 				{
-					io.OnCollide(obj);
+
 				}
 			}
 		}
