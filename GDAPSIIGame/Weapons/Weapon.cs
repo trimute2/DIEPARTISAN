@@ -26,8 +26,11 @@ namespace GDAPSIIGame
 		private bool reload;
 		private float reloadTimer;
 		private Weapon_Dir dir;
+		private float angle;
+		private Vector2 origin;
+		private Vector2 TexPosition;
 
-        public Weapon(ProjectileType pT, Texture2D texture, Vector2 position, Rectangle boundingBox, float fireRate, float clipSize, float reloadSpeed) : base(texture, position, boundingBox)
+        public Weapon(ProjectileType pT, Texture2D texture, Vector2 position, Rectangle boundingBox, float fireRate, float clipSize, float reloadSpeed, Vector2 origin) : base(texture, position, boundingBox)
         {
             this.projType = pT; //Type of projectile the weapon fires
             this.fireRate = fireRate; //How fast until the weapon can fire again
@@ -38,7 +41,10 @@ namespace GDAPSIIGame
 			this.reloadTimer = 0; //The timer used to increment a reload
             this.fireTimer = 0; //The timer used to control weapon fire rates
 			this.fired = false; //Whether the weapon has fired
-			dir = Weapon_Dir.Down; //The direction of the weapon for drawing
+			this.dir = Weapon_Dir.Down; //The direction of the weapon for drawing
+			this.angle = 0; //The angle of the weapon
+			this.origin = origin; //The origin point of the weapon (where the player holds it)
+			this.TexPosition = position;
         }
 
         /// <summary>
@@ -63,8 +69,11 @@ namespace GDAPSIIGame
         {
             base.Update(gameTime);
 
+			angle = -MathHelper.ToRadians(Player.Instance.Angle);
+			TexPosition = Position;
+
 			//Control when user can fire again after just firing
-            if (fired)
+			if (fired)
             {
 				//Increment fireTimer
 				fireTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -96,25 +105,38 @@ namespace GDAPSIIGame
         {
 			switch (dir)
 			{
-				case Weapon_Dir.Up:
+				case Weapon_Dir.Up: 
 					break;
 				case Weapon_Dir.UpLeft:
+					this.TexPosition.X = this.Position.X - 20;
 					break;
 				case Weapon_Dir.Left:
+					this.TexPosition.X = this.Position.X - 20;
 					break;
 				case Weapon_Dir.DownLeft:
+					this.TexPosition.X = this.Position.X - 20;
 					break;
 				case Weapon_Dir.Down:
 					break;
 				case Weapon_Dir.DownRight:
+					this.TexPosition.X = this.Position.X + 20;
 					break;
 				case Weapon_Dir.Right:
+					this.TexPosition.X = this.Position.X + 20;
 					break;
 				case Weapon_Dir.UpRight:
-					break;
-				default:
+					this.TexPosition.X = this.Position.X + 20;
 					break;
 			}
+
+			spriteBatch.Draw(this.Texture,
+				this.TexPosition,
+				null,
+				null,
+				origin,
+				angle,
+				this.Scale,
+				Color.White);
 		}
 
 		/// <summary>

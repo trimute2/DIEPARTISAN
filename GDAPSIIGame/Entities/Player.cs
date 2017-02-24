@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using GDAPSIIGame.Entities;
 using System.Threading;
+using System.Runtime.CompilerServices;
 
 namespace GDAPSIIGame
 {
@@ -20,8 +21,12 @@ namespace GDAPSIIGame
 		private MouseState mouseState;
 		private MouseState prevMouseState;
 		private GameTime currentTime;
-        private float hurting;
+		private KeyboardState currentState;
+		private KeyboardState prevState;
+		private float hurting;
         private Color color;
+		private float angle;
+		private SpriteEffects effect;
 
 		//Singleton
 
@@ -33,6 +38,8 @@ namespace GDAPSIIGame
 			prevMouseState = Mouse.GetState();
             hurting = 0;
             color = Color.White;
+			angle = 0;
+			effect = new SpriteEffects();
 		}
 
 		static public Player Instantiate(Weapon weapon, int health, int moveSpeed, Texture2D texture, Vector2 position, Rectangle boundingBox)
@@ -73,14 +80,43 @@ namespace GDAPSIIGame
             set { if (value) { hurting = 0.5f; } }
         }
 
+		/// <summary>
+		/// The current GameTime
+		/// </summary>
 		public GameTime CurrentTime
 		{
 			get { return currentTime; }
 			set { currentTime = value; }
 		}
 
-        //Methods
-        public override void Update(GameTime gameTime)
+		/// <summary>
+		/// The current state of the keyboard
+		/// </summary>
+		public KeyboardState CurrentState
+		{
+			[MethodImpl(MethodImplOptions.Synchronized)]
+			get { return currentState; }
+			set { currentState = value; }
+		}
+
+		/// <summary>
+		/// The previous state of the keyboard
+		/// </summary>
+		public KeyboardState PrevState
+		{
+			[MethodImpl(MethodImplOptions.Synchronized)]
+			get { return prevState; }
+			set { prevState = value; }
+		}
+
+		public float Angle
+		{
+			get { return angle; }
+			set { angle = value; }
+		}
+
+		//Methods
+		public override void Update(GameTime gameTime)
         {
 			currentTime = gameTime;
             base.Update(gameTime);
@@ -97,37 +133,21 @@ namespace GDAPSIIGame
 			prevMouseState = mouseState;
 			mouseState = Mouse.GetState();
 
+			//Current keyboard state
+			PrevState = CurrentState;
+			currentState = Keyboard.GetState();
+
+			//Update weapon position
+			weapon.X = this.X+(BoundingBox.Width/2);
+			weapon.Y = this.Y+(BoundingBox.Height/2);
+
 			//Fire weapon only if previous frame didn't have left button being pressed
 			if (mouseState.LeftButton == ButtonState.Pressed && prevMouseState.LeftButton == ButtonState.Released)
 			{
 				Vector2 direction = new Vector2((mouseState.X - instance.X) / 1000, (mouseState.Y - instance.Y) / 1000);
 				direction.Normalize();
-				this.Weapon.Fire(Position, direction);
+				this.Weapon.Fire(Weapon.Position, direction);
 			}
-
-            //Find the right sprite to draw
-            //Determine player direction and get the corresponding sprite
-            switch (this.Dir)
-            {
-                case Entity_Dir.Up:
-                    break;
-                case Entity_Dir.UpLeft:
-                    break;
-                case Entity_Dir.Left:
-                    break;
-                case Entity_Dir.DownLeft:
-                    break;
-                case Entity_Dir.Down:
-                    break;
-                case Entity_Dir.DownRight:
-                    break;
-                case Entity_Dir.Right:
-                    break;
-                case Entity_Dir.UpRight:
-                    break;
-                default:
-                    break;
-            }
 
             //Determine if the player hurting color should be playing
             if (hurting > 0)
@@ -139,15 +159,47 @@ namespace GDAPSIIGame
 
 		public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(this.Texture,
-                this.Position,
-                null,
-                null,
-                Vector2.Zero,
-                0.0f,
-                this.Scale,
-                color,
-                0);
+			//Find the right sprite to draw
+			//Determine player direction and get the corresponding sprite
+			switch (this.Dir)
+			{
+				case Entity_Dir.Up:
+					effect = SpriteEffects.None;
+					break;
+				case Entity_Dir.UpLeft:
+					effect = SpriteEffects.FlipHorizontally;
+					break;
+				case Entity_Dir.Left:
+					effect = SpriteEffects.FlipHorizontally;
+					break;
+				case Entity_Dir.DownLeft:
+					effect = SpriteEffects.FlipHorizontally;
+					break;
+				case Entity_Dir.Down:
+					effect = SpriteEffects.None;
+					break;
+				case Entity_Dir.DownRight:
+					effect = SpriteEffects.None;
+					break;
+				case Entity_Dir.Right:
+					effect = SpriteEffects.None;
+					break;
+				case Entity_Dir.UpRight:
+					effect = SpriteEffects.None;
+					break;
+			}
+
+			spriteBatch.Draw(this.Texture,
+				this.Position,
+				null,
+				null,
+				Vector2.Zero,
+				0.0f,
+				this.Scale,
+				color,
+				effect);
+
+			weapon.Draw(spriteBatch);
         }
 
         /// <summary>
@@ -174,28 +226,30 @@ namespace GDAPSIIGame
             while (true)
             {
 				//Update keyboards
-				prevKbState = kbState;
-				kbState = Keyboard.GetState();
+				prevKbState = PrevState;
+				kbState = CurrentState;
 
-                deltaTime = (float)CurrentTime.ElapsedGameTime.TotalSeconds / ((float)1/60);
+                deltaTime = (float)CurrentTime.ElapsedGameTime.TotalSeconds/200;
+				//Console.WriteLine(deltaTime);
+				//Console.WriteLine(CurrentTime.ElapsedGameTime.TotalSeconds);
 
                 //Basic keyboard movement
                 if (kbState.IsKeyDown(Keys.W) || kbState.IsKeyDown(Keys.Up))
                 {
-                    this.Y -= 5f * deltaTime;
+                    this.Y -= deltaTime;
                 }
                 else if (kbState.IsKeyDown(Keys.S) || kbState.IsKeyDown(Keys.Down))
                 {
-                    this.Y += 5f * deltaTime;
+                    this.Y += deltaTime;
                 }
 
                 if (kbState.IsKeyDown(Keys.D) || kbState.IsKeyDown(Keys.Right))
                 {
-                    this.X += 5f * deltaTime;
+                    this.X += deltaTime;
                 }
                 else if (kbState.IsKeyDown(Keys.A) || kbState.IsKeyDown(Keys.Left))
                 {
-                    this.X -= 5f * deltaTime;
+                    this.X -= deltaTime;
                 }
 				
                 //Player reloading
@@ -209,7 +263,7 @@ namespace GDAPSIIGame
                 //   180
                 //-90   90
                 //    0
-                float angle = MathHelper.ToDegrees((float)Math.Atan2(mouseState.X - Position.X, mouseState.Y - Position.Y));
+                angle = MathHelper.ToDegrees((float)Math.Atan2(mouseState.X - Position.X, mouseState.Y - Position.Y));
 
                 //Use angle to find player direction
                 if ((angle < -157.5) || (angle > 157.5) && this.Dir != Entity_Dir.Up)
@@ -252,7 +306,7 @@ namespace GDAPSIIGame
                     this.Dir = Entity_Dir.Down;
 					weapon.Dir = Weapon_Dir.Down;
 				}
-                Thread.Sleep(CurrentTime.ElapsedGameTime.Milliseconds);
+                //Thread.Sleep(1);
                 //Console.WriteLine(angle);
                 //Console.WriteLine(this.Dir);
             }
