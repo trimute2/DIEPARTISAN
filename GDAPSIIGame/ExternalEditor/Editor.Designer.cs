@@ -247,7 +247,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(198, 534);
+            this.ClientSize = new System.Drawing.Size(196, 534);
             this.Controls.Add(this.currentLevelGroup);
             this.Controls.Add(this.CurrentToolLabel);
             this.Controls.Add(this.enemyToolButton);
