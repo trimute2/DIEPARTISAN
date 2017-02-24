@@ -31,11 +31,10 @@
             this.newLevelCollisionButton = new System.Windows.Forms.Button();
             this.openLevelXTilesLabel = new System.Windows.Forms.Label();
             this.openLevelYTilesLabel = new System.Windows.Forms.Label();
-            this.openLevelXTilesTextbox = new System.Windows.Forms.TextBox();
-            this.openLevelYTilesTextbox = new System.Windows.Forms.TextBox();
+            this.newLevelXTilesTextbox = new System.Windows.Forms.TextBox();
+            this.newLevelYTilesTextbox = new System.Windows.Forms.TextBox();
             this.createOpenLevelGroup = new System.Windows.Forms.GroupBox();
             this.openLevelCollisionButton = new System.Windows.Forms.Button();
-            this.levelEditingGroup = new System.Windows.Forms.GroupBox();
             this.wallToolButton = new System.Windows.Forms.Button();
             this.enemyToolButton = new System.Windows.Forms.Button();
             this.deleteToolButton = new System.Windows.Forms.Button();
@@ -81,25 +80,25 @@
             this.openLevelYTilesLabel.TabIndex = 3;
             this.openLevelYTilesLabel.Text = "y tiles:";
             // 
-            // openLevelXTilesTextbox
+            // newLevelXTilesTextbox
             // 
-            this.openLevelXTilesTextbox.Location = new System.Drawing.Point(64, 31);
-            this.openLevelXTilesTextbox.Name = "openLevelXTilesTextbox";
-            this.openLevelXTilesTextbox.Size = new System.Drawing.Size(88, 20);
-            this.openLevelXTilesTextbox.TabIndex = 4;
+            this.newLevelXTilesTextbox.Location = new System.Drawing.Point(64, 31);
+            this.newLevelXTilesTextbox.Name = "newLevelXTilesTextbox";
+            this.newLevelXTilesTextbox.Size = new System.Drawing.Size(88, 20);
+            this.newLevelXTilesTextbox.TabIndex = 4;
             // 
-            // openLevelYTilesTextbox
+            // newLevelYTilesTextbox
             // 
-            this.openLevelYTilesTextbox.Location = new System.Drawing.Point(64, 62);
-            this.openLevelYTilesTextbox.Name = "openLevelYTilesTextbox";
-            this.openLevelYTilesTextbox.Size = new System.Drawing.Size(88, 20);
-            this.openLevelYTilesTextbox.TabIndex = 5;
+            this.newLevelYTilesTextbox.Location = new System.Drawing.Point(64, 62);
+            this.newLevelYTilesTextbox.Name = "newLevelYTilesTextbox";
+            this.newLevelYTilesTextbox.Size = new System.Drawing.Size(88, 20);
+            this.newLevelYTilesTextbox.TabIndex = 5;
             // 
             // createOpenLevelGroup
             // 
             this.createOpenLevelGroup.Controls.Add(this.openLevelCollisionButton);
-            this.createOpenLevelGroup.Controls.Add(this.openLevelXTilesTextbox);
-            this.createOpenLevelGroup.Controls.Add(this.openLevelYTilesTextbox);
+            this.createOpenLevelGroup.Controls.Add(this.newLevelXTilesTextbox);
+            this.createOpenLevelGroup.Controls.Add(this.newLevelYTilesTextbox);
             this.createOpenLevelGroup.Controls.Add(this.newLevelCollisionButton);
             this.createOpenLevelGroup.Controls.Add(this.openLevelXTilesLabel);
             this.createOpenLevelGroup.Controls.Add(this.openLevelYTilesLabel);
@@ -119,15 +118,6 @@
             this.openLevelCollisionButton.Text = "Open Level Collision...";
             this.openLevelCollisionButton.UseVisualStyleBackColor = true;
             // 
-            // levelEditingGroup
-            // 
-            this.levelEditingGroup.Location = new System.Drawing.Point(201, 12);
-            this.levelEditingGroup.Name = "levelEditingGroup";
-            this.levelEditingGroup.Size = new System.Drawing.Size(687, 511);
-            this.levelEditingGroup.TabIndex = 7;
-            this.levelEditingGroup.TabStop = false;
-            this.levelEditingGroup.Text = "Level Editing";
-            // 
             // wallToolButton
             // 
             this.wallToolButton.BackColor = System.Drawing.SystemColors.ButtonHighlight;
@@ -139,6 +129,7 @@
             this.wallToolButton.TabIndex = 8;
             this.wallToolButton.Text = "Wall";
             this.wallToolButton.UseVisualStyleBackColor = false;
+            this.wallToolButton.Click += new System.EventHandler(this.wallToolButton_Click);
             // 
             // enemyToolButton
             // 
@@ -151,18 +142,20 @@
             this.enemyToolButton.TabIndex = 9;
             this.enemyToolButton.Text = "Enemy";
             this.enemyToolButton.UseVisualStyleBackColor = false;
+            this.enemyToolButton.Click += new System.EventHandler(this.enemyToolButton_Click);
             // 
             // deleteToolButton
             // 
-            this.deleteToolButton.BackColor = System.Drawing.Color.Salmon;
+            this.deleteToolButton.BackColor = System.Drawing.SystemColors.ButtonHighlight;
             this.deleteToolButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.deleteToolButton.ForeColor = System.Drawing.SystemColors.ButtonFace;
+            this.deleteToolButton.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.deleteToolButton.Location = new System.Drawing.Point(99, 207);
             this.deleteToolButton.Name = "deleteToolButton";
             this.deleteToolButton.Size = new System.Drawing.Size(85, 42);
             this.deleteToolButton.TabIndex = 10;
             this.deleteToolButton.Text = "Delete";
             this.deleteToolButton.UseVisualStyleBackColor = false;
+            this.deleteToolButton.Click += new System.EventHandler(this.deleteToolButton_Click);
             // 
             // spawnToolButton
             // 
@@ -175,6 +168,7 @@
             this.spawnToolButton.TabIndex = 11;
             this.spawnToolButton.Text = "Spawn";
             this.spawnToolButton.UseVisualStyleBackColor = false;
+            this.spawnToolButton.Click += new System.EventHandler(this.spawnToolButton_Click);
             // 
             // CurrentToolLabel
             // 
@@ -191,6 +185,7 @@
             this.currentLevelXTilesBox.Name = "currentLevelXTilesBox";
             this.currentLevelXTilesBox.Size = new System.Drawing.Size(50, 20);
             this.currentLevelXTilesBox.TabIndex = 13;
+            this.currentLevelXTilesBox.SelectedItemChanged += new System.EventHandler(this.currentLevelXTilesBox_SelectedItemChanged);
             // 
             // currentLevelYTilesBox
             // 
@@ -252,20 +247,19 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(904, 538);
+            this.ClientSize = new System.Drawing.Size(198, 534);
             this.Controls.Add(this.currentLevelGroup);
             this.Controls.Add(this.CurrentToolLabel);
             this.Controls.Add(this.enemyToolButton);
             this.Controls.Add(this.spawnToolButton);
             this.Controls.Add(this.deleteToolButton);
             this.Controls.Add(this.wallToolButton);
-            this.Controls.Add(this.levelEditingGroup);
             this.Controls.Add(this.createOpenLevelGroup);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.Name = "Editor";
-            this.Text = "Level Collision Editor";
+            this.ShowIcon = false;
             this.createOpenLevelGroup.ResumeLayout(false);
             this.createOpenLevelGroup.PerformLayout();
             this.currentLevelGroup.ResumeLayout(false);
@@ -279,11 +273,10 @@
         private System.Windows.Forms.Button newLevelCollisionButton;
         private System.Windows.Forms.Label openLevelXTilesLabel;
         private System.Windows.Forms.Label openLevelYTilesLabel;
-        private System.Windows.Forms.TextBox openLevelXTilesTextbox;
-        private System.Windows.Forms.TextBox openLevelYTilesTextbox;
+        private System.Windows.Forms.TextBox newLevelXTilesTextbox;
+        private System.Windows.Forms.TextBox newLevelYTilesTextbox;
         private System.Windows.Forms.GroupBox createOpenLevelGroup;
         private System.Windows.Forms.Button openLevelCollisionButton;
-        private System.Windows.Forms.GroupBox levelEditingGroup;
         private System.Windows.Forms.Button wallToolButton;
         private System.Windows.Forms.Button enemyToolButton;
         private System.Windows.Forms.Button deleteToolButton;
