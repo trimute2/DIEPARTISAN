@@ -98,12 +98,9 @@ namespace GDAPSIIGame
 			return BoundingBox.Intersects(box);
 		}
 
-
-		public virtual void OnCollision(Rectangle bb, CollisionType ct)
+		public virtual void OnCollision(ICollidable obj)
 		{
 			throw new NotImplementedException();
 		}
-
-		
 	}
 }

@@ -7,10 +7,6 @@ using Microsoft.Xna.Framework;
 
 namespace GDAPSIIGame.Interface
 {
-	public enum CollisionType
-	{
-		Player, Enemy, Projectile, Wall
-	}
 
 	/// <summary>
 	/// handles how the object should react to the collision
@@ -21,7 +17,7 @@ namespace GDAPSIIGame.Interface
 	{
 		Rectangle BoundingBox { get; }
 
-		void OnCollision(Rectangle bb, CollisionType ct);
+		void OnCollision(ICollidable obj);
 
 		bool Collide(ICollidable obj);
 

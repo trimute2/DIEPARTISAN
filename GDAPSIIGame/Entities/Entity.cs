@@ -53,62 +53,63 @@ namespace GDAPSIIGame.Entities
 			set { dir = value; }
 		}
 
-		public override void OnCollision(Rectangle bb, CollisionType ct)
+		public override void OnCollision(ICollidable obj)
 		{
-			switch (ct)
+			Rectangle bb = obj.BoundingBox;
+			if(obj is Wall)
 			{
-				case CollisionType.Wall:
-					//top left &...
-					if (bb.Contains(BoundingBox.Left, BoundingBox.Top))
+				//top left &...
+				if (bb.Contains(BoundingBox.Left, BoundingBox.Top))
+				{
+					// top right
+					if (bb.Contains(BoundingBox.Right, BoundingBox.Top))
 					{
-						// top right
-						if (bb.Contains(BoundingBox.Right, BoundingBox.Top))
-						{
-							this.Y += bb.Bottom- BoundingBox.Top;
-						}
-						else // bottom left
-						if (bb.Contains(BoundingBox.Left, BoundingBox.Bottom))
-						{
-							this.X += bb.Right-BoundingBox.Left;
-						}
-						else // nothing
-						{
-							this.X += bb.Bottom - BoundingBox.Top;
-							this.Y += bb.Right - BoundingBox.Left;
-						}
-					}
-					else //bottom right &...
-					if (bb.Contains(BoundingBox.Right, BoundingBox.Bottom))
-					{
-						// top right
-						if (bb.Contains(BoundingBox.Right, BoundingBox.Top))
-						{
-							this.X -= BoundingBox.Right-bb.Left;
-						}
-						else // bottom left
-						if (bb.Contains(BoundingBox.Left, BoundingBox.Bottom))
-						{
-							this.Y -= BoundingBox.Bottom-bb.Top;
-						}
-						else // nothing
-						{
-							this.X -= BoundingBox.Right - bb.Left;
-							this.Y -= BoundingBox.Bottom - bb.Top;
-						}
+						this.Y += bb.Bottom - BoundingBox.Top;
 					}
 					else // bottom left
 					if (bb.Contains(BoundingBox.Left, BoundingBox.Bottom))
 					{
-						this.X += bb.Bottom - BoundingBox.Top;
-						this.Y -= BoundingBox.Bottom - bb.Top;
+						this.X += bb.Right - BoundingBox.Left;
 					}
-					else // top right
+					else // nothing
 					{
-						this.X -= BoundingBox.Right - bb.Left;
+						this.X += bb.Bottom - BoundingBox.Top;
 						this.Y += bb.Right - BoundingBox.Left;
 					}
-					break;
+				}
+				else //bottom right &...
+				if (bb.Contains(BoundingBox.Right, BoundingBox.Bottom))
+				{
+					// top right
+					if (bb.Contains(BoundingBox.Right, BoundingBox.Top))
+					{
+						this.X -= BoundingBox.Right - bb.Left;
+					}
+					else // bottom left
+					if (bb.Contains(BoundingBox.Left, BoundingBox.Bottom))
+					{
+						this.Y -= BoundingBox.Bottom - bb.Top;
+					}
+					else // nothing
+					{
+						this.X -= BoundingBox.Right - bb.Left;
+						this.Y -= BoundingBox.Bottom - bb.Top;
+					}
+				}
+				else // bottom left
+				if (bb.Contains(BoundingBox.Left, BoundingBox.Bottom))
+				{
+					this.X += bb.Bottom - BoundingBox.Top;
+					this.Y -= BoundingBox.Bottom - bb.Top;
+				}
+				else // top right
+				{
+					this.X -= BoundingBox.Right - bb.Left;
+					this.Y += bb.Right - BoundingBox.Left;
+				}
 			}
+
 		}
+
 	}
 }
