@@ -144,8 +144,6 @@ namespace ExternalEditor
 
         public void TileClicked(object sender, EventArgs e)
         {
-            if (mouse.Button ==  MouseButtons.Left)
-            {
                 Button b = (Button)sender;
                 switch (currentTool)
                 {
@@ -173,7 +171,6 @@ namespace ExternalEditor
                         b.BackColor = SystemColors.MenuHighlight;
                         break;
                 }
-            }
         }
 
         public void InitializeGrid(int width, int height)
