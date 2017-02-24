@@ -25,6 +25,8 @@ namespace GDAPSIIGame
 		private KeyboardState prevState;
 		private float hurting;
         private Color color;
+		private float angle;
+		private SpriteEffects effect;
 
 		//Singleton
 
@@ -36,6 +38,8 @@ namespace GDAPSIIGame
 			prevMouseState = Mouse.GetState();
             hurting = 0;
             color = Color.White;
+			angle = 0;
+			effect = new SpriteEffects();
 		}
 
 		static public Player Instantiate(Weapon weapon, int health, int moveSpeed, Texture2D texture, Vector2 position, Rectangle boundingBox)
@@ -105,6 +109,12 @@ namespace GDAPSIIGame
 			set { prevState = value; }
 		}
 
+		public float Angle
+		{
+			get { return angle; }
+			set { angle = value; }
+		}
+
 		//Methods
 		public override void Update(GameTime gameTime)
         {
@@ -127,37 +137,17 @@ namespace GDAPSIIGame
 			PrevState = CurrentState;
 			currentState = Keyboard.GetState();
 
+			//Update weapon position
+			weapon.X = this.X+(BoundingBox.Width/2);
+			weapon.Y = this.Y+(BoundingBox.Height/2);
+
 			//Fire weapon only if previous frame didn't have left button being pressed
 			if (mouseState.LeftButton == ButtonState.Pressed && prevMouseState.LeftButton == ButtonState.Released)
 			{
 				Vector2 direction = new Vector2((mouseState.X - instance.X) / 1000, (mouseState.Y - instance.Y) / 1000);
 				direction.Normalize();
-				this.Weapon.Fire(Position, direction);
+				this.Weapon.Fire(Weapon.Position, direction);
 			}
-
-            //Find the right sprite to draw
-            //Determine player direction and get the corresponding sprite
-            switch (this.Dir)
-            {
-                case Entity_Dir.Up:
-                    break;
-                case Entity_Dir.UpLeft:
-                    break;
-                case Entity_Dir.Left:
-                    break;
-                case Entity_Dir.DownLeft:
-                    break;
-                case Entity_Dir.Down:
-                    break;
-                case Entity_Dir.DownRight:
-                    break;
-                case Entity_Dir.Right:
-                    break;
-                case Entity_Dir.UpRight:
-                    break;
-                default:
-                    break;
-            }
 
             //Determine if the player hurting color should be playing
             if (hurting > 0)
@@ -169,15 +159,47 @@ namespace GDAPSIIGame
 
 		public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(this.Texture,
-                this.Position,
-                null,
-                null,
-                Vector2.Zero,
-                0.0f,
-                this.Scale,
-                color,
-                0);
+			//Find the right sprite to draw
+			//Determine player direction and get the corresponding sprite
+			switch (this.Dir)
+			{
+				case Entity_Dir.Up:
+					effect = SpriteEffects.None;
+					break;
+				case Entity_Dir.UpLeft:
+					effect = SpriteEffects.FlipHorizontally;
+					break;
+				case Entity_Dir.Left:
+					effect = SpriteEffects.FlipHorizontally;
+					break;
+				case Entity_Dir.DownLeft:
+					effect = SpriteEffects.FlipHorizontally;
+					break;
+				case Entity_Dir.Down:
+					effect = SpriteEffects.None;
+					break;
+				case Entity_Dir.DownRight:
+					effect = SpriteEffects.None;
+					break;
+				case Entity_Dir.Right:
+					effect = SpriteEffects.None;
+					break;
+				case Entity_Dir.UpRight:
+					effect = SpriteEffects.None;
+					break;
+			}
+
+			spriteBatch.Draw(this.Texture,
+				this.Position,
+				null,
+				null,
+				Vector2.Zero,
+				0.0f,
+				this.Scale,
+				color,
+				effect);
+
+			weapon.Draw(spriteBatch);
         }
 
         /// <summary>
@@ -241,7 +263,7 @@ namespace GDAPSIIGame
                 //   180
                 //-90   90
                 //    0
-                float angle = MathHelper.ToDegrees((float)Math.Atan2(mouseState.X - Position.X, mouseState.Y - Position.Y));
+                angle = MathHelper.ToDegrees((float)Math.Atan2(mouseState.X - Position.X, mouseState.Y - Position.Y));
 
                 //Use angle to find player direction
                 if ((angle < -157.5) || (angle > 157.5) && this.Dir != Entity_Dir.Up)

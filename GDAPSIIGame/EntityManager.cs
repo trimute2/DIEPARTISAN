@@ -63,9 +63,15 @@ namespace GDAPSIIGame
         /// </summary>
         internal void LoadContent(ContentManager Content)
         {
-            Texture2D playerTexture = Content.Load<Texture2D>("player");
+            Texture2D playerTexture = Content.Load<Texture2D>("playerNew");
             player = Player.Instantiate(null, 100, 1, playerTexture, new Vector2(playerTexture.Width, playerTexture.Height), new Rectangle(playerTexture.Width, playerTexture.Height, 50, 50));
-            Player.Instance.Weapon = new Weapon(ProjectileType.DEFAULT, Player.Instance.Texture, Player.Instance.Position, Player.Instance.BoundingBox, 0.5f, 10f, 2f);
+            Player.Instance.Weapon = new Weapon(ProjectileType.DEFAULT,
+				Player.Instance.Texture,
+				Player.Instance.Position,
+				new Rectangle((int)player.X,
+				(int)player.Y, 20, 60),
+				0.5f, 10f, 2f,
+				new Vector2(playerTexture.Bounds.X+playerTexture.Bounds.Width/2, playerTexture.Bounds.Top+playerTexture.Bounds.Height/4));
             entities.Add(player);
             ChunkManager.Instance.Add(Player);
         }
