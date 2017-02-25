@@ -47,6 +47,7 @@
             this.currentLevelNameLabel = new System.Windows.Forms.Label();
             this.currentLevelNameTextbox = new System.Windows.Forms.TextBox();
             this.currentLevelGroup = new System.Windows.Forms.GroupBox();
+            this.loadingBar = new System.Windows.Forms.ProgressBar();
             this.createOpenLevelGroup.SuspendLayout();
             this.currentLevelGroup.SuspendLayout();
             this.SuspendLayout();
@@ -243,11 +244,20 @@
             this.currentLevelGroup.TabStop = false;
             this.currentLevelGroup.Text = "Current Level";
             // 
+            // loadingBar
+            // 
+            this.loadingBar.ForeColor = System.Drawing.Color.MediumPurple;
+            this.loadingBar.Location = new System.Drawing.Point(15, 344);
+            this.loadingBar.Name = "loadingBar";
+            this.loadingBar.Size = new System.Drawing.Size(169, 16);
+            this.loadingBar.TabIndex = 20;
+            // 
             // Editor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(196, 534);
+            this.Controls.Add(this.loadingBar);
             this.Controls.Add(this.currentLevelGroup);
             this.Controls.Add(this.CurrentToolLabel);
             this.Controls.Add(this.enemyToolButton);
@@ -289,6 +299,7 @@
         private System.Windows.Forms.Label currentLevelNameLabel;
         private System.Windows.Forms.TextBox currentLevelNameTextbox;
         private System.Windows.Forms.GroupBox currentLevelGroup;
+        private System.Windows.Forms.ProgressBar loadingBar;
     }
 }
 

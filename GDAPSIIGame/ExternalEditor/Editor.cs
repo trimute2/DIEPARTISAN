@@ -16,7 +16,6 @@ namespace ExternalEditor
         private bool spawnPlaced;
         private int[] tiles;
         private List<Button> tileButtons;
-        private MouseEventArgs mouse;
 
         enum ProgramState
         {
@@ -43,7 +42,6 @@ namespace ExternalEditor
             state = ProgramState.startup;
             currentTool = Tool.wall;
             spawnPlaced = false;
-            mouse = new MouseEventArgs(MouseButtons.Left, 0, 0, 0, 0);
             tileSize = 20;
             xMin = 10;
             yMin = 10;
@@ -97,6 +95,7 @@ namespace ExternalEditor
                     deleteToolButton.Enabled = false;
                     spawnToolButton.Enabled = false;
                     enemyToolButton.Enabled = false;
+                    loadingBar.Enabled = false;
                     break;
 
                 case (ProgramState.editing):
@@ -108,6 +107,7 @@ namespace ExternalEditor
                     deleteToolButton.Enabled = true;
                     spawnToolButton.Enabled = true;
                     enemyToolButton.Enabled = true;
+                    loadingBar.Enabled = true;
                     break;
             }
         }
@@ -125,11 +125,12 @@ namespace ExternalEditor
                 yTiles = int.Parse(newLevelYTilesTextbox.Text);
                 tiles = new int[xTiles * yTiles];
                 InitializeGrid(xTiles, yTiles);
-                state = ProgramState.editing;
                 UpdateStateVisuals();
                 this.Width = (this.Width + (tileSize * xTiles) + 12);
+                state = ProgramState.editing;
                 currentLevelXTilesBox.Text = xTiles + "";
                 currentLevelYTilesBox.Text = yTiles + "";
+                loadingBar.Maximum = xTiles * yTiles;
                 InitializeGrid(xTiles, yTiles);
             }
             else
@@ -144,6 +145,8 @@ namespace ExternalEditor
 
         public void TileClicked(object sender, EventArgs e)
         {
+            if (state == ProgramState.editing)
+            {
                 Button b = (Button)sender;
                 switch (currentTool)
                 {
@@ -171,6 +174,7 @@ namespace ExternalEditor
                         b.BackColor = SystemColors.MenuHighlight;
                         break;
                 }
+            }
         }
 
         public void InitializeGrid(int width, int height)
@@ -193,6 +197,9 @@ namespace ExternalEditor
                     tileButtons.Add(b);
                     this.Controls.Add(b);
                     b.MouseEnter += new EventHandler(this.TileClicked);
+
+                    if(loadingBar.Value < loadingBar.Maximum)
+                        loadingBar.Value++;
                 }
             }
         }
