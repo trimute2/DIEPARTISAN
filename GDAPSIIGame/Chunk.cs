@@ -124,7 +124,8 @@ namespace GDAPSIIGame
 				{
 					if (objects[i].Collide(objects[j]))
 					{
-						
+						objects[i].OnCollision(objects[j]);
+						objects[j].OnCollision(objects[i]);
 					}
 				}
 			}
@@ -141,7 +142,8 @@ namespace GDAPSIIGame
 			{
 				if (io.Collide(obj))
 				{
-
+					io.OnCollision(obj);
+					obj.OnCollision(io);
 				}
 			}
 		}

@@ -100,7 +100,7 @@ namespace GDAPSIIGame
 
 		public virtual void OnCollision(ICollidable obj)
 		{
-			throw new NotImplementedException();
+			//throw new NotImplementedException();
 		}
 	}
 }

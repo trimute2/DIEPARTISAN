@@ -56,58 +56,69 @@ namespace GDAPSIIGame.Entities
 		public override void OnCollision(ICollidable obj)
 		{
 			Rectangle bb = obj.BoundingBox;
-			if(obj is Wall)
+            
+
+            if (obj is Wall)
 			{
-				//top left &...
-				if (bb.Contains(BoundingBox.Left, BoundingBox.Top))
+				//the clossest point on (or in) the player's bounding box to the wall's center 
+                Vector2 point = Vector2.Zero;
+
+				// if the players bounding box contains the wall's center set point to the walls center
+				if (BoundingBox.Contains(bb.Center))
 				{
-					// top right
-					if (bb.Contains(BoundingBox.Right, BoundingBox.Top))
+					point = bb.Center.ToVector2();
+				}
+				else
+				{
+					//find the clossest point on the player's bounding box to the wall's center
+					if(bb.Center.Y > BoundingBox.Bottom)
 					{
-						this.Y += bb.Bottom - BoundingBox.Top;
+						point.Y = BoundingBox.Bottom;
+					}else if(bb.Center.Y < BoundingBox.Top)
+					{
+						point.Y = BoundingBox.Top;
+					}else
+					{
+						point.Y = bb.Center.Y;
 					}
-					else // bottom left
-					if (bb.Contains(BoundingBox.Left, BoundingBox.Bottom))
+					if(bb.Center.X > BoundingBox.Right)
 					{
-						this.X += bb.Right - BoundingBox.Left;
-					}
-					else // nothing
+						point.X = BoundingBox.Right;
+					}else if(bb.Center.X < BoundingBox.Left)
 					{
-						this.X += bb.Bottom - BoundingBox.Top;
-						this.Y += bb.Right - BoundingBox.Left;
+						point.X = BoundingBox.Left;
+					}else
+					{
+						point.X = bb.Center.X;
 					}
 				}
-				else //bottom right &...
-				if (bb.Contains(BoundingBox.Right, BoundingBox.Bottom))
+
+				//get the distance between each side of the wall and the point 
+				float distLeft = point.X - bb.Left;
+				float distRight = bb.Right - point.X;
+				float distTop = point.Y - bb.Top;
+				float distBottom = bb.Bottom - point.Y;
+
+				//offset the player by the shortest distance
+				if(distLeft < distRight &&
+					distLeft < distTop &&
+					distLeft < distBottom)
 				{
-					// top right
-					if (bb.Contains(BoundingBox.Right, BoundingBox.Top))
-					{
-						this.X -= BoundingBox.Right - bb.Left;
-					}
-					else // bottom left
-					if (bb.Contains(BoundingBox.Left, BoundingBox.Bottom))
-					{
-						this.Y -= BoundingBox.Bottom - bb.Top;
-					}
-					else // nothing
-					{
-						this.X -= BoundingBox.Right - bb.Left;
-						this.Y -= BoundingBox.Bottom - bb.Top;
-					}
-				}
-				else // bottom left
-				if (bb.Contains(BoundingBox.Left, BoundingBox.Bottom))
+					this.X -= distLeft;
+				}else if(distRight < distTop &&
+					distRight < distBottom)
 				{
-					this.X += bb.Bottom - BoundingBox.Top;
-					this.Y -= BoundingBox.Bottom - bb.Top;
-				}
-				else // top right
+					this.X += distRight;
+				}else if(distTop < distBottom)
 				{
-					this.X -= BoundingBox.Right - bb.Left;
-					this.Y += bb.Right - BoundingBox.Left;
+					this.Y -= distTop;
 				}
-			}
+				else
+				{
+					this.Y += distBottom;
+				}
+				
+            }
 
 		}
 
