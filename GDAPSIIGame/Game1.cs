@@ -7,7 +7,7 @@ using GDAPSIIGame.Map;
 
 namespace GDAPSIIGame
 {
-    enum GameState { Main_Menu, Gameplay, Pause_Menu}
+    enum GameState { MainMenu, GamePlay, PauseMenu}
     
     public class Game1 : Game
     {
@@ -21,6 +21,7 @@ namespace GDAPSIIGame
 		ChunkManager chunkManager;
         MapManager mapManager;
         Texture2D theTexture;
+		GameState gameState;
 
 		public Game1()
         {
@@ -47,6 +48,8 @@ namespace GDAPSIIGame
             //Initialize keyboards
             kbState = new KeyboardState();
 			previousKbState = kbState;
+
+			gameState = GameState.MainMenu;
 			base.Initialize();
         }
 
@@ -76,24 +79,46 @@ namespace GDAPSIIGame
 
 		protected override void Update(GameTime gameTime)
 		{
-			if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-			{
-				Exit();
+			switch (gameState) {
+				case GameState.GamePlay:
+					if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+					{
+						Exit();
+					}
+					//ScreenWrap(player);
+					previousKbState = kbState;
+					kbState = Keyboard.GetState();
+
+					if (kbState.IsKeyDown(Keys.Enter)&& !previousKbState.IsKeyDown(Keys.Enter))
+					{
+						gameState = GameState.PauseMenu;
+					}
+
+					//Update entities
+					entityManager.Update(gameTime);
+
+					//Update projectiles
+					projectileManager.Update(gameTime, previousKbState, kbState);
+
+					//Update chunks
+					chunkManager.Update();
+					break;
+				case GameState.MainMenu:
+					kbState = Keyboard.GetState();
+					if (kbState.IsKeyDown(Keys.Enter))
+					{
+						gameState = GameState.GamePlay;
+					}
+					break;
+				case GameState.PauseMenu:
+					previousKbState = kbState;
+					kbState = Keyboard.GetState();
+					if (kbState.IsKeyDown(Keys.Enter) && !previousKbState.IsKeyDown(Keys.Enter))
+					{
+						gameState = GameState.GamePlay;
+					}
+					break;
 			}
-
-			//ScreenWrap(player);
-			previousKbState = kbState;
-			kbState = Keyboard.GetState();
-
-            //Update entities
-            entityManager.Update(gameTime);
-
-            //Update projectiles
-            projectileManager.Update(gameTime, previousKbState, kbState);
-
-			//Update chunks
-			chunkManager.Update();
-
 			base.Update(gameTime);
 		}
 
@@ -124,16 +149,19 @@ namespace GDAPSIIGame
             //newthing.Draw();
             //Begin SpriteBatch
 			spriteBatch.Begin();
+			switch (gameState)
+			{
+				case GameState.GamePlay:
+					//Draw Map
+					mapManager.Draw(spriteBatch, theTexture);
 
-            //Draw Map
-            mapManager.Draw(spriteBatch, theTexture);
+					//Draw entities
+					entityManager.Draw(gameTime, spriteBatch);
 
-            //Draw entities
-            entityManager.Draw(gameTime, spriteBatch);
-
-            //Draw projectiles
-            projectileManager.Draw(gameTime, spriteBatch);
-
+					//Draw projectiles
+					projectileManager.Draw(gameTime, spriteBatch);
+					break;
+			}
 
             //End SpriteBatch
 			spriteBatch.End();
