@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -67,6 +69,17 @@ namespace GDAPSIIGame.Map
                 numRooms <<= 1;
             } while ((numRooms & 8) == 0);
             
+        }
+
+        public void Draw(SpriteBatch spriteBatch, Texture2D texture)
+        {
+            for (int i = 0; i < 10; i++)
+            {
+                for (int j = 0; j < 10; j++)
+                {
+                    spriteBatch.Draw(texture, new Rectangle(i*64, j*64, 64, 64), Color.White);
+                }
+            }
         }
 
 

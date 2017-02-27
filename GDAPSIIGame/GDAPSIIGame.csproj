@@ -47,6 +47,9 @@
     <Compile Include="Entities\Player.cs" />
     <Compile Include="GameObject.cs" />
     <Compile Include="Interface\ICollidable.cs" />
+    <Compile Include="Map\Camera.cs" />
+    <Compile Include="Map\Map.cs" />
+    <Compile Include="Map\MapManager.cs" />
     <Compile Include="Map\Room.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Projectile.cs" />
@@ -71,6 +74,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Icon.ico" />
+    <Content Include="Map\testRoom1.txt" />
   </ItemGroup>
   <ItemGroup>
     <MonoGameContentReference Include="Content\Content.mgcb" />

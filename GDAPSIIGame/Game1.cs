@@ -3,6 +3,8 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 using System;
+using GDAPSIIGame.Map;
+
 namespace GDAPSIIGame
 {
     enum GameState { Main_Menu, Gameplay, Pause_Menu}
@@ -17,6 +19,8 @@ namespace GDAPSIIGame
         KeyboardState kbState;
 		KeyboardState previousKbState;
 		ChunkManager chunkManager;
+        MapManager mapManager;
+        Texture2D theTexture;
 
 		public Game1()
         {
@@ -37,6 +41,9 @@ namespace GDAPSIIGame
             //Initialize projectile manager
             projectileManager = ProjectileManager.Instance;
 
+            //Initialize map manager
+            mapManager = new MapManager();
+
             //Initialize keyboards
             kbState = new KeyboardState();
 			previousKbState = kbState;
@@ -50,6 +57,8 @@ namespace GDAPSIIGame
             entityManager.LoadContent(Content);
             //Load projectiles
             projectileManager.LoadContent(Content);
+            //Load the one and only texture
+            theTexture = Content.Load<Texture2D>("playernew");
 
             //Rectangle pls = new Rectangle(0, 0, 0, 0);
             //Vector2 aids = Vector2.Zero;
@@ -111,15 +120,20 @@ namespace GDAPSIIGame
 		protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
+
             //newthing.Draw();
             //Begin SpriteBatch
 			spriteBatch.Begin();
 
+            //Draw Map
+            mapManager.Draw(spriteBatch, theTexture);
+
             //Draw entities
-			entityManager.Draw(gameTime, spriteBatch);
+            entityManager.Draw(gameTime, spriteBatch);
 
             //Draw projectiles
             projectileManager.Draw(gameTime, spriteBatch);
+
 
             //End SpriteBatch
 			spriteBatch.End();
