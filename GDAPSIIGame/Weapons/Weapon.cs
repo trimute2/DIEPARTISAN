@@ -42,7 +42,7 @@ namespace GDAPSIIGame
             this.fireTimer = 0; //The timer used to control weapon fire rates
 			this.fired = false; //Whether the weapon has fired
 			this.dir = Weapon_Dir.Down; //The direction of the weapon for drawing
-			this.angle = 0; //The angle of the weapon
+			this.angle = 0; //The angle of the weapon in radians
 			this.origin = origin; //The origin point of the weapon (where the player holds it)
 			this.TexPosition = position;
         }
@@ -65,11 +65,19 @@ namespace GDAPSIIGame
 			set { dir = value; }
 		}
 
+        /// <summary>
+        /// The angle of the player's weapon in radians
+        /// </summary>
+        public float Angle
+        {
+            get { return angle; }
+            set { angle = value; }
+        }
+
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
 
-			angle = -MathHelper.ToRadians(Player.Instance.Angle);
 			TexPosition = Position;
 
 			//Control when user can fire again after just firing
@@ -155,14 +163,16 @@ namespace GDAPSIIGame
 		/// </summary>
 		/// <param name="position">The position the bullet is spawned at</param>
 		/// <param name="direction">The speed that the bullet is moving</param>
-        public void Fire(Vector2 position, Vector2 direction)
+        public void Fire(Vector2 direction)
         {
-			//Check user can fire or if they need to reload
+            //Check user can fire or if they need to reload
             if (!fired && !reload && clip > 0)
             {
-				fired = true;
-				clip--;
-				ProjectileManager.Instance.Clone(projType, position, direction);
+                fired = true;
+                clip--;
+                Vector2 rotatedPos = new Vector2((float)Math.Cos(angle) + (float)Math.Sin(angle),
+                    (float)-Math.Sin(angle) + (float)Math.Cos(angle));
+				ProjectileManager.Instance.Clone(projType, Position+rotatedPos, direction);
             }
         }
     }

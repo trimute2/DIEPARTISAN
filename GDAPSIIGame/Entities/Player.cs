@@ -138,16 +138,16 @@ namespace GDAPSIIGame
 			PrevState = CurrentState;
 			currentState = Keyboard.GetState();
 
-			//Update weapon position
-			weapon.X = this.X+(BoundingBox.Width/2);
-			weapon.Y = this.Y+(BoundingBox.Height/2);
+            //Update the weapons rotation
+            weapon.Angle = -((float)Math.Atan2(mouseState.X - Weapon.Position.X, mouseState.Y - Weapon.Position.Y));
 
-			//Fire weapon only if previous frame didn't have left button being pressed
-			if (mouseState.LeftButton == ButtonState.Pressed && prevMouseState.LeftButton == ButtonState.Released)
+
+            //Fire weapon only if previous frame didn't have left button being pressed
+            if (mouseState.LeftButton == ButtonState.Pressed && prevMouseState.LeftButton == ButtonState.Released)
 			{
-				Vector2 direction = new Vector2((mouseState.X - instance.X) / 1000, (mouseState.Y - instance.Y) / 1000);
+				Vector2 direction = new Vector2((mouseState.X - Weapon.X) / 1000, (mouseState.Y - Weapon.Y) / 1000);
 				direction.Normalize();
-				this.Weapon.Fire(Weapon.Position, direction);
+				this.Weapon.Fire(direction);
 			}
 
             //Determine if the player hurting color should be playing
@@ -208,9 +208,9 @@ namespace GDAPSIIGame
         /// </summary>
         /// <param name="position"></param>
         /// <param name="direction"></param>
-        public void Fire(Vector2 position, Vector2 direction)
+        public void Fire(Vector2 direction)
         {
-            weapon.Fire(position, direction);
+            weapon.Fire(direction);
         }
 
         /// <summary>
@@ -219,8 +219,6 @@ namespace GDAPSIIGame
         /// <param name="kbState">KeyboardState</param>
         public void parseInput(GameTime gameTime)
         {
-            float currTime = 0;
-            float prevTime = 0;
             float deltaTime = 0;
 			KeyboardState kbState = Keyboard.GetState();
 			KeyboardState prevKbState = Keyboard.GetState();
@@ -259,12 +257,16 @@ namespace GDAPSIIGame
 					this.weapon.Reload();
 				}
 
-                //Calculates the angle between the player and the mouse
-                //See below
-                //   180
-                //-90   90
-                //    0
-                angle = MathHelper.ToDegrees((float)Math.Atan2(mouseState.X - Position.X, mouseState.Y - Position.Y));
+				//Update weapon position
+				weapon.X = this.X + (BoundingBox.Width / 2);
+				weapon.Y = this.Y + (BoundingBox.Height / 2);
+
+				//Calculates the angle between the player and the mouse
+				//See below
+				//   180
+				//-90   90
+				//    0
+				angle = MathHelper.ToDegrees((float)Math.Atan2(mouseState.X - Position.X, mouseState.Y - Position.Y));
 
                 //Use angle to find player direction
                 if ((angle < -157.5) || (angle > 157.5) && this.Dir != Entity_Dir.Up)
