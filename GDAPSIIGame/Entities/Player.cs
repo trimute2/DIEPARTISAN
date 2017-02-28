@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Input;
 using GDAPSIIGame.Entities;
 using System.Threading;
 using System.Runtime.CompilerServices;
+using GDAPSIIGame.Map;
 
 namespace GDAPSIIGame
 {
@@ -309,6 +310,8 @@ namespace GDAPSIIGame
                 //Thread.Sleep(1);
                 //Console.WriteLine(angle);
                 //Console.WriteLine(this.Dir);
+                Camera.Instance.X = (int)Position.X;
+                Camera.Instance.Y = (int)Position.Y;
             }
         }
     }

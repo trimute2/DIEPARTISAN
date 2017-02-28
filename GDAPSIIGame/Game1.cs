@@ -21,6 +21,7 @@ namespace GDAPSIIGame
 		ChunkManager chunkManager;
         MapManager mapManager;
         Texture2D theTexture;
+        Camera mainCamera;
 
 		public Game1()
         {
@@ -43,6 +44,7 @@ namespace GDAPSIIGame
 
             //Initialize map manager
             mapManager = new MapManager();
+
 
             //Initialize keyboards
             kbState = new KeyboardState();
@@ -94,7 +96,14 @@ namespace GDAPSIIGame
 			//Update chunks
 			chunkManager.Update();
 
-			base.Update(gameTime);
+
+            //initialize Camera
+            if (mainCamera == null)
+            {
+                mainCamera = new Camera(GraphicsDevice.Viewport);
+            }
+
+            base.Update(gameTime);
 		}
 
 		private void ScreenWrap(GameObject objToWrap)
