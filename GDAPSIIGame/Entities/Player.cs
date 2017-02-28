@@ -118,7 +118,10 @@ namespace GDAPSIIGame
 		//Methods
 		public override void Update(GameTime gameTime)
         {
-			currentTime = gameTime;
+			if (currentTime == null)
+			{
+				currentTime = gameTime;
+			}
             base.Update(gameTime);
 			weapon.Update(gameTime);
 
@@ -221,8 +224,12 @@ namespace GDAPSIIGame
             float deltaTime = 0;
 			KeyboardState kbState = Keyboard.GetState();
 			KeyboardState prevKbState = Keyboard.GetState();
+			GameTime previousTime = new GameTime();
             while (true)
             {
+				//while (previousTime.ElapsedGameTime == currentTime.ElapsedGameTime)
+				//{ Console.WriteLine(3); }
+				Console.WriteLine(deltaTime);
 				//Update keyboards
 				prevKbState = PrevState;
 				kbState = CurrentState;
@@ -308,9 +315,9 @@ namespace GDAPSIIGame
                     this.Dir = Entity_Dir.Down;
 					weapon.Dir = Weapon_Dir.Down;
 				}
-                //Thread.Sleep(1);
-                //Console.WriteLine(angle);
-                //Console.WriteLine(this.Dir);
+				//Thread.Sleep(1);
+				previousTime.ElapsedGameTime = CurrentTime.ElapsedGameTime;
+				previousTime.TotalGameTime = CurrentTime.TotalGameTime;
             }
         }
     }
