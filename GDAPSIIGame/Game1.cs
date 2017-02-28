@@ -33,6 +33,9 @@ namespace GDAPSIIGame
         protected override void Initialize()
         {
 			this.IsMouseVisible = true;
+			graphics.PreferredBackBufferWidth = 2000;
+			graphics.ApplyChanges();
+			
 
             //Initialize entity manager
             entityManager = EntityManager.Instance;
