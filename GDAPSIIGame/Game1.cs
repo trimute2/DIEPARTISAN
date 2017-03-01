@@ -33,8 +33,8 @@ namespace GDAPSIIGame
         protected override void Initialize()
         {
 			this.IsMouseVisible = true;
-			graphics.PreferredBackBufferWidth = 2000;
-			graphics.ApplyChanges();
+			//graphics.PreferredBackBufferWidth = 2000;
+			//graphics.ApplyChanges();
 			
 
             //Initialize entity manager
@@ -112,7 +112,7 @@ namespace GDAPSIIGame
             //initialize Camera
             if (mainCamera == null)
             {
-                mainCamera = new Camera(GraphicsDevice.Viewport);
+                //mainCamera = new Camera(GraphicsDevice.Viewport);
             }
 
             base.Update(gameTime);

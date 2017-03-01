@@ -172,7 +172,8 @@ namespace GDAPSIIGame
                 clip--;
                 Vector2 rotatedPos = new Vector2((float)Math.Cos(angle) + (float)Math.Sin(angle),
                     (float)-Math.Sin(angle) + (float)Math.Cos(angle));
-				ProjectileManager.Instance.Clone(projType, Position+rotatedPos, direction);
+				Vector2 pos = new Vector2(TexPosition.X + (BoundingBox.Width / 2), TexPosition.Y + (BoundingBox.Height / 4));
+				ProjectileManager.Instance.Clone(projType, TexPosition+rotatedPos, direction);
             }
         }
     }

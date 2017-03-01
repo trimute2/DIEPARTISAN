@@ -230,7 +230,7 @@ namespace GDAPSIIGame
             {
 				//while (previousTime.ElapsedGameTime == currentTime.ElapsedGameTime)
 				//{ Console.WriteLine(3); }
-				Console.WriteLine(deltaTime);
+				//Console.WriteLine(deltaTime);
 				//Update keyboards
 				prevKbState = PrevState;
 				kbState = CurrentState;

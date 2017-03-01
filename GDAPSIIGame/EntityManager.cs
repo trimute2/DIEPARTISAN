@@ -80,8 +80,7 @@ namespace GDAPSIIGame
             Player.Instance.Weapon = new Weapon(ProjectileType.DEFAULT,
 				playerBullet,
 				Player.Instance.Position,
-				new Rectangle((int)player.X,
-				(int)player.Y, 20, 60),
+				new Rectangle((int)player.X, (int)player.Y, 20, 60),
 				0.5f, 10f, 2f,
 				new Vector2(playerTexture.Bounds.X+playerTexture.Bounds.Width/2, playerTexture.Bounds.Top+playerTexture.Bounds.Height/4));
             entities.Add(player);
