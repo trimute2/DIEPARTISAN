@@ -28,7 +28,7 @@ namespace GDAPSIIGame
 		private Weapon_Dir dir;
 		private float angle;
 		private Vector2 origin;
-		private Vector2 TexPosition;
+		private Vector2 muzzlePos;
 
         public Weapon(ProjectileType pT, Texture2D texture, Vector2 position, Rectangle boundingBox, float fireRate, float clipSize, float reloadSpeed, Vector2 origin) : base(texture, position, boundingBox)
         {
@@ -44,7 +44,7 @@ namespace GDAPSIIGame
 			this.dir = Weapon_Dir.Down; //The direction of the weapon for drawing
 			this.angle = 0; //The angle of the weapon in radians
 			this.origin = origin; //The origin point of the weapon (where the player holds it)
-			this.TexPosition = position;
+			this.muzzlePos = new Vector2();
         }
 
         /// <summary>
@@ -74,11 +74,48 @@ namespace GDAPSIIGame
             set { angle = value; }
         }
 
+		/// <summary>
+		/// The position of the muzzle on the weapon
+		/// </summary>
+		public Vector2 MuzzlePos
+		{
+			get { return MuzzlePos; }
+			set { muzzlePos = value; }
+		}
+
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
 
-			TexPosition = Position;
+			switch (dir)
+			{
+				case Weapon_Dir.Up:
+					break;
+				case Weapon_Dir.UpLeft:
+					this.X = this.X - 20;
+					break;
+				case Weapon_Dir.Left:
+					this.X = this.X - 20;
+					break;
+				case Weapon_Dir.DownLeft:
+					this.X -= 20;
+					break;
+				case Weapon_Dir.Down:
+					break;
+				case Weapon_Dir.DownRight:
+					this.X = this.X + 20;
+					break;
+				case Weapon_Dir.Right:
+					this.X = this.X + 20;
+					break;
+				case Weapon_Dir.UpRight:
+					this.X = this.X + 20;
+					break;
+			}
+
+			//Update the muzzle's position
+			muzzlePos = Position + new Vector2(0, BoundingBox.Width);
+			muzzlePos = RotateVector2(muzzlePos, angle, Position);
 
 			//Control when user can fire again after just firing
 			if (fired)
@@ -116,32 +153,26 @@ namespace GDAPSIIGame
 				case Weapon_Dir.Up: 
 					break;
 				case Weapon_Dir.UpLeft:
-					this.TexPosition.X = this.Position.X - 20;
 					break;
 				case Weapon_Dir.Left:
-					this.TexPosition.X = this.Position.X - 20;
 					break;
 				case Weapon_Dir.DownLeft:
-					this.TexPosition.X = this.Position.X - 20;
 					break;
 				case Weapon_Dir.Down:
 					break;
 				case Weapon_Dir.DownRight:
-					this.TexPosition.X = this.Position.X + 20;
 					break;
 				case Weapon_Dir.Right:
-					this.TexPosition.X = this.Position.X + 20;
 					break;
 				case Weapon_Dir.UpRight:
-					this.TexPosition.X = this.Position.X + 20;
 					break;
 			}
 
 			spriteBatch.Draw(this.Texture,
-				this.TexPosition,
+				this.Position,
 				null,
 				null,
-				origin,
+				null,
 				angle,
 				this.Scale,
 				Color.White);
@@ -170,11 +201,39 @@ namespace GDAPSIIGame
             {
                 fired = true;
                 clip--;
-                Vector2 rotatedPos = new Vector2((float)Math.Cos(angle) + (float)Math.Sin(angle),
-                    (float)-Math.Sin(angle) + (float)Math.Cos(angle));
-				Vector2 pos = new Vector2(TexPosition.X + (BoundingBox.Width / 2), TexPosition.Y + (BoundingBox.Height / 4));
-				ProjectileManager.Instance.Clone(projType, TexPosition+rotatedPos, direction);
+
+				float cosRadians = (float)Math.Cos(angle);
+				float sinRadians = (float)Math.Sin(angle);
+
+				//Vector2 translatedPoint = new Vector2();
+				//translatedPoint.X = point.X - pivot.X;
+				//translatedPoint.Y = point.Y - pivot.Y;
+
+				//Vector2 rotatedPoint = new Vector2();
+				//rotatedPoint.X = translatedPoint.X * cosRadians - translatedPoint.Y * sinRadians + pivot.X;
+				//rotatedPoint.Y = translatedPoint.X * sinRadians + translatedPoint.Y * cosRadians + pivot.Y;
+
+				ProjectileManager.Instance.Clone(projType, muzzlePos, direction);
             }
         }
+
+		private Vector2 RotateVector2(Vector2 point, float radians, Vector2 pivot)
+		{
+			//Get the cos and sin of the angle
+			float cosRadians = (float)Math.Cos(radians);
+			float sinRadians = (float)Math.Sin(radians);
+
+			//Get the vector between the two points
+			Vector2 translatedPoint = new Vector2();
+			translatedPoint.X = point.X - pivot.X;
+			translatedPoint.Y = point.Y - pivot.Y;
+
+			//Rotate the point
+			Vector2 rotatedPoint = new Vector2();
+			rotatedPoint.X = translatedPoint.X * cosRadians - translatedPoint.Y * sinRadians + pivot.X;
+			rotatedPoint.Y = translatedPoint.X * sinRadians + translatedPoint.Y * cosRadians + pivot.Y;
+
+			return rotatedPoint;
+		}
     }
 }

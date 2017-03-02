@@ -124,7 +124,6 @@ namespace GDAPSIIGame
 				currentTime = gameTime;
 			}
             base.Update(gameTime);
-			weapon.Update(gameTime);
 
             if (inputThread == null)
             {
@@ -143,12 +142,16 @@ namespace GDAPSIIGame
 
             //Update the weapons rotation
             weapon.Angle = -((float)Math.Atan2(mouseState.X - Weapon.Position.X, mouseState.Y - Weapon.Position.Y));
+			//Update weapon position
+			weapon.X = this.X + (BoundingBox.Width / 2);
+			weapon.Y = this.Y + (BoundingBox.Height / 2);
+			//Update weapon
+			weapon.Update(gameTime);
 
-
-            //Fire weapon only if previous frame didn't have left button being pressed
-            if (mouseState.LeftButton == ButtonState.Pressed && prevMouseState.LeftButton == ButtonState.Released)
+			//Fire weapon only if previous frame didn't have left button being pressed
+			if (mouseState.LeftButton == ButtonState.Pressed && prevMouseState.LeftButton == ButtonState.Released)
 			{
-				Vector2 direction = new Vector2((mouseState.X - Weapon.X) / 1000, (mouseState.Y - Weapon.Y) / 1000);
+				Vector2 direction = new Vector2((mouseState.X - Weapon.X) / 1, (mouseState.Y - Weapon.Y) / 1);
 				direction.Normalize();
 				this.Weapon.Fire(direction);
 			}
@@ -263,10 +266,6 @@ namespace GDAPSIIGame
 				{
 					this.weapon.Reload();
 				}
-
-				//Update weapon position
-				weapon.X = this.X + (BoundingBox.Width / 2);
-				weapon.Y = this.Y + (BoundingBox.Height / 2);
 
 				//Calculates the angle between the player and the mouse
 				//See below
