@@ -43,15 +43,15 @@ namespace GDAPSIIGame
 			//Initialize the chunk manager
 			chunkManager = ChunkManager.Instance;
 
-            //Initialize projectile manager
-            projectileManager = ProjectileManager.Instance;
+			//Initialize projectile manager
+			projectileManager = ProjectileManager.Instance;
 
-            //Initialize map manager
-            mapManager = new MapManager();
+			//Initialize map manager
+			mapManager = new MapManager();
 
 
-            //Initialize keyboards
-            kbState = new KeyboardState();
+			//Initialize keyboards
+			kbState = new KeyboardState();
 			previousKbState = kbState;
 
 			gameState = GameState.MainMenu;
@@ -60,24 +60,24 @@ namespace GDAPSIIGame
 
         protected override void LoadContent()
         {
-            spriteBatch = new SpriteBatch(GraphicsDevice);
-            //Load entities
-            entityManager.LoadContent(Content);
-            //Load projectiles
-            projectileManager.LoadContent(Content);
-            //Load the one and only texture
-            theTexture = Content.Load<Texture2D>("playernew");
+			spriteBatch = new SpriteBatch(GraphicsDevice);
+			//Load entities
+			entityManager.LoadContent(Content);
+			//Load projectiles
+			projectileManager.LoadContent(Content);
+			//Load the one and only texture
+			theTexture = Content.Load<Texture2D>("playernew");
 
-            //Rectangle pls = new Rectangle(0, 0, 0, 0);
-            //Vector2 aids = Vector2.Zero;
-            //Texture2D why = Content.Load<Texture2D>("player");
-            //Projectile p = new Projectile(why, Vector2.Zero, new Rectangle(0, 0, 0, 0), Vector2.Zero);
-            //Console.WriteLine(why);
-            //newthing = (Projectile)p.GetType().GetConstructor(new System.Type[] { why.GetType(), aids.GetType(), pls.GetType(), aids.GetType() }).Invoke(new object[] {why, new Vector2(2,2), new Rectangle(0, 0, 10, 10), new Vector2(.01f, .01f) });
-            //Console.WriteLine(newthing.Direction);
-        }
+			//Rectangle pls = new Rectangle(0, 0, 0, 0);
+			//Vector2 aids = Vector2.Zero;
+			//Texture2D why = Content.Load<Texture2D>("player");
+			//Projectile p = new Projectile(why, Vector2.Zero, new Rectangle(0, 0, 0, 0), Vector2.Zero);
+			//Console.WriteLine(why);
+			//newthing = (Projectile)p.GetType().GetConstructor(new System.Type[] { why.GetType(), aids.GetType(), pls.GetType(), aids.GetType() }).Invoke(new object[] {why, new Vector2(2,2), new Rectangle(0, 0, 10, 10), new Vector2(.01f, .01f) });
+			//Console.WriteLine(newthing.Direction);
+		}
 
-        protected override void UnloadContent()
+		protected override void UnloadContent()
         {
 
         }
@@ -105,19 +105,15 @@ namespace GDAPSIIGame
 					//Update projectiles
 					projectileManager.Update(gameTime, previousKbState, kbState);
 
-			//Update chunks
-			chunkManager.Update();
-
-
-            //initialize Camera
-            if (mainCamera == null)
-            {
-                //mainCamera = new Camera(GraphicsDevice.Viewport);
-            }
-
-            base.Update(gameTime);
 					//Update chunks
 					chunkManager.Update();
+
+					//initialize Camera
+					if (mainCamera == null)
+					{
+						mainCamera = Camera.Instance;
+					}
+
 					break;
 				case GameState.MainMenu:
 					kbState = Keyboard.GetState();
@@ -160,10 +156,10 @@ namespace GDAPSIIGame
 
 		protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+			GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            //newthing.Draw();
-            //Begin SpriteBatch
+			//newthing.Draw();
+			//Begin SpriteBatch
 			spriteBatch.Begin();
 			switch (gameState)
 			{
@@ -179,10 +175,10 @@ namespace GDAPSIIGame
 					break;
 			}
 
-            //End SpriteBatch
+			//End SpriteBatch
 			spriteBatch.End();
 
-            base.Draw(gameTime);
+			base.Draw(gameTime);
         }
 
 
