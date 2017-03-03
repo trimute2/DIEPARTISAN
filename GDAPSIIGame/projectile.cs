@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GDAPSIIGame.Interface;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -46,6 +47,11 @@ namespace GDAPSIIGame
             ProjectileManager.Instance.Add(p);
             return p;
         }
-        
-    }
+
+		public override void OnCollision(ICollidable obj)
+		{
+			active = false;
+		}
+
+	}
 }

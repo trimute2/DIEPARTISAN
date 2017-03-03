@@ -131,6 +131,17 @@ namespace GDAPSIIGame
 			}
 		}
 
+		public void RemoveInactive()
+		{
+			for(int i = objects.Count-1; i >= 0; i--)
+			{
+				if (!((objects[i]).IsActive))
+				{
+					objects.Remove(objects[i]);
+				}
+			}
+		}
+
 		/// <summary>
 		/// checks an object not included in the chunk against objects in the chunk
 		/// this is for cases where objects overlap two chunks

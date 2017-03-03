@@ -170,6 +170,7 @@ namespace GDAPSIIGame
 			ChunkIt();
 			foreach(Chunk chunk in chunks)
 			{
+				chunk.RemoveInactive();
 				chunk.CollideObjects();
 			}
 			ChunkOverlap();

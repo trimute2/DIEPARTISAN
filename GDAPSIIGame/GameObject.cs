@@ -16,6 +16,7 @@ namespace GDAPSIIGame
         private Vector2 position;
         private Rectangle boundingBox;
         private Vector2 scale;
+		public bool active;
 
 		public GameObject(Texture2D texture, Vector2 position, Rectangle boundingBox) {
             this.texture = texture;
@@ -25,6 +26,7 @@ namespace GDAPSIIGame
             //Console.WriteLine(boundingBox.Width);
             scale = new Vector2((float)boundingBox.Width/texture.Width,  (float)boundingBox.Height/texture.Height);
             //Console.WriteLine(scale);
+			active = true;
         }
 
         public float X {
@@ -60,7 +62,13 @@ namespace GDAPSIIGame
             set { scale = value; }
         }
 
-        public virtual void Draw(SpriteBatch spriteBatch) {
+		public bool IsActive
+		{
+			get { return active; }
+		}
+
+
+		public virtual void Draw(SpriteBatch spriteBatch) {
             spriteBatch.Draw(texture,
                 position,
                 null,

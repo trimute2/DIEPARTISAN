@@ -90,6 +90,15 @@ namespace GDAPSIIGame
             ChunkManager.Instance.Add(p);
         }
 
+		/// <summary>
+		/// removes a projectile
+		/// </summary>
+		/// <param name="p">the projectile to remove</param>
+		internal void Remove(Projectile p)
+		{
+			projectiles.Remove(p);
+		}
+
         internal Projectile Clone(ProjectileType pT, Vector2 currPosition, Vector2 currDirection)
         {
             switch (pT)

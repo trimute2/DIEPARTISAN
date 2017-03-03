@@ -118,7 +118,10 @@ namespace GDAPSIIGame.Entities
 					this.Y += distBottom;
 				}
 				
-            }
+            }else if(obj is Projectile)
+			{
+				this.health -= (int)((Projectile)obj).Damage;
+			}
 
 		}
 
