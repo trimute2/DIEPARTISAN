@@ -72,10 +72,7 @@ namespace GDAPSIIGame
                 1,
                 playerTexture,
                 new Vector2(playerTexture.Width, playerTexture.Height),
-                new Rectangle(playerTexture.Width,
-                playerTexture.Height,
-                50,
-                50));
+                new Rectangle(playerTexture.Width, playerTexture.Height, 50, 50));
             //Create the player's weapon and add it to the player
             Player.Instance.Weapon = new Weapon(ProjectileType.DEFAULT,
 				playerBullet,

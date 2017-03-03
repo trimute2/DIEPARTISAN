@@ -28,7 +28,8 @@ namespace GDAPSIIGame
 		private Weapon_Dir dir;
 		private float angle;
 		private Vector2 origin;
-		private Vector2 muzzlePos;
+		//private Vector2 muzzlePos;
+		private Vector2 bulletOffset;
 
         public Weapon(ProjectileType pT, Texture2D texture, Vector2 position, Rectangle boundingBox, float fireRate, float clipSize, float reloadSpeed, Vector2 origin) : base(texture, position, boundingBox)
         {
@@ -44,7 +45,8 @@ namespace GDAPSIIGame
 			this.dir = Weapon_Dir.Down; //The direction of the weapon for drawing
 			this.angle = 0; //The angle of the weapon in radians
 			this.origin = origin; //The origin point of the weapon (where the player holds it)
-			this.muzzlePos = new Vector2();
+			//this.muzzlePos = new Vector2();
+			this.bulletOffset = new Vector2(-boundingBox.Width/2, boundingBox.Height/4);
         }
 
         /// <summary>
@@ -77,11 +79,11 @@ namespace GDAPSIIGame
 		/// <summary>
 		/// The position of the muzzle on the weapon
 		/// </summary>
-		public Vector2 MuzzlePos
-		{
-			get { return MuzzlePos; }
-			set { muzzlePos = value; }
-		}
+		//public Vector2 MuzzlePos
+		//{
+		//	get { return MuzzlePos; }
+		//	set { muzzlePos = value; }
+		//}
 
         public override void Update(GameTime gameTime)
         {
@@ -90,32 +92,43 @@ namespace GDAPSIIGame
 			switch (dir)
 			{
 				case Weapon_Dir.Up:
+					this.bulletOffset = new Vector2(BoundingBox.Width / 4, BoundingBox.Height / 4);
 					break;
 				case Weapon_Dir.UpLeft:
 					this.X = this.X - 20;
+					this.bulletOffset = new Vector2(-BoundingBox.Width / 4, BoundingBox.Height / 4);
 					break;
 				case Weapon_Dir.Left:
 					this.X = this.X - 20;
+					this.bulletOffset = new Vector2(-BoundingBox.Width / 2, BoundingBox.Height / 4);
 					break;
 				case Weapon_Dir.DownLeft:
 					this.X -= 20;
+					this.bulletOffset = new Vector2(-BoundingBox.Width , BoundingBox.Height / 4);
 					break;
 				case Weapon_Dir.Down:
+					this.bulletOffset = new Vector2(-BoundingBox.Width / 2, BoundingBox.Height / 4);
 					break;
 				case Weapon_Dir.DownRight:
 					this.X = this.X + 20;
+					this.bulletOffset = new Vector2(-BoundingBox.Width / 4, BoundingBox.Height / 4);
 					break;
 				case Weapon_Dir.Right:
 					this.X = this.X + 20;
+					this.bulletOffset = new Vector2(BoundingBox.Width / 2, BoundingBox.Height / 4);
 					break;
 				case Weapon_Dir.UpRight:
 					this.X = this.X + 20;
+					this.bulletOffset = new Vector2(BoundingBox.Width, BoundingBox.Height / 4);
 					break;
 			}
 
 			//Update the muzzle's position
-			muzzlePos = Position + new Vector2(0, BoundingBox.Width);
-			muzzlePos = RotateVector2(muzzlePos, angle, Position);
+			//muzzlePos = Position + new Vector2(BoundingBox.Width/2, BoundingBox.Width);
+			//float deltaOne = Position.X - (Position.X-BoundingBox.Width);
+			//float deltaTwo = Position.Y - (Position.Y+BoundingBox.Height);
+			//originPosition = new Vector2((Position.X-BoundingBox.Width) + origin.X * deltaOne, (Position.Y + BoundingBox.Height) + origin.Y * deltaTwo);
+			//muzzlePos = RotateVector2(muzzlePos, angle, Position);
 
 			//Control when user can fire again after just firing
 			if (fired)
@@ -172,7 +185,7 @@ namespace GDAPSIIGame
 				this.Position,
 				null,
 				null,
-				null,
+				origin,
 				angle,
 				this.Scale,
 				Color.White);
@@ -201,39 +214,30 @@ namespace GDAPSIIGame
             {
                 fired = true;
                 clip--;
+				Matrix rotationMatrix = Matrix.CreateRotationZ(angle);
+				Vector2 bulletPosition = Vector2.Transform(bulletOffset, rotationMatrix);
 
-				float cosRadians = (float)Math.Cos(angle);
-				float sinRadians = (float)Math.Sin(angle);
-
-				//Vector2 translatedPoint = new Vector2();
-				//translatedPoint.X = point.X - pivot.X;
-				//translatedPoint.Y = point.Y - pivot.Y;
-
-				//Vector2 rotatedPoint = new Vector2();
-				//rotatedPoint.X = translatedPoint.X * cosRadians - translatedPoint.Y * sinRadians + pivot.X;
-				//rotatedPoint.Y = translatedPoint.X * sinRadians + translatedPoint.Y * cosRadians + pivot.Y;
-
-				ProjectileManager.Instance.Clone(projType, muzzlePos, direction);
+				ProjectileManager.Instance.Clone(projType, Position+bulletPosition, direction);
             }
         }
 
-		private Vector2 RotateVector2(Vector2 point, float radians, Vector2 pivot)
-		{
-			//Get the cos and sin of the angle
-			float cosRadians = (float)Math.Cos(radians);
-			float sinRadians = (float)Math.Sin(radians);
+		//private Vector2 RotateVector2(Vector2 point, float radians, Vector2 pivot)
+		//{
+		//	//Get the cos and sin of the angle
+		//	float cosRadians = (float)Math.Cos(radians);
+		//	float sinRadians = (float)Math.Sin(radians);
 
-			//Get the vector between the two points
-			Vector2 translatedPoint = new Vector2();
-			translatedPoint.X = point.X - pivot.X;
-			translatedPoint.Y = point.Y - pivot.Y;
+		//	//Get the vector between the two points
+		//	Vector2 translatedPoint = new Vector2();
+		//	translatedPoint.X = point.X - pivot.X;
+		//	translatedPoint.Y = point.Y - pivot.Y;
 
-			//Rotate the point
-			Vector2 rotatedPoint = new Vector2();
-			rotatedPoint.X = translatedPoint.X * cosRadians - translatedPoint.Y * sinRadians + pivot.X;
-			rotatedPoint.Y = translatedPoint.X * sinRadians + translatedPoint.Y * cosRadians + pivot.Y;
+		//	//Rotate the point
+		//	Vector2 rotatedPoint = new Vector2();
+		//	rotatedPoint.X = translatedPoint.X * cosRadians - translatedPoint.Y * sinRadians + pivot.X;
+		//	rotatedPoint.Y = translatedPoint.X * sinRadians + translatedPoint.Y * cosRadians + pivot.Y;
 
-			return rotatedPoint;
-		}
+		//	return rotatedPoint;
+		//}
     }
 }
