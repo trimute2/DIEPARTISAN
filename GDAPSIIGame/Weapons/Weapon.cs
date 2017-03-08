@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using GDAPSIIGame.Map;
 
 namespace GDAPSIIGame
 {
@@ -184,8 +185,8 @@ namespace GDAPSIIGame
 			}
 
 			spriteBatch.Draw(this.Texture,
-				this.Position,
-				null,
+                Camera.Instance.GetViewportPosition(this),
+                null,
 				null,
 				origin,
 				angle,
