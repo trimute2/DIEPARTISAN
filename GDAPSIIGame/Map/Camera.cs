@@ -61,6 +61,21 @@ namespace GDAPSIIGame.Map
             return new Vector2(go.X - size.X, go.Y - size.Y);
         }
 
+        public Vector2 GetViewportPosition(Vector2 normalPos)
+        {
+            return new Vector2(normalPos.X - size.X, normalPos.Y - size.Y);
+        }
+
+        public Vector2 GetViewportPosition(float X, float Y)
+        {
+            return new Vector2(X - size.X, Y - size.Y);
+        }
+
+        public Vector2 GetViewportPosition(Point p)
+        {
+            return new Vector2(p.X - size.X, p.Y - size.Y);
+        }
+
         /// <summary>
         /// Tells if a camera vectored coordinate is within the camera's bounds
         /// </summary>
