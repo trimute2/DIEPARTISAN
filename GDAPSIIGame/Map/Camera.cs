@@ -40,11 +40,13 @@ namespace GDAPSIIGame.Map
 
         public int X
         {
+            get { return size.X; }
             set { size.X = value; }
         }
 
         public int Y
         {
+            get { return size.Y; }
             set { size.Y = value; }
         }
 
