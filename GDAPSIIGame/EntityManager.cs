@@ -69,7 +69,7 @@ namespace GDAPSIIGame
 			//Create the player object
 			player = Player.Instantiate(null,
                 100,
-                1,
+                5,
                 playerTexture,
                 new Vector2(playerTexture.Width, playerTexture.Height),
                 new Rectangle(playerTexture.Width, playerTexture.Height, 50, 50));
@@ -79,7 +79,8 @@ namespace GDAPSIIGame
 				Player.Instance.Position,
 				new Rectangle((int)player.X, (int)player.Y, 20, 60),
 				0.2f, 100f, 0.5f,
-				new Vector2(playerTexture.Bounds.X+playerTexture.Bounds.Width/2, playerTexture.Bounds.Top+playerTexture.Bounds.Height/4));
+				new Vector2(playerTexture.Bounds.X+playerTexture.Bounds.Width/2, playerTexture.Bounds.Top+playerTexture.Bounds.Height/4),
+				Owners.Player);
             entities.Add(player);
             ChunkManager.Instance.Add(Player);
         }

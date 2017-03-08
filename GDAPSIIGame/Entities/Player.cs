@@ -18,29 +18,31 @@ namespace GDAPSIIGame
 		//Fields
 		static private Player instance;
 		private Weapon weapon;
-		private Thread inputThread;
 		private MouseState mouseState;
 		private MouseState prevMouseState;
 		private GameTime currentTime;
-		private KeyboardState currentState;
-		private KeyboardState prevState;
+		private KeyboardState keyState;
+		private KeyboardState prevKeyState;
 		private float hurting;
         private Color color;
 		private float angle;
 		private SpriteEffects effect;
+		private float timeMult;
 
 		//Singleton
 
 		private Player(Weapon weapon, int health, int moveSpeed, Texture2D texture, Vector2 position, Rectangle boundingBox) : base(health, moveSpeed, texture, position, boundingBox)
 		{
 			this.weapon = weapon;
-			inputThread = null;
 			mouseState = Mouse.GetState();
 			prevMouseState = Mouse.GetState();
-            hurting = 0;
+			keyState = Keyboard.GetState();
+			prevKeyState = Keyboard.GetState();
+			hurting = 0;
             color = Color.White;
 			angle = 0;
 			effect = new SpriteEffects();
+			timeMult = 0;
 		}
 
 		static public Player Instantiate(Weapon weapon, int health, int moveSpeed, Texture2D texture, Vector2 position, Rectangle boundingBox)
@@ -51,7 +53,6 @@ namespace GDAPSIIGame
 			}
 			return instance;
 		}
-
 
 		//Properties
 
@@ -81,64 +82,21 @@ namespace GDAPSIIGame
             set { if (value) { hurting = 0.5f; } }
         }
 
-		/// <summary>
-		/// The current GameTime
-		/// </summary>
-		public GameTime CurrentTime
-		{
-			get { return currentTime; }
-			set { currentTime = value; }
-		}
-
-		/// <summary>
-		/// The current state of the keyboard
-		/// </summary>
-		public KeyboardState CurrentState
-		{
-			[MethodImpl(MethodImplOptions.Synchronized)]
-			get { return currentState; }
-			set { currentState = value; }
-		}
-
-		/// <summary>
-		/// The previous state of the keyboard
-		/// </summary>
-		public KeyboardState PrevState
-		{
-			[MethodImpl(MethodImplOptions.Synchronized)]
-			get { return prevState; }
-			set { prevState = value; }
-		}
-
-		public float Angle
-		{
-			get { return angle; }
-			set { angle = value; }
-		}
-
 		//Methods
 		public override void Update(GameTime gameTime)
         {
-			if (currentTime == null)
-			{
-				currentTime = gameTime;
-			}
             base.Update(gameTime);
-
-            if (inputThread == null)
-            {
-                inputThread = new Thread(() => parseInput(gameTime));
-				inputThread.IsBackground = true;
-                inputThread.Start();
-            }
 
 			//Mouse state
 			prevMouseState = mouseState;
 			mouseState = Mouse.GetState();
 
 			//Current keyboard state
-			PrevState = CurrentState;
-			currentState = Keyboard.GetState();
+			prevKeyState = keyState;
+			keyState = Keyboard.GetState();
+
+			//Update player movement
+			UpdateInput(gameTime, keyState, prevKeyState);
 
             //Update the weapons rotation
             weapon.Angle = -((float)Math.Atan2(mouseState.X - Weapon.Position.X, mouseState.Y - Weapon.Position.Y));
@@ -197,7 +155,7 @@ namespace GDAPSIIGame
 			}
 
 			spriteBatch.Draw(this.Texture,
-				this.Position,
+				Camera.Instance.GetViewportPosition(this),
 				null,
 				null,
 				Vector2.Zero,
@@ -210,120 +168,86 @@ namespace GDAPSIIGame
         }
 
         /// <summary>
-        /// Fires the player's weapon
-        /// </summary>
-        /// <param name="position"></param>
-        /// <param name="direction"></param>
-        public void Fire(Vector2 direction)
-        {
-            weapon.Fire(direction);
-        }
-
-        /// <summary>
         /// Parses Input during updates
         /// </summary>
-        /// <param name="kbState">KeyboardState</param>
-        public void parseInput(GameTime gameTime)
+        /// <param name="keyState">KeyboardState</param>
+        public void UpdateInput(GameTime gameTime, KeyboardState keyState, KeyboardState prevKeyState)
         {
-            float deltaTime = 0;
-			KeyboardState kbState = Keyboard.GetState();
-			KeyboardState prevKbState = Keyboard.GetState();
-			GameTime previousTime = new GameTime();
-            while (true)
-            {
-				//while (previousTime.ElapsedGameTime == currentTime.ElapsedGameTime)
-				//{ Console.WriteLine(3); }
-				//Console.WriteLine(deltaTime);
-				//Update keyboards
-				prevKbState = PrevState;
-				kbState = CurrentState;
+            timeMult = (float)gameTime.ElapsedGameTime.TotalSeconds / ((float)1/60);
 
-                deltaTime = (float)CurrentTime.ElapsedGameTime.TotalSeconds/200;
-				//Console.WriteLine(deltaTime);
-				//Console.WriteLine(CurrentTime.ElapsedGameTime.TotalSeconds);
+			//Basic keyboard movement
+			if (keyState.IsKeyDown(Keys.W) || keyState.IsKeyDown(Keys.Up))
+			{
+				this.Y -= this.MoveSpeed * timeMult;
+			}
+			else if (keyState.IsKeyDown(Keys.S) || keyState.IsKeyDown(Keys.Down))
+			{
+				this.Y += this.MoveSpeed * timeMult;
+			}
 
-                //Basic keyboard movement
-                if (kbState.IsKeyDown(Keys.W) || kbState.IsKeyDown(Keys.Up))
-                {
-                    this.Y -= deltaTime;
-                }
-                else if (kbState.IsKeyDown(Keys.S) || kbState.IsKeyDown(Keys.Down))
-                {
-                    this.Y += deltaTime;
-                }
+			if (keyState.IsKeyDown(Keys.D) || keyState.IsKeyDown(Keys.Right))
+			{
+				this.X += this.MoveSpeed * timeMult;
+			}
+			else if (keyState.IsKeyDown(Keys.A) || keyState.IsKeyDown(Keys.Left))
+			{
+				this.X -= this.MoveSpeed * timeMult;
+			}
 
-                if (kbState.IsKeyDown(Keys.D) || kbState.IsKeyDown(Keys.Right))
-                {
-                    this.X += deltaTime;
-                }
-                else if (kbState.IsKeyDown(Keys.A) || kbState.IsKeyDown(Keys.Left))
-                {
-                    this.X -= deltaTime;
-                }
-				
-                //Player reloading
-				if (kbState.IsKeyDown(Keys.R) && prevKbState.IsKeyUp(Keys.R))
-				{
-					this.weapon.Reload();
-				}
+			//Player reloading
+			if (keyState.IsKeyDown(Keys.R) && prevKeyState.IsKeyUp(Keys.R))
+			{
+				this.weapon.Reload();
+			}
 
-				//Calculates the angle between the player and the mouse
-				//See below
-				//   180
-				//-90   90
-				//    0
-				angle = MathHelper.ToDegrees((float)Math.Atan2(mouseState.X - Position.X, mouseState.Y - Position.Y));
+			//Calculates the angle between the player and the mouse
+			//See below
+			//   180
+			//-90   90
+			//    0
+			angle = MathHelper.ToDegrees((float)Math.Atan2(mouseState.X - Position.X, mouseState.Y - Position.Y));
 
-                //Use angle to find player direction
-                if ((angle < -157.5) || (angle > 157.5) && this.Dir != Entity_Dir.Up)
-                {
-                    this.Dir = Entity_Dir.Up;
-					weapon.Dir = Weapon_Dir.Up;
-                }
-                else if ((angle < 157.5) && (angle > 112.5) && this.Dir != Entity_Dir.UpRight)
-                {
-                    this.Dir = Entity_Dir.UpRight;
-					weapon.Dir = Weapon_Dir.UpRight;
-				}
-                else if ((angle < 112.5) && (angle > 67.5) && this.Dir != Entity_Dir.Right)
-                {
-                    this.Dir = Entity_Dir.Right;
-					weapon.Dir = Weapon_Dir.Right;
-				}
-                else if ((angle < 67.5) && (angle > 22.5) && this.Dir != Entity_Dir.DownRight)
-                {
-                    this.Dir = Entity_Dir.DownRight;
-					weapon.Dir = Weapon_Dir.DownRight;
-				}
-                else if ((angle < -22.5) && (angle > -67.5) && this.Dir != Entity_Dir.DownLeft)
-                {
-                    this.Dir = Entity_Dir.DownLeft;
-					weapon.Dir = Weapon_Dir.DownLeft;
-				}
-                else if ((angle < -67.5) && (angle > -112.5) && this.Dir != Entity_Dir.Left)
-                {
-                    this.Dir = Entity_Dir.Left;
-					weapon.Dir = Weapon_Dir.Left;
-				}
-                else if ((angle < -112.5) && (angle > -157.5) && this.Dir != Entity_Dir.UpLeft)
-                {
-                    this.Dir = Entity_Dir.UpLeft;
-					weapon.Dir = Weapon_Dir.UpLeft;
-				}
-                else if ((angle < 22.5) && (angle > -22.5) && this.Dir != Entity_Dir.Down)
-                {
-                    this.Dir = Entity_Dir.Down;
-					weapon.Dir = Weapon_Dir.Down;
-				}
-                //Thread.Sleep(1);
-                //Console.WriteLine(angle);
-                //Console.WriteLine(this.Dir);
-                Camera.Instance.X = (int)Position.X;
-                Camera.Instance.Y = (int)Position.Y;
-				//Thread.Sleep(1);
-				previousTime.ElapsedGameTime = CurrentTime.ElapsedGameTime;
-				previousTime.TotalGameTime = CurrentTime.TotalGameTime;
-            }
+			//Use angle to find player direction
+			if ((angle < -157.5) || (angle > 157.5) && this.Dir != Entity_Dir.Up)
+			{
+				this.Dir = Entity_Dir.Up;
+				weapon.Dir = Weapon_Dir.Up;
+			}
+			else if ((angle < 157.5) && (angle > 112.5) && this.Dir != Entity_Dir.UpRight)
+			{
+				this.Dir = Entity_Dir.UpRight;
+				weapon.Dir = Weapon_Dir.UpRight;
+			}
+			else if ((angle < 112.5) && (angle > 67.5) && this.Dir != Entity_Dir.Right)
+			{
+				this.Dir = Entity_Dir.Right;
+				weapon.Dir = Weapon_Dir.Right;
+			}
+			else if ((angle < 67.5) && (angle > 22.5) && this.Dir != Entity_Dir.DownRight)
+			{
+				this.Dir = Entity_Dir.DownRight;
+				weapon.Dir = Weapon_Dir.DownRight;
+			}
+			else if ((angle < -22.5) && (angle > -67.5) && this.Dir != Entity_Dir.DownLeft)
+			{
+				this.Dir = Entity_Dir.DownLeft;
+				weapon.Dir = Weapon_Dir.DownLeft;
+			}
+			else if ((angle < -67.5) && (angle > -112.5) && this.Dir != Entity_Dir.Left)
+			{
+				this.Dir = Entity_Dir.Left;
+				weapon.Dir = Weapon_Dir.Left;
+			}
+			else if ((angle < -112.5) && (angle > -157.5) && this.Dir != Entity_Dir.UpLeft)
+			{
+				this.Dir = Entity_Dir.UpLeft;
+				weapon.Dir = Weapon_Dir.UpLeft;
+			}
+			else if ((angle < 22.5) && (angle > -22.5) && this.Dir != Entity_Dir.Down)
+			{
+				this.Dir = Entity_Dir.Down;
+				weapon.Dir = Weapon_Dir.Down;
+			}
         }
     }
 }

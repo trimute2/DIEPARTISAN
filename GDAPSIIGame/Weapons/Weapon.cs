@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using GDAPSIIGame.Map;
 
 namespace GDAPSIIGame
 {
@@ -30,8 +31,9 @@ namespace GDAPSIIGame
 		private Vector2 origin;
 		//private Vector2 muzzlePos;
 		private Vector2 bulletOffset;
+		private Owners owner;
 
-        public Weapon(ProjectileType pT, Texture2D texture, Vector2 position, Rectangle boundingBox, float fireRate, float clipSize, float reloadSpeed, Vector2 origin) : base(texture, position, boundingBox)
+        public Weapon(ProjectileType pT, Texture2D texture, Vector2 position, Rectangle boundingBox, float fireRate, float clipSize, float reloadSpeed, Vector2 origin, Owners owner) : base(texture, position, boundingBox)
         {
             this.projType = pT; //Type of projectile the weapon fires
             this.fireRate = fireRate; //How fast until the weapon can fire again
@@ -47,6 +49,7 @@ namespace GDAPSIIGame
 			this.origin = origin; //The origin point of the weapon (where the player holds it)
 			//this.muzzlePos = new Vector2();
 			this.bulletOffset = new Vector2(-boundingBox.Width/2, boundingBox.Height/4);
+			this.owner = owner;
         }
 
         /// <summary>
@@ -182,8 +185,8 @@ namespace GDAPSIIGame
 			}
 
 			spriteBatch.Draw(this.Texture,
-				this.Position,
-				null,
+                Camera.Instance.GetViewportPosition(this),
+                null,
 				null,
 				origin,
 				angle,
@@ -217,7 +220,7 @@ namespace GDAPSIIGame
 				Matrix rotationMatrix = Matrix.CreateRotationZ(angle);
 				Vector2 bulletPosition = Vector2.Transform(bulletOffset, rotationMatrix);
 
-				ProjectileManager.Instance.Clone(projType, Position+bulletPosition, direction);
+				ProjectileManager.Instance.Clone(projType, Position+bulletPosition, direction, owner);
             }
         }
 

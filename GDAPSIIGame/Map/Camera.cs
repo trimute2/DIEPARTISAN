@@ -23,6 +23,7 @@ namespace GDAPSIIGame.Map
             float x = Player.Instance.X - vp.Width / 2;
             float y = Player.Instance.Y - vp.Height / 2;
             size = new Rectangle((int)x, (int)y, vp.Width, vp.Height);
+            Console.WriteLine(vp.Width + " " + vp.Height);
         }
 
 
@@ -40,17 +41,34 @@ namespace GDAPSIIGame.Map
 
         public int X
         {
+            get { return size.X; }
             set { size.X = value; }
         }
 
         public int Y
         {
+            get { return size.Y; }
             set { size.Y = value; }
         }
 
         public Rectangle Bounds
         {
             get { return size; }
+        }
+
+        public Vector2 GetViewportPosition(GameObject go)
+        {
+            return new Vector2(go.X - size.X, go.Y - size.Y);
+        }
+
+        /// <summary>
+        /// Tells if a camera vectored coordinate is within the camera's bounds
+        /// </summary>
+        /// <param name="v">Vector in camera coords</param>
+        /// <returns>true/false if vector is within camera bounds</returns>
+        public bool InBounds(Vector2 v)
+        {
+            return v.X < size.Width && v.Y < size.Height;
         }
     }
 }

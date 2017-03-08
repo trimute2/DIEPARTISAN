@@ -40,8 +40,8 @@ namespace GDAPSIIGame
             //Initialize entity manager
             entityManager = EntityManager.Instance;
 
-			//Initialize the chunk manager
-			chunkManager = ChunkManager.Instance;
+            //Initialize the chunk manager
+            chunkManager = ChunkManager.Instance;
 
 			//Initialize projectile manager
 			projectileManager = ProjectileManager.Instance;
@@ -63,8 +63,10 @@ namespace GDAPSIIGame
 			spriteBatch = new SpriteBatch(GraphicsDevice);
 			//Load entities
 			entityManager.LoadContent(Content);
-			//Load projectiles
-			projectileManager.LoadContent(Content);
+            //Make the Camera
+            Camera.Instance.setPosition(GraphicsDevice.Viewport);
+            //Load projectiles
+            projectileManager.LoadContent(Content);
 			//Load the one and only texture
 			theTexture = Content.Load<Texture2D>("playernew");
 
@@ -172,6 +174,9 @@ namespace GDAPSIIGame
 
 					//Draw projectiles
 					projectileManager.Draw(gameTime, spriteBatch);
+					break;
+				case GameState.MainMenu:
+					spriteBatch.Draw(theTexture, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
 					break;
 			}
 

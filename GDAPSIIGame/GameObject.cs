@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using GDAPSIIGame.Interface;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using GDAPSIIGame.Map;
 
 namespace GDAPSIIGame
 {
@@ -69,15 +70,19 @@ namespace GDAPSIIGame
 
 
 		public virtual void Draw(SpriteBatch spriteBatch) {
-            spriteBatch.Draw(texture,
-                position,
-                null,
-                null,
-                Vector2.Zero,
-                0.0f,
-                scale,
-                null,
-                0);
+            Vector2 camPos = Camera.Instance.GetViewportPosition(this);
+            if (Camera.Instance.InBounds(camPos))
+            {
+                spriteBatch.Draw(texture,
+                    camPos,
+                    null,
+                    null,
+                    Vector2.Zero,
+                    0.0f,
+                    scale,
+                    null,
+                    0);
+            }
         }
 
         public virtual void Update(GameTime gameTime)
