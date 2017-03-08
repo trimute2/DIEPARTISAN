@@ -58,7 +58,7 @@ namespace GDAPSIIGame
         internal void LoadContent(ContentManager Content)
         {
             Texture2D texture = Content.Load<Texture2D>("player");
-            Projectiles.Add(new Projectile(texture, new Vector2(texture.Width, texture.Height), new Rectangle(texture.Width, texture.Height, 25, 25), new Vector2(-0.05f, -0.05f), 1));
+            //Projectiles.Add(new Projectile(texture, new Vector2(texture.Width, texture.Height), new Rectangle(texture.Width, texture.Height, 25, 25), new Vector2(-0.05f, -0.05f), 1));
             hiddenProjectiles.Add(new Projectile(texture, new Vector2(-100, -100), new Rectangle(texture.Width, texture.Height, 25, 25), new Vector2(0f, 0f), 1));
         }
 
@@ -67,10 +67,22 @@ namespace GDAPSIIGame
         /// </summary>
         internal void Update(GameTime gameTime, KeyboardState previousKbState, KeyboardState kbState)
         {
-                foreach (Projectile p in Projectiles)
-                {
-                    p.Update(gameTime);
-                }
+			for (int i = projectiles.Count - 1; i >= 0; i--)
+			{
+				if (projectiles[i].IsActive)
+				{
+					projectiles[i].Update(gameTime);
+				}
+				else
+				{
+					projectiles.Remove(projectiles[i]);
+				}
+			}
+
+			/*foreach (Projectile p in Projectiles)
+			{
+				p.Update(gameTime);
+			}*/
         }
 
         /// <summary>
@@ -78,10 +90,11 @@ namespace GDAPSIIGame
         /// </summary>
         internal void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-                foreach (Projectile p in Projectiles)
-                {
-                    p.Draw(spriteBatch);
-                }
+
+			foreach (Projectile p in Projectiles)
+			{
+				p.Draw(spriteBatch);
+			}
         }
 
         internal void Add(Projectile p)
@@ -99,12 +112,12 @@ namespace GDAPSIIGame
 			projectiles.Remove(p);
 		}
 
-        internal Projectile Clone(ProjectileType pT, Vector2 currPosition, Vector2 currDirection)
+        internal Projectile Clone(ProjectileType pT, Vector2 currPosition, Vector2 currDirection, Owners owner)
         {
             switch (pT)
             {
                 case ProjectileType.DEFAULT:
-                    return hiddenProjectiles[(int)pT - 1].Clone(currPosition, currDirection);
+                    return hiddenProjectiles[(int)pT - 1].Clone(currPosition, currDirection, owner);
             }
             return null;
         }
