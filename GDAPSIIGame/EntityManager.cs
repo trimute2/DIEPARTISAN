@@ -89,10 +89,20 @@ namespace GDAPSIIGame
         /// </summary>
         internal void Update(GameTime gameTime)
 		{
-			foreach (Entities.Entity e in entities)
+			for(int i = entities.Count-1;i >= 0; i--)
+			{
+				if (entities[i].IsActive)
+				{
+					entities[i].Update(gameTime);
+				}else
+				{
+					entities.Remove(entities[i]);
+				}
+			}
+			/*foreach (Entities.Entity e in entities)
 			{
 				e.Update(gameTime);
-			}
+			}*/
 		}
 
         /// <summary>
