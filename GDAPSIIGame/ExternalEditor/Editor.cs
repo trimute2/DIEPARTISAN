@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework.Input;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Threading;
@@ -16,6 +17,11 @@ namespace ExternalEditor
         private bool spawnPlaced;
         private int[] tiles;
         private List<Button> tileButtons;
+        private MouseState ms;
+
+        private Color wallColor;
+        private Color enemyColor;
+        private Color spawnColor;
 
         enum ProgramState
         {
@@ -39,6 +45,7 @@ namespace ExternalEditor
             InitializeComponent();
             UpdateStateVisuals();
             tileButtons = new List<Button>();
+            ms = Mouse.GetState();
             state = ProgramState.startup;
             currentTool = Tool.wall;
             spawnPlaced = false;
@@ -48,6 +55,7 @@ namespace ExternalEditor
             xMax = 40;
             yMax = 25;
         }
+
 
         private void wallToolButton_Click(object sender, EventArgs e)
         {
@@ -77,16 +85,12 @@ namespace ExternalEditor
             CurrentToolLabel.ForeColor = Color.OrangeRed;
         }
 
-        private void currentLevelXTilesBox_SelectedItemChanged(object sender, EventArgs e)
-        {
-            
-        }
-
         public void UpdateStateVisuals()
         {
             switch(state)
             {
                 case (ProgramState.startup):
+                    CurrentToolLabel.ForeColor = SystemColors.MenuHighlight;
                     newLevelCollisionButton.Enabled = true;
                     currentLevelNameTextbox.Enabled = false;
                     currentLevelXTilesBox.Enabled = false;
@@ -125,9 +129,9 @@ namespace ExternalEditor
                 yTiles = int.Parse(newLevelYTilesTextbox.Text);
                 tiles = new int[xTiles * yTiles];
                 InitializeGrid(xTiles, yTiles);
+                state = ProgramState.editing;
                 UpdateStateVisuals();
                 this.Width = (this.Width + (tileSize * xTiles) + 12);
-                state = ProgramState.editing;
                 currentLevelXTilesBox.Text = xTiles + "";
                 currentLevelYTilesBox.Text = yTiles + "";
                 loadingBar.Maximum = xTiles * yTiles;
@@ -135,7 +139,7 @@ namespace ExternalEditor
             }
             else
             {
-                MessageBox.Show("X values must be positive integers with a value between " + xMin + " and " +xMax + ", " + 
+                System.Windows.Forms.MessageBox.Show("X values must be positive integers with a value between " + xMin + " and " +xMax + ", " + 
                                 "Y values must be positive integers with a value between " + yMin + " and " + yMax + ".",
                                 "Error!",
                                  MessageBoxButtons.OK, 
@@ -145,35 +149,37 @@ namespace ExternalEditor
 
         public void TileClicked(object sender, EventArgs e)
         {
+            ms = Mouse.GetState();
             if (state == ProgramState.editing)
             {
-                Button b = (Button)sender;
-                switch (currentTool)
-                {
-                    case (Tool.delete):
-                        if (b.BackColor == Color.LightGreen)
-                        {
-                            spawnPlaced = false;
-                        }
-                        b.BackColor = SystemColors.ButtonHighlight;
-                        break;
+                //if() mouse - press
+                    Button b = (Button)sender;
+                    switch (currentTool)
+                    {
+                        case (Tool.delete):
+                            if (b.BackColor == Color.LightGreen)
+                            {
+                                spawnPlaced = false;
+                            }
+                            b.BackColor = SystemColors.ButtonHighlight;
+                            break;
 
-                    case (Tool.enemy):
-                        b.BackColor = Color.OrangeRed;
-                        break;
+                        case (Tool.enemy):
+                            b.BackColor = Color.OrangeRed;
+                            break;
 
-                    case (Tool.spawn):
-                        if (!spawnPlaced)
-                        {
-                            b.BackColor = Color.LightGreen;
-                            spawnPlaced = true;
-                        }
-                        break;
+                        case (Tool.spawn):
+                            if (!spawnPlaced)
+                            {
+                                b.BackColor = Color.LightGreen;
+                                spawnPlaced = true;
+                            }
+                            break;
 
-                    case (Tool.wall):
-                        b.BackColor = SystemColors.MenuHighlight;
-                        break;
-                }
+                        case (Tool.wall):
+                            b.BackColor = SystemColors.MenuHighlight;
+                            break;
+                    }
             }
         }
 
@@ -197,9 +203,24 @@ namespace ExternalEditor
                     tileButtons.Add(b);
                     this.Controls.Add(b);
                     b.MouseEnter += new EventHandler(this.TileClicked);
-
-                    if(loadingBar.Value < loadingBar.Maximum)
+                    if (loadingBar.Value < loadingBar.Maximum)
                         loadingBar.Value++;
+                }
+            }
+        }
+
+        //0 = nothing (floor)
+        //1 = wall
+        //2 = enemy
+        //3 = spawn
+
+        public void ExportGridToFile()
+        {
+            for(int i = 0; i < tiles.GetLength(0); i++)
+            {
+                for(int j = 0; j < tiles.GetLength(1); j++)
+                {
+                    BackColor = tileButtons[i + j].BackColor;
                 }
             }
         }
