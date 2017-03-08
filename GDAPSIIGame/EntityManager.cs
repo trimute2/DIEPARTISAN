@@ -69,7 +69,7 @@ namespace GDAPSIIGame
 			//Create the player object
 			player = Player.Instantiate(null,
                 100,
-                1,
+                5,
                 playerTexture,
                 new Vector2(playerTexture.Width, playerTexture.Height),
                 new Rectangle(playerTexture.Width, playerTexture.Height, 50, 50));
