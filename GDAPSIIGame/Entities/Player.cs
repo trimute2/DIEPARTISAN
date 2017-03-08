@@ -155,7 +155,7 @@ namespace GDAPSIIGame
 			}
 
 			spriteBatch.Draw(this.Texture,
-				this.Position,
+				Camera.Instance.GetViewportPosition(this),
 				null,
 				null,
 				Vector2.Zero,
