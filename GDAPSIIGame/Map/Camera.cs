@@ -54,5 +54,20 @@ namespace GDAPSIIGame.Map
         {
             get { return size; }
         }
+
+        public Vector2 GetViewportPosition(GameObject go)
+        {
+            return new Vector2(size.X - go.X, size.Y - go.Y);
+        }
+
+        /// <summary>
+        /// Tells if a camera vectored coordinate is within the camera's bounds
+        /// </summary>
+        /// <param name="v">Vector in camera coords</param>
+        /// <returns>true/false if vector is within camera bounds</returns>
+        public bool InBounds(Vector2 v)
+        {
+            return v.X < size.Width && v.Y < size.Y;
+        }
     }
 }
