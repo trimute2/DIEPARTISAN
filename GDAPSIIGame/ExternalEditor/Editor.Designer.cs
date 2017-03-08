@@ -186,7 +186,6 @@
             this.currentLevelXTilesBox.Name = "currentLevelXTilesBox";
             this.currentLevelXTilesBox.Size = new System.Drawing.Size(50, 20);
             this.currentLevelXTilesBox.TabIndex = 13;
-            this.currentLevelXTilesBox.SelectedItemChanged += new System.EventHandler(this.currentLevelXTilesBox_SelectedItemChanged);
             // 
             // currentLevelYTilesBox
             // 
