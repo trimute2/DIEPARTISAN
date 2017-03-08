@@ -173,6 +173,9 @@ namespace GDAPSIIGame
 					//Draw projectiles
 					projectileManager.Draw(gameTime, spriteBatch);
 					break;
+				case GameState.MainMenu:
+					spriteBatch.Draw(theTexture, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
+					break;
 			}
 
 			//End SpriteBatch
