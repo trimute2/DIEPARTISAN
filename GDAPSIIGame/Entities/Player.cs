@@ -98,8 +98,9 @@ namespace GDAPSIIGame
 			//Update player movement
 			UpdateInput(gameTime, keyState, prevKeyState);
 
-            //Update the weapons rotation
-            weapon.Angle = -((float)Math.Atan2(mouseState.X - Weapon.Position.X, mouseState.Y - Weapon.Position.Y));
+			//Update the weapons rotation
+			Vector2 camw = Camera.Instance.GetViewportPosition(Weapon.Position);
+            weapon.Angle = -((float)Math.Atan2(mouseState.X - camw.X, mouseState.Y - camw.Y));
 			//Update weapon position
 			weapon.X = this.X + (BoundingBox.Width / 2);
 			weapon.Y = this.Y + (BoundingBox.Height / 2);
@@ -109,7 +110,7 @@ namespace GDAPSIIGame
 			//Fire weapon only if previous frame didn't have left button being pressed
 			if (mouseState.LeftButton == ButtonState.Pressed && prevMouseState.LeftButton == ButtonState.Released)
 			{
-				Vector2 direction = new Vector2((mouseState.X - Weapon.X) / 1, (mouseState.Y - Weapon.Y) / 1);
+				Vector2 direction = new Vector2((mouseState.X - camw.X) / 1, (mouseState.Y - camw.Y) / 1);
 				direction.Normalize();
 				this.Weapon.Fire(direction);
 			}
@@ -205,7 +206,8 @@ namespace GDAPSIIGame
 			//   180
 			//-90   90
 			//    0
-			angle = MathHelper.ToDegrees((float)Math.Atan2(mouseState.X - Position.X, mouseState.Y - Position.Y));
+			Vector2 campos = Camera.Instance.GetViewportPosition(this.X+25,this.Y);
+			angle = MathHelper.ToDegrees((float)Math.Atan2(mouseState.X - campos.X, mouseState.Y - campos.Y));
 
 			//Use angle to find player direction
 			if ((angle < -157.5) || (angle > 157.5) && this.Dir != Entity_Dir.Up)
