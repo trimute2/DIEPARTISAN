@@ -180,19 +180,23 @@ namespace GDAPSIIGame
 			if (keyState.IsKeyDown(Keys.W) || keyState.IsKeyDown(Keys.Up))
 			{
 				this.Y -= this.MoveSpeed * timeMult;
+				Camera.Instance.Y -= (int)(this.MoveSpeed*timeMult);
 			}
 			else if (keyState.IsKeyDown(Keys.S) || keyState.IsKeyDown(Keys.Down))
 			{
 				this.Y += this.MoveSpeed * timeMult;
+				Camera.Instance.Y += (int)(this.MoveSpeed * timeMult);
 			}
 
 			if (keyState.IsKeyDown(Keys.D) || keyState.IsKeyDown(Keys.Right))
 			{
 				this.X += this.MoveSpeed * timeMult;
+				Camera.Instance.X += (int)(this.MoveSpeed * timeMult);
 			}
 			else if (keyState.IsKeyDown(Keys.A) || keyState.IsKeyDown(Keys.Left))
 			{
 				this.X -= this.MoveSpeed * timeMult;
+				Camera.Instance.X -= (int)(this.MoveSpeed * timeMult);
 			}
 
 			//Player reloading
