@@ -89,6 +89,32 @@ namespace GDAPSIIGame.Map
             }
         }
 
+        public void initRoom()
+        {
+            //Should change this later
+            int tileSize = 64;
+            int roomSize = 10;
+            for (int i = 0; i < roomSize; i++)
+            {
+                for (int j = 0; j < roomSize; j++)
+                {
+                    switch (tileLayout[i, j])
+                    {
+                        case TileType.ENEMY:
+                            //TODO: Spawn an enemy
+                            break;
 
+                        case TileType.PLAYER:
+                            //TODo: Decide if we want to do anything to player here
+                            break;
+
+                        case TileType.WALL:
+                            //TODO: Build a wall
+                            break;
+                    }
+                    //spriteBatch.Draw(texture, new Rectangle((int)currPos.X + i * tileSize, (int)currPos.Y + j * tileSize, tileSize, tileSize), Color.White);
+                }
+            }
+        }
     }
 }

@@ -15,6 +15,7 @@ namespace GDAPSIIGame.Map
         List<Room> rooms = new List<Room>();
         public MapManager()
         {
+            //TODO: randomize choice of rooms
             generateMap("testRoom1.txt", this);
         }
 
@@ -54,6 +55,15 @@ namespace GDAPSIIGame.Map
                     m.Add(new Room(tiles, new Vector2(i*roomSize, j*roomSize)));
                 }
             }
+        }
+
+
+        /// <summary>
+        /// Instantiates Gameobjects in Rooms, then sets spaces to floor.
+        /// </summary>
+        public void initMap()
+        {
+
         }
     }
 }
