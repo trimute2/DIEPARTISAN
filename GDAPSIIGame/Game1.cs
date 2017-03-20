@@ -33,10 +33,7 @@ namespace GDAPSIIGame
         protected override void Initialize()
         {
 			this.IsMouseVisible = true;
-			//graphics.PreferredBackBufferWidth = 2000;
-			//graphics.ApplyChanges();
 			
-
             //Initialize entity manager
             entityManager = EntityManager.Instance;
 
@@ -69,14 +66,6 @@ namespace GDAPSIIGame
             projectileManager.LoadContent(Content);
 			//Load the one and only texture
 			theTexture = Content.Load<Texture2D>("playernew");
-
-			//Rectangle pls = new Rectangle(0, 0, 0, 0);
-			//Vector2 aids = Vector2.Zero;
-			//Texture2D why = Content.Load<Texture2D>("player");
-			//Projectile p = new Projectile(why, Vector2.Zero, new Rectangle(0, 0, 0, 0), Vector2.Zero);
-			//Console.WriteLine(why);
-			//newthing = (Projectile)p.GetType().GetConstructor(new System.Type[] { why.GetType(), aids.GetType(), pls.GetType(), aids.GetType() }).Invoke(new object[] {why, new Vector2(2,2), new Rectangle(0, 0, 10, 10), new Vector2(.01f, .01f) });
-			//Console.WriteLine(newthing.Direction);
 		}
 
 		protected override void UnloadContent()
@@ -86,13 +75,16 @@ namespace GDAPSIIGame
 
 		protected override void Update(GameTime gameTime)
 		{
-			switch (gameState) {
+            base.Update(gameTime);
+
+            switch (gameState)
+            {
 				case GameState.GamePlay:
 					if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
 					{
 						Exit();
 					}
-					//ScreenWrap(player);
+					
 					previousKbState = kbState;
 					kbState = Keyboard.GetState();
 
@@ -133,36 +125,15 @@ namespace GDAPSIIGame
 					}
 					break;
 			}
-			base.Update(gameTime);
-		}
-
-		private void ScreenWrap(GameObject objToWrap)
-		{
-			if (objToWrap.X < 0)
-			{
-				objToWrap.X = GraphicsDevice.Viewport.Width - objToWrap.X;
-			}
-			else if (objToWrap.X > GraphicsDevice.Viewport.Width)
-			{
-				objToWrap.X = objToWrap.X - GraphicsDevice.Viewport.Width;
-			}
-			if (objToWrap.Y < 0)
-			{
-				objToWrap.Y = GraphicsDevice.Viewport.Height - objToWrap.Y;
-			}
-			else if (objToWrap.Y > GraphicsDevice.Viewport.Height)
-			{
-				objToWrap.Y = objToWrap.Y - GraphicsDevice.Viewport.Height;
-			}
 		}
 
 		protected override void Draw(GameTime gameTime)
         {
 			GraphicsDevice.Clear(Color.CornflowerBlue);
 
-			//newthing.Draw();
 			//Begin SpriteBatch
 			spriteBatch.Begin();
+
 			switch (gameState)
 			{
 				case GameState.GamePlay:
