@@ -43,6 +43,8 @@ namespace GDAPSIIGame.Map
             this.connections = 0;
         }
 
+
+
         /// <summary>
         /// Matrix of Tiles belonging to this room
         /// </summary>
@@ -76,7 +78,7 @@ namespace GDAPSIIGame.Map
         public void Draw(SpriteBatch spriteBatch, Texture2D texture)
         {
             Vector2 currPos = Camera.Instance.GetViewportPosition(position);
-            int tileSize = 512;
+            int tileSize = 64;
             int roomSize = 10;
             for (int i = 0; i < roomSize; i++)
             {
