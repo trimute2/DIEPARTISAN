@@ -125,5 +125,14 @@ namespace GDAPSIIGame.Entities
 
 		}
 
+		public override void Update(GameTime gameTime)
+		{
+			if(health <= 0)
+			{
+				active = false;
+			}
+			base.Update(gameTime);
+		}
+
 	}
 }

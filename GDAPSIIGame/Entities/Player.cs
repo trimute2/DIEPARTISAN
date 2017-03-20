@@ -10,6 +10,7 @@ using GDAPSIIGame.Entities;
 using System.Threading;
 using System.Runtime.CompilerServices;
 using GDAPSIIGame.Map;
+using GDAPSIIGame.Interface;
 
 namespace GDAPSIIGame
 {
@@ -255,5 +256,21 @@ namespace GDAPSIIGame
 				weapon.Dir = Weapon_Dir.Down;
 			}
         }
-    }
+
+		public override void OnCollision(ICollidable obj)
+		{
+			if (obj is Projectile)
+			{
+				if (((Projectile)obj).Owner != Owners.Player)
+				{
+					this.Health -= (int)((Projectile)obj).Damage;
+				}
+			}
+			else
+			{
+				base.OnCollision(obj);
+			}
+		}
+
+	}
 }
