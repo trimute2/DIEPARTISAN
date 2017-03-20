@@ -3,6 +3,7 @@ using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.Xna.Framework;
 using System.Threading.Tasks;
 
 namespace GDAPSIIGame.Map
@@ -22,7 +23,7 @@ namespace GDAPSIIGame.Map
                 }
             }
 
-            Room r = new Room(tiles);
+            Room r = new Room(tiles, Vector2.Zero);
             m.Add(r);
         }
     }

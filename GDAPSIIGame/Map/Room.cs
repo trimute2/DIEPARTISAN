@@ -34,9 +34,11 @@ namespace GDAPSIIGame.Map
         //The literal tilemap of the room
         private TileType[,] tileLayout;
         int connections;
+        Vector2 position;
 
-        public Room(TileType[,] tileLayout)
+        public Room(TileType[,] tileLayout, Vector2 position)
         {
+            this.position = position;
             this.tileLayout = tileLayout;
             this.connections = 0;
         }
@@ -73,11 +75,14 @@ namespace GDAPSIIGame.Map
 
         public void Draw(SpriteBatch spriteBatch, Texture2D texture)
         {
-            for (int i = 0; i < 10; i++)
+            Vector2 currPos = Camera.Instance.GetViewportPosition(position);
+            int tileSize = 512;
+            int roomSize = 10;
+            for (int i = 0; i < roomSize; i++)
             {
-                for (int j = 0; j < 10; j++)
+                for (int j = 0; j < roomSize; j++)
                 {
-                    spriteBatch.Draw(texture, new Rectangle(i*64, j*64, 64, 64), Color.White);
+                    spriteBatch.Draw(texture, new Rectangle((int)currPos.X + i*tileSize, (int)currPos.Y + j*tileSize, tileSize, tileSize), Color.White);
                 }
             }
         }
