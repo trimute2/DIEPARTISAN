@@ -24,6 +24,8 @@ namespace GDAPSIIGame
         public Vector2 Direction { get { return direction; } set { direction = value; } }
         public float Damage { get { return damage; } set { damage = value; } }
 
+		public Owners Owner { get { return owner; } }
+
         //Constructor
         /// <summary>
         /// A movable projectile object
