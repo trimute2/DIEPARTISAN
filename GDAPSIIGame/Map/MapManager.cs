@@ -24,7 +24,7 @@ namespace GDAPSIIGame.Map
         {
             foreach (Room r in rooms)
             {
-                //r.Draw(spritebatch, texture);
+                r.Draw(spritebatch, texture);
             }
         }
     }
