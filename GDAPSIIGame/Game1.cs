@@ -33,6 +33,8 @@ namespace GDAPSIIGame
         protected override void Initialize()
         {
 			this.IsMouseVisible = true;
+            //this.graphics.IsFullScreen = true;
+            //graphics.ToggleFullScreen();
 			
             //Initialize entity manager
             entityManager = EntityManager.Instance;
@@ -45,7 +47,6 @@ namespace GDAPSIIGame
 
 			//Initialize map manager
 			mapManager = new MapManager();
-
 
 			//Initialize keyboards
 			kbState = new KeyboardState();
@@ -66,7 +67,7 @@ namespace GDAPSIIGame
             projectileManager.LoadContent(Content);
 			//Load the one and only texture
 			theTexture = Content.Load<Texture2D>("playernew");
-		}
+        }
 
 		protected override void UnloadContent()
         {
@@ -156,7 +157,5 @@ namespace GDAPSIIGame
 
 			base.Draw(gameTime);
         }
-
-
     }
 }

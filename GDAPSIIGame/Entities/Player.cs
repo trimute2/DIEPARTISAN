@@ -21,7 +21,6 @@ namespace GDAPSIIGame
 		private Weapon weapon;
 		private MouseState mouseState;
 		private MouseState prevMouseState;
-		private GameTime currentTime;
 		private KeyboardState keyState;
 		private KeyboardState prevKeyState;
 		private float hurting;
@@ -199,6 +198,8 @@ namespace GDAPSIIGame
 				this.X -= this.MoveSpeed * timeMult;
 				Camera.Instance.X -= (int)(this.MoveSpeed * timeMult);
 			}
+
+            
 
 			//Player reloading
 			if (keyState.IsKeyDown(Keys.R) && prevKeyState.IsKeyUp(Keys.R))
