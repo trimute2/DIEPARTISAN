@@ -10,6 +10,7 @@ using GDAPSIIGame.Entities;
 using System.Threading;
 using System.Runtime.CompilerServices;
 using GDAPSIIGame.Map;
+using GDAPSIIGame.Interface;
 
 namespace GDAPSIIGame
 {
@@ -20,7 +21,6 @@ namespace GDAPSIIGame
 		private Weapon weapon;
 		private MouseState mouseState;
 		private MouseState prevMouseState;
-		private GameTime currentTime;
 		private KeyboardState keyState;
 		private KeyboardState prevKeyState;
 		private float hurting;
@@ -199,6 +199,8 @@ namespace GDAPSIIGame
 				Camera.Instance.X -= (int)(this.MoveSpeed * timeMult);
 			}
 
+            
+
 			//Player reloading
 			if (keyState.IsKeyDown(Keys.R) && prevKeyState.IsKeyUp(Keys.R))
 			{
@@ -255,5 +257,21 @@ namespace GDAPSIIGame
 				weapon.Dir = Weapon_Dir.Down;
 			}
         }
-    }
+
+		public override void OnCollision(ICollidable obj)
+		{
+			if (obj is Projectile)
+			{
+				if (((Projectile)obj).Owner != Owners.Player)
+				{
+					this.Health -= (int)((Projectile)obj).Damage;
+				}
+			}
+			else
+			{
+				base.OnCollision(obj);
+			}
+		}
+
+	}
 }
