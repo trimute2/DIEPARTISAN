@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Threading;
 using System.Windows.Forms;
 using System.Windows.Input;
@@ -10,25 +11,25 @@ namespace ExternalEditor
 {
     public partial class Editor : Form
     {
+        //Initialize the class components.
         private int tileSize;
         private int xTiles, yTiles;
         private int xMin, xMax;
         private int yMin, yMax;
         private bool spawnPlaced;
-        private int[] tiles;
+        private int[,] tiles;
         private List<Button> tileButtons;
+        private StreamWriter sw;
         private MouseState ms;
 
-        private Color wallColor;
-        private Color enemyColor;
-        private Color spawnColor;
-
+        //Enums for the program state, to enable and disable buttons accordingly.
         enum ProgramState
         {
             startup,
             editing
         }
 
+        //Enums for the current tool the user is on.
         enum Tool
         {
             wall,
@@ -40,6 +41,7 @@ namespace ExternalEditor
         ProgramState state;
         Tool currentTool;
 
+        //Initialize the windows forms and its components.
         public Editor()
         {
             InitializeComponent();
@@ -56,7 +58,7 @@ namespace ExternalEditor
             yMax = 25;
         }
 
-
+        //Set the tool variable to the according tool when that button is pressed.
         private void wallToolButton_Click(object sender, EventArgs e)
         {
             currentTool = Tool.wall;
@@ -85,6 +87,7 @@ namespace ExternalEditor
             CurrentToolLabel.ForeColor = Color.OrangeRed;
         }
 
+        //Changes the button visuals based on the program state of the form.
         public void UpdateStateVisuals()
         {
             switch(state)
@@ -93,8 +96,6 @@ namespace ExternalEditor
                     CurrentToolLabel.ForeColor = SystemColors.MenuHighlight;
                     newLevelCollisionButton.Enabled = true;
                     currentLevelNameTextbox.Enabled = false;
-                    currentLevelXTilesBox.Enabled = false;
-                    currentLevelYTilesBox.Enabled = false;
                     wallToolButton.Enabled = false;
                     deleteToolButton.Enabled = false;
                     spawnToolButton.Enabled = false;
@@ -105,8 +106,6 @@ namespace ExternalEditor
                 case (ProgramState.editing):
                     newLevelCollisionButton.Enabled = false;
                     currentLevelNameTextbox.Enabled = true;
-                    currentLevelXTilesBox.Enabled = true;
-                    currentLevelYTilesBox.Enabled = true;
                     wallToolButton.Enabled = true;
                     deleteToolButton.Enabled = true;
                     spawnToolButton.Enabled = true;
@@ -116,6 +115,7 @@ namespace ExternalEditor
             }
         }
 
+        //Initializes a button grid based on the x and y input of the user. Also initializes some variables.
         private void newLevelCollisionButton_Click(object sender, EventArgs e)
         {
             if(int.TryParse(newLevelXTilesTextbox.Text, out xTiles) &&
@@ -127,13 +127,11 @@ namespace ExternalEditor
             {
                 xTiles = int.Parse(newLevelXTilesTextbox.Text);
                 yTiles = int.Parse(newLevelYTilesTextbox.Text);
-                tiles = new int[xTiles * yTiles];
+                tiles = new int[xTiles , yTiles];
                 InitializeGrid(xTiles, yTiles);
                 state = ProgramState.editing;
                 UpdateStateVisuals();
                 this.Width = (this.Width + (tileSize * xTiles) + 12);
-                currentLevelXTilesBox.Text = xTiles + "";
-                currentLevelYTilesBox.Text = yTiles + "";
                 loadingBar.Maximum = xTiles * yTiles;
                 InitializeGrid(xTiles, yTiles);
             }
@@ -147,6 +145,13 @@ namespace ExternalEditor
             }
         }
 
+        //Preforms the export function when the save button is clicked. 
+        private void saveLevelButton_Click(object sender, EventArgs e)
+        {
+            ExportGridToFile();
+        }
+
+        //Action for when a tile is clicked, for hovered upon. Method is called every time the mouse hovers over a tile.
         public void TileClicked(object sender, EventArgs e)
         {
             ms = Mouse.GetState();
@@ -183,6 +188,7 @@ namespace ExternalEditor
             }
         }
 
+        //Initializes the grid visuals for the tile editor - a list set of buttons acting as tiles.
         public void InitializeGrid(int width, int height)
         {
             int gridX = 195;
@@ -214,6 +220,7 @@ namespace ExternalEditor
         //2 = enemy
         //3 = spawn
 
+        //Exports the grid to the tile 2D array, and exports that 2D array to a .cmap file in the program directory.
         public void ExportGridToFile()
         {
             for(int i = 0; i < tiles.GetLength(0); i++)
@@ -221,8 +228,56 @@ namespace ExternalEditor
                 for(int j = 0; j < tiles.GetLength(1); j++)
                 {
                     BackColor = tileButtons[i + j].BackColor;
+
+                    //If the tile is set to the wall color, set the grid info at [i][j] to a wall.
+                    if(BackColor == SystemColors.MenuHighlight) 
+                    {
+                        tiles[i, j] = 1;
+                    }
+                    //If the tile is set to the enemy color, set the grid info at [i][j] to an enemy.
+                    else if (BackColor == Color.OrangeRed)
+                    {
+                        tiles[i, j] = 2;
+                    }
+                    //If the tile is set to the spawn color, set the grid info at [i][j] to a spawn.
+                    else if (BackColor == Color.LightGreen)
+                    {
+                        tiles[i, j] = 3;
+                    }
+                    //If the tile back is blank, set the grid info at [i][j] to 0.
+                    else
+                    {
+                        tiles[i, j] = 0;
+                    }
                 }
             }
+
+            try
+            {
+                sw = new StreamWriter(currentLevelNameTextbox.Text + ".cmap");
+                for(int i = 0; i < tiles.GetLength(0); i++)
+                {
+                    for (int j = 0; j < tiles.GetLength(1); j++)
+                    {
+                        sw.Write(tiles[i, j]);
+                    }
+                    sw.Write("\n");
+                }
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine("Error with file write: " + e.Message);
+            }
+            finally
+            {
+                if (sw != null)
+                    sw.Close();
+            }
+
+            System.Windows.Forms.MessageBox.Show("New Collision map saved as " + currentLevelNameTextbox.Text + ".cmap.",
+                                 "Success!",
+                                 MessageBoxButtons.OK,
+                                 MessageBoxIcon.Information);
         }
     }
 }

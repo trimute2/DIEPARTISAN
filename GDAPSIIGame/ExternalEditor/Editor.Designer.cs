@@ -40,14 +40,11 @@
             this.deleteToolButton = new System.Windows.Forms.Button();
             this.spawnToolButton = new System.Windows.Forms.Button();
             this.CurrentToolLabel = new System.Windows.Forms.Label();
-            this.currentLevelXTilesBox = new System.Windows.Forms.DomainUpDown();
-            this.currentLevelYTilesBox = new System.Windows.Forms.DomainUpDown();
-            this.currentLevelXTilesLabel = new System.Windows.Forms.Label();
-            this.currentLevelYTilesLabel = new System.Windows.Forms.Label();
             this.currentLevelNameLabel = new System.Windows.Forms.Label();
             this.currentLevelNameTextbox = new System.Windows.Forms.TextBox();
             this.currentLevelGroup = new System.Windows.Forms.GroupBox();
             this.loadingBar = new System.Windows.Forms.ProgressBar();
+            this.saveLevelButton = new System.Windows.Forms.Button();
             this.createOpenLevelGroup.SuspendLayout();
             this.currentLevelGroup.SuspendLayout();
             this.SuspendLayout();
@@ -180,42 +177,10 @@
             this.CurrentToolLabel.TabIndex = 12;
             this.CurrentToolLabel.Text = "Current Tool: Wall";
             // 
-            // currentLevelXTilesBox
-            // 
-            this.currentLevelXTilesBox.Location = new System.Drawing.Point(64, 27);
-            this.currentLevelXTilesBox.Name = "currentLevelXTilesBox";
-            this.currentLevelXTilesBox.Size = new System.Drawing.Size(50, 20);
-            this.currentLevelXTilesBox.TabIndex = 13;
-            // 
-            // currentLevelYTilesBox
-            // 
-            this.currentLevelYTilesBox.Location = new System.Drawing.Point(64, 57);
-            this.currentLevelYTilesBox.Name = "currentLevelYTilesBox";
-            this.currentLevelYTilesBox.Size = new System.Drawing.Size(50, 20);
-            this.currentLevelYTilesBox.TabIndex = 14;
-            // 
-            // currentLevelXTilesLabel
-            // 
-            this.currentLevelXTilesLabel.AutoSize = true;
-            this.currentLevelXTilesLabel.Location = new System.Drawing.Point(22, 29);
-            this.currentLevelXTilesLabel.Name = "currentLevelXTilesLabel";
-            this.currentLevelXTilesLabel.Size = new System.Drawing.Size(36, 13);
-            this.currentLevelXTilesLabel.TabIndex = 15;
-            this.currentLevelXTilesLabel.Text = "x tiles:";
-            // 
-            // currentLevelYTilesLabel
-            // 
-            this.currentLevelYTilesLabel.AutoSize = true;
-            this.currentLevelYTilesLabel.Location = new System.Drawing.Point(22, 59);
-            this.currentLevelYTilesLabel.Name = "currentLevelYTilesLabel";
-            this.currentLevelYTilesLabel.Size = new System.Drawing.Size(36, 13);
-            this.currentLevelYTilesLabel.TabIndex = 16;
-            this.currentLevelYTilesLabel.Text = "y tiles:";
-            // 
             // currentLevelNameLabel
             // 
             this.currentLevelNameLabel.AutoSize = true;
-            this.currentLevelNameLabel.Location = new System.Drawing.Point(19, 102);
+            this.currentLevelNameLabel.Location = new System.Drawing.Point(19, 36);
             this.currentLevelNameLabel.Name = "currentLevelNameLabel";
             this.currentLevelNameLabel.Size = new System.Drawing.Size(38, 13);
             this.currentLevelNameLabel.TabIndex = 17;
@@ -223,22 +188,19 @@
             // 
             // currentLevelNameTextbox
             // 
-            this.currentLevelNameTextbox.Location = new System.Drawing.Point(64, 99);
+            this.currentLevelNameTextbox.Location = new System.Drawing.Point(64, 33);
             this.currentLevelNameTextbox.Name = "currentLevelNameTextbox";
             this.currentLevelNameTextbox.Size = new System.Drawing.Size(88, 20);
             this.currentLevelNameTextbox.TabIndex = 18;
             // 
             // currentLevelGroup
             // 
-            this.currentLevelGroup.Controls.Add(this.currentLevelXTilesBox);
+            this.currentLevelGroup.Controls.Add(this.saveLevelButton);
             this.currentLevelGroup.Controls.Add(this.currentLevelNameTextbox);
-            this.currentLevelGroup.Controls.Add(this.currentLevelYTilesBox);
             this.currentLevelGroup.Controls.Add(this.currentLevelNameLabel);
-            this.currentLevelGroup.Controls.Add(this.currentLevelXTilesLabel);
-            this.currentLevelGroup.Controls.Add(this.currentLevelYTilesLabel);
             this.currentLevelGroup.Location = new System.Drawing.Point(12, 386);
             this.currentLevelGroup.Name = "currentLevelGroup";
-            this.currentLevelGroup.Size = new System.Drawing.Size(172, 137);
+            this.currentLevelGroup.Size = new System.Drawing.Size(172, 109);
             this.currentLevelGroup.TabIndex = 19;
             this.currentLevelGroup.TabStop = false;
             this.currentLevelGroup.Text = "Current Level";
@@ -251,11 +213,21 @@
             this.loadingBar.Size = new System.Drawing.Size(169, 16);
             this.loadingBar.TabIndex = 20;
             // 
+            // saveLevelButton
+            // 
+            this.saveLevelButton.Location = new System.Drawing.Point(22, 64);
+            this.saveLevelButton.Name = "saveLevelButton";
+            this.saveLevelButton.Size = new System.Drawing.Size(130, 23);
+            this.saveLevelButton.TabIndex = 19;
+            this.saveLevelButton.Text = "Save Level";
+            this.saveLevelButton.UseVisualStyleBackColor = true;
+            this.saveLevelButton.Click += new System.EventHandler(this.saveLevelButton_Click);
+            // 
             // Editor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(196, 534);
+            this.ClientSize = new System.Drawing.Size(196, 506);
             this.Controls.Add(this.loadingBar);
             this.Controls.Add(this.currentLevelGroup);
             this.Controls.Add(this.CurrentToolLabel);
@@ -291,14 +263,11 @@
         private System.Windows.Forms.Button deleteToolButton;
         private System.Windows.Forms.Button spawnToolButton;
         private System.Windows.Forms.Label CurrentToolLabel;
-        private System.Windows.Forms.DomainUpDown currentLevelXTilesBox;
-        private System.Windows.Forms.DomainUpDown currentLevelYTilesBox;
-        private System.Windows.Forms.Label currentLevelXTilesLabel;
-        private System.Windows.Forms.Label currentLevelYTilesLabel;
         private System.Windows.Forms.Label currentLevelNameLabel;
         private System.Windows.Forms.TextBox currentLevelNameTextbox;
         private System.Windows.Forms.GroupBox currentLevelGroup;
         private System.Windows.Forms.ProgressBar loadingBar;
+        private System.Windows.Forms.Button saveLevelButton;
     }
 }
 
