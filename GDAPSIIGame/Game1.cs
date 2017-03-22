@@ -25,7 +25,8 @@ namespace GDAPSIIGame
         Camera mainCamera;
 		GameState gameState;
 		Texture2D mouseTex;
-		Vector2 mousePos;
+        Texture2D wallTexture;
+        Vector2 mousePos;
 		MouseState mState;
 		Vector2 mouseScale;
 
@@ -77,7 +78,11 @@ namespace GDAPSIIGame
 			mouseTex = Content.Load<Texture2D>("playernew");
 			mousePos = new Vector2(mState.X, mState.Y);
 			mouseScale = new Vector2((float)16 / mouseTex.Width, (float)16 / mouseTex.Height);
-		}
+            //Grab different wall texture
+            wallTexture = Content.Load<Texture2D>("playerBullet");
+            //Init Map
+            mapManager.initMap(theTexture, wallTexture);
+        }
 
 		protected override void UnloadContent()
         {
@@ -153,7 +158,7 @@ namespace GDAPSIIGame
 			{
 				case GameState.GamePlay:
 					//Draw Map
-					mapManager.Draw(spriteBatch, theTexture);
+					mapManager.Draw(spriteBatch, theTexture, wallTexture);
 
 					//Draw entities
 					entityManager.Draw(gameTime, spriteBatch);

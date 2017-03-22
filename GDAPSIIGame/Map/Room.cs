@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using GDAPSIIGame.Entities;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -14,9 +15,9 @@ namespace GDAPSIIGame.Map
     enum TileType
     {
         FLOOR,
-        PLAYER,
+        WALL,
         ENEMY,
-        WALL
+        PLAYER
     }
 
     /// <summary>
@@ -75,7 +76,7 @@ namespace GDAPSIIGame.Map
             
         }
 
-        public void Draw(SpriteBatch spriteBatch, Texture2D texture)
+        public void Draw(SpriteBatch spriteBatch, Texture2D floorTexture, Texture2D wallTexture)
         {
             Vector2 currPos = Camera.Instance.GetViewportPosition(position);
             int tileSize = 64;
@@ -84,16 +85,32 @@ namespace GDAPSIIGame.Map
             {
                 for (int j = 0; j < roomSize; j++)
                 {
-                    spriteBatch.Draw(texture, new Rectangle((int)currPos.X + i*tileSize, (int)currPos.Y + j*tileSize, tileSize, tileSize), Color.White);
+                    spriteBatch.Draw(
+                        tileLayout[i, j] == TileType.WALL ? wallTexture : floorTexture,
+                        new Rectangle(
+                            (int)currPos.X + i*tileSize, 
+                            (int)currPos.Y + j*tileSize, 
+                            tileSize, 
+                            tileSize), 
+                        Color.White);
                 }
             }
         }
 
-        public void initRoom()
+        /// <summary>
+        /// Takes a Room and creates everything that is not a floor tile
+        /// </summary>
+        /// <param name="enemyTexture">Texture of enemies in this room</param>
+        /// <param name="wallTexture">Texture of walls in this room</param>
+        public void initRoom(Texture2D enemyTexture, Texture2D wallTexture)
         {
             //Should change this later
             int tileSize = 64;
             int roomSize = 10;
+            int enemySpriteWidth = 32;
+            int enemySpriteHeight = 32;
+            int wallSpriteWidth = 32;
+            int wallSpriteHeight = 32;
             for (int i = 0; i < roomSize; i++)
             {
                 for (int j = 0; j < roomSize; j++)
@@ -101,16 +118,46 @@ namespace GDAPSIIGame.Map
                     switch (tileLayout[i, j])
                     {
                         case TileType.ENEMY:
-                            //TODO: Spawn an enemy
+                            Vector2 currPos = 
+                                new Vector2(
+                                    position.X + tileSize * i, 
+                                    position.Y + tileSize * j);
+                            int health = 50;
+                            int moveSpeed = 1;
+                            EntityManager.Instance.Add(
+                                new Enemy(
+                                    health, 
+                                    moveSpeed, 
+                                    enemyTexture, 
+                                    currPos, 
+                                    new Rectangle(
+                                        (int)currPos.X, 
+                                        (int)currPos.Y, 
+                                        enemySpriteWidth,
+                                        enemySpriteHeight)));
                             break;
 
                         case TileType.PLAYER:
-                            //TODo: Decide if we want to do anything to player here
+                            //TODO: Decide if we want to do anything to player here
                             break;
 
                         case TileType.WALL:
-                            //TODO: Build a wall
+                            //Console.WriteLine("WALL!");
+                            Vector2 currPos2 =
+                                new Vector2(
+                                    position.X + tileSize * i, 
+                                    position.Y + tileSize * j);
+                            ChunkManager.Instance.Add(
+                                new Wall(
+                                    wallTexture, 
+                                    currPos2, 
+                                    new Rectangle(
+                                        (int)currPos2.X, 
+                                        (int)currPos2.Y, 
+                                        wallSpriteWidth, 
+                                        wallSpriteHeight)));
                             break;
+
                     }
                     //spriteBatch.Draw(texture, new Rectangle((int)currPos.X + i * tileSize, (int)currPos.Y + j * tileSize, tileSize, tileSize), Color.White);
                 }

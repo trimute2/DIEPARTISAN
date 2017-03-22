@@ -24,11 +24,11 @@ namespace GDAPSIIGame.Map
             rooms.Add(r);
         }
 
-        public void Draw(SpriteBatch spritebatch, Texture2D texture)
+        public void Draw(SpriteBatch spritebatch, Texture2D floorTexture, Texture2D wallTexture)
         {
             foreach (Room r in rooms)
             {
-                r.Draw(spritebatch, texture);
+                r.Draw(spritebatch, floorTexture, wallTexture);
             }
         }
 
@@ -41,7 +41,8 @@ namespace GDAPSIIGame.Map
             {
                 for (int j = 0; j < lines[i].Length; j++)
                 {
-                    tiles[i, j] = (TileType)lines[i][j];
+                    tiles[i, j] = (TileType)(lines[i][j] - 48);
+                    Console.WriteLine(tiles[i, j]);
                 }
             }
 
@@ -61,9 +62,12 @@ namespace GDAPSIIGame.Map
         /// <summary>
         /// Instantiates Gameobjects in Rooms, then sets spaces to floor.
         /// </summary>
-        public void initMap()
+        public void initMap(Texture2D floorTexture, Texture2D wallTexture)
         {
-
+            foreach (Room r in rooms)
+            {
+                r.initRoom(floorTexture, wallTexture);
+            }
         }
     }
 }
