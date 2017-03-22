@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 using System;
 using GDAPSIIGame.Map;
+using System.Threading;
 
 namespace GDAPSIIGame
 {
@@ -23,6 +24,10 @@ namespace GDAPSIIGame
         Texture2D theTexture;
         Camera mainCamera;
 		GameState gameState;
+		Texture2D mouseTex;
+		Vector2 mousePos;
+		MouseState mState;
+		Vector2 mouseScale;
 
 		public Game1()
         {
@@ -32,7 +37,7 @@ namespace GDAPSIIGame
 
         protected override void Initialize()
         {
-			this.IsMouseVisible = true;
+			this.IsMouseVisible = false;
             //this.graphics.IsFullScreen = true;
             //graphics.ToggleFullScreen();
 			
@@ -67,7 +72,12 @@ namespace GDAPSIIGame
             projectileManager.LoadContent(Content);
 			//Load the one and only texture
 			theTexture = Content.Load<Texture2D>("playernew");
-        }
+			//Initiate mouse
+			mState = Mouse.GetState();
+			mouseTex = Content.Load<Texture2D>("playernew");
+			mousePos = new Vector2(mState.X, mState.Y);
+			mouseScale = new Vector2((float)16 / mouseTex.Width, (float)16 / mouseTex.Height);
+		}
 
 		protected override void UnloadContent()
         {
@@ -78,7 +88,11 @@ namespace GDAPSIIGame
 		{
             base.Update(gameTime);
 
-            switch (gameState)
+			//Update mouse texture's position
+			mState = Mouse.GetState();
+			mousePos = mState.Position.ToVector2();
+
+			switch (gameState)
             {
 				case GameState.GamePlay:
 					if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
@@ -151,6 +165,17 @@ namespace GDAPSIIGame
 					spriteBatch.Draw(theTexture, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
 					break;
 			}
+
+			//Draw the mouse texture
+			spriteBatch.Draw(mouseTex,
+					mousePos,
+					null,
+					null,
+					Vector2.Zero,
+					0.0f,
+					mouseScale,
+					null,
+					0);
 
 			//End SpriteBatch
 			spriteBatch.End();
