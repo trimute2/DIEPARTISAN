@@ -145,6 +145,13 @@ namespace GDAPSIIGame
 				{
 					chunks[offset].CollideAgainst(gol);
 				}
+				offset = Offset(i + cpr + 1);
+				gol = chunks[i].GetOverlap(chunks[offset]);
+				if(gol.Count > 0)
+				{
+					chunks[offset].CollideAgainst(gol);
+				}
+
 			}
 		}
 
