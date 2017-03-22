@@ -223,12 +223,12 @@ namespace ExternalEditor
         //Exports the grid to the tile 2D array, and exports that 2D array to a .cmap file in the program directory.
         public void ExportGridToFile()
         {
+            var index = 0;
             for(int i = 0; i < tiles.GetLength(0); i++)
             {
                 for(int j = 0; j < tiles.GetLength(1); j++)
                 {
-                    BackColor = tileButtons[i + j].BackColor;
-
+                    BackColor = tileButtons[index].BackColor;
                     //If the tile is set to the wall color, set the grid info at [i][j] to a wall.
                     if(BackColor == SystemColors.MenuHighlight) 
                     {
@@ -249,6 +249,7 @@ namespace ExternalEditor
                     {
                         tiles[i, j] = 0;
                     }
+                    index++;
                 }
             }
 
@@ -278,6 +279,7 @@ namespace ExternalEditor
                                  "Success!",
                                  MessageBoxButtons.OK,
                                  MessageBoxIcon.Information);
+            this.BackColor = Form.DefaultBackColor;
         }
     }
 }
