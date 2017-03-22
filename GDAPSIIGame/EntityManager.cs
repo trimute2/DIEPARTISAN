@@ -111,7 +111,11 @@ namespace GDAPSIIGame
         /// </summary>
         internal void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            Player.Draw(spriteBatch);
+            //Player.Draw(spriteBatch);
+			foreach (Entities.Entity en in entities)
+			{
+				en.Draw(spriteBatch);
+			}
         }
 
         internal void Add(Entities.Entity e)
