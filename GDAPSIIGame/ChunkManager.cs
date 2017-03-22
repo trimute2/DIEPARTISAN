@@ -12,15 +12,15 @@ namespace GDAPSIIGame
     {
 		static private ChunkManager instance; 
         private Chunk[] chunks;
-        private const int chunkNum = 8;
+        private const int chunkNum = 400;
         /// <summary>
 		/// number of rows of chunks
 		/// </summary>
-		private const int numRows = 2;
+		private const int numRows = 20;
         /// <summary>
         /// number of chunks per row
         /// </summary>
-        private int cpr = 4;
+        private int cpr = 20;
 
         private ChunkManager()
         {
@@ -31,7 +31,7 @@ namespace GDAPSIIGame
 				for (int j = 0; j< cpr; j++)
 				{
 					chunks[ID] = new Chunk(
-						new Rectangle(200 * j, 240 * i, 200, 240),
+						new Rectangle(640 * j, 640 * i, 640, 640),
 						cpr, ID);
 					ID++;
 				}
