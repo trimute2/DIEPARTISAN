@@ -154,8 +154,8 @@ namespace GDAPSIIGame.Map
                                     new Rectangle(
                                         (int)currPos2.X, 
                                         (int)currPos2.Y, 
-                                        wallSpriteWidth, 
-                                        wallSpriteHeight)));
+                                        tileSize, 
+                                        tileSize)));
                             break;
 
                     }
