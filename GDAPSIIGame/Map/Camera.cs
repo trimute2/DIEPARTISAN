@@ -12,6 +12,8 @@ namespace GDAPSIIGame.Map
     {
         private Rectangle size;
         private static Camera instance;
+        private float xOffset;
+        private float yOffset;
 
         private Camera()
         {
@@ -20,8 +22,10 @@ namespace GDAPSIIGame.Map
 
         public void setPosition(Viewport vp)
         {
-            float x = Player.Instance.X - vp.Width / 2;
-            float y = Player.Instance.Y - vp.Height / 2;
+            xOffset = vp.Width / 2;
+            yOffset = vp.Height / 2;
+            float x = Player.Instance.X - xOffset;
+            float y = Player.Instance.Y - yOffset;
             size = new Rectangle((int)x, (int)y, vp.Width, vp.Height);
             Console.WriteLine(vp.Width + " " + vp.Height);
         }
@@ -55,6 +59,13 @@ namespace GDAPSIIGame.Map
         {
             get { return size; }
         }
+
+        public void resetPosition(Vector2 newPos)
+        {
+            size.X = (int)(newPos.X - xOffset);
+            size.Y = (int)(newPos.Y - yOffset);
+        }
+
 
         public Vector2 GetViewportPosition(GameObject go)
         {

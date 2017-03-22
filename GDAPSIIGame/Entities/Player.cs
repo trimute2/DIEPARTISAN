@@ -270,6 +270,7 @@ namespace GDAPSIIGame
 			else
 			{
 				base.OnCollision(obj);
+                Camera.Instance.resetPosition(Position);
 			}
 		}
 
