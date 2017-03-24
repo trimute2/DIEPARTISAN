@@ -115,12 +115,15 @@ namespace GDAPSIIGame
 				this.Weapon.Fire(direction);
 			}
 
-            //Determine if the player hurting color should be playing
-            if (hurting > 0)
-            {
-                //Subtract from the hurting timer if the player is hurting
-                hurting -= (float)gameTime.ElapsedGameTime.TotalMilliseconds/1000;
+			//Determine if the player hurting color should be playing
+			if (hurting > 0)
+			{
+				//Subtract from the hurting timer if the player is hurting
+				hurting -= (float)gameTime.ElapsedGameTime.TotalMilliseconds / 1000;
+				color = Color.Red;
 			}
+			//Change this so it is more efficient
+			else color = Color.White;
         }
 
 		public override void Draw(SpriteBatch spriteBatch)
@@ -271,7 +274,7 @@ namespace GDAPSIIGame
             {
                 if (!IsHurting)
                 {
-                    Health -= 25;
+                    Health -= 20;
 					IsHurting = true;
                 }
             }
