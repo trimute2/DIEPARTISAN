@@ -48,8 +48,12 @@ namespace GDAPSIIGame.Entities
         {
             if (obj is Projectile && ((Projectile)(obj)).Owner == Owners.Player)
             {
-                active = false;
+                Health -= 25;
             }
-        }
+			else
+			{
+				base.OnCollision(obj);
+			}
+		}
     }
 }
