@@ -43,8 +43,8 @@
             this.currentLevelNameLabel = new System.Windows.Forms.Label();
             this.currentLevelNameTextbox = new System.Windows.Forms.TextBox();
             this.currentLevelGroup = new System.Windows.Forms.GroupBox();
-            this.loadingBar = new System.Windows.Forms.ProgressBar();
             this.saveLevelButton = new System.Windows.Forms.Button();
+            this.loadingBar = new System.Windows.Forms.ProgressBar();
             this.createOpenLevelGroup.SuspendLayout();
             this.currentLevelGroup.SuspendLayout();
             this.SuspendLayout();
@@ -115,6 +115,7 @@
             this.openLevelCollisionButton.TabIndex = 6;
             this.openLevelCollisionButton.Text = "Open Level Collision...";
             this.openLevelCollisionButton.UseVisualStyleBackColor = true;
+            this.openLevelCollisionButton.Click += new System.EventHandler(this.openLevelCollisionButton_Click);
             // 
             // wallToolButton
             // 
@@ -205,14 +206,6 @@
             this.currentLevelGroup.TabStop = false;
             this.currentLevelGroup.Text = "Current Level";
             // 
-            // loadingBar
-            // 
-            this.loadingBar.ForeColor = System.Drawing.Color.MediumPurple;
-            this.loadingBar.Location = new System.Drawing.Point(15, 344);
-            this.loadingBar.Name = "loadingBar";
-            this.loadingBar.Size = new System.Drawing.Size(169, 16);
-            this.loadingBar.TabIndex = 20;
-            // 
             // saveLevelButton
             // 
             this.saveLevelButton.Location = new System.Drawing.Point(22, 64);
@@ -222,6 +215,14 @@
             this.saveLevelButton.Text = "Save Level";
             this.saveLevelButton.UseVisualStyleBackColor = true;
             this.saveLevelButton.Click += new System.EventHandler(this.saveLevelButton_Click);
+            // 
+            // loadingBar
+            // 
+            this.loadingBar.ForeColor = System.Drawing.Color.MediumPurple;
+            this.loadingBar.Location = new System.Drawing.Point(15, 344);
+            this.loadingBar.Name = "loadingBar";
+            this.loadingBar.Size = new System.Drawing.Size(169, 16);
+            this.loadingBar.TabIndex = 20;
             // 
             // Editor
             // 
@@ -237,7 +238,6 @@
             this.Controls.Add(this.wallToolButton);
             this.Controls.Add(this.createOpenLevelGroup);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.Name = "Editor";
             this.ShowIcon = false;

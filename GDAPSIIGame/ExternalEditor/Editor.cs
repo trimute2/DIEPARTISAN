@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework.Input;
 using System;
+using System.Diagnostics;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
@@ -151,6 +152,24 @@ namespace ExternalEditor
             ExportGridToFile();
         }
 
+        private void openLevelCollisionButton_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog dialog = new OpenFileDialog();
+            dialog.InitialDirectory = "c:\\";
+            dialog.Filter = "cmap files (*.cmap)|*.cmap";
+            dialog.FilterIndex = 2;
+            dialog.RestoreDirectory = true;
+
+            if(dialog.ShowDialog() == DialogResult.OK)
+            {
+                string filename = dialog.FileName;
+                string[] filelines = File.ReadAllLines(filename);
+                InitializeGridFromFile(filelines);
+                state = ProgramState.editing;
+                UpdateStateVisuals();
+            }
+        }
+
         //Action for when a tile is clicked, for hovered upon. Method is called every time the mouse hovers over a tile.
         public void TileClicked(object sender, EventArgs e)
         {
@@ -215,6 +234,54 @@ namespace ExternalEditor
             }
         }
 
+        public void InitializeGridFromFile(string[] read)
+        {
+            this.Width = (this.Width + (tileSize * read[0].Length) + 12);
+            int gridX = 195;
+            int gridY = 17;
+            for (int i = 0; i < read.Length; i++)
+            {
+                for(int j = 0; j < read[0].Length; j++)
+                {
+                    Button b = new Button();
+                    b.Text = "";
+                    switch(read[i][j])
+                    {
+                        case '0':
+                            b.BackColor = SystemColors.ButtonHighlight;
+                            break;
+
+                        case '1':
+                            b.BackColor = SystemColors.MenuHighlight;
+                            break;
+
+                        case '2':
+                            b.BackColor = Color.OrangeRed;
+                            break;
+
+                        case '3':
+                            b.BackColor = Color.LightGreen;
+                            break;
+                    }
+
+                    b.ForeColor = SystemColors.ButtonHighlight;
+                    b.Size = new Size(tileSize, tileSize);
+                    b.FlatStyle = FlatStyle.Flat;
+                    b.FlatAppearance.MouseOverBackColor = b.BackColor;
+                    b.BackColorChanged += (s, e) => { b.FlatAppearance.MouseOverBackColor = b.BackColor; };
+                    b.Location = new Point(gridX,gridY);
+                    tileButtons.Add(b);
+                    this.Controls.Add(b);
+                    b.MouseEnter += new EventHandler(this.TileClicked);
+                    if (loadingBar.Value < loadingBar.Maximum)
+                        loadingBar.Value++;
+                    gridX += tileSize;
+                }
+                gridX = 195;
+                gridY += tileSize;
+            }
+        }
+
         //0 = nothing (floor)
         //1 = wall
         //2 = enemy
@@ -229,22 +296,18 @@ namespace ExternalEditor
                 for(int j = 0; j < tiles.GetLength(1); j++)
                 {
                     BackColor = tileButtons[index].BackColor;
-                    //If the tile is set to the wall color, set the grid info at [i][j] to a wall.
                     if(BackColor == SystemColors.MenuHighlight) 
                     {
                         tiles[i, j] = 1;
                     }
-                    //If the tile is set to the enemy color, set the grid info at [i][j] to an enemy.
                     else if (BackColor == Color.OrangeRed)
                     {
                         tiles[i, j] = 2;
                     }
-                    //If the tile is set to the spawn color, set the grid info at [i][j] to a spawn.
                     else if (BackColor == Color.LightGreen)
                     {
                         tiles[i, j] = 3;
                     }
-                    //If the tile back is blank, set the grid info at [i][j] to 0.
                     else
                     {
                         tiles[i, j] = 0;
@@ -253,33 +316,41 @@ namespace ExternalEditor
                 }
             }
 
+            //Attempt saving the collision map to a .cmap file.
             try
             {
+                this.BackColor = Form.DefaultBackColor;
                 sw = new StreamWriter(currentLevelNameTextbox.Text + ".cmap");
                 for(int i = 0; i < tiles.GetLength(0); i++)
                 {
                     for (int j = 0; j < tiles.GetLength(1); j++)
                     {
-                        sw.Write(tiles[i, j]);
+                        sw.Write(tiles[j,i]);
                     }
                     sw.Write("\n");
                 }
+                //Print success results.
+                System.Windows.Forms.MessageBox.Show("New Collision map saved as " + currentLevelNameTextbox.Text + ".cmap.",
+                                 "Success!",
+                                 MessageBoxButtons.OK,
+                                 MessageBoxIcon.Information);
+                this.BackColor = Form.DefaultBackColor;
             }
+            //Print error results.
             catch(Exception e)
             {
                 Console.WriteLine("Error with file write: " + e.Message);
+                System.Windows.Forms.MessageBox.Show("Error with file write: " + e.Message,
+                                "Error!",
+                                 MessageBoxButtons.OK,
+                                 MessageBoxIcon.Error);
+                this.BackColor = Form.DefaultBackColor;
             }
             finally
             {
                 if (sw != null)
                     sw.Close();
-            }
-
-            System.Windows.Forms.MessageBox.Show("New Collision map saved as " + currentLevelNameTextbox.Text + ".cmap.",
-                                 "Success!",
-                                 MessageBoxButtons.OK,
-                                 MessageBoxIcon.Information);
-            this.BackColor = Form.DefaultBackColor;
+            }       
         }
     }
 }
