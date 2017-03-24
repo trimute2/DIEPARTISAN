@@ -44,16 +44,5 @@ namespace GDAPSIIGame.Entities
             }
         }
 
-        public override void OnCollision(ICollidable obj)
-        {
-            if (obj is Projectile && ((Projectile)(obj)).Owner == Owners.Player)
-            {
-                Health -= 25;
-            }
-			else
-			{
-				base.OnCollision(obj);
-			}
-		}
     }
 }

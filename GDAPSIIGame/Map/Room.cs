@@ -122,7 +122,7 @@ namespace GDAPSIIGame.Map
                                 new Vector2(
                                     position.X + tileSize * i, 
                                     position.Y + tileSize * j);
-                            int health = 50;
+                            int health = 1;
                             int moveSpeed = 1;
 
                             //Create new enemy
