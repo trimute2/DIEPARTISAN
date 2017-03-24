@@ -124,7 +124,9 @@ namespace GDAPSIIGame.Map
                                     position.Y + tileSize * j);
                             int health = 50;
                             int moveSpeed = 1;
-                            EntityManager.Instance.Add(
+
+                            //Create new enemy
+                            Enemy newEnemy = 
                                 new Enemy(
                                     health, 
                                     moveSpeed, 
@@ -134,7 +136,11 @@ namespace GDAPSIIGame.Map
                                         (int)currPos.X, 
                                         (int)currPos.Y, 
                                         enemySpriteWidth,
-                                        enemySpriteHeight)));
+                                        enemySpriteHeight));
+
+                            //Add Enemy to game
+                            EntityManager.Instance.Add(newEnemy);
+                            ChunkManager.Instance.Add(newEnemy);
                             break;
 
                         case TileType.PLAYER:

@@ -95,7 +95,8 @@ namespace GDAPSIIGame
 				if (entities[i].IsActive)
 				{
 					entities[i].Update(gameTime);
-				}else
+				}
+                else
 				{
 					entities.Remove(entities[i]);
 				}

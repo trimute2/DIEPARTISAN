@@ -119,7 +119,7 @@ namespace GDAPSIIGame
             if (hurting > 0)
             {
                 //Subtract from the hurting timer if the player is hurting
-                hurting -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+                hurting -= (float)gameTime.ElapsedGameTime.TotalMilliseconds/1000;
 			}
         }
 
@@ -267,6 +267,14 @@ namespace GDAPSIIGame
 					this.Health -= (int)((Projectile)obj).Damage;
 				}
 			}
+            else if(obj is Enemy)
+            {
+                if (!IsHurting)
+                {
+                    Health -= 25;
+					IsHurting = true;
+                }
+            }
 			else
 			{
 				base.OnCollision(obj);
