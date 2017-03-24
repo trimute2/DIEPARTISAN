@@ -63,9 +63,9 @@ namespace GDAPSIIGame
 		/// </summary>
 		/// <param name="rec">the bounding box to be checked</param>
 		/// <returns>if the bounding box overlaps the chunk</returns>
-		public bool Contains(Rectangle rec)
+		public bool Intersects(Rectangle rec)
 		{
-			return area.Contains(rec);
+			return area.Intersects(rec);
 		}
 
 		/// <summary>
@@ -182,7 +182,7 @@ namespace GDAPSIIGame
 			List<GameObject> overlap = new List<GameObject>();
 			foreach(GameObject obj in Objects)
 			{
-				if (ch.Contains(obj.BoundingBox))
+				if (ch.Intersects(obj.BoundingBox))
 				{
 					overlap.Add(obj);
 				}
