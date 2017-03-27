@@ -21,6 +21,7 @@ namespace GDAPSIIGame
 		KeyboardState previousKbState;
 		ChunkManager chunkManager;
         MapManager mapManager;
+        UIManager uiManager;
         Texture2D theTexture;
         Camera mainCamera;
 		GameState gameState;
@@ -54,6 +55,9 @@ namespace GDAPSIIGame
 			//Initialize map manager
 			mapManager = new MapManager();
 
+            //Initialize ui manager
+            uiManager = new UIManager();
+
 			//Initialize keyboards
 			kbState = new KeyboardState();
 			previousKbState = kbState;
@@ -71,6 +75,8 @@ namespace GDAPSIIGame
             Camera.Instance.setPosition(GraphicsDevice.Viewport);
             //Load projectiles
             projectileManager.LoadContent(Content);
+            //Load UI Assets
+            uiManager.LoadContent(Content);
 			//Load the one and only texture
 			theTexture = Content.Load<Texture2D>("playernew");
 			//Initiate mouse
@@ -122,6 +128,9 @@ namespace GDAPSIIGame
 					//Update chunks
 					chunkManager.Update();
 
+                    //Update UI
+                    uiManager.Update(gameTime);
+
 					//initialize Camera
 					if (mainCamera == null)
 					{
@@ -166,7 +175,9 @@ namespace GDAPSIIGame
 					//Draw projectiles
 					projectileManager.Draw(gameTime, spriteBatch);
 
-                    
+                    //Draw UI
+                    uiManager.Draw(gameTime, spriteBatch);
+
 					break;
 				case GameState.MainMenu:
 					spriteBatch.Draw(theTexture, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
