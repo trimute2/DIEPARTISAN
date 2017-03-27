@@ -24,6 +24,7 @@ namespace GDAPSIIGame
 		private KeyboardState keyState;
 		private KeyboardState prevKeyState;
 		private float hurting;
+        private float hurtBlink;
         private Color color;
 		private float angle;
 		private SpriteEffects effect;
@@ -39,6 +40,7 @@ namespace GDAPSIIGame
 			keyState = Keyboard.GetState();
 			prevKeyState = Keyboard.GetState();
 			hurting = 0;
+            hurtBlink = 0;
             color = Color.White;
 			angle = 0;
 			effect = new SpriteEffects();
@@ -79,7 +81,14 @@ namespace GDAPSIIGame
         public bool IsHurting
         {
             get { return hurting > 0; }
-            set { if (value) { hurting = 0.5f; } }
+            set
+            {
+				if (value)
+                {
+					hurting = 1.5f;
+					hurtBlink = 0f;
+                }
+            }
         }
 
 		//Methods
@@ -120,10 +129,25 @@ namespace GDAPSIIGame
 			{
 				//Subtract from the hurting timer if the player is hurting
 				hurting -= (float)gameTime.ElapsedGameTime.TotalMilliseconds / 1000;
-				color = Color.Red;
+				//Increment the blink timer
+				hurtBlink += (float)gameTime.ElapsedGameTime.TotalMilliseconds / 1000;
+				if (hurtBlink > ((float)1/15))
+				{
+					//Reset blink timer
+					hurtBlink -= ((float)1/15);
+					//Find the correct color
+					if (color == Color.Red)
+					{
+						color = Color.LightGray;
+					}
+					else color = Color.Red;
+				}
 			}
-			//Change this so it is more efficient
-			else color = Color.White;
+			//Change the color back to the default at the end
+			else if (color == Color.Red || color == Color.LightGray)
+			{
+				color = Color.White;
+			}
         }
 
 		public override void Draw(SpriteBatch spriteBatch)
@@ -207,7 +231,7 @@ namespace GDAPSIIGame
 			//Player reloading
 			if (keyState.IsKeyDown(Keys.R) && prevKeyState.IsKeyUp(Keys.R))
 			{
-				this.weapon.Reload();
+				this.weapon.ReloadWeapon();
 			}
 
 			//Calculates the angle between the player and the mouse
@@ -219,10 +243,14 @@ namespace GDAPSIIGame
 			angle = MathHelper.ToDegrees((float)Math.Atan2(mouseState.X - campos.X, mouseState.Y - campos.Y));
 
 			//Use angle to find player direction
-			if ((angle < -157.5) || (angle > 157.5) && this.Dir != Entity_Dir.Up)
+			if ((angle < -157.5) || (angle > 157.5))
 			{
 				this.Dir = Entity_Dir.Up;
-				weapon.Dir = Weapon_Dir.Up;
+				if (angle < -157.5)
+				{
+					weapon.Dir = Weapon_Dir.UpWest;
+				}
+				else weapon.Dir = Weapon_Dir.UpEast;
 			}
 			else if ((angle < 157.5) && (angle > 112.5) && this.Dir != Entity_Dir.UpRight)
 			{
@@ -254,10 +282,14 @@ namespace GDAPSIIGame
 				this.Dir = Entity_Dir.UpLeft;
 				weapon.Dir = Weapon_Dir.UpLeft;
 			}
-			else if ((angle < 22.5) && (angle > -22.5) && this.Dir != Entity_Dir.Down)
+			else if ((angle < 22.5) && (angle > -22.5))
 			{
 				this.Dir = Entity_Dir.Down;
-				weapon.Dir = Weapon_Dir.Down;
+				if(angle < 0)
+				{
+					weapon.Dir = Weapon_Dir.DownWest;
+				}
+				else weapon.Dir = Weapon_Dir.DownEast;
 			}
         }
 

@@ -12,7 +12,7 @@ namespace GDAPSIIGame
 	/// <summary>
 	/// The direction the weapon sprite is facing
 	/// </summary>
-	enum Weapon_Dir { Up, UpLeft, Left, DownLeft, Down, DownRight, Right, UpRight }
+	enum Weapon_Dir { UpEast, UpWest, UpLeft, Left, DownLeft, DownWest, DownEast, DownRight, Right, UpRight }
 
     class Weapon : GameObject
     {
@@ -22,16 +22,15 @@ namespace GDAPSIIGame
         private float clipSize;
 		private float clip;
         private float reloadSpeed;
-        private float fireTimer;
-        private bool fired;
-		private bool reload;
-		private float reloadTimer;
+        private float fired;
+		private float reload;
 		private Weapon_Dir dir;
 		private float angle;
 		private Vector2 origin;
 		//private Vector2 muzzlePos;
 		private Vector2 bulletOffset;
 		private Owners owner;
+		private SpriteEffects effects;
 
         public Weapon(ProjectileType pT, Texture2D texture, Vector2 position, Rectangle boundingBox, float fireRate, float clipSize, float reloadSpeed, Vector2 origin, Owners owner) : base(texture, position, boundingBox)
         {
@@ -40,16 +39,15 @@ namespace GDAPSIIGame
             this.clipSize = clipSize; //How large the clip is
 			this.clip = clipSize; //The current amount of bullets in the clip
             this.reloadSpeed = reloadSpeed; //How long it takes to reload
-			this.reload = false; //Whether the uesr is reloading
-			this.reloadTimer = 0; //The timer used to increment a reload
-            this.fireTimer = 0; //The timer used to control weapon fire rates
-			this.fired = false; //Whether the weapon has fired
-			this.dir = Weapon_Dir.Down; //The direction of the weapon for drawing
+			this.reload = 0; //Timer for whether the uesr is reloading
+			this.fired = 0; //Whether the weapon has fired
+			this.dir = Weapon_Dir.DownWest; //The direction of the weapon for drawing
 			this.angle = 0; //The angle of the weapon in radians
 			this.origin = origin; //The origin point of the weapon (where the player holds it)
 			//this.muzzlePos = new Vector2();
 			this.bulletOffset = new Vector2(-boundingBox.Width/2, boundingBox.Height/4);
 			this.owner = owner;
+			effects = SpriteEffects.None;
         }
 
         /// <summary>
@@ -71,13 +69,45 @@ namespace GDAPSIIGame
 		}
 
         /// <summary>
-        /// The angle of the player's weapon in radians
+        /// The angle of the weapon in radians
         /// </summary>
         public float Angle
         {
             get { return angle; }
             set { angle = value; }
         }
+
+		/// <summary>
+		/// Whether the weapon is reloading or not
+		/// </summary>
+		public bool Reload
+		{
+			get { return reload > 0; }
+			private set
+			{
+				if (value)
+				{
+					reload = reloadSpeed;
+				}
+				else reload = 0;
+			}
+		}
+
+		/// <summary>
+		/// Whether the weapon is firing or not
+		/// </summary>
+		public bool Fired
+		{
+			get { return fired > 0; }
+			private set
+			{
+				if (value)
+				{
+					fired = fireRate;
+				}
+				else fired = 0;
+			}
+		}
 
 		/// <summary>
 		/// The position of the muzzle on the weapon
@@ -88,40 +118,50 @@ namespace GDAPSIIGame
 		//	set { muzzlePos = value; }
 		//}
 
-        public override void Update(GameTime gameTime)
+		public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
 
 			switch (dir)
 			{
-				case Weapon_Dir.Up:
+				case Weapon_Dir.UpEast:
+					this.X += 20;
+					this.bulletOffset = new Vector2(BoundingBox.Width / 4, BoundingBox.Height / 4);
+					break;
+				case Weapon_Dir.UpWest:
+					this.X -= 20;
 					this.bulletOffset = new Vector2(BoundingBox.Width / 4, BoundingBox.Height / 4);
 					break;
 				case Weapon_Dir.UpLeft:
-					this.X = this.X - 20;
+					this.X -= 20;
 					this.bulletOffset = new Vector2(-BoundingBox.Width / 4, BoundingBox.Height / 4);
 					break;
 				case Weapon_Dir.Left:
-					this.X = this.X - 20;
+					this.X -= 20;
 					this.bulletOffset = new Vector2(-BoundingBox.Width / 2, BoundingBox.Height / 4);
 					break;
 				case Weapon_Dir.DownLeft:
 					this.X -= 20;
 					this.bulletOffset = new Vector2(-BoundingBox.Width , BoundingBox.Height / 4);
 					break;
-				case Weapon_Dir.Down:
+				case Weapon_Dir.DownWest:
+					this.X -= 20;
+					this.bulletOffset = new Vector2(-BoundingBox.Width / 2, BoundingBox.Height / 4);
+					break;
+				case Weapon_Dir.DownEast:
+					this.X += 20;
 					this.bulletOffset = new Vector2(-BoundingBox.Width / 2, BoundingBox.Height / 4);
 					break;
 				case Weapon_Dir.DownRight:
-					this.X = this.X + 20;
+					this.X += 20;
 					this.bulletOffset = new Vector2(-BoundingBox.Width / 4, BoundingBox.Height / 4);
 					break;
 				case Weapon_Dir.Right:
-					this.X = this.X + 20;
+					this.X += 20;
 					this.bulletOffset = new Vector2(BoundingBox.Width / 2, BoundingBox.Height / 4);
 					break;
 				case Weapon_Dir.UpRight:
-					this.X = this.X + 20;
+					this.X += 20;
 					this.bulletOffset = new Vector2(BoundingBox.Width, BoundingBox.Height / 4);
 					break;
 			}
@@ -134,30 +174,27 @@ namespace GDAPSIIGame
 			//muzzlePos = RotateVector2(muzzlePos, angle, Position);
 
 			//Control when user can fire again after just firing
-			if (fired)
+			if (Fired)
             {
 				//Increment fireTimer
-				fireTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
+				fired -= (float)gameTime.ElapsedGameTime.TotalSeconds;
 				//Check if fireTimer meets the threshold
-				if (fireTimer >= fireRate)
+				if (!Fired)
 				{
 					//Allow the user to fire again and reset timer
-					fired = false;
-					fireTimer -= fireRate;
+					Fired = false;
 				}
             }
 
-			if (reload)
+			if (Reload)
 			{
 				//Inrement reloadTimer
-				reloadTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
+				reload -= (float)gameTime.ElapsedGameTime.TotalSeconds;
 				//Check if reloadTimer meets the threshold
-				if (reloadTimer >= reloadSpeed)
+				if (!Reload)
 				{
 					//Reload the clip
-					reload = false;
 					clip = clipSize;
-					reloadTimer -= reloadSpeed;
 				}
 			}
         }
@@ -166,21 +203,35 @@ namespace GDAPSIIGame
         {
 			switch (dir)
 			{
-				case Weapon_Dir.Up: 
+				case Weapon_Dir.UpEast:
+					effects = SpriteEffects.FlipHorizontally;
+					break;
+				case Weapon_Dir.UpWest:
+					effects = SpriteEffects.None;
 					break;
 				case Weapon_Dir.UpLeft:
+					effects = SpriteEffects.None;
 					break;
 				case Weapon_Dir.Left:
+					effects = SpriteEffects.None;
 					break;
 				case Weapon_Dir.DownLeft:
+					effects = SpriteEffects.None;
 					break;
-				case Weapon_Dir.Down:
+				case Weapon_Dir.DownWest:
+					effects = SpriteEffects.None;
+					break;
+				case Weapon_Dir.DownEast:
+					effects = SpriteEffects.FlipHorizontally;
 					break;
 				case Weapon_Dir.DownRight:
+					effects = SpriteEffects.FlipHorizontally;
 					break;
 				case Weapon_Dir.Right:
+					effects = SpriteEffects.FlipHorizontally;
 					break;
 				case Weapon_Dir.UpRight:
+					effects = SpriteEffects.FlipHorizontally;
 					break;
 			}
 
@@ -191,17 +242,18 @@ namespace GDAPSIIGame
 				origin,
 				angle,
 				this.Scale,
-				Color.White);
+				Color.White,
+				effects);
 		}
 
 		/// <summary>
 		/// Tell the weapon it is time to reload
 		/// </summary>
-		public void Reload()
+		public void ReloadWeapon()
 		{
-			if (!reload && clip < clipSize)
+			if (!Reload && clip < clipSize)
 			{
-				reload = true;
+				Reload = true;
 			}
 		}
 
@@ -213,11 +265,12 @@ namespace GDAPSIIGame
         public void Fire(Vector2 direction)
         {
             //Check user can fire or if they need to reload
-            if (!fired && !reload && clip > 0)
+            if (!Fired && !Reload && clip > 0)
             {
-                fired = true;
+                Fired = true;
                 clip--;
 				Matrix rotationMatrix = Matrix.CreateRotationZ(angle);
+				//muzzlePos = new Vector2(BoundingBox.Width, BoundingBox.Height / 2) ;
 				Vector2 bulletPosition = Vector2.Transform(bulletOffset, rotationMatrix);
 
 				ProjectileManager.Instance.Clone(projType, Position+bulletPosition, direction, owner);

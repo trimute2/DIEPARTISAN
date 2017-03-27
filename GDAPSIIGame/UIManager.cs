@@ -22,8 +22,8 @@ namespace GDAPSIIGame
         //Height and Width values for the default full healthbox
         private int healthbarWidth;
         private int healthbarHeight;
-        //Creating the max health for the player for draw reference **WILL BE UPDATED WITH PLAYER PROPERTY**
-        private int playerMaxHealth = Player.Instance.Health;
+		//Creating the max health for the player for draw reference **WILL BE UPDATED WITH PLAYER PROPERTY**
+		private int playerMaxHealth;
 
         /// <summary>
         /// Load content from the UI Manager's assets.
@@ -31,6 +31,7 @@ namespace GDAPSIIGame
         /// <param name="Content"></param>
         internal void LoadContent(ContentManager Content)
         {
+			playerMaxHealth = Player.Instance.Health;
             //Set X and Y values for the healthbar, as well as values for the bounding box.
             healthbarX = 10;
             healthbarY = 10;
