@@ -94,8 +94,7 @@ namespace GDAPSIIGame
 		//Methods
 		public override void Update(GameTime gameTime)
         {
-            base.Update(gameTime);
-
+            //base.Update(gameTime);
 			//Mouse state
 			prevMouseState = mouseState;
 			mouseState = Mouse.GetState();
@@ -148,6 +147,10 @@ namespace GDAPSIIGame
 			{
 				color = Color.White;
 			}
+			//Change this so it is more efficient
+			else color = Color.White;
+			Camera.Instance.resetPosition(Position);
+			base.Update(gameTime);
         }
 
 		public override void Draw(SpriteBatch spriteBatch)
@@ -207,23 +210,23 @@ namespace GDAPSIIGame
 			if (keyState.IsKeyDown(Keys.W) || keyState.IsKeyDown(Keys.Up))
 			{
 				this.Y -= this.MoveSpeed * timeMult;
-				Camera.Instance.Y -= (int)(this.MoveSpeed*timeMult);
+				//Camera.Instance.Y -= (int)(this.MoveSpeed*timeMult);
 			}
 			else if (keyState.IsKeyDown(Keys.S) || keyState.IsKeyDown(Keys.Down))
 			{
 				this.Y += this.MoveSpeed * timeMult;
-				Camera.Instance.Y += (int)(this.MoveSpeed * timeMult);
+				//Camera.Instance.Y += (int)(this.MoveSpeed * timeMult);
 			}
 
 			if (keyState.IsKeyDown(Keys.D) || keyState.IsKeyDown(Keys.Right))
 			{
 				this.X += this.MoveSpeed * timeMult;
-				Camera.Instance.X += (int)(this.MoveSpeed * timeMult);
+				//Camera.Instance.X += (int)(this.MoveSpeed * timeMult);
 			}
 			else if (keyState.IsKeyDown(Keys.A) || keyState.IsKeyDown(Keys.Left))
 			{
 				this.X -= this.MoveSpeed * timeMult;
-				Camera.Instance.X -= (int)(this.MoveSpeed * timeMult);
+				//Camera.Instance.X -= (int)(this.MoveSpeed * timeMult);
 			}
 
             
@@ -313,7 +316,7 @@ namespace GDAPSIIGame
 			else
 			{
 				base.OnCollision(obj);
-                Camera.Instance.resetPosition(Position);
+				Camera.Instance.resetPosition(Position);
 			}
 		}
 

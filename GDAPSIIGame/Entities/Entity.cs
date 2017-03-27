@@ -57,9 +57,9 @@ namespace GDAPSIIGame.Entities
 		{
 			Rectangle bb = obj.BoundingBox;
             
-
             if (obj is Wall)
 			{
+				ResetBound();
 				//the clossest point on (or in) the player's bounding box to the wall's center 
                 Vector2 point = Vector2.Zero;
 
@@ -73,42 +73,47 @@ namespace GDAPSIIGame.Entities
 					//find the clossest point on the player's bounding box to the wall's center
 					if(bb.Center.Y > BoundingBox.Bottom)
 					{
-						point.Y = BoundingBox.Bottom;
+						//point.Y = BoundingBox.Bottom;
+						point.Y = this.Y + BoundingBox.Height;
 					}else if(bb.Center.Y < BoundingBox.Top)
 					{
-						point.Y = BoundingBox.Top;
+						//point.Y = BoundingBox.Top;
+						point.Y = this.Y;
 					}else
 					{
 						point.Y = bb.Center.Y;
 					}
 					if(bb.Center.X > BoundingBox.Right)
 					{
-						point.X = BoundingBox.Right;
+						//point.X = BoundingBox.Right;
+						point.X = this.X + BoundingBox.Width;
 					}else if(bb.Center.X < BoundingBox.Left)
 					{
-						point.X = BoundingBox.Left;
+						//point.X = BoundingBox.Left;
+						point.X = this.X;
 					}else
 					{
 						point.X = bb.Center.X;
 					}
 				}
 
-				//get the distance between each side of the wall and the point 
-				float distLeft = point.X - bb.Left;
-				float distRight = bb.Right - point.X;
-				float distTop = point.Y - bb.Top;
-				float distBottom = bb.Bottom - point.Y;
+                //get the distance between each side of the wall and the point 
+                float distLeft = point.X - bb.Left;
+                float distRight = bb.Right - point.X;
+                float distTop = point.Y - bb.Top;
+                float distBottom = bb.Bottom - point.Y;
+
 
 				//offset the player by the shortest distance
 				if(distLeft < distRight &&
 					distLeft < distTop &&
 					distLeft < distBottom)
 				{
-					this.X -= distLeft;
+					this.X -= distLeft+1;
 				}else if(distRight < distTop &&
 					distRight < distBottom)
 				{
-					this.X += distRight;
+					this.X += distRight+1;
 				}else if(distTop < distBottom)
 				{
 					this.Y -= distTop;
@@ -117,7 +122,9 @@ namespace GDAPSIIGame.Entities
 				{
 					this.Y += distBottom;
 				}
-				
+
+				this.ResetBound();
+
             }else if(obj is Projectile)
 			{
 				this.health -= (int)((Projectile)obj).Damage;

@@ -91,6 +91,12 @@ namespace GDAPSIIGame
             boundingBox.Y = (int)position.Y;
         }
 
+		public void ResetBound()
+		{
+			boundingBox.X = (int)position.X;
+			boundingBox.Y = (int)position.Y;
+		}
+
         /// <summary>
         /// Check if the boundingboxes of two rectangles collide
         /// </summary>
