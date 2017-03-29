@@ -110,17 +110,34 @@ namespace GDAPSIIGame.Entities
 					distLeft < distBottom)
 				{
 					this.X -= distLeft+1;
+					if(this is Player && ((Player)this).Weapon != null)
+					{
+						((Player)this).Weapon.X -= distLeft + 1;
+					}
 				}else if(distRight < distTop &&
 					distRight < distBottom)
 				{
 					this.X += distRight+1;
-				}else if(distTop < distBottom)
+					if (this is Player && ((Player)this).Weapon != null)
+					{
+						((Player)this).Weapon.X += distRight + 1;
+					}
+				}
+				else if(distTop < distBottom)
 				{
 					this.Y -= distTop;
+					if (this is Player && ((Player)this).Weapon != null)
+					{
+						((Player)this).Weapon.Y -= distTop;
+					}
 				}
 				else
 				{
 					this.Y += distBottom;
+					if (this is Player && ((Player)this).Weapon != null)
+					{
+						((Player)this).Weapon.Y += distBottom;
+					}
 				}
 
 				this.ResetBound();
