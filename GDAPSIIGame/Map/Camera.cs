@@ -62,7 +62,7 @@ namespace GDAPSIIGame.Map
 
         public void resetPosition(Vector2 newPos)
         {
-            size.X = (int)(newPos.X - xOffset);
+            size.X = (int)Math.Round(newPos.X - xOffset);
             size.Y = (int)(newPos.Y - yOffset);
         }
 
