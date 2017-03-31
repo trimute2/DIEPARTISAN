@@ -4,15 +4,12 @@ using System.Diagnostics;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using System.Threading;
 using System.Windows.Forms;
-using System.Windows.Input;
 
 namespace ExternalEditor
 {
     public partial class Editor : Form
     {
-        //Initialize the class components.
         private int tileSize;
         private int xTiles, yTiles;
         private int xMin, xMax;
@@ -22,15 +19,14 @@ namespace ExternalEditor
         private List<Button> tileButtons;
         private StreamWriter sw;
         private MouseState ms;
+        bool mouse_down = false;
 
-        //Enums for the program state, to enable and disable buttons accordingly.
         enum ProgramState
         {
             startup,
             editing
         }
 
-        //Enums for the current tool the user is on.
         enum Tool
         {
             wall,
@@ -42,7 +38,6 @@ namespace ExternalEditor
         ProgramState state;
         Tool currentTool;
 
-        //Initialize the windows forms and its components.
         public Editor()
         {
             InitializeComponent();
@@ -59,7 +54,6 @@ namespace ExternalEditor
             yMax = 25;
         }
 
-        //Set the tool variable to the according tool when that button is pressed.
         private void wallToolButton_Click(object sender, EventArgs e)
         {
             currentTool = Tool.wall;
@@ -88,7 +82,6 @@ namespace ExternalEditor
             CurrentToolLabel.ForeColor = Color.OrangeRed;
         }
 
-        //Changes the button visuals based on the program state of the form.
         public void UpdateStateVisuals()
         {
             switch(state)
@@ -116,7 +109,6 @@ namespace ExternalEditor
             }
         }
 
-        //Initializes a button grid based on the x and y input of the user. Also initializes some variables.
         private void newLevelCollisionButton_Click(object sender, EventArgs e)
         {
             if(int.TryParse(newLevelXTilesTextbox.Text, out xTiles) &&
@@ -135,6 +127,7 @@ namespace ExternalEditor
                 this.Width = (this.Width + (tileSize * xTiles) + 12);
                 loadingBar.Maximum = xTiles * yTiles;
                 InitializeGrid(xTiles, yTiles);
+                currentLevelNameTextbox.Text = "NewCollision";
             }
             else
             {
@@ -146,7 +139,6 @@ namespace ExternalEditor
             }
         }
 
-        //Preforms the export function when the save button is clicked. 
         private void saveLevelButton_Click(object sender, EventArgs e)
         {
             ExportGridToFile();
@@ -170,44 +162,90 @@ namespace ExternalEditor
             }
         }
 
-        //Action for when a tile is clicked, for hovered upon. Method is called every time the mouse hovers over a tile.
-        public void TileClicked(object sender, EventArgs e)
+        public void TileDragged(object sender, EventArgs e)
         {
-            ms = Mouse.GetState();
-            if (state == ProgramState.editing)
+            Button b = (Button)sender;
+            MouseEventArgs me = (MouseEventArgs)e;
+            Point p = new Point(b.Location.X + me.Location.X, b.Location.Y + me.Location.Y);
+            if (mouse_down)
             {
-                //if() mouse - press
-                    Button b = (Button)sender;
-                    switch (currentTool)
+                foreach (var item in tileButtons)
+                {
+                    if (item.Bounds.Contains(p))
                     {
-                        case (Tool.delete):
-                            if (b.BackColor == Color.LightGreen)
-                            {
-                                spawnPlaced = false;
-                            }
-                            b.BackColor = SystemColors.ButtonHighlight;
-                            break;
+                        Debug.WriteLine("Mouse is in bounds.");
+                        switch (currentTool)
+                        {
+                            case (Tool.delete):
+                                if (item.BackColor == Color.LightGreen)
+                                {
+                                    spawnPlaced = false;
+                                }
+                                item.BackColor = SystemColors.ButtonHighlight;
+                                break;
 
-                        case (Tool.enemy):
-                            b.BackColor = Color.OrangeRed;
-                            break;
+                            case (Tool.enemy):
+                                item.BackColor = Color.OrangeRed;
+                                break;
 
-                        case (Tool.spawn):
-                            if (!spawnPlaced)
-                            {
-                                b.BackColor = Color.LightGreen;
-                                spawnPlaced = true;
-                            }
-                            break;
+                            case (Tool.spawn):
+                                if (!spawnPlaced)
+                                {
+                                    item.BackColor = Color.LightGreen;
+                                    spawnPlaced = true;
+                                }
+                                break;
 
-                        case (Tool.wall):
-                            b.BackColor = SystemColors.MenuHighlight;
-                            break;
+                            case (Tool.wall):
+                                item.BackColor = SystemColors.MenuHighlight;
+                                break;
+                        }
                     }
+                }
             }
         }
 
-        //Initializes the grid visuals for the tile editor - a list set of buttons acting as tiles.
+        public void TileClicked(object sender, EventArgs e)
+        {
+            Button b = (Button)sender;
+            switch (currentTool)
+            {
+                case (Tool.delete):
+                    if (b.BackColor == Color.LightGreen)
+                    {
+                        spawnPlaced = false;
+                    }
+                    b.BackColor = SystemColors.ButtonHighlight;
+                    break;
+
+                case (Tool.enemy):
+                    b.BackColor = Color.OrangeRed;
+                    break;
+
+                case (Tool.spawn):
+                    if (!spawnPlaced)
+                    {
+                        b.BackColor = Color.LightGreen;
+                        spawnPlaced = true;
+                    }
+                    break;
+
+                case (Tool.wall):
+                    b.BackColor = SystemColors.MenuHighlight;
+                    break;
+            }
+        }
+
+        private void Editor_MouseDown(object sender, MouseEventArgs e)
+        {
+            mouse_down = true;
+        }
+
+        private void Editor_MouseUp(object sender, MouseEventArgs e)
+        {
+            mouse_down = false;
+        }
+
         public void InitializeGrid(int width, int height)
         {
             int gridX = 195;
@@ -223,11 +261,15 @@ namespace ExternalEditor
                     b.Size = new Size(tileSize, tileSize);
                     b.FlatStyle = FlatStyle.Flat;
                     b.FlatAppearance.MouseOverBackColor = b.BackColor;
+                    b.ForeColor = Color.Gray;
                     b.BackColorChanged += (s, e) => {b.FlatAppearance.MouseOverBackColor = b.BackColor;};
                     b.Location = new Point(i + gridX, j + gridY);
                     tileButtons.Add(b);
                     this.Controls.Add(b);
-                    b.MouseEnter += new EventHandler(this.TileClicked);
+                    b.MouseClick += (s, e) => { mouse_down = true; TileClicked(s, e); };
+                    b.MouseUp += (s, e) => { mouse_down = false; };
+                    b.MouseDown += (s, e) => { mouse_down = true; };
+                    b.MouseMove += (s, e) => { TileDragged(s, e); };
                     if (loadingBar.Value < loadingBar.Maximum)
                         loadingBar.Value++;
                 }
@@ -263,7 +305,6 @@ namespace ExternalEditor
                             b.BackColor = Color.LightGreen;
                             break;
                     }
-
                     b.ForeColor = SystemColors.ButtonHighlight;
                     b.Size = new Size(tileSize, tileSize);
                     b.FlatStyle = FlatStyle.Flat;
@@ -281,13 +322,7 @@ namespace ExternalEditor
                 gridY += tileSize;
             }
         }
-
-        //0 = nothing (floor)
-        //1 = wall
-        //2 = enemy
-        //3 = spawn
-
-        //Exports the grid to the tile 2D array, and exports that 2D array to a .cmap file in the program directory.
+ 
         public void ExportGridToFile()
         {
             var index = 0;
@@ -315,8 +350,6 @@ namespace ExternalEditor
                     index++;
                 }
             }
-
-            //Attempt saving the collision map to a .cmap file.
             try
             {
                 this.BackColor = Form.DefaultBackColor;
@@ -329,14 +362,12 @@ namespace ExternalEditor
                     }
                     sw.Write("\n");
                 }
-                //Print success results.
                 System.Windows.Forms.MessageBox.Show("New Collision map saved as " + currentLevelNameTextbox.Text + ".cmap.",
                                  "Success!",
                                  MessageBoxButtons.OK,
                                  MessageBoxIcon.Information);
                 this.BackColor = Form.DefaultBackColor;
             }
-            //Print error results.
             catch(Exception e)
             {
                 Console.WriteLine("Error with file write: " + e.Message);

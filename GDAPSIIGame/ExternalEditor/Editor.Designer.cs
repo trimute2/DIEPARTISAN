@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Editor));
             this.newLevelCollisionButton = new System.Windows.Forms.Button();
             this.openLevelXTilesLabel = new System.Windows.Forms.Label();
             this.openLevelYTilesLabel = new System.Windows.Forms.Label();
@@ -237,10 +238,13 @@
             this.Controls.Add(this.deleteToolButton);
             this.Controls.Add(this.wallToolButton);
             this.Controls.Add(this.createOpenLevelGroup);
+            this.Cursor = System.Windows.Forms.Cursors.Hand;
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "Editor";
-            this.ShowIcon = false;
+            this.Text = "DieEditor";
+            this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.Editor_MouseUp);
             this.createOpenLevelGroup.ResumeLayout(false);
             this.createOpenLevelGroup.PerformLayout();
             this.currentLevelGroup.ResumeLayout(false);
