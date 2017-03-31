@@ -29,6 +29,7 @@ namespace GDAPSIIGame
 		private float angle;
 		private SpriteEffects effect;
 		private float timeMult;
+		private float firing;
 
 		//Singleton
 
@@ -45,6 +46,7 @@ namespace GDAPSIIGame
 			angle = 0;
 			effect = new SpriteEffects();
 			timeMult = 0;
+			firing = 0;
 		}
 
 		static public Player Instantiate(Weapon weapon, int health, int moveSpeed, Texture2D texture, Vector2 position, Rectangle boundingBox)
@@ -91,6 +93,21 @@ namespace GDAPSIIGame
             }
         }
 
+		/// <summary>
+		/// Whether the player is firing their weapon or not
+		/// </summary>
+		public bool IsFiring
+		{
+			get { return firing > 0; }
+			set
+			{
+				if (value)
+				{
+					firing = 0.05f;
+				}
+			}
+		}
+
 		//Methods
 		public override void Update(GameTime gameTime)
         {
@@ -121,15 +138,35 @@ namespace GDAPSIIGame
 				Vector2 direction = new Vector2((mouseState.X - camw.X) / 1, (mouseState.Y - camw.Y) / 1);
 				direction.Normalize();
 				this.Weapon.Fire(direction);
+				if (weapon.Fired)
+				{
+					IsFiring = true;
+				}
+			}
+
+			//Check if the player has fired their weapon
+			if (IsFiring)
+			{
+				//Deincrement the timer
+				firing -= (float)gameTime.ElapsedGameTime.TotalMilliseconds / 1000;
+				//Shake the camera
+				Camera.Instance.Shake(Position, 0.5f);
 			}
 
 			//Determine if the player hurting color should be playing
-			if (hurting > 0)
+			if (IsHurting)
 			{
 				//Subtract from the hurting timer if the player is hurting
 				hurting -= (float)gameTime.ElapsedGameTime.TotalMilliseconds / 1000;
 				//Increment the blink timer
 				hurtBlink += (float)gameTime.ElapsedGameTime.TotalMilliseconds / 1000;
+				
+				//Shake the screen
+				if (hurting > 1.3)
+				{
+					Camera.Instance.Shake(Position, 2);
+				}
+
 				if (hurtBlink > ((float)1/15))
 				{
 					//Reset blink timer
@@ -147,9 +184,14 @@ namespace GDAPSIIGame
 			{
 				color = Color.White;
 			}
-			//Change this so it is more efficient
-			else color = Color.White;
-			Camera.Instance.resetPosition(Position);
+
+			//Check if the camera is shaking
+			if (!IsFiring && hurting < 1.3)
+			{
+				//Update camera's position
+				Camera.Instance.resetPosition(Position);
+			}
+
 			base.Update(gameTime);
         }
 
