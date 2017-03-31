@@ -124,7 +124,7 @@ namespace ExternalEditor
                 InitializeGrid(xTiles, yTiles);
                 state = ProgramState.editing;
                 UpdateStateVisuals();
-                this.Width = (this.Width + (tileSize * xTiles) + 12);
+                this.Width = (this.Width + (tileSize * xTiles) + 11);
                 loadingBar.Maximum = xTiles * yTiles;
                 InitializeGrid(xTiles, yTiles);
                 currentLevelNameTextbox.Text = "NewCollision";
