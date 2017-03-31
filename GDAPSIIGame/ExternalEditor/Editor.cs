@@ -19,13 +19,25 @@ namespace ExternalEditor
         private List<Button> tileButtons;
         private StreamWriter sw;
         private MouseState ms;
-        bool mouse_down = false;
+        private bool mouseDown;
+
+        private string wallTileText = "";
+        private string enemyTileText = "";
+        private string spawnTileText = "";
+
+        /// <summary>
+        /// The states of the program, to allow/disallow button actions.
+        /// </summary>
 
         enum ProgramState
         {
             startup,
             editing
         }
+
+        /// <summary>
+        /// Tool enumeration for the different button options in the left column.
+        /// </summary>
 
         enum Tool
         {
@@ -38,6 +50,10 @@ namespace ExternalEditor
         ProgramState state;
         Tool currentTool;
 
+        /// <summary>
+        /// Initialize a new Editor window.
+        /// </summary>
+
         public Editor()
         {
             InitializeComponent();
@@ -47,12 +63,19 @@ namespace ExternalEditor
             state = ProgramState.startup;
             currentTool = Tool.wall;
             spawnPlaced = false;
+            mouseDown = false;
             tileSize = 20;
             xMin = 10;
             yMin = 10;
             xMax = 40;
             yMax = 25;
         }
+
+        /// <summary>
+        /// Click method the the wall tool button.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
 
         private void wallToolButton_Click(object sender, EventArgs e)
         {
@@ -61,12 +84,24 @@ namespace ExternalEditor
             CurrentToolLabel.ForeColor = SystemColors.MenuHighlight;
         }
 
+        /// <summary>
+        /// CLick method for the delete tool button.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+
         private void deleteToolButton_Click(object sender, EventArgs e)
         {
             currentTool = Tool.delete;
-            CurrentToolLabel.Text = "Current Tool: Delete";
+            CurrentToolLabel.Text = "Current Tool: Eraser";
             CurrentToolLabel.ForeColor = Color.Red;
         }
+
+        /// <summary>
+        /// Click method for the spawn tool button.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
 
         private void spawnToolButton_Click(object sender, EventArgs e)
         {
@@ -75,12 +110,22 @@ namespace ExternalEditor
             CurrentToolLabel.ForeColor = Color.LightGreen;
         }
 
+        /// <summary>
+        /// Click button for the enemy tool button.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+
         private void enemyToolButton_Click(object sender, EventArgs e)
         {
             currentTool = Tool.enemy;
             CurrentToolLabel.Text = "Current Tool: Enemy";
             CurrentToolLabel.ForeColor = Color.OrangeRed;
         }
+
+        /// <summary>
+        /// Update the button access of the program based on the program state.
+        /// </summary>
 
         public void UpdateStateVisuals()
         {
@@ -95,6 +140,10 @@ namespace ExternalEditor
                     spawnToolButton.Enabled = false;
                     enemyToolButton.Enabled = false;
                     loadingBar.Enabled = false;
+                    clearLevelButton.Enabled = false;
+                    saveLevelButton.Enabled = false;
+                    currentLevelNameTextbox.Enabled = false;
+                    CurrentToolLabel.Text = "";
                     break;
 
                 case (ProgramState.editing):
@@ -105,9 +154,19 @@ namespace ExternalEditor
                     spawnToolButton.Enabled = true;
                     enemyToolButton.Enabled = true;
                     loadingBar.Enabled = true;
+                    clearLevelButton.Enabled = true;
+                    currentLevelNameTextbox.Enabled = true;
+                    saveLevelButton.Enabled = true;
+                    CurrentToolLabel.Text = "Current Tool: Wall";
                     break;
             }
         }
+
+        /// <summary>
+        /// Creates a new matrix of buttons for tile editing, and expands the screen accordingly.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
 
         private void newLevelCollisionButton_Click(object sender, EventArgs e)
         {
@@ -124,7 +183,7 @@ namespace ExternalEditor
                 InitializeGrid(xTiles, yTiles);
                 state = ProgramState.editing;
                 UpdateStateVisuals();
-                this.Width = (this.Width + (tileSize * xTiles) + 11);
+                this.Width = (this.Width + (tileSize * xTiles) + 15) / 2;
                 loadingBar.Maximum = xTiles * yTiles;
                 InitializeGrid(xTiles, yTiles);
                 currentLevelNameTextbox.Text = "NewCollision";
@@ -139,10 +198,22 @@ namespace ExternalEditor
             }
         }
 
+        /// <summary>
+        /// Calls the export method to save the matrix as a file.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+
         private void saveLevelButton_Click(object sender, EventArgs e)
         {
             ExportGridToFile();
         }
+
+        /// <summary>
+        /// Opens an explorer window to open a .cmap file for editing.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
 
         private void openLevelCollisionButton_Click(object sender, EventArgs e)
         {
@@ -162,12 +233,18 @@ namespace ExternalEditor
             }
         }
 
+        /// <summary>
+        /// Fills in tiles in the matrix accordingly when the mouse is dragging.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+
         public void TileDragged(object sender, EventArgs e)
         {
             Button b = (Button)sender;
             MouseEventArgs me = (MouseEventArgs)e;
             Point p = new Point(b.Location.X + me.Location.X, b.Location.Y + me.Location.Y);
-            if (mouse_down)
+            if (mouseDown)
             {
                 foreach (var item in tileButtons)
                 {
@@ -182,28 +259,38 @@ namespace ExternalEditor
                                     spawnPlaced = false;
                                 }
                                 item.BackColor = SystemColors.ButtonHighlight;
+                                item.Text = "";
                                 break;
 
                             case (Tool.enemy):
                                 item.BackColor = Color.OrangeRed;
+                                item.Text = enemyTileText;
                                 break;
 
                             case (Tool.spawn):
                                 if (!spawnPlaced)
                                 {
                                     item.BackColor = Color.LightGreen;
+                                    item.Text = spawnTileText;
                                     spawnPlaced = true;
                                 }
                                 break;
 
                             case (Tool.wall):
                                 item.BackColor = SystemColors.MenuHighlight;
+                                item.Text = wallTileText;
                                 break;
                         }
                     }
                 }
             }
         }
+
+        /// <summary>
+        /// Fills in a tile when it is clicked.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
 
         public void TileClicked(object sender, EventArgs e)
         {
@@ -216,65 +303,87 @@ namespace ExternalEditor
                         spawnPlaced = false;
                     }
                     b.BackColor = SystemColors.ButtonHighlight;
+                    b.Text = "";
                     break;
 
                 case (Tool.enemy):
                     b.BackColor = Color.OrangeRed;
+                    b.Text = enemyTileText;
                     break;
 
                 case (Tool.spawn):
                     if (!spawnPlaced)
                     {
                         b.BackColor = Color.LightGreen;
+                        b.Text = spawnTileText;
                         spawnPlaced = true;
                     }
                     break;
 
                 case (Tool.wall):
                     b.BackColor = SystemColors.MenuHighlight;
+                    b.Text = wallTileText;
                     break;
             }
         }
 
-        private void Editor_MouseDown(object sender, MouseEventArgs e)
+        /// <summary>
+        /// Clears the level if the user selects the option.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+
+        private void clearLevelButton_Click(object sender, EventArgs e)
         {
-            mouse_down = true;
+            DialogResult delete = System.Windows.Forms.MessageBox.Show("Are you sure you want to clear the current level? No changes will be saved.", "Warning!", MessageBoxButtons.YesNo);
+            if (delete == DialogResult.Yes)
+            {
+                for (int i = 0; i < tileButtons.Count; i++)
+                {
+                    tileButtons[i].BackColor = SystemColors.ButtonHighlight;
+                }
+            }
         }
 
-        private void Editor_MouseUp(object sender, MouseEventArgs e)
-        {
-            mouse_down = false;
-        }
+        /// <summary>
+        /// Initialized the buttons for the matrix of tiles, and sets events accordingly.
+        /// </summary>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
 
         public void InitializeGrid(int width, int height)
         {
             int gridX = 195;
             int gridY = 17;
-            for(int i = 0; i < height * tileSize; i += tileSize)
+            for(int i = 0; i < width * tileSize; i += tileSize)
             {
-                for(int j = 0; j < width * tileSize; j += tileSize)
+                for(int j = 0; j < height * tileSize; j += tileSize)
                 {
                     Button b = new Button();
                     b.Text = "";
                     b.BackColor = SystemColors.ButtonHighlight;
-                    b.ForeColor = SystemColors.ButtonHighlight;
+                    b.ForeColor = Color.LightGray;
                     b.Size = new Size(tileSize, tileSize);
                     b.FlatStyle = FlatStyle.Flat;
                     b.FlatAppearance.MouseOverBackColor = b.BackColor;
-                    b.ForeColor = Color.Gray;
                     b.BackColorChanged += (s, e) => {b.FlatAppearance.MouseOverBackColor = b.BackColor;};
                     b.Location = new Point(i + gridX, j + gridY);
                     tileButtons.Add(b);
                     this.Controls.Add(b);
-                    b.MouseClick += (s, e) => { mouse_down = true; TileClicked(s, e); };
-                    b.MouseUp += (s, e) => { mouse_down = false; };
-                    b.MouseDown += (s, e) => { mouse_down = true; };
+                    b.MouseClick += (s, e) => { mouseDown = true; TileClicked(s, e); };
+                    b.MouseUp += (s, e) => { mouseDown = false; };
+                    b.MouseDown += (s, e) => { mouseDown = true; };
                     b.MouseMove += (s, e) => { TileDragged(s, e); };
                     if (loadingBar.Value < loadingBar.Maximum)
                         loadingBar.Value++;
                 }
             }
         }
+
+        /// <summary>
+        /// Reads a collision matrix from a .cmap file, and creates a tile matrix from it.
+        /// </summary>
+        /// <param name="read"></param>
 
         public void InitializeGridFromFile(string[] read)
         {
@@ -313,7 +422,10 @@ namespace ExternalEditor
                     b.Location = new Point(gridX,gridY);
                     tileButtons.Add(b);
                     this.Controls.Add(b);
-                    b.MouseEnter += new EventHandler(this.TileClicked);
+                    b.MouseClick += (s, e) => { mouseDown = true; TileClicked(s, e); };
+                    b.MouseUp += (s, e) => { mouseDown = false; };
+                    b.MouseDown += (s, e) => { mouseDown = true; };
+                    b.MouseMove += (s, e) => { TileDragged(s, e); };
                     if (loadingBar.Value < loadingBar.Maximum)
                         loadingBar.Value++;
                     gridX += tileSize;
@@ -322,6 +434,10 @@ namespace ExternalEditor
                 gridY += tileSize;
             }
         }
+
+        /// <summary>
+        /// Exports the current tile matrix into a .cmap file.
+        /// </summary>
  
         public void ExportGridToFile()
         {
