@@ -17,12 +17,12 @@ namespace GDAPSIIGame
     {
         //Fields
         private Vector2 direction;
-        private float damage;
+        private int damage;
 		private Owners owner;
 
         //Properties
         public Vector2 Direction { get { return direction; } set { direction = value; } }
-        public float Damage { get { return damage; } set { damage = value; } }
+        public int Damage { get { return damage; } set { damage = value; } }
 
 		public Owners Owner { get { return owner; } }
 
@@ -33,7 +33,7 @@ namespace GDAPSIIGame
         /// <param name="texture"></param>
         /// <param name="position"></param>
         /// <param name="direction"></param>
-        public Projectile(Texture2D texture, Vector2 position, Rectangle boundingBox, Vector2 direction, float damage, Owners owner = Owners.None) : base(texture, position, boundingBox)
+        public Projectile(Texture2D texture, Vector2 position, Rectangle boundingBox, Vector2 direction, int damage, Owners owner = Owners.None) : base(texture, position, boundingBox)
         {
             this.direction = direction;
             this.damage = damage;

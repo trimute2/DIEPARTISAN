@@ -53,6 +53,11 @@ namespace GDAPSIIGame.Entities
 			set { dir = value; }
 		}
 
+		public virtual void Damage(int dmg)
+		{
+			this.health -= dmg;
+		}
+
 		public override void OnCollision(ICollidable obj)
 		{
 			Rectangle bb = obj.BoundingBox;
@@ -144,7 +149,7 @@ namespace GDAPSIIGame.Entities
 
             }else if(obj is Projectile)
 			{
-				this.health -= (int)((Projectile)obj).Damage;
+				this.Damage(((Projectile)obj).Damage);
 			}
 
 		}

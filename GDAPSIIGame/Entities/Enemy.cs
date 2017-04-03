@@ -11,17 +11,43 @@ namespace GDAPSIIGame.Entities
 {
     class Enemy : Entity
     {
-        public Enemy(int health, int moveSpeed, Texture2D texture, Vector2 position, Rectangle boundingBox) : base(health, moveSpeed, texture, position, boundingBox)
+		private bool awake;
+
+		public bool Awake
+		{
+			get { return awake; }
+			set { awake = value; }
+		}
+
+		public Enemy(int health, int moveSpeed, Texture2D texture, Vector2 position, Rectangle boundingBox) : base(health, moveSpeed, texture, position, boundingBox)
         {
+			awake = false;
         }
 
         public override void Update(GameTime gameTime)
         {
-            Move(Player.Instance);
+			if (!awake)
+			{
+				if (Vector2.Distance(
+					Player.Instance.BoundingBox.Center.ToVector2(),
+					this.BoundingBox.Center.ToVector2()) <= 192)
+				{
+					this.awake = true;
+				}
+			}
+			else
+			{
+				Move(Player.Instance);
+			}
 			base.Update(gameTime);
         }
 
-        public void Move(GameObject thingToMoveTo)
+		public override void Damage(int dmg)
+		{
+			awake = true;
+			base.Damage(dmg);
+		}
+		public void Move(GameObject thingToMoveTo)
         {
             Vector2 diff = Position - thingToMoveTo.Position;
             if (diff.X > 0)

@@ -50,6 +50,7 @@
     <Compile Include="Map\Camera.cs" />
     <Compile Include="Map\MapManager.cs" />
     <Compile Include="Map\Room.cs" />
+    <Compile Include="Pods\Pod.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Projectile.cs" />
     <Compile Include="ProjectileManager.cs" />
