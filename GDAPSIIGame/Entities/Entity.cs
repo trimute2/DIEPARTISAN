@@ -125,18 +125,18 @@ namespace GDAPSIIGame.Entities
 				}
 				else if(distTop < distBottom)
 				{
-					this.Y -= distTop;
+					this.Y -= distTop+1;
 					if (this is Player && ((Player)this).Weapon != null)
 					{
-						((Player)this).Weapon.Y -= distTop;
+						((Player)this).Weapon.Y -= distTop+1;
 					}
 				}
 				else
 				{
-					this.Y += distBottom;
+					this.Y += distBottom+1;
 					if (this is Player && ((Player)this).Weapon != null)
 					{
-						((Player)this).Weapon.Y += distBottom;
+						((Player)this).Weapon.Y += distBottom+1;
 					}
 				}
 
