@@ -16,7 +16,8 @@ namespace GDAPSIIGame.Map
         public MapManager()
         {
             //TODO: randomize choice of rooms
-            generateMap("testRoom1.txt", this);
+            String[] files = new String[] { "testRoom1.txt", "testRoom2.txt" };
+            generateMap(files, this);
         }
 
         public void Add(Room r)
@@ -32,28 +33,34 @@ namespace GDAPSIIGame.Map
             }
         }
 
-        public static void generateMap(String filename, MapManager m)
+        public static void generateMap(String[] filenames, MapManager m)
         {
-            String[] lines = File.ReadAllLines("../../../../Map/" + filename);
-            TileType[,] tiles = new TileType[10, 10];
-
-            for (int i = 0; i < lines.Length; i++)
-            {
-                for (int j = 0; j < lines[i].Length; j++)
-                {
-                    tiles[i, j] = (TileType)(lines[i][j] - 48);
-                    Console.WriteLine(tiles[i, j]);
-                }
-            }
-
-            Room r = new Room(tiles, Vector2.Zero);
             int mapSize = 20;
-            int roomSize = 64 * 10;
+            Random randy = new Random();
+            string filename;
             for (int i = 0; i < mapSize; i++)
             {
                 for (int j = 0; j < mapSize; j++)
                 {
-                    m.Add(new Room(tiles, new Vector2(i*roomSize, j*roomSize)));
+                    filename = filenames[randy.Next(filenames.Length)];
+                    String[] lines = File.ReadAllLines("../../../../Map/" + filename);
+                    TileType[,] tiles = new TileType[10, 10];
+
+                    for (int k = 0; k < lines.Length; k++)
+                    {
+                        for (int l = 0; l < lines[0].Length; l++)
+                        {
+
+                            //The 48 comes from the fact that 0's ascii code is 48
+                            tiles[l, k] = (TileType)(lines[l][k] - 48);
+                            //Console.WriteLine(tiles[l, k] + "----------");
+                        }
+                    }
+
+                    Room r = new Room(tiles, Vector2.Zero);
+                    int roomSize = 64 * 10;
+
+                    m.Add(new Room(tiles, new Vector2(i * roomSize, j * roomSize)));
                 }
             }
         }

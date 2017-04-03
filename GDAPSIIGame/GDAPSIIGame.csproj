@@ -74,6 +74,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Icon.ico" />
+    <Content Include="Map\testRoom2.txt" />
     <Content Include="Map\testRoom1.txt" />
   </ItemGroup>
   <ItemGroup>
