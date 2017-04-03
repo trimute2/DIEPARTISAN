@@ -24,10 +24,12 @@ namespace GDAPSIIGame
 		private KeyboardState keyState;
 		private KeyboardState prevKeyState;
 		private float hurting;
+        private float hurtBlink;
         private Color color;
 		private float angle;
 		private SpriteEffects effect;
 		private float timeMult;
+		private float firing;
 
 		//Singleton
 
@@ -39,10 +41,12 @@ namespace GDAPSIIGame
 			keyState = Keyboard.GetState();
 			prevKeyState = Keyboard.GetState();
 			hurting = 0;
+            hurtBlink = 0;
             color = Color.White;
 			angle = 0;
 			effect = new SpriteEffects();
 			timeMult = 0;
+			firing = 0;
 		}
 
 		static public Player Instantiate(Weapon weapon, int health, int moveSpeed, Texture2D texture, Vector2 position, Rectangle boundingBox)
@@ -79,14 +83,35 @@ namespace GDAPSIIGame
         public bool IsHurting
         {
             get { return hurting > 0; }
-            set { if (value) { hurting = 0.5f; } }
+            set
+            {
+				if (value)
+                {
+					hurting = 1.5f;
+					hurtBlink = 0f;
+                }
+            }
         }
+
+		/// <summary>
+		/// Whether the player is firing their weapon or not
+		/// </summary>
+		public bool IsFiring
+		{
+			get { return firing > 0; }
+			set
+			{
+				if (value)
+				{
+					firing = 0.05f;
+				}
+			}
+		}
 
 		//Methods
 		public override void Update(GameTime gameTime)
         {
-            base.Update(gameTime);
-
+            //base.Update(gameTime);
 			//Mouse state
 			prevMouseState = mouseState;
 			mouseState = Mouse.GetState();
@@ -113,17 +138,61 @@ namespace GDAPSIIGame
 				Vector2 direction = new Vector2((mouseState.X - camw.X) / 1, (mouseState.Y - camw.Y) / 1);
 				direction.Normalize();
 				this.Weapon.Fire(direction);
+				if (weapon.Fired)
+				{
+					IsFiring = true;
+				}
+			}
+
+			//Check if the player has fired their weapon
+			if (IsFiring)
+			{
+				//Deincrement the timer
+				firing -= (float)gameTime.ElapsedGameTime.TotalMilliseconds / 1000;
+				//Shake the camera
+				Camera.Instance.Shake(Position, 0.5f);
 			}
 
 			//Determine if the player hurting color should be playing
-			if (hurting > 0)
+			if (IsHurting)
 			{
 				//Subtract from the hurting timer if the player is hurting
 				hurting -= (float)gameTime.ElapsedGameTime.TotalMilliseconds / 1000;
-				color = Color.Red;
+				//Increment the blink timer
+				hurtBlink += (float)gameTime.ElapsedGameTime.TotalMilliseconds / 1000;
+				
+				//Shake the screen
+				if (hurting > 1.3)
+				{
+					Camera.Instance.Shake(Position, 2);
+				}
+
+				if (hurtBlink > ((float)1/15))
+				{
+					//Reset blink timer
+					hurtBlink -= ((float)1/15);
+					//Find the correct color
+					if (color == Color.Red)
+					{
+						color = Color.LightGray;
+					}
+					else color = Color.Red;
+				}
 			}
-			//Change this so it is more efficient
-			else color = Color.White;
+			//Change the color back to the default at the end
+			else if (color == Color.Red || color == Color.LightGray)
+			{
+				color = Color.White;
+			}
+
+			//Check if the camera is shaking
+			if (!IsFiring && hurting < 1.3)
+			{
+				//Update camera's position
+				Camera.Instance.resetPosition(Position);
+			}
+
+			base.Update(gameTime);
         }
 
 		public override void Draw(SpriteBatch spriteBatch)
@@ -183,23 +252,23 @@ namespace GDAPSIIGame
 			if (keyState.IsKeyDown(Keys.W) || keyState.IsKeyDown(Keys.Up))
 			{
 				this.Y -= this.MoveSpeed * timeMult;
-				Camera.Instance.Y -= (int)(this.MoveSpeed*timeMult);
+				//Camera.Instance.Y -= (int)(this.MoveSpeed*timeMult);
 			}
 			else if (keyState.IsKeyDown(Keys.S) || keyState.IsKeyDown(Keys.Down))
 			{
 				this.Y += this.MoveSpeed * timeMult;
-				Camera.Instance.Y += (int)(this.MoveSpeed * timeMult);
+				//Camera.Instance.Y += (int)(this.MoveSpeed * timeMult);
 			}
 
 			if (keyState.IsKeyDown(Keys.D) || keyState.IsKeyDown(Keys.Right))
 			{
 				this.X += this.MoveSpeed * timeMult;
-				Camera.Instance.X += (int)(this.MoveSpeed * timeMult);
+				//Camera.Instance.X += (int)(this.MoveSpeed * timeMult);
 			}
 			else if (keyState.IsKeyDown(Keys.A) || keyState.IsKeyDown(Keys.Left))
 			{
 				this.X -= this.MoveSpeed * timeMult;
-				Camera.Instance.X -= (int)(this.MoveSpeed * timeMult);
+				//Camera.Instance.X -= (int)(this.MoveSpeed * timeMult);
 			}
 
             
@@ -207,7 +276,7 @@ namespace GDAPSIIGame
 			//Player reloading
 			if (keyState.IsKeyDown(Keys.R) && prevKeyState.IsKeyUp(Keys.R))
 			{
-				this.weapon.Reload();
+				this.weapon.ReloadWeapon();
 			}
 
 			//Calculates the angle between the player and the mouse
@@ -219,10 +288,14 @@ namespace GDAPSIIGame
 			angle = MathHelper.ToDegrees((float)Math.Atan2(mouseState.X - campos.X, mouseState.Y - campos.Y));
 
 			//Use angle to find player direction
-			if ((angle < -157.5) || (angle > 157.5) && this.Dir != Entity_Dir.Up)
+			if ((angle < -157.5) || (angle > 157.5))
 			{
 				this.Dir = Entity_Dir.Up;
-				weapon.Dir = Weapon_Dir.Up;
+				if (angle < -157.5)
+				{
+					weapon.Dir = Weapon_Dir.UpWest;
+				}
+				else weapon.Dir = Weapon_Dir.UpEast;
 			}
 			else if ((angle < 157.5) && (angle > 112.5) && this.Dir != Entity_Dir.UpRight)
 			{
@@ -254,10 +327,14 @@ namespace GDAPSIIGame
 				this.Dir = Entity_Dir.UpLeft;
 				weapon.Dir = Weapon_Dir.UpLeft;
 			}
-			else if ((angle < 22.5) && (angle > -22.5) && this.Dir != Entity_Dir.Down)
+			else if ((angle < 22.5) && (angle > -22.5))
 			{
 				this.Dir = Entity_Dir.Down;
-				weapon.Dir = Weapon_Dir.Down;
+				if(angle < 0)
+				{
+					weapon.Dir = Weapon_Dir.DownWest;
+				}
+				else weapon.Dir = Weapon_Dir.DownEast;
 			}
         }
 
@@ -281,7 +358,7 @@ namespace GDAPSIIGame
 			else
 			{
 				base.OnCollision(obj);
-                Camera.Instance.resetPosition(Position);
+				Camera.Instance.resetPosition(Position);
 			}
 		}
 

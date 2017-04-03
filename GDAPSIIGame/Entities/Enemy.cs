@@ -17,9 +17,8 @@ namespace GDAPSIIGame.Entities
 
         public override void Update(GameTime gameTime)
         {
-            base.Update(gameTime);
-
             Move(Player.Instance);
+			base.Update(gameTime);
         }
 
         public void Move(GameObject thingToMoveTo)
@@ -29,7 +28,7 @@ namespace GDAPSIIGame.Entities
             {
                 X--;
             }
-            else
+            else  
             {
                 X++;
             }

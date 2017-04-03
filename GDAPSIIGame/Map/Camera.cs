@@ -14,6 +14,7 @@ namespace GDAPSIIGame.Map
         private static Camera instance;
         private float xOffset;
         private float yOffset;
+		private Random rng;
 
         private Camera()
         {
@@ -32,6 +33,7 @@ namespace GDAPSIIGame.Map
             float y = Player.Instance.Y - yOffset;
             size = new Rectangle((int)x, (int)y, vp.Width, vp.Height);
             Console.WriteLine(vp.Width + " " + vp.Height);
+			rng = new Random();
         }
 
 
@@ -70,9 +72,9 @@ namespace GDAPSIIGame.Map
         /// <param name="newPos">Current position of Player</param>
         public void resetPosition(Vector2 newPos)
         {
-            size.X = (int)(newPos.X - xOffset);
+            size.X = (int)Math.Round(newPos.X - xOffset);
             size.Y = (int)(newPos.Y - yOffset);
-        }
+		}
 
 
         public Vector2 GetViewportPosition(GameObject go)
@@ -104,5 +106,32 @@ namespace GDAPSIIGame.Map
         {
             return v.X < size.Width && v.Y < size.Height;
         }
+
+		/// <summary>
+		/// Shake the camera centered around the a point
+		/// </summary>
+		/// <param name="point">The point to shake the camera around</param>
+		/// <param name="intensity">The intensity of the screen shake</param>
+		public void Shake(Vector2 point, float intensity)
+		{
+			//Choose x direction
+			int multix = 0;
+			if (rng.NextDouble() < 0.5f)
+			{
+				multix = -1;
+			}
+			else multix = 1;
+
+			//Choose y direction
+			int multiy = 0;
+			if (rng.NextDouble() < 0.5f)
+			{
+				multiy = -1;
+			}
+			else multiy = 1;
+
+			//Shake the camera based off of the player's position
+			resetPosition(new Vector2(point.X + intensity * multix, point.Y + +intensity * multiy));
+		}
     }
 }

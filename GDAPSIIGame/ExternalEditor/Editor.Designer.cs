@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Editor));
             this.newLevelCollisionButton = new System.Windows.Forms.Button();
             this.openLevelXTilesLabel = new System.Windows.Forms.Label();
             this.openLevelYTilesLabel = new System.Windows.Forms.Label();
@@ -45,19 +46,23 @@
             this.currentLevelGroup = new System.Windows.Forms.GroupBox();
             this.saveLevelButton = new System.Windows.Forms.Button();
             this.loadingBar = new System.Windows.Forms.ProgressBar();
+            this.clearLevelButton = new System.Windows.Forms.Button();
+            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.createOpenLevelGroup.SuspendLayout();
             this.currentLevelGroup.SuspendLayout();
             this.SuspendLayout();
             // 
             // newLevelCollisionButton
             // 
+            this.newLevelCollisionButton.BackColor = System.Drawing.SystemColors.ButtonHighlight;
             this.newLevelCollisionButton.ForeColor = System.Drawing.SystemColors.ControlText;
             this.newLevelCollisionButton.Location = new System.Drawing.Point(22, 107);
             this.newLevelCollisionButton.Name = "newLevelCollisionButton";
             this.newLevelCollisionButton.Size = new System.Drawing.Size(130, 24);
             this.newLevelCollisionButton.TabIndex = 1;
             this.newLevelCollisionButton.Text = "New Level Collision...";
-            this.newLevelCollisionButton.UseVisualStyleBackColor = true;
+            this.newLevelCollisionButton.UseVisualStyleBackColor = false;
             this.newLevelCollisionButton.Click += new System.EventHandler(this.newLevelCollisionButton_Click);
             // 
             // openLevelXTilesLabel
@@ -109,12 +114,13 @@
             // 
             // openLevelCollisionButton
             // 
+            this.openLevelCollisionButton.BackColor = System.Drawing.SystemColors.ButtonHighlight;
             this.openLevelCollisionButton.Location = new System.Drawing.Point(22, 146);
             this.openLevelCollisionButton.Name = "openLevelCollisionButton";
             this.openLevelCollisionButton.Size = new System.Drawing.Size(130, 23);
             this.openLevelCollisionButton.TabIndex = 6;
             this.openLevelCollisionButton.Text = "Open Level Collision...";
-            this.openLevelCollisionButton.UseVisualStyleBackColor = true;
+            this.openLevelCollisionButton.UseVisualStyleBackColor = false;
             this.openLevelCollisionButton.Click += new System.EventHandler(this.openLevelCollisionButton_Click);
             // 
             // wallToolButton
@@ -152,7 +158,7 @@
             this.deleteToolButton.Name = "deleteToolButton";
             this.deleteToolButton.Size = new System.Drawing.Size(85, 42);
             this.deleteToolButton.TabIndex = 10;
-            this.deleteToolButton.Text = "Delete";
+            this.deleteToolButton.Text = "Eraser";
             this.deleteToolButton.UseVisualStyleBackColor = false;
             this.deleteToolButton.Click += new System.EventHandler(this.deleteToolButton_Click);
             // 
@@ -181,17 +187,17 @@
             // currentLevelNameLabel
             // 
             this.currentLevelNameLabel.AutoSize = true;
-            this.currentLevelNameLabel.Location = new System.Drawing.Point(19, 36);
+            this.currentLevelNameLabel.Location = new System.Drawing.Point(116, 31);
             this.currentLevelNameLabel.Name = "currentLevelNameLabel";
-            this.currentLevelNameLabel.Size = new System.Drawing.Size(38, 13);
+            this.currentLevelNameLabel.Size = new System.Drawing.Size(36, 13);
             this.currentLevelNameLabel.TabIndex = 17;
-            this.currentLevelNameLabel.Text = "Name:";
+            this.currentLevelNameLabel.Text = ".cmap";
             // 
             // currentLevelNameTextbox
             // 
-            this.currentLevelNameTextbox.Location = new System.Drawing.Point(64, 33);
+            this.currentLevelNameTextbox.Location = new System.Drawing.Point(23, 28);
             this.currentLevelNameTextbox.Name = "currentLevelNameTextbox";
-            this.currentLevelNameTextbox.Size = new System.Drawing.Size(88, 20);
+            this.currentLevelNameTextbox.Size = new System.Drawing.Size(87, 20);
             this.currentLevelNameTextbox.TabIndex = 18;
             // 
             // currentLevelGroup
@@ -199,7 +205,7 @@
             this.currentLevelGroup.Controls.Add(this.saveLevelButton);
             this.currentLevelGroup.Controls.Add(this.currentLevelNameTextbox);
             this.currentLevelGroup.Controls.Add(this.currentLevelNameLabel);
-            this.currentLevelGroup.Location = new System.Drawing.Point(12, 386);
+            this.currentLevelGroup.Location = new System.Drawing.Point(12, 392);
             this.currentLevelGroup.Name = "currentLevelGroup";
             this.currentLevelGroup.Size = new System.Drawing.Size(172, 109);
             this.currentLevelGroup.TabIndex = 19;
@@ -208,27 +214,53 @@
             // 
             // saveLevelButton
             // 
+            this.saveLevelButton.BackColor = System.Drawing.SystemColors.ButtonHighlight;
             this.saveLevelButton.Location = new System.Drawing.Point(22, 64);
             this.saveLevelButton.Name = "saveLevelButton";
             this.saveLevelButton.Size = new System.Drawing.Size(130, 23);
             this.saveLevelButton.TabIndex = 19;
             this.saveLevelButton.Text = "Save Level";
-            this.saveLevelButton.UseVisualStyleBackColor = true;
+            this.saveLevelButton.UseVisualStyleBackColor = false;
             this.saveLevelButton.Click += new System.EventHandler(this.saveLevelButton_Click);
             // 
             // loadingBar
             // 
+            this.loadingBar.BackColor = System.Drawing.SystemColors.ButtonHighlight;
             this.loadingBar.ForeColor = System.Drawing.Color.MediumPurple;
-            this.loadingBar.Location = new System.Drawing.Point(15, 344);
+            this.loadingBar.Location = new System.Drawing.Point(12, 507);
             this.loadingBar.Name = "loadingBar";
-            this.loadingBar.Size = new System.Drawing.Size(169, 16);
+            this.loadingBar.Size = new System.Drawing.Size(172, 16);
             this.loadingBar.TabIndex = 20;
+            // 
+            // clearLevelButton
+            // 
+            this.clearLevelButton.BackColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.clearLevelButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.clearLevelButton.Location = new System.Drawing.Point(12, 336);
+            this.clearLevelButton.Name = "clearLevelButton";
+            this.clearLevelButton.Size = new System.Drawing.Size(172, 43);
+            this.clearLevelButton.TabIndex = 21;
+            this.clearLevelButton.Text = "🗑️";
+            this.clearLevelButton.UseVisualStyleBackColor = false;
+            this.clearLevelButton.Click += new System.EventHandler(this.clearLevelButton_Click);
+            // 
+            // toolStripStatusLabel1
+            // 
+            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(23, 23);
+            // 
+            // toolStripStatusLabel2
+            // 
+            this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
+            this.toolStripStatusLabel2.Size = new System.Drawing.Size(23, 23);
             // 
             // Editor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(196, 506);
+            this.AutoSize = true;
+            this.ClientSize = new System.Drawing.Size(196, 535);
+            this.Controls.Add(this.clearLevelButton);
             this.Controls.Add(this.loadingBar);
             this.Controls.Add(this.currentLevelGroup);
             this.Controls.Add(this.CurrentToolLabel);
@@ -237,10 +269,12 @@
             this.Controls.Add(this.deleteToolButton);
             this.Controls.Add(this.wallToolButton);
             this.Controls.Add(this.createOpenLevelGroup);
+            this.Cursor = System.Windows.Forms.Cursors.Arrow;
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "Editor";
-            this.ShowIcon = false;
+            this.Text = "DieEditor";
             this.createOpenLevelGroup.ResumeLayout(false);
             this.createOpenLevelGroup.PerformLayout();
             this.currentLevelGroup.ResumeLayout(false);
@@ -268,6 +302,9 @@
         private System.Windows.Forms.GroupBox currentLevelGroup;
         private System.Windows.Forms.ProgressBar loadingBar;
         private System.Windows.Forms.Button saveLevelButton;
+        private System.Windows.Forms.Button clearLevelButton;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel2;
     }
 }
 
