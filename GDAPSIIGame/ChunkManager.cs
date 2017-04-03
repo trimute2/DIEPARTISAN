@@ -183,5 +183,19 @@ namespace GDAPSIIGame
 			ChunkOverlap();
 		}
 
+		public void DeleteWalls()
+		{
+			foreach (Chunk chunk in chunks)
+			{
+				foreach (GameObject obj in chunk.Objects)
+				{
+					if (obj is Wall)
+					{
+						obj.IsActive = false;
+					}
+				}
+			}
+		}
+
 	}
 }

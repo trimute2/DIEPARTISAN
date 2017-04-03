@@ -8,7 +8,7 @@ using System.Threading;
 
 namespace GDAPSIIGame
 {
-    enum GameState { MainMenu, GamePlay, PauseMenu}
+    enum GameState { MainMenu, LoadingScreen, GamePlay, GameOver, PauseMenu}
     
     public class Game1 : Game
     {
@@ -137,13 +137,37 @@ namespace GDAPSIIGame
 						mainCamera = Camera.Instance;
 					}
 
+					if(entityManager.BeatLevel)
+					{
+						entityManager.RemoveEnemies();
+						chunkManager.DeleteWalls();
+						mapManager = new MapManager();
+						mapManager.initMap(theTexture, wallTexture);
+					}
+
+					if(Player.Instance.Health <= 0)
+					{
+						gameState = GameState.GameOver;
+					}
+
 					break;
 				case GameState.MainMenu:
 					kbState = Keyboard.GetState();
 					if (kbState.IsKeyDown(Keys.Enter))
 					{
-						gameState = GameState.GamePlay;
+						gameState = GameState.LoadingScreen;
 					}
+					break;
+				case GameState.LoadingScreen:
+					entityManager.RemoveEnemies();
+					chunkManager.DeleteWalls();
+					mapManager = new MapManager();
+					mapManager.initMap(theTexture, wallTexture);
+					Player.Instance.ResetPlayer();
+					gameState = GameState.GamePlay;
+					break;
+				case GameState.GameOver:
+					gameState = GameState.MainMenu;
 					break;
 				case GameState.PauseMenu:
 					previousKbState = kbState;

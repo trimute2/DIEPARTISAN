@@ -13,24 +13,15 @@ namespace GDAPSIIGame
     class EntityManager
     {
         //Fields-----------------
-        List<Entities.Entity> entities;
+        List<Entities.Entity> enemies;
         static private EntityManager instance;
         static private Player player;
 
-        //Properties-------------
-
-        /// <summary>
-        /// The list of all entities
-        /// </summary>
-        public List<Entities.Entity> Entities { get { return entities; } set { entities = value; } }
-
-        /// <summary>
-        /// The player object
-        /// </summary>
-        public Player Player {
-            get { return player; }
-        }
-
+		//Properties-------------
+		public bool BeatLevel
+		{
+			get { return enemies.Count == 0; }
+		}
 
         //Methods----------------
 
@@ -39,7 +30,7 @@ namespace GDAPSIIGame
         /// </summary>
         private EntityManager()
         {
-            entities = new List<Entities.Entity>();
+            enemies = new List<Entities.Entity>();
         }
 
         /// <summary>
@@ -81,8 +72,7 @@ namespace GDAPSIIGame
 				0.2f, 100f, 0.5f,
 				new Vector2(playerTexture.Bounds.X+playerTexture.Bounds.Width, playerTexture.Bounds.Top+playerTexture.Bounds.Height/2),
 				Owners.Player);
-            entities.Add(player);
-            ChunkManager.Instance.Add(Player);
+            ChunkManager.Instance.Add(player);
         }
 
         /// <summary>
@@ -90,21 +80,21 @@ namespace GDAPSIIGame
         /// </summary>
         internal void Update(GameTime gameTime)
 		{
-			for(int i = entities.Count-1;i >= 0; i--)
+			if(player.IsActive)
 			{
-				if (entities[i].IsActive)
+				player.Update(gameTime);
+			}
+			for(int i = enemies.Count-1;i >= 0; i--)
+			{
+				if (enemies[i].IsActive)
 				{
-					entities[i].Update(gameTime);
+					enemies[i].Update(gameTime);
 				}
                 else
 				{
-					entities.Remove(entities[i]);
+					enemies.Remove(enemies[i]);
 				}
 			}
-			/*foreach (Entities.Entity e in entities)
-			{
-				e.Update(gameTime);
-			}*/
 		}
 
         /// <summary>
@@ -113,15 +103,25 @@ namespace GDAPSIIGame
         internal void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             //Player.Draw(spriteBatch);
-			foreach (Entities.Entity en in entities)
+			foreach (Entities.Entity en in enemies)
 			{
 				en.Draw(spriteBatch);
 			}
+			player.Draw(spriteBatch);
         }
 
         internal void Add(Entities.Entity e)
         {
-            entities.Add(e);
+            enemies.Add(e);
         }
+
+		internal void RemoveEnemies()
+		{
+			foreach (Entities.Entity e in enemies)
+			{
+				e.IsActive = false;
+			}
+			enemies.Clear();
+		}
     }
 }

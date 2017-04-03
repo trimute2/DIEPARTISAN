@@ -66,6 +66,7 @@ namespace GDAPSIIGame
 		public bool IsActive
 		{
 			get { return active; }
+			set { active = value; }
 		}
 
 

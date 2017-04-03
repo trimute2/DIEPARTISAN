@@ -35,7 +35,7 @@ namespace GDAPSIIGame.Map
 
         public static void generateMap(String[] filenames, MapManager m)
         {
-            int mapSize = 20;
+            int mapSize = 2;
             Random randy = new Random();
             string filename;
             for (int i = 0; i < mapSize; i++)

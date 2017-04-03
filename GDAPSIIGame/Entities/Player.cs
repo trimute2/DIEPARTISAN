@@ -362,5 +362,22 @@ namespace GDAPSIIGame
 			}
 		}
 
+		public void ResetPlayer()
+		{
+			mouseState = Mouse.GetState();
+			prevMouseState = Mouse.GetState();
+			keyState = Keyboard.GetState();
+			prevKeyState = Keyboard.GetState();
+			Health = 100;
+
+			hurting = 0;
+			hurtBlink = 0;
+			color = Color.White;
+			angle = 0;
+			effect = new SpriteEffects();
+			timeMult = 0;
+			firing = 0;
+		}
+
 	}
 }
