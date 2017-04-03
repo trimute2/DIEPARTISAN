@@ -21,6 +21,10 @@ namespace GDAPSIIGame.Map
             
         }
 
+        /// <summary>
+        /// Sets position of Camera based on viewport
+        /// </summary>
+        /// <param name="vp">Current viewport of game</param>
         public void setPosition(Viewport vp)
         {
             xOffset = vp.Width / 2;
@@ -62,6 +66,10 @@ namespace GDAPSIIGame.Map
             get { return size; }
         }
 
+        /// <summary>
+        /// Reset Camera position given player position
+        /// </summary>
+        /// <param name="newPos">Current position of Player</param>
         public void resetPosition(Vector2 newPos)
         {
             size.X = (int)Math.Round(newPos.X - xOffset);
