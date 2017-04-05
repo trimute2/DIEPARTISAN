@@ -12,11 +12,18 @@ namespace GDAPSIIGame.Entities
     class Enemy : Entity
     {
 		private bool awake;
+		private bool hit;
 
 		public bool Awake
 		{
 			get { return awake; }
 			set { awake = value; }
+		}
+
+		public bool Hit
+		{
+			get { return hit; }
+			set { hit = value; }
 		}
 
 		public Enemy(int health, int moveSpeed, Texture2D texture, Vector2 position, Rectangle boundingBox) : base(health, moveSpeed, texture, position, boundingBox)
@@ -45,8 +52,10 @@ namespace GDAPSIIGame.Entities
 		public override void Damage(int dmg)
 		{
 			awake = true;
+			Player.Instance.updateMultiplier(this);
 			base.Damage(dmg);
 		}
+
 		public void Move(GameObject thingToMoveTo)
         {
             Vector2 diff = Position - thingToMoveTo.Position;

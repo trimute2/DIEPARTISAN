@@ -31,6 +31,11 @@ namespace GDAPSIIGame
 		private float timeMult;
 		private float firing;
 
+		private float focusMultiplier;
+		private float varianceMultiplier;
+		private Enemy lastHit;
+		private bool updateVariance;
+
 		//Singleton
 
 		private Player(Weapon weapon, int health, int moveSpeed, Texture2D texture, Vector2 position, Rectangle boundingBox) : base(health, moveSpeed, texture, position, boundingBox)
@@ -106,6 +111,11 @@ namespace GDAPSIIGame
 					firing = 0.05f;
 				}
 			}
+		}
+
+		public float ScoreMultiplier
+		{
+			get { return varianceMultiplier * focusMultiplier; }
 		}
 
 		//Methods
@@ -194,6 +204,23 @@ namespace GDAPSIIGame
 
 			base.Update(gameTime);
         }
+
+		public void updateMultiplier(Enemy e)
+		{
+			if(lastHit == e)
+			{
+				focusMultiplier += 0.1f;
+				updateVariance = false;
+			}else
+			{
+				if (updateVariance)
+				{
+					varianceMultiplier += 0.1f;
+				}
+				updateVariance = true;
+				lastHit = e;
+			}
+		}
 
 		public override void Draw(SpriteBatch spriteBatch)
         {
