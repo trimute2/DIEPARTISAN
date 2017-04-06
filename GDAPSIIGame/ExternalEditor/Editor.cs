@@ -8,22 +8,26 @@ using System.Windows.Forms;
 
 namespace ExternalEditor
 {
+    /// <summary>
+    /// Partial class for the editor tool. Handles all program arithmetic.
+    /// </summary>
     public partial class Editor : Form
     {
-        private int tileSize;
-        private int xTiles, yTiles;
-        private int xMin, xMax;
-        private int yMin, yMax;
-        private bool spawnPlaced;
-        private int[,] tiles;
-        private List<Button> tileButtons;
-        private StreamWriter sw;
-        private MouseState ms;
-        private bool mouseDown;
+        private int tileSize;               //How large the tiles are
+        private int xTiles, yTiles;         //How many X and Y tiles are in the current scene
+        private int xMin, xMax;             //Minimum scene tiles for the X direction.
+        private int yMin, yMax;             //Minimum scene tiles for the Y direction.
+        private bool spawnPlaced;           //Determines whether a spawn tile has been placed yet.
+        private int[,] tiles;               //Integer array of tiles on the screen.
+        private List<Button> tileButtons;   //List of buttons, being shown as tiles.
+        private StreamWriter sw;            //Stream Writer for file opening.
+        private MouseState ms;              //State of the mouse for clicking actions.
+        private bool mouseDown;             //Determines globally if the mouse is down.
+        private bool newOpen;
 
-        private string wallTileText = "";
-        private string enemyTileText = "";
-        private string spawnTileText = "";
+        private string wallTileText = "";   //Text overwrite for the wall tile.
+        private string enemyTileText = "";  //Text overwrite for the enemy tile.
+        private string spawnTileText = "";  //Text overwrite for the spawn tile.
 
         /// <summary>
         /// The states of the program, to allow/disallow button actions.
@@ -61,6 +65,7 @@ namespace ExternalEditor
             tileButtons = new List<Button>();
             ms = Mouse.GetState();
             state = ProgramState.startup;
+            this.timer.Interval = 20;
             currentTool = Tool.wall;
             spawnPlaced = false;
             mouseDown = false;
@@ -80,7 +85,7 @@ namespace ExternalEditor
         private void wallToolButton_Click(object sender, EventArgs e)
         {
             currentTool = Tool.wall;
-            CurrentToolLabel.Text = "Current Tool: Wall";
+            CurrentToolLabel.Text = toolStripTextBox.Text = "Changed Tool: Wall";
             CurrentToolLabel.ForeColor = SystemColors.MenuHighlight;
         }
 
@@ -93,7 +98,7 @@ namespace ExternalEditor
         private void deleteToolButton_Click(object sender, EventArgs e)
         {
             currentTool = Tool.delete;
-            CurrentToolLabel.Text = "Current Tool: Eraser";
+            CurrentToolLabel.Text = toolStripTextBox.Text = "Changed Tool: Eraser";
             CurrentToolLabel.ForeColor = Color.Red;
         }
 
@@ -106,7 +111,7 @@ namespace ExternalEditor
         private void spawnToolButton_Click(object sender, EventArgs e)
         {
             currentTool = Tool.spawn;
-            CurrentToolLabel.Text = "Current Tool: Spawn";
+            CurrentToolLabel.Text = toolStripTextBox.Text = "Changed Tool: Spawn";
             CurrentToolLabel.ForeColor = Color.LightGreen;
         }
 
@@ -119,7 +124,7 @@ namespace ExternalEditor
         private void enemyToolButton_Click(object sender, EventArgs e)
         {
             currentTool = Tool.enemy;
-            CurrentToolLabel.Text = "Current Tool: Enemy";
+            CurrentToolLabel.Text = toolStripTextBox.Text = "Changed Tool: Enemy";
             CurrentToolLabel.ForeColor = Color.OrangeRed;
         }
 
@@ -133,7 +138,10 @@ namespace ExternalEditor
             {
                 case (ProgramState.startup):
                     CurrentToolLabel.ForeColor = SystemColors.MenuHighlight;
+                    //Sets "New Level" and "Open Level" buttons to true.
                     newLevelCollisionButton.Enabled = true;
+                    openLevelCollisionButton.Enabled = true;
+                    //Sets all other enabled values to false while a new project is being created.
                     currentLevelNameTextbox.Enabled = false;
                     wallToolButton.Enabled = false;
                     deleteToolButton.Enabled = false;
@@ -147,7 +155,9 @@ namespace ExternalEditor
                     break;
 
                 case (ProgramState.editing):
-                    newLevelCollisionButton.Enabled = false;
+                    //Sets all button enabled values to true while editing.
+                    timer.Enabled = true;
+                    newLevelCollisionButton.Enabled = true;
                     currentLevelNameTextbox.Enabled = true;
                     wallToolButton.Enabled = true;
                     deleteToolButton.Enabled = true;
@@ -170,6 +180,7 @@ namespace ExternalEditor
 
         private void newLevelCollisionButton_Click(object sender, EventArgs e)
         {
+            //Try parsing the string values of the textboxes, and seeing if they're in bounds.
             if(int.TryParse(newLevelXTilesTextbox.Text, out xTiles) &&
                int.TryParse(newLevelYTilesTextbox.Text, out yTiles) &&
                int.Parse(newLevelXTilesTextbox.Text) <= xMax &&
@@ -177,19 +188,22 @@ namespace ExternalEditor
                int.Parse(newLevelYTilesTextbox.Text) <= yMax &&
                int.Parse(newLevelYTilesTextbox.Text) >= yMin)
             {
+                //Set up new tile map.
                 xTiles = int.Parse(newLevelXTilesTextbox.Text);
                 yTiles = int.Parse(newLevelYTilesTextbox.Text);
                 tiles = new int[xTiles , yTiles];
                 InitializeGrid(xTiles, yTiles);
                 state = ProgramState.editing;
                 UpdateStateVisuals();
-                this.Width = (this.Width + (tileSize * xTiles) + 15) / 2;
+                this.Width = (this.Width + (tileSize * xTiles)) / 2 + 15;
                 loadingBar.Maximum = xTiles * yTiles;
                 InitializeGrid(xTiles, yTiles);
                 currentLevelNameTextbox.Text = "NewCollision";
+                timer.Start();
             }
             else
             {
+                //If the values were not an integer or were our of bounds, show an error message box.
                 System.Windows.Forms.MessageBox.Show("X values must be positive integers with a value between " + xMin + " and " +xMax + ", " + 
                                 "Y values must be positive integers with a value between " + yMin + " and " + yMax + ".",
                                 "Error!",
@@ -206,6 +220,7 @@ namespace ExternalEditor
 
         private void saveLevelButton_Click(object sender, EventArgs e)
         {
+            //May have other functions later in development. Right now it's only a method pointer.
             ExportGridToFile();
         }
 
@@ -345,6 +360,11 @@ namespace ExternalEditor
             }
         }
 
+        private void Refresh(object sender, EventArgs e)
+        {
+            
+        }
+
         /// <summary>
         /// Initialized the buttons for the matrix of tiles, and sets events accordingly.
         /// </summary>
@@ -373,6 +393,10 @@ namespace ExternalEditor
                     b.MouseClick += (s, e) => { mouseDown = true; TileClicked(s, e); };
                     b.MouseUp += (s, e) => { mouseDown = false; };
                     b.MouseDown += (s, e) => { mouseDown = true; };
+
+                    b.MouseLeave += (s, e) => { this.Cursor = Cursors.Arrow; };
+                    b.MouseEnter += (s, e) => { this.Cursor = Cursors.Hand; };
+
                     b.MouseMove += (s, e) => { TileDragged(s, e); };
                     if (loadingBar.Value < loadingBar.Maximum)
                         loadingBar.Value++;

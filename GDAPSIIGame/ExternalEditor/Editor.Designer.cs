@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Editor));
             this.newLevelCollisionButton = new System.Windows.Forms.Button();
             this.openLevelXTilesLabel = new System.Windows.Forms.Label();
@@ -49,17 +50,22 @@
             this.clearLevelButton = new System.Windows.Forms.Button();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStrip = new System.Windows.Forms.StatusStrip();
+            this.toolStripTextBox = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripXYPos = new System.Windows.Forms.ToolStripStatusLabel();
+            this.timer = new System.Windows.Forms.Timer(this.components);
             this.createOpenLevelGroup.SuspendLayout();
             this.currentLevelGroup.SuspendLayout();
+            this.toolStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // newLevelCollisionButton
             // 
             this.newLevelCollisionButton.BackColor = System.Drawing.SystemColors.ButtonHighlight;
             this.newLevelCollisionButton.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.newLevelCollisionButton.Location = new System.Drawing.Point(22, 107);
+            this.newLevelCollisionButton.Location = new System.Drawing.Point(22, 115);
             this.newLevelCollisionButton.Name = "newLevelCollisionButton";
-            this.newLevelCollisionButton.Size = new System.Drawing.Size(130, 24);
+            this.newLevelCollisionButton.Size = new System.Drawing.Size(130, 26);
             this.newLevelCollisionButton.TabIndex = 1;
             this.newLevelCollisionButton.Text = "New Level Collision...";
             this.newLevelCollisionButton.UseVisualStyleBackColor = false;
@@ -68,31 +74,31 @@
             // openLevelXTilesLabel
             // 
             this.openLevelXTilesLabel.AutoSize = true;
-            this.openLevelXTilesLabel.Location = new System.Drawing.Point(22, 34);
+            this.openLevelXTilesLabel.Location = new System.Drawing.Point(22, 37);
             this.openLevelXTilesLabel.Name = "openLevelXTilesLabel";
-            this.openLevelXTilesLabel.Size = new System.Drawing.Size(36, 13);
+            this.openLevelXTilesLabel.Size = new System.Drawing.Size(38, 14);
             this.openLevelXTilesLabel.TabIndex = 2;
             this.openLevelXTilesLabel.Text = "x tiles:";
             // 
             // openLevelYTilesLabel
             // 
             this.openLevelYTilesLabel.AutoSize = true;
-            this.openLevelYTilesLabel.Location = new System.Drawing.Point(23, 65);
+            this.openLevelYTilesLabel.Location = new System.Drawing.Point(23, 70);
             this.openLevelYTilesLabel.Name = "openLevelYTilesLabel";
-            this.openLevelYTilesLabel.Size = new System.Drawing.Size(36, 13);
+            this.openLevelYTilesLabel.Size = new System.Drawing.Size(38, 14);
             this.openLevelYTilesLabel.TabIndex = 3;
             this.openLevelYTilesLabel.Text = "y tiles:";
             // 
             // newLevelXTilesTextbox
             // 
-            this.newLevelXTilesTextbox.Location = new System.Drawing.Point(64, 31);
+            this.newLevelXTilesTextbox.Location = new System.Drawing.Point(64, 33);
             this.newLevelXTilesTextbox.Name = "newLevelXTilesTextbox";
             this.newLevelXTilesTextbox.Size = new System.Drawing.Size(88, 20);
             this.newLevelXTilesTextbox.TabIndex = 4;
             // 
             // newLevelYTilesTextbox
             // 
-            this.newLevelYTilesTextbox.Location = new System.Drawing.Point(64, 62);
+            this.newLevelYTilesTextbox.Location = new System.Drawing.Point(64, 67);
             this.newLevelYTilesTextbox.Name = "newLevelYTilesTextbox";
             this.newLevelYTilesTextbox.Size = new System.Drawing.Size(88, 20);
             this.newLevelYTilesTextbox.TabIndex = 5;
@@ -105,9 +111,9 @@
             this.createOpenLevelGroup.Controls.Add(this.newLevelCollisionButton);
             this.createOpenLevelGroup.Controls.Add(this.openLevelXTilesLabel);
             this.createOpenLevelGroup.Controls.Add(this.openLevelYTilesLabel);
-            this.createOpenLevelGroup.Location = new System.Drawing.Point(12, 12);
+            this.createOpenLevelGroup.Location = new System.Drawing.Point(12, 13);
             this.createOpenLevelGroup.Name = "createOpenLevelGroup";
-            this.createOpenLevelGroup.Size = new System.Drawing.Size(172, 187);
+            this.createOpenLevelGroup.Size = new System.Drawing.Size(172, 201);
             this.createOpenLevelGroup.TabIndex = 6;
             this.createOpenLevelGroup.TabStop = false;
             this.createOpenLevelGroup.Text = "Create/Open Level";
@@ -115,9 +121,9 @@
             // openLevelCollisionButton
             // 
             this.openLevelCollisionButton.BackColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.openLevelCollisionButton.Location = new System.Drawing.Point(22, 146);
+            this.openLevelCollisionButton.Location = new System.Drawing.Point(22, 157);
             this.openLevelCollisionButton.Name = "openLevelCollisionButton";
-            this.openLevelCollisionButton.Size = new System.Drawing.Size(130, 23);
+            this.openLevelCollisionButton.Size = new System.Drawing.Size(130, 25);
             this.openLevelCollisionButton.TabIndex = 6;
             this.openLevelCollisionButton.Text = "Open Level Collision...";
             this.openLevelCollisionButton.UseVisualStyleBackColor = false;
@@ -128,9 +134,9 @@
             this.wallToolButton.BackColor = System.Drawing.SystemColors.ButtonHighlight;
             this.wallToolButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wallToolButton.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.wallToolButton.Location = new System.Drawing.Point(12, 207);
+            this.wallToolButton.Location = new System.Drawing.Point(12, 223);
             this.wallToolButton.Name = "wallToolButton";
-            this.wallToolButton.Size = new System.Drawing.Size(84, 42);
+            this.wallToolButton.Size = new System.Drawing.Size(84, 45);
             this.wallToolButton.TabIndex = 8;
             this.wallToolButton.Text = "Wall";
             this.wallToolButton.UseVisualStyleBackColor = false;
@@ -141,9 +147,9 @@
             this.enemyToolButton.BackColor = System.Drawing.SystemColors.ButtonHighlight;
             this.enemyToolButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.enemyToolButton.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.enemyToolButton.Location = new System.Drawing.Point(99, 254);
+            this.enemyToolButton.Location = new System.Drawing.Point(99, 274);
             this.enemyToolButton.Name = "enemyToolButton";
-            this.enemyToolButton.Size = new System.Drawing.Size(85, 42);
+            this.enemyToolButton.Size = new System.Drawing.Size(85, 45);
             this.enemyToolButton.TabIndex = 9;
             this.enemyToolButton.Text = "Enemy";
             this.enemyToolButton.UseVisualStyleBackColor = false;
@@ -154,9 +160,9 @@
             this.deleteToolButton.BackColor = System.Drawing.SystemColors.ButtonHighlight;
             this.deleteToolButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.deleteToolButton.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.deleteToolButton.Location = new System.Drawing.Point(99, 207);
+            this.deleteToolButton.Location = new System.Drawing.Point(99, 223);
             this.deleteToolButton.Name = "deleteToolButton";
-            this.deleteToolButton.Size = new System.Drawing.Size(85, 42);
+            this.deleteToolButton.Size = new System.Drawing.Size(85, 45);
             this.deleteToolButton.TabIndex = 10;
             this.deleteToolButton.Text = "Eraser";
             this.deleteToolButton.UseVisualStyleBackColor = false;
@@ -167,9 +173,9 @@
             this.spawnToolButton.BackColor = System.Drawing.SystemColors.ButtonHighlight;
             this.spawnToolButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.spawnToolButton.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.spawnToolButton.Location = new System.Drawing.Point(12, 254);
+            this.spawnToolButton.Location = new System.Drawing.Point(12, 274);
             this.spawnToolButton.Name = "spawnToolButton";
-            this.spawnToolButton.Size = new System.Drawing.Size(84, 42);
+            this.spawnToolButton.Size = new System.Drawing.Size(84, 45);
             this.spawnToolButton.TabIndex = 11;
             this.spawnToolButton.Text = "Spawn";
             this.spawnToolButton.UseVisualStyleBackColor = false;
@@ -178,24 +184,24 @@
             // CurrentToolLabel
             // 
             this.CurrentToolLabel.AutoSize = true;
-            this.CurrentToolLabel.Location = new System.Drawing.Point(12, 309);
+            this.CurrentToolLabel.Location = new System.Drawing.Point(12, 333);
             this.CurrentToolLabel.Name = "CurrentToolLabel";
-            this.CurrentToolLabel.Size = new System.Drawing.Size(92, 13);
+            this.CurrentToolLabel.Size = new System.Drawing.Size(91, 14);
             this.CurrentToolLabel.TabIndex = 12;
             this.CurrentToolLabel.Text = "Current Tool: Wall";
             // 
             // currentLevelNameLabel
             // 
             this.currentLevelNameLabel.AutoSize = true;
-            this.currentLevelNameLabel.Location = new System.Drawing.Point(116, 31);
+            this.currentLevelNameLabel.Location = new System.Drawing.Point(116, 33);
             this.currentLevelNameLabel.Name = "currentLevelNameLabel";
-            this.currentLevelNameLabel.Size = new System.Drawing.Size(36, 13);
+            this.currentLevelNameLabel.Size = new System.Drawing.Size(36, 14);
             this.currentLevelNameLabel.TabIndex = 17;
             this.currentLevelNameLabel.Text = ".cmap";
             // 
             // currentLevelNameTextbox
             // 
-            this.currentLevelNameTextbox.Location = new System.Drawing.Point(23, 28);
+            this.currentLevelNameTextbox.Location = new System.Drawing.Point(23, 30);
             this.currentLevelNameTextbox.Name = "currentLevelNameTextbox";
             this.currentLevelNameTextbox.Size = new System.Drawing.Size(87, 20);
             this.currentLevelNameTextbox.TabIndex = 18;
@@ -205,9 +211,9 @@
             this.currentLevelGroup.Controls.Add(this.saveLevelButton);
             this.currentLevelGroup.Controls.Add(this.currentLevelNameTextbox);
             this.currentLevelGroup.Controls.Add(this.currentLevelNameLabel);
-            this.currentLevelGroup.Location = new System.Drawing.Point(12, 392);
+            this.currentLevelGroup.Location = new System.Drawing.Point(12, 422);
             this.currentLevelGroup.Name = "currentLevelGroup";
-            this.currentLevelGroup.Size = new System.Drawing.Size(172, 109);
+            this.currentLevelGroup.Size = new System.Drawing.Size(172, 117);
             this.currentLevelGroup.TabIndex = 19;
             this.currentLevelGroup.TabStop = false;
             this.currentLevelGroup.Text = "Current Level";
@@ -215,9 +221,9 @@
             // saveLevelButton
             // 
             this.saveLevelButton.BackColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.saveLevelButton.Location = new System.Drawing.Point(22, 64);
+            this.saveLevelButton.Location = new System.Drawing.Point(22, 69);
             this.saveLevelButton.Name = "saveLevelButton";
-            this.saveLevelButton.Size = new System.Drawing.Size(130, 23);
+            this.saveLevelButton.Size = new System.Drawing.Size(130, 25);
             this.saveLevelButton.TabIndex = 19;
             this.saveLevelButton.Text = "Save Level";
             this.saveLevelButton.UseVisualStyleBackColor = false;
@@ -227,18 +233,18 @@
             // 
             this.loadingBar.BackColor = System.Drawing.SystemColors.ButtonHighlight;
             this.loadingBar.ForeColor = System.Drawing.Color.MediumPurple;
-            this.loadingBar.Location = new System.Drawing.Point(12, 507);
+            this.loadingBar.Location = new System.Drawing.Point(12, 546);
             this.loadingBar.Name = "loadingBar";
-            this.loadingBar.Size = new System.Drawing.Size(172, 16);
+            this.loadingBar.Size = new System.Drawing.Size(172, 17);
             this.loadingBar.TabIndex = 20;
             // 
             // clearLevelButton
             // 
             this.clearLevelButton.BackColor = System.Drawing.SystemColors.ButtonHighlight;
             this.clearLevelButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.clearLevelButton.Location = new System.Drawing.Point(12, 336);
+            this.clearLevelButton.Location = new System.Drawing.Point(12, 362);
             this.clearLevelButton.Name = "clearLevelButton";
-            this.clearLevelButton.Size = new System.Drawing.Size(172, 43);
+            this.clearLevelButton.Size = new System.Drawing.Size(172, 46);
             this.clearLevelButton.TabIndex = 21;
             this.clearLevelButton.Text = "🗑️";
             this.clearLevelButton.UseVisualStyleBackColor = false;
@@ -254,12 +260,38 @@
             this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
             this.toolStripStatusLabel2.Size = new System.Drawing.Size(23, 23);
             // 
+            // toolStrip
+            // 
+            this.toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripTextBox,
+            this.toolStripXYPos});
+            this.toolStrip.Location = new System.Drawing.Point(0, 572);
+            this.toolStrip.Name = "toolStrip";
+            this.toolStrip.Size = new System.Drawing.Size(196, 22);
+            this.toolStrip.TabIndex = 22;
+            this.toolStrip.Text = "statusStrip1";
+            // 
+            // toolStripTextBox
+            // 
+            this.toolStripTextBox.Name = "toolStripTextBox";
+            this.toolStripTextBox.Size = new System.Drawing.Size(0, 17);
+            // 
+            // toolStripXYPos
+            // 
+            this.toolStripXYPos.Name = "toolStripXYPos";
+            this.toolStripXYPos.Size = new System.Drawing.Size(0, 17);
+            // 
+            // timer
+            // 
+            this.timer.Tick += new System.EventHandler(this.Refresh);
+            // 
             // Editor
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
-            this.ClientSize = new System.Drawing.Size(196, 535);
+            this.ClientSize = new System.Drawing.Size(196, 594);
+            this.Controls.Add(this.toolStrip);
             this.Controls.Add(this.clearLevelButton);
             this.Controls.Add(this.loadingBar);
             this.Controls.Add(this.currentLevelGroup);
@@ -270,7 +302,7 @@
             this.Controls.Add(this.wallToolButton);
             this.Controls.Add(this.createOpenLevelGroup);
             this.Cursor = System.Windows.Forms.Cursors.Arrow;
-            this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "Editor";
@@ -279,6 +311,8 @@
             this.createOpenLevelGroup.PerformLayout();
             this.currentLevelGroup.ResumeLayout(false);
             this.currentLevelGroup.PerformLayout();
+            this.toolStrip.ResumeLayout(false);
+            this.toolStrip.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -305,6 +339,10 @@
         private System.Windows.Forms.Button clearLevelButton;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel2;
+        private System.Windows.Forms.StatusStrip toolStrip;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripTextBox;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripXYPos;
+        private System.Windows.Forms.Timer timer;
     }
 }
 
