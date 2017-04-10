@@ -143,11 +143,11 @@ namespace GDAPSIIGame
 			weapon.Update(gameTime);
 
 			//Fire weapon only if previous frame didn't have left button being pressed
-			if (mouseState.LeftButton == ButtonState.Pressed && prevMouseState.LeftButton == ButtonState.Released)
+			if (mouseState.LeftButton == ButtonState.Pressed)
 			{
 				Vector2 direction = new Vector2((mouseState.X - camw.X) / 1, (mouseState.Y - camw.Y) / 1);
 				direction.Normalize();
-				this.Weapon.Fire(direction);
+				this.Weapon.Fire(direction, mouseState, prevMouseState);
 				if (weapon.Fired)
 				{
 					IsFiring = true;

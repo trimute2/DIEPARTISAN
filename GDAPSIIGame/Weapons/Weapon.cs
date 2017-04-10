@@ -7,6 +7,7 @@ using GDAPSIIGame.Interface;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using GDAPSIIGame.Map;
+using Microsoft.Xna.Framework.Input;
 
 namespace GDAPSIIGame.Weapons
 {
@@ -76,7 +77,7 @@ namespace GDAPSIIGame.Weapons
 			base.Draw(spriteBatch);
 		}
 
-		public abstract void Fire(Vector2 direction);
+		public abstract void Fire(Vector2 direction, MouseState mouseState, MouseState prevMouseState);
 
 		public abstract void ReloadWeapon();
 	}

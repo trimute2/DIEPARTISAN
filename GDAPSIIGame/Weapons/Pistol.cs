@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using GDAPSIIGame.Map;
+using Microsoft.Xna.Framework.Input;
 
 namespace GDAPSIIGame
 {
@@ -208,18 +209,22 @@ namespace GDAPSIIGame
 		/// </summary>
 		/// <param name="position">The position the bullet is spawned at</param>
 		/// <param name="direction">The speed that the bullet is moving</param>
-        public override void Fire(Vector2 direction)
+        public override void Fire(Vector2 direction, MouseState mouseState, MouseState prevMouseState)
         {
-            //Check user can fire or if they need to reload
-            if (!Fired && !Reload && clip > 0)
-            {
-                Fired = true;
-                clip--;
-				Matrix rotationMatrix = Matrix.CreateRotationZ(Angle);
-				Vector2 bulletPosition = Vector2.Transform(bulletOffset, rotationMatrix);
+			//Check if click condition is met
+			if (mouseState.LeftButton == ButtonState.Pressed && prevMouseState.LeftButton == ButtonState.Released)
+			{
+				//Check user can fire or if they need to reload
+				if (!Fired && !Reload && clip > 0)
+				{
+					Fired = true;
+					clip--;
+					Matrix rotationMatrix = Matrix.CreateRotationZ(Angle);
+					Vector2 bulletPosition = Vector2.Transform(bulletOffset, rotationMatrix);
 
-				ProjectileManager.Instance.Clone(ProjType, Position+bulletPosition, direction, owner);
-            }
+					ProjectileManager.Instance.Clone(ProjType, Position + bulletPosition, direction, owner);
+				}
+			}
         }
     }
 }
