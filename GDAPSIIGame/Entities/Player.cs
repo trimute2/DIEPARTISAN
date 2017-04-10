@@ -41,6 +41,8 @@ namespace GDAPSIIGame
 		private Player(Weapons.Weapon weapon, int health, int moveSpeed, Texture2D texture, Vector2 position, Rectangle boundingBox) : base(health, moveSpeed, texture, position, boundingBox)
 		{
 			this.weapon = weapon;
+			focusMultiplier = 1.0f;
+			varianceMultiplier = 1.0f;
 			mouseState = Mouse.GetState();
 			prevMouseState = Mouse.GetState();
 			keyState = Keyboard.GetState();

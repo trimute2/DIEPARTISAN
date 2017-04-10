@@ -60,6 +60,7 @@ namespace GDAPSIIGame.Pods
 					if (pods[i].Awake)
 					{
 						globalScore += pods[i].GetScore();
+						pods[i].RemoveInactive();
 					}
 					if (pods[i].Empty)
 					{
