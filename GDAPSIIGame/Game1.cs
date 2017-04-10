@@ -31,6 +31,7 @@ namespace GDAPSIIGame
         Vector2 mousePos;
 		MouseState mState;
 		Vector2 mouseScale;
+		SpriteFont font;
 
 		public Game1()
         {
@@ -78,6 +79,8 @@ namespace GDAPSIIGame
             projectileManager.LoadContent(Content);
             //Load UI Assets
             uiManager.LoadContent(Content);
+
+			font = Content.Load<SpriteFont>("Font");
 			//Load the one and only texture
 			theTexture = Content.Load<Texture2D>("playernew");
 			//Initiate mouse
@@ -259,7 +262,7 @@ namespace GDAPSIIGame
 							mouseScale,
 							null,
 							0);
-
+					spriteBatch.DrawString(font, PodManager.Instance.GlobalScore.ToString(), new Vector2(50, 50), Color.Black);
 					break;
 
 				//Drawing for pause menu

@@ -56,13 +56,6 @@ namespace GDAPSIIGame.Pods
 				timeActive += (float)gameTime.ElapsedGameTime.TotalSeconds;
 			}
 
-			for(int i = Enemies.Count - 1; i >= 0; i--)
-			{
-				if (!Enemies[i].active)
-				{
-					Enemies.RemoveAt(i);
-				}
-			}
 		}
 
 		public int GetScore()
@@ -75,6 +68,17 @@ namespace GDAPSIIGame.Pods
 			score = (int) ((float) score * Player.Instance.ScoreMultiplier);
 			podScore += score;
 			return score;
+		}
+
+		public void RemoveInactive()
+		{
+			for (int i = Enemies.Count - 1; i >= 0; i--)
+			{
+				if (!Enemies[i].active)
+				{
+					Enemies.RemoveAt(i);
+				}
+			}
 		}
 
 		private void WakeAll()
