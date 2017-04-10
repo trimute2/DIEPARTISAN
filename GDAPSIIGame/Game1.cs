@@ -23,7 +23,7 @@ namespace GDAPSIIGame
 		ChunkManager chunkManager;
         MapManager mapManager;
         UIManager uiManager;
-        Texture2D theTexture;
+		Texture2D floorTexture;
         Camera mainCamera;
 		GameState gameState;
 		Texture2D mouseTex;
@@ -32,6 +32,8 @@ namespace GDAPSIIGame
 		MouseState mState;
 		Vector2 mouseScale;
 		SpriteFont font;
+		Weapons.WeaponManager weaponManager;
+		TextureManager textureManager;
 
 		public Game1()
         {
@@ -42,9 +44,12 @@ namespace GDAPSIIGame
         protected override void Initialize()
         {
 			this.IsMouseVisible = false;
-            //this.graphics.IsFullScreen = true;
-            //graphics.ToggleFullScreen();
-			
+			//this.graphics.IsFullScreen = true;
+			//graphics.ToggleFullScreen();
+
+			//Initialize texture manager
+			textureManager = TextureManager.Instance;
+
             //Initialize entity manager
             entityManager = EntityManager.Instance;
 
@@ -56,6 +61,9 @@ namespace GDAPSIIGame
 
 			//Initialize map manager
 			mapManager = new MapManager();
+
+			//Initialize weapon manager
+			weaponManager = Weapons.WeaponManager.Instance;
 
             //Initialize ui manager
             uiManager = new UIManager();
@@ -71,6 +79,10 @@ namespace GDAPSIIGame
         protected override void LoadContent()
         {
 			spriteBatch = new SpriteBatch(GraphicsDevice);
+			//Load textures
+			textureManager.LoadContent(Content);
+			//Load weapons
+			weaponManager.LoadContent(Content);
 			//Load entities
 			entityManager.LoadContent(Content);
             //Make the Camera
@@ -82,16 +94,16 @@ namespace GDAPSIIGame
 
 			font = Content.Load<SpriteFont>("Font");
 			//Load the one and only texture
-			theTexture = Content.Load<Texture2D>("playernew");
+			floorTexture = textureManager.RoomTextures["FloorTexture"];
 			//Initiate mouse
 			mState = Mouse.GetState();
-			mouseTex = Content.Load<Texture2D>("playernew");
+			mouseTex = textureManager.MouseTextures["MousePointer"];
 			mousePos = new Vector2(mState.X, mState.Y);
 			mouseScale = new Vector2((float)16 / mouseTex.Width, (float)16 / mouseTex.Height);
             //Grab different wall texture
-            wallTexture = Content.Load<Texture2D>("playerBullet");
+            wallTexture = textureManager.RoomTextures["WallTexture"];
             //Init Map
-            mapManager.initMap(theTexture, wallTexture);
+            mapManager.initMap(floorTexture, wallTexture);
         }
 
 		protected override void UnloadContent()
@@ -135,7 +147,7 @@ namespace GDAPSIIGame
 
 					//Create the new map
 					mapManager = new MapManager();
-					mapManager.initMap(theTexture, wallTexture);
+					mapManager.initMap(floorTexture, wallTexture);
 
 					//Go to gameplay
 					gameState = GameState.GamePlay;
@@ -220,7 +232,7 @@ namespace GDAPSIIGame
 				//Drawing for main menu
 				case GameState.Menu:
 					//Draw the menu
-					spriteBatch.Draw(theTexture, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
+					spriteBatch.Draw(floorTexture, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
 
 					//Draw the mouse texture
 					spriteBatch.Draw(mouseTex,
@@ -241,7 +253,7 @@ namespace GDAPSIIGame
 				//Drawing for gameplay
 				case GameState.GamePlay:
 					//Draw Map
-					mapManager.Draw(spriteBatch, theTexture, wallTexture);
+					mapManager.Draw(spriteBatch, floorTexture, wallTexture);
 
 					//Draw entities
 					entityManager.Draw(gameTime, spriteBatch);
@@ -268,7 +280,7 @@ namespace GDAPSIIGame
 				//Drawing for pause menu
 				case GameState.PauseMenu:
 					//Draw Map
-					mapManager.Draw(spriteBatch, theTexture, wallTexture);
+					mapManager.Draw(spriteBatch, floorTexture, wallTexture);
 
 					//Draw entities
 					entityManager.Draw(gameTime, spriteBatch);
