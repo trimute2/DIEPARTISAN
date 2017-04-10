@@ -50,13 +50,11 @@ namespace GDAPSIIGame
         }
         
         /// <summary>
-        /// Load in sprites
+        /// Create objects
         /// </summary>
         internal void LoadContent(ContentManager Content)
         {
-            //Load in the player texture
-            Texture2D playerTexture = Content.Load<Texture2D>("spr_player");
-			Texture2D playerBullet = Content.Load<Texture2D>("playerBullet");
+			Texture2D playerTexture = TextureManager.Instance.PlayerTextures["PlayerTexture"];
 			//Create the player object
 			player = Player.Instantiate(null,
                 100,
@@ -64,14 +62,8 @@ namespace GDAPSIIGame
                 playerTexture,
                 new Vector2(playerTexture.Width, playerTexture.Height),
                 new Rectangle(playerTexture.Width, playerTexture.Height, 40, 60));
-            //Create the player's weapon and add it to the player
-            Player.Instance.Weapon = new Weapon(ProjectileType.DEFAULT,
-				playerBullet,
-				Player.Instance.Position,
-				new Rectangle((int)player.X, (int)player.Y, 20, 30),
-				0.2f, 100f, 0.5f,
-				new Vector2(playerTexture.Bounds.X+playerTexture.Bounds.Width, playerTexture.Bounds.Top+playerTexture.Bounds.Height/2),
-				Owners.Player);
+			//Create the player's weapon and add it to the player
+			Player.Instance.Weapon = Weapons.WeaponManager.Instance.Pistol;
             ChunkManager.Instance.Add(player);
         }
 

@@ -57,9 +57,9 @@ namespace GDAPSIIGame
         /// </summary>
         internal void LoadContent(ContentManager Content)
         {
-            Texture2D texture = Content.Load<Texture2D>("player");
-            //Projectiles.Add(new Projectile(texture, new Vector2(texture.Width, texture.Height), new Rectangle(texture.Width, texture.Height, 25, 25), new Vector2(-0.05f, -0.05f), 1));
-            hiddenProjectiles.Add(new Projectile(texture, new Vector2(-100, -100), new Rectangle(texture.Width, texture.Height, 25, 25), new Vector2(0f, 0f), 1));
+			Texture2D texture = TextureManager.Instance.BulletTextures["PlayerBullet"];
+			//Projectiles.Add(new Projectile(texture, new Vector2(texture.Width, texture.Height), new Rectangle(texture.Width, texture.Height, 25, 25), new Vector2(-0.05f, -0.05f), 1));
+			hiddenProjectiles.Add(new Projectile(texture, new Vector2(-100, -100), new Rectangle(texture.Width, texture.Height, 25, 25), new Vector2(0f, 0f), 1));
         }
 
         /// <summary>

@@ -18,7 +18,7 @@ namespace GDAPSIIGame
 	{
 		//Fields
 		static private Player instance;
-		private Weapon weapon;
+		private Weapons.Weapon weapon;
 		private MouseState mouseState;
 		private MouseState prevMouseState;
 		private KeyboardState keyState;
@@ -38,7 +38,7 @@ namespace GDAPSIIGame
 
 		//Singleton
 
-		private Player(Weapon weapon, int health, int moveSpeed, Texture2D texture, Vector2 position, Rectangle boundingBox) : base(health, moveSpeed, texture, position, boundingBox)
+		private Player(Weapons.Weapon weapon, int health, int moveSpeed, Texture2D texture, Vector2 position, Rectangle boundingBox) : base(health, moveSpeed, texture, position, boundingBox)
 		{
 			this.weapon = weapon;
 			mouseState = Mouse.GetState();
@@ -54,7 +54,7 @@ namespace GDAPSIIGame
 			firing = 0;
 		}
 
-		static public Player Instantiate(Weapon weapon, int health, int moveSpeed, Texture2D texture, Vector2 position, Rectangle boundingBox)
+		static public Player Instantiate(Weapons.Weapon weapon, int health, int moveSpeed, Texture2D texture, Vector2 position, Rectangle boundingBox)
 		{
 			if (instance == null)
 			{
@@ -76,7 +76,7 @@ namespace GDAPSIIGame
 		/// <summary>
 		/// The weapon the player is holding
 		/// </summary>
-		public Weapon Weapon
+		public Weapons.Weapon Weapon
 		{
 			get { return weapon; }
 			set { weapon = value; }
@@ -320,48 +320,48 @@ namespace GDAPSIIGame
 				this.Dir = Entity_Dir.Up;
 				if (angle < -157.5)
 				{
-					weapon.Dir = Weapon_Dir.UpWest;
+					weapon.Dir = Weapons.Weapon_Dir.UpWest;
 				}
-				else weapon.Dir = Weapon_Dir.UpEast;
+				else weapon.Dir = Weapons.Weapon_Dir.UpEast;
 			}
 			else if ((angle < 157.5) && (angle > 112.5) && this.Dir != Entity_Dir.UpRight)
 			{
 				this.Dir = Entity_Dir.UpRight;
-				weapon.Dir = Weapon_Dir.UpRight;
+				weapon.Dir = Weapons.Weapon_Dir.UpRight;
 			}
 			else if ((angle < 112.5) && (angle > 67.5) && this.Dir != Entity_Dir.Right)
 			{
 				this.Dir = Entity_Dir.Right;
-				weapon.Dir = Weapon_Dir.Right;
+				weapon.Dir = Weapons.Weapon_Dir.Right;
 			}
 			else if ((angle < 67.5) && (angle > 22.5) && this.Dir != Entity_Dir.DownRight)
 			{
 				this.Dir = Entity_Dir.DownRight;
-				weapon.Dir = Weapon_Dir.DownRight;
+				weapon.Dir = Weapons.Weapon_Dir.DownRight;
 			}
 			else if ((angle < -22.5) && (angle > -67.5) && this.Dir != Entity_Dir.DownLeft)
 			{
 				this.Dir = Entity_Dir.DownLeft;
-				weapon.Dir = Weapon_Dir.DownLeft;
+				weapon.Dir = Weapons.Weapon_Dir.DownLeft;
 			}
 			else if ((angle < -67.5) && (angle > -112.5) && this.Dir != Entity_Dir.Left)
 			{
 				this.Dir = Entity_Dir.Left;
-				weapon.Dir = Weapon_Dir.Left;
+				weapon.Dir = Weapons.Weapon_Dir.Left;
 			}
 			else if ((angle < -112.5) && (angle > -157.5) && this.Dir != Entity_Dir.UpLeft)
 			{
 				this.Dir = Entity_Dir.UpLeft;
-				weapon.Dir = Weapon_Dir.UpLeft;
+				weapon.Dir = Weapons.Weapon_Dir.UpLeft;
 			}
 			else if ((angle < 22.5) && (angle > -22.5))
 			{
 				this.Dir = Entity_Dir.Down;
 				if(angle < 0)
 				{
-					weapon.Dir = Weapon_Dir.DownWest;
+					weapon.Dir = Weapons.Weapon_Dir.DownWest;
 				}
-				else weapon.Dir = Weapon_Dir.DownEast;
+				else weapon.Dir = Weapons.Weapon_Dir.DownEast;
 			}
         }
 
