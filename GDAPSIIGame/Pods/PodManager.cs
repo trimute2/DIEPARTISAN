@@ -20,6 +20,11 @@ namespace GDAPSIIGame.Pods
 			globalScore = 0;
 		}
 
+		public int GlobalScore
+		{
+			get { return globalScore; }
+		}
+
 		static public PodManager Instance
 		{
 			get

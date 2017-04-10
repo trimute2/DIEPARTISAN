@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 using System;
 using GDAPSIIGame.Map;
+using GDAPSIIGame.Pods;
 using System.Threading;
 
 namespace GDAPSIIGame
@@ -164,6 +165,8 @@ namespace GDAPSIIGame
 
 					//Update UI
 					uiManager.Update(gameTime);
+
+					PodManager.Instance.Update(gameTime);
 
 					//Initialize Camera
 					if (mainCamera == null)
