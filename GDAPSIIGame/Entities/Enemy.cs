@@ -13,6 +13,7 @@ namespace GDAPSIIGame.Entities
     {
 		private bool awake;
 		private bool hit;
+		private int scoreValue;
 
 		public bool Awake
 		{
@@ -20,18 +21,32 @@ namespace GDAPSIIGame.Entities
 			set { awake = value; }
 		}
 
-		public bool Hit
+		public int score
 		{
-			get { return hit; }
-			set { hit = value; }
+			get
+			{
+				if (hit)
+				{
+					hit = false;
+					return scoreValue;
+				}
+				return 0;
+			}
 		}
 
 		public Enemy(int health, int moveSpeed, Texture2D texture, Vector2 position, Rectangle boundingBox) : base(health, moveSpeed, texture, position, boundingBox)
         {
 			awake = false;
+			scoreValue = 5;
         }
 
-        public override void Update(GameTime gameTime)
+		public Enemy(int health, int moveSpeed, Texture2D texture, Vector2 position, Rectangle boundingBox, int scoreValue) : base(health, moveSpeed, texture, position, boundingBox)
+		{
+			awake = false;
+			this.scoreValue = scoreValue;
+		}
+
+		public override void Update(GameTime gameTime)
         {
 			if (!awake)
 			{
@@ -52,6 +67,7 @@ namespace GDAPSIIGame.Entities
 		public override void Damage(int dmg)
 		{
 			awake = true;
+			hit = true;
 			Player.Instance.updateMultiplier(this);
 			base.Damage(dmg);
 		}

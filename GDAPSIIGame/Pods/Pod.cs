@@ -14,12 +14,24 @@ namespace GDAPSIIGame.Pods
 		private List<Enemy> Enemies;
 		private bool awake;
 		private float timeActive;
+		private int podScore;
+		private int damageCaused;
 
 		public Pod()
 		{
 			Enemies = new List<Enemy>();
 			awake = false;
 			timeActive = 0f;
+		}
+
+		public bool Awake
+		{
+			get { return awake; }
+		}
+
+		public bool Empty
+		{
+			get { return Enemies.Count == 0; }
 		}
 
 		public void Add(Enemy en)
@@ -43,6 +55,26 @@ namespace GDAPSIIGame.Pods
 			{
 				timeActive += (float)gameTime.ElapsedGameTime.TotalSeconds;
 			}
+
+			for(int i = Enemies.Count - 1; i >= 0; i--)
+			{
+				if (!Enemies[i].active)
+				{
+					Enemies.RemoveAt(i);
+				}
+			}
+		}
+
+		public int GetScore()
+		{
+			int score = 0;
+			foreach(Enemy e in Enemies)
+			{
+				score += e.score;
+			}
+			score = (int) ((float) score * Player.Instance.ScoreMultiplier);
+			podScore += score;
+			return score;
 		}
 
 		private void WakeAll()
@@ -52,6 +84,7 @@ namespace GDAPSIIGame.Pods
 				en.Awake = true;
 			}
 		}
+
 
 	}
 }

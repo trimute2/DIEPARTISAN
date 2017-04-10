@@ -1,4 +1,5 @@
 ﻿using GDAPSIIGame.Entities;
+using GDAPSIIGame.Pods;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -111,6 +112,7 @@ namespace GDAPSIIGame.Map
             int enemySpriteHeight = 32;
             int wallSpriteWidth = 32;
             int wallSpriteHeight = 32;
+			Pod pod = new Pod();
             for (int i = 0; i < roomSize; i++)
             {
                 for (int j = 0; j < roomSize; j++)
@@ -141,6 +143,7 @@ namespace GDAPSIIGame.Map
                             //Add Enemy to game
                             EntityManager.Instance.Add(newEnemy);
                             ChunkManager.Instance.Add(newEnemy);
+							pod.Add(newEnemy);
                             break;
 
                         case TileType.PLAYER:
@@ -168,6 +171,7 @@ namespace GDAPSIIGame.Map
                     //spriteBatch.Draw(texture, new Rectangle((int)currPos.X + i * tileSize, (int)currPos.Y + j * tileSize, tileSize, tileSize), Color.White);
                 }
             }
+			PodManager.Instance.Add(pod);
         }
     }
 }
