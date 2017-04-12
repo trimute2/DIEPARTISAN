@@ -21,13 +21,11 @@ namespace GDAPSIIGame
         KeyboardState kbState;
 		KeyboardState previousKbState;
 		ChunkManager chunkManager;
-		Map.Map map;
+		MapManager mapManager;
         UIManager uiManager;
-		Texture2D floorTexture;
         Camera mainCamera;
 		GameState gameState;
 		Texture2D mouseTex;
-        Texture2D wallTexture;
         Vector2 mousePos;
 		MouseState mState;
 		Vector2 mouseScale;
@@ -60,7 +58,7 @@ namespace GDAPSIIGame
 			projectileManager = ProjectileManager.Instance;
 
 			//Initialize map manager
-			map = new Map.Map();
+			mapManager = MapManager.Instance;
 
 			//Initialize weapon manager
 			weaponManager = Weapons.WeaponManager.Instance;
@@ -93,17 +91,12 @@ namespace GDAPSIIGame
             uiManager.LoadContent(Content);
 
 			font = Content.Load<SpriteFont>("Font");
-			//Load the one and only texture
-			floorTexture = textureManager.RoomTextures["FloorTexture"];
+
 			//Initiate mouse
 			mState = Mouse.GetState();
 			mouseTex = textureManager.MouseTextures["MousePointer"];
 			mousePos = new Vector2(mState.X, mState.Y);
 			mouseScale = new Vector2((float)16 / mouseTex.Width, (float)16 / mouseTex.Height);
-            //Grab different wall texture
-            wallTexture = textureManager.RoomTextures["WallTexture"];
-            //Init Map
-            map.initMap(floorTexture, wallTexture);
         }
 
 		protected override void UnloadContent()
@@ -146,8 +139,7 @@ namespace GDAPSIIGame
 					chunkManager.DeleteWalls();
 
 					//Create the new map
-					map = new Map.Map();
-					map.initMap(floorTexture, wallTexture);
+					MapManager.Instance.CreateMap(textureManager.RoomTextures["WallTexture"], textureManager.RoomTextures["FloorTexture"]);
 
 					//Go to gameplay
 					gameState = GameState.GamePlay;
@@ -232,7 +224,7 @@ namespace GDAPSIIGame
 				//Drawing for main menu
 				case GameState.Menu:
 					//Draw the menu
-					spriteBatch.Draw(floorTexture, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
+					spriteBatch.Draw(textureManager.EnemyTextures["EnemyTexture"], new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
 
 					//Draw the mouse texture
 					spriteBatch.Draw(mouseTex,
@@ -253,7 +245,7 @@ namespace GDAPSIIGame
 				//Drawing for gameplay
 				case GameState.GamePlay:
 					//Draw Map
-					map.Draw(spriteBatch, floorTexture, wallTexture);
+					mapManager.Draw(spriteBatch);
 
 					//Draw entities
 					entityManager.Draw(gameTime, spriteBatch);
@@ -280,7 +272,7 @@ namespace GDAPSIIGame
 				//Drawing for pause menu
 				case GameState.PauseMenu:
 					//Draw Map
-					map.Draw(spriteBatch, floorTexture, wallTexture);
+					mapManager.Draw(spriteBatch);
 
 					//Draw entities
 					entityManager.Draw(gameTime, spriteBatch);

@@ -47,6 +47,7 @@
     <Compile Include="Entities\Player.cs" />
     <Compile Include="GameObject.cs" />
     <Compile Include="Interface\ICollidable.cs" />
+    <Compile Include="MapManager.cs" />
     <Compile Include="Map\Camera.cs" />
     <Compile Include="Map\Map.cs" />
     <Compile Include="Map\Room.cs" />

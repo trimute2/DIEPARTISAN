@@ -37,6 +37,8 @@ namespace GDAPSIIGame.Map
         private TileType[,] tileLayout;
         int connections;
         Vector2 position;
+		Texture2D wallTexture;
+		Texture2D floorTexture;
 
         public Room(TileType[,] tileLayout, Vector2 position)
         {
@@ -77,7 +79,7 @@ namespace GDAPSIIGame.Map
             
         }
 
-        public void Draw(SpriteBatch spriteBatch, Texture2D floorTexture, Texture2D wallTexture)
+        public void Draw(SpriteBatch spriteBatch)
         {
             Vector2 currPos = Camera.Instance.GetViewportPosition(position);
             int tileSize = 64;
@@ -98,13 +100,17 @@ namespace GDAPSIIGame.Map
             }
         }
 
-        /// <summary>
-        /// Takes a Room and creates everything that is not a floor tile
-        /// </summary>
-        /// <param name="enemyTexture">Texture of enemies in this room</param>
-        /// <param name="wallTexture">Texture of walls in this room</param>
-        public void initRoom(Texture2D enemyTexture, Texture2D wallTexture)
+		/// <summary>
+		/// Takes a Room and creates everything that is not a floor tile
+		/// </summary>
+		/// <param name="enemyTexture">Texture of enemies in this room</param>
+		/// <param name="wallTexture">Texture of walls in this room</param>
+		public void initRoom(Texture2D enemyTexture, Texture2D floorTexture, Texture2D wallTexture)
         {
+			//Init room's textures
+			this.wallTexture = wallTexture;
+			this.floorTexture = floorTexture;
+
             //Should change this later
             int tileSize = 64;
             int roomSize = 10;

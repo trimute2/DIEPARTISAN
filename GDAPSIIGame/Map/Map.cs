@@ -25,11 +25,11 @@ namespace GDAPSIIGame.Map
             rooms.Add(r);
         }
 
-        public void Draw(SpriteBatch spritebatch, Texture2D floorTexture, Texture2D wallTexture)
+        public void Draw(SpriteBatch spritebatch)
         {
             foreach (Room r in rooms)
             {
-                r.Draw(spritebatch, floorTexture, wallTexture);
+                r.Draw(spritebatch);
             }
         }
 
@@ -73,7 +73,7 @@ namespace GDAPSIIGame.Map
         {
             foreach (Room r in rooms)
             {
-                r.initRoom(floorTexture, wallTexture);
+                r.initRoom(floorTexture, floorTexture, wallTexture);
             }
         }
     }
