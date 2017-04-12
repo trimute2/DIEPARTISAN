@@ -21,7 +21,7 @@ namespace GDAPSIIGame
         KeyboardState kbState;
 		KeyboardState previousKbState;
 		ChunkManager chunkManager;
-        MapManager mapManager;
+		Map.Map map;
         UIManager uiManager;
 		Texture2D floorTexture;
         Camera mainCamera;
@@ -60,7 +60,7 @@ namespace GDAPSIIGame
 			projectileManager = ProjectileManager.Instance;
 
 			//Initialize map manager
-			mapManager = new MapManager();
+			map = new Map.Map();
 
 			//Initialize weapon manager
 			weaponManager = Weapons.WeaponManager.Instance;
@@ -103,7 +103,7 @@ namespace GDAPSIIGame
             //Grab different wall texture
             wallTexture = textureManager.RoomTextures["WallTexture"];
             //Init Map
-            mapManager.initMap(floorTexture, wallTexture);
+            map.initMap(floorTexture, wallTexture);
         }
 
 		protected override void UnloadContent()
@@ -146,8 +146,8 @@ namespace GDAPSIIGame
 					chunkManager.DeleteWalls();
 
 					//Create the new map
-					mapManager = new MapManager();
-					mapManager.initMap(floorTexture, wallTexture);
+					map = new Map.Map();
+					map.initMap(floorTexture, wallTexture);
 
 					//Go to gameplay
 					gameState = GameState.GamePlay;
@@ -253,7 +253,7 @@ namespace GDAPSIIGame
 				//Drawing for gameplay
 				case GameState.GamePlay:
 					//Draw Map
-					mapManager.Draw(spriteBatch, floorTexture, wallTexture);
+					map.Draw(spriteBatch, floorTexture, wallTexture);
 
 					//Draw entities
 					entityManager.Draw(gameTime, spriteBatch);
@@ -280,7 +280,7 @@ namespace GDAPSIIGame
 				//Drawing for pause menu
 				case GameState.PauseMenu:
 					//Draw Map
-					mapManager.Draw(spriteBatch, floorTexture, wallTexture);
+					map.Draw(spriteBatch, floorTexture, wallTexture);
 
 					//Draw entities
 					entityManager.Draw(gameTime, spriteBatch);

@@ -10,10 +10,10 @@ using System.Threading.Tasks;
 
 namespace GDAPSIIGame.Map
 {
-    class MapManager
+    class Map
     {
         List<Room> rooms = new List<Room>();
-        public MapManager()
+        public Map()
         {
             //TODO: randomize choice of rooms
             String[] files = new String[] { "testRoom1.txt", "testRoom2.txt" };
@@ -33,7 +33,7 @@ namespace GDAPSIIGame.Map
             }
         }
 
-        public static void generateMap(String[] filenames, MapManager m)
+        public static void generateMap(String[] filenames, Map m)
         {
             int mapSize = 2;
             Random randy = new Random();
