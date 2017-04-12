@@ -57,11 +57,8 @@ namespace GDAPSIIGame.Pods
 				for (int i = pods.Count - 1; i >= 0; i--)
 				{
 					pods[i].Update(gameTime);
-					if (pods[i].Awake)
-					{
-						globalScore += pods[i].GetScore();
-						pods[i].RemoveInactive();
-					}
+					globalScore += pods[i].GetScore();
+					pods[i].RemoveInactive();
 					if (pods[i].Empty)
 					{
 						pods.RemoveAt(i);
