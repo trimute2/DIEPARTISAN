@@ -61,6 +61,7 @@
     <Compile Include="UIManager.cs" />
     <Compile Include="Wall.cs" />
     <Compile Include="Weapons\Pistol.cs" />
+    <Compile Include="Weapons\Rifle.cs" />
     <Compile Include="Weapons\Weapon.cs" />
     <Compile Include="Weapons\WeaponManager.cs" />
   </ItemGroup>

@@ -138,6 +138,8 @@ namespace GDAPSIIGame
 					entityManager.RemoveEnemies();
 					chunkManager.DeleteWalls();
 
+					//ADD THREADING
+
 					//Create the new map
 					MapManager.Instance.CreateMap(textureManager.RoomTextures["WallTexture"], textureManager.RoomTextures["FloorTexture"]);
 

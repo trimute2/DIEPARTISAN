@@ -15,10 +15,14 @@ namespace GDAPSIIGame.Weapons
 		//Fields-----------------
 		static private WeaponManager instance;
 		Pistol pistol;
+		Rifle rifle;
 
 		//Weapons
 		public Pistol Pistol
 		{ get { return pistol; } }
+
+		public Rifle Rifle
+		{ get { return rifle; } }
 
 		//Methods----------------
 
@@ -28,6 +32,7 @@ namespace GDAPSIIGame.Weapons
 		private WeaponManager()
 		{
 			pistol = null;
+			rifle = null;
 		}
 
 		public void LoadContent(ContentManager Content)
@@ -37,6 +42,13 @@ namespace GDAPSIIGame.Weapons
 				TextureManager.Instance.WeaponTextures["PistolTexture"],
 				Vector2.Zero,
 				new Rectangle(0, 0, 20, 30),
+				0.2f, 100f, 0.5f,
+				new Vector2(playerTexture.Bounds.X + playerTexture.Bounds.Width, playerTexture.Bounds.Top + playerTexture.Bounds.Height / 2),
+				Owners.Player);
+			rifle = new Rifle(ProjectileType.DEFAULT,
+				TextureManager.Instance.WeaponTextures["PistolTexture"],
+				Vector2.Zero,
+				new Rectangle(0, 0, 20, 50),
 				0.2f, 100f, 0.5f,
 				new Vector2(playerTexture.Bounds.X + playerTexture.Bounds.Width, playerTexture.Bounds.Top + playerTexture.Bounds.Height / 2),
 				Owners.Player);

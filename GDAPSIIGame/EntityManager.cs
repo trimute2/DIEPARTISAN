@@ -63,7 +63,7 @@ namespace GDAPSIIGame
                 new Vector2(playerTexture.Width, playerTexture.Height),
                 new Rectangle(playerTexture.Width, playerTexture.Height, 40, 60));
 			//Create the player's weapon and add it to the player
-			Player.Instance.Weapon = Weapons.WeaponManager.Instance.Pistol;
+			Player.Instance.Weapon = Weapons.WeaponManager.Instance.Rifle;
             ChunkManager.Instance.Add(player);
         }
 
