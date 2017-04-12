@@ -274,7 +274,8 @@ namespace GDAPSIIGame
 							mouseScale,
 							null,
 							0);
-					spriteBatch.DrawString(font, PodManager.Instance.GlobalScore.ToString(), new Vector2(50, 50), Color.Black);
+					spriteBatch.DrawString(font, PodManager.Instance.GlobalScore.ToString(), new Vector2(50, 50), Color.Red);
+					spriteBatch.DrawString(font, Player.Instance.ScoreMultiplier.ToString(), new Vector2(50, 100), Color.Red);
 					break;
 
 				//Drawing for pause menu

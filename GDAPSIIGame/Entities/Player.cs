@@ -32,7 +32,9 @@ namespace GDAPSIIGame
 		private float firing;
 
 		private float focusMultiplier;
+		private float focusTimer;
 		private float varianceMultiplier;
+		private float varianceTimer;
 		private Enemy lastHit;
 		private bool updateVariance;
 
@@ -42,7 +44,9 @@ namespace GDAPSIIGame
 		{
 			this.weapon = weapon;
 			focusMultiplier = 1.0f;
+			focusTimer = 0f;
 			varianceMultiplier = 1.0f;
+			varianceTimer = 0f;
 			mouseState = Mouse.GetState();
 			prevMouseState = Mouse.GetState();
 			keyState = Keyboard.GetState();
@@ -204,6 +208,24 @@ namespace GDAPSIIGame
 				Camera.Instance.resetPosition(Position);
 			}
 
+			//update score multiplier timers
+			if(focusTimer > 0)
+			{
+				focusTimer -= (float) gameTime.ElapsedGameTime.TotalMilliseconds/1000;
+			}
+			else
+			{
+				focusMultiplier = 1.0f;
+			}
+
+			if(varianceTimer > 0)
+			{
+				varianceTimer -= (float)gameTime.ElapsedGameTime.TotalMilliseconds/1000;
+			}else
+			{
+				varianceMultiplier = 1.0f;
+			}
+
 			base.Update(gameTime);
         }
 
@@ -212,12 +234,14 @@ namespace GDAPSIIGame
 			if(lastHit == e)
 			{
 				focusMultiplier += 0.1f;
+				focusTimer = 5f;
 				updateVariance = false;
 			}else
 			{
 				if (updateVariance)
 				{
 					varianceMultiplier += 0.1f;
+					varianceTimer = 5f;
 				}
 				updateVariance = true;
 				lastHit = e;
