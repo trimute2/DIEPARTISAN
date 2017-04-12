@@ -121,7 +121,7 @@ namespace GDAPSIIGame
 
 		public float ScoreMultiplier
 		{
-			get { return varianceMultiplier * focusMultiplier; }
+			get { return (float) Math.Round((float) (varianceMultiplier * focusMultiplier),2); }
 		}
 
 		//Methods
@@ -406,6 +406,16 @@ namespace GDAPSIIGame
                 {
                     Health -= 20;
 					IsHurting = true;
+					focusMultiplier *= 0.9f;
+					if(focusMultiplier < 1)
+					{
+						focusMultiplier = 1.0f;
+					}
+					varianceMultiplier *= 0.9f;
+					if(varianceMultiplier < 1)
+					{
+						varianceMultiplier = 1.0f;
+					}
                 }
             }
 			else
