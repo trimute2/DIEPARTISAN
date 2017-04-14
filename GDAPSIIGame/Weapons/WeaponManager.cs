@@ -38,14 +38,14 @@ namespace GDAPSIIGame.Weapons
 		public void LoadContent(ContentManager Content)
 		{
 			Texture2D playerTexture = TextureManager.Instance.PlayerTextures["PlayerTexture"];
-			pistol = new Pistol(ProjectileType.DEFAULT,
+			pistol = new Pistol(ProjectileType.PISTOL,
 				TextureManager.Instance.WeaponTextures["PistolTexture"],
 				Vector2.Zero,
 				new Rectangle(0, 0, 20, 30),
 				0.2f, 100f, 0.5f,
 				new Vector2(playerTexture.Bounds.X + playerTexture.Bounds.Width, playerTexture.Bounds.Top + playerTexture.Bounds.Height / 2),
 				Owners.Player);
-			rifle = new Rifle(ProjectileType.DEFAULT,
+			rifle = new Rifle(ProjectileType.RIFLE,
 				TextureManager.Instance.WeaponTextures["PistolTexture"],
 				Vector2.Zero,
 				new Rectangle(0, 0, 20, 50),

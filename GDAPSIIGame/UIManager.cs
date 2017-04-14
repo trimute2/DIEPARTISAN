@@ -42,7 +42,7 @@ namespace GDAPSIIGame
             healthbarForeground = Content.Load<Texture2D>("redbar");
             //set both the background and foreground of the healthbox to the same bounding area
             healthbarBackgroundBounding = healthbarForegroundBounding = new Rectangle(new Point(healthbarX, healthbarY), new Point(healthbarWidth, healthbarHeight));
-        }
+		}
 
         /// <summary>
         /// Update the UI Manager once per frame. Managed through Game1.cs.

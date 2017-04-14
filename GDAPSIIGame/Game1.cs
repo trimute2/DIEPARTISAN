@@ -77,18 +77,34 @@ namespace GDAPSIIGame
         protected override void LoadContent()
         {
 			spriteBatch = new SpriteBatch(GraphicsDevice);
-			//Load textures
-			textureManager.LoadContent(Content);
-			//Load weapons
-			weaponManager.LoadContent(Content);
-			//Load entities
-			entityManager.LoadContent(Content);
-            //Make the Camera
-            Camera.Instance.setPosition(GraphicsDevice.Viewport);
-            //Load projectiles
-            projectileManager.LoadContent(Content);
-            //Load UI Assets
-            uiManager.LoadContent(Content);
+
+			List<Thread> threads = new List<Thread>();
+
+			//Make all the threads
+			Thread tex = new Thread(() => textureManager.LoadContent(Content) );
+			tex.Name = "Textures";
+			threads.Add(tex);
+			Thread weap = new Thread(() => weaponManager.LoadContent(Content));
+			weap.Name = "Weapons";
+			threads.Add(weap);
+			Thread ent = new Thread(() => entityManager.LoadContent(Content));
+			ent.Name = "Entities";
+			threads.Add(ent);
+			Thread proj = new Thread(() => projectileManager.LoadContent(Content));
+			proj.Name = "Name";
+			threads.Add(proj);
+			Thread ui = new Thread(() => uiManager.LoadContent(Content));
+			ui.Name = "UI";
+			threads.Add(ui);
+
+			foreach (Thread t in threads)
+			{
+				t.Start();
+				t.Join();
+			}
+
+			//Make the Camera
+			Camera.Instance.setPosition(GraphicsDevice.Viewport);
 
 			font = Content.Load<SpriteFont>("Font");
 
@@ -137,8 +153,6 @@ namespace GDAPSIIGame
 					//Empty all entities and walls
 					entityManager.RemoveEnemies();
 					chunkManager.DeleteWalls();
-
-					//ADD THREADING
 
 					//Create the new map
 					MapManager.Instance.CreateMap(textureManager.RoomTextures["WallTexture"], textureManager.RoomTextures["FloorTexture"]);

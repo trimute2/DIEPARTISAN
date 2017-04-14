@@ -12,7 +12,8 @@ namespace GDAPSIIGame
 {
     enum ProjectileType
     {
-        DEFAULT = 1
+        PISTOL = 1,
+		RIFLE = 2
     }
     class ProjectileManager
     {
@@ -59,8 +60,9 @@ namespace GDAPSIIGame
         {
 			Texture2D texture = TextureManager.Instance.BulletTextures["PlayerBullet"];
 			//Projectiles.Add(new Projectile(texture, new Vector2(texture.Width, texture.Height), new Rectangle(texture.Width, texture.Height, 25, 25), new Vector2(-0.05f, -0.05f), 1));
+			hiddenProjectiles.Add(new Projectile(texture, new Vector2(-100, -100), new Rectangle(texture.Width, texture.Height, 25, 25), new Vector2(0f, 0f), 2));
 			hiddenProjectiles.Add(new Projectile(texture, new Vector2(-100, -100), new Rectangle(texture.Width, texture.Height, 25, 25), new Vector2(0f, 0f), 1));
-        }
+		}
 
         /// <summary>
         /// Update projectiles
@@ -116,9 +118,11 @@ namespace GDAPSIIGame
         {
             switch (pT)
             {
-                case ProjectileType.DEFAULT:
+                case ProjectileType.PISTOL:
                     return hiddenProjectiles[(int)pT - 1].Clone(currPosition, currDirection, owner);
-            }
+				case ProjectileType.RIFLE:
+					return hiddenProjectiles[(int)pT - 1].Clone(currPosition, currDirection, owner);
+			}
             return null;
         }
     }

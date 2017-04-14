@@ -65,7 +65,7 @@ namespace GDAPSIIGame
 			//Create the player's weapon and add it to the player
 			Player.Instance.Weapon = Weapons.WeaponManager.Instance.Rifle;
             ChunkManager.Instance.Add(player);
-        }
+		}
 
         /// <summary>
         /// Update entities

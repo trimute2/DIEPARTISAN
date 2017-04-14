@@ -94,7 +94,6 @@ namespace GDAPSIIGame
 			//Load room textures
 			roomTextures.Add("WallTexture", Content.Load<Texture2D>("playerBullet"));
 			roomTextures.Add("FloorTexture", Content.Load<Texture2D>("playerNew"));
-
 		}
 	}
 }

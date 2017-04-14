@@ -32,7 +32,6 @@ namespace GDAPSIIGame.Map
             float x = Player.Instance.X - xOffset;
             float y = Player.Instance.Y - yOffset;
             size = new Rectangle((int)x, (int)y, vp.Width, vp.Height);
-            Console.WriteLine(vp.Width + " " + vp.Height);
 			rng = new Random();
         }
 
