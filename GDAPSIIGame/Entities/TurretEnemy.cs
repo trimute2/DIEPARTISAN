@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using GDAPSIIGame.Interface;
 using GDAPSIIGame.Weapons;
+using Microsoft.Xna.Framework.Input;
 
 namespace GDAPSIIGame.Entities
 {
@@ -15,10 +16,14 @@ namespace GDAPSIIGame.Entities
 		TurretGun gun;
 
 		public TurretEnemy(int health, int moveSpeed, Texture2D texture, Vector2 position, Rectangle boundingBox) : base(health, moveSpeed, texture, position, boundingBox)
-		{ }
+		{
+			gun = WeaponManager.Instance.TurretGun;
+		}
 
         public TurretEnemy(int health, int moveSpeed, Texture2D texture, Vector2 position, Rectangle boundingBox, int scoreValue) : base(health, moveSpeed, texture, position, boundingBox, scoreValue)
-		{ }
+		{
+			gun = WeaponManager.Instance.TurretGun;
+		}
 
         public override void Update(GameTime gameTime)
         {
@@ -33,12 +38,23 @@ namespace GDAPSIIGame.Entities
             }
             else
             {
-                Shoot(Player.Instance);
+				gun.Angle = -((float)Math.Atan2(Player.Instance.X - this.X, Player.Instance.Y - this.Y));
+				Shoot(Player.Instance);
             }
+			//Update weapon position
+			gun.X = this.X + (BoundingBox.Width / 2);
+			gun.Y = this.Y + (BoundingBox.Height / 2);
+			gun.Update(gameTime);
             base.Update(gameTime);
         }
 
-        public override void Damage(int dmg)
+		public override void Draw(SpriteBatch spriteBatch)
+		{
+			gun.Draw(spriteBatch);
+			base.Draw(spriteBatch);
+		}
+
+		public override void Damage(int dmg)
         {
             Awake = true;
             Hit = true;
@@ -46,10 +62,15 @@ namespace GDAPSIIGame.Entities
             base.Damage(dmg);
         }
 
-        public void Shoot(GameObject thingToShootAt)
-        {
-            Vector2 diff = Position - thingToShootAt.Position;
-            
+		public void Shoot(GameObject thingToShootAt)
+		{
+			if (!gun.Fired)
+			{
+				Vector2 diff = new Vector2 ( thingToShootAt.Position.X - Position.X, thingToShootAt.Position.Y - Position.Y);
+				diff.Normalize();
+				MouseState unnecessary = Mouse.GetState();
+				gun.Fire(diff, unnecessary, unnecessary);
+			}
         }
     }
 }

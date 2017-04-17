@@ -13,7 +13,8 @@ namespace GDAPSIIGame
     enum ProjectileType
     {
         PISTOL = 1,
-		RIFLE = 2
+		RIFLE = 2,
+		TURRET = 3
     }
     class ProjectileManager
     {
@@ -62,6 +63,7 @@ namespace GDAPSIIGame
 			//Projectiles.Add(new Projectile(texture, new Vector2(texture.Width, texture.Height), new Rectangle(texture.Width, texture.Height, 25, 25), new Vector2(-0.05f, -0.05f), 1));
 			hiddenProjectiles.Add(new Projectile(texture, new Vector2(-100, -100), new Rectangle(texture.Width, texture.Height, 25, 25), new Vector2(0f, 0f), 2));
 			hiddenProjectiles.Add(new Projectile(texture, new Vector2(-100, -100), new Rectangle(texture.Width, texture.Height, 25, 25), new Vector2(0f, 0f), 1));
+			hiddenProjectiles.Add(new Projectile(texture, new Vector2(-100, -100), new Rectangle(texture.Width, texture.Height, 25, 25), new Vector2(0f, 0f), 3));
 		}
 
         /// <summary>
@@ -121,6 +123,8 @@ namespace GDAPSIIGame
                 case ProjectileType.PISTOL:
                     return hiddenProjectiles[(int)pT - 1].Clone(currPosition, currDirection, owner);
 				case ProjectileType.RIFLE:
+					return hiddenProjectiles[(int)pT - 1].Clone(currPosition, currDirection, owner);
+				case ProjectileType.TURRET:
 					return hiddenProjectiles[(int)pT - 1].Clone(currPosition, currDirection, owner);
 			}
             return null;

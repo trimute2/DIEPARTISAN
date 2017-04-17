@@ -16,6 +16,7 @@ namespace GDAPSIIGame.Weapons
 		static private WeaponManager instance;
 		Pistol pistol;
 		Rifle rifle;
+		TurretGun turretGun;
 
 		//Weapons
 		public Pistol Pistol
@@ -23,6 +24,9 @@ namespace GDAPSIIGame.Weapons
 
 		public Rifle Rifle
 		{ get { return rifle; } }
+
+		public TurretGun TurretGun
+		{ get { return turretGun; } }
 
 		//Methods----------------
 
@@ -52,6 +56,13 @@ namespace GDAPSIIGame.Weapons
 				0.2f, 100f, 0.5f,
 				new Vector2(playerTexture.Bounds.X + playerTexture.Bounds.Width, playerTexture.Bounds.Top + playerTexture.Bounds.Height / 2),
 				Owners.Player);
+			turretGun = new TurretGun(ProjectileType.TURRET,
+				TextureManager.Instance.WeaponTextures["PistolTexture"],
+				Vector2.Zero,
+				new Rectangle(0, 0, 20, 60), 
+				1f, 
+				Vector2.Zero,
+				Owners.Enemy);
 		}
 
 		/// <summary>

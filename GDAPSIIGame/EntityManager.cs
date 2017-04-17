@@ -7,13 +7,14 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Input;
+using GDAPSIIGame.Entities;
 
 namespace GDAPSIIGame
 {
     class EntityManager
     {
         //Fields-----------------
-        List<Entities.Entity> enemies;
+        List<Entity> enemies;
         static private EntityManager instance;
         static private Player player;
 
@@ -30,7 +31,7 @@ namespace GDAPSIIGame
         /// </summary>
         private EntityManager()
         {
-            enemies = new List<Entities.Entity>();
+            enemies = new List<Entity>();
         }
 
         /// <summary>
@@ -95,14 +96,14 @@ namespace GDAPSIIGame
         internal void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             //Player.Draw(spriteBatch);
-			foreach (Entities.Entity en in enemies)
+			foreach (Entity en in enemies)
 			{
 				en.Draw(spriteBatch);
 			}
 			player.Draw(spriteBatch);
         }
 
-        internal void Add(Entities.Entity e)
+        internal void Add(Entity e)
         {
             enemies.Add(e);
         }

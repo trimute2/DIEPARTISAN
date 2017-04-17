@@ -11,7 +11,7 @@ namespace GDAPSIIGame.Pods
 	class Pod
 	{
 
-		private List<MeleeEnemy> Enemies;
+		private List<Enemy> Enemies;
 		private bool awake;
 		private float timeActive;
 		private int podScore;
@@ -19,7 +19,7 @@ namespace GDAPSIIGame.Pods
 
 		public Pod()
 		{
-			Enemies = new List<MeleeEnemy>();
+			Enemies = new List<Enemy>();
 			awake = false;
 			timeActive = 0f;
 		}
@@ -34,7 +34,7 @@ namespace GDAPSIIGame.Pods
 			get { return Enemies.Count == 0; }
 		}
 
-		public void Add(MeleeEnemy en)
+		public void Add(Enemy en)
 		{
 			Enemies.Add(en);
 		}
@@ -61,7 +61,7 @@ namespace GDAPSIIGame.Pods
 		public int GetScore()
 		{
 			int score = 0;
-			foreach(MeleeEnemy e in Enemies)
+			foreach(Enemy e in Enemies)
 			{
 				score += e.Score;
 			}
@@ -83,7 +83,7 @@ namespace GDAPSIIGame.Pods
 
 		private void WakeAll()
 		{
-			foreach (MeleeEnemy en in Enemies)
+			foreach (Enemy en in Enemies)
 			{
 				en.Awake = true;
 			}

@@ -147,9 +147,13 @@ namespace GDAPSIIGame.Entities
 
 				this.ResetBound();
 
-            }else if(obj is Projectile)
+            }
+			else if(obj is Projectile)
 			{
-				this.Damage(((Projectile)obj).Damage);
+				if( (obj as Projectile).Owner == Owners.Player)
+				{
+					this.Damage(((Projectile)obj).Damage);
+				}
 			}
 
 		}

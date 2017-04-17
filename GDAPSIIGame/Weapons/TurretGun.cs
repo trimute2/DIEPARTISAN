@@ -14,7 +14,6 @@ namespace GDAPSIIGame.Weapons
 	{
 		//Fields
 		private float fireRate;
-		private float reloadSpeed;
 		private float fired;
 		private Vector2 origin;
 		private Vector2 bulletOffset;
@@ -53,43 +52,33 @@ namespace GDAPSIIGame.Weapons
 			switch (Dir)
 			{
 				case Weapons.Weapon_Dir.UpEast:
-					this.X += 20;
 					this.bulletOffset = new Vector2(BoundingBox.Width / 4, BoundingBox.Height / 4);
 					break;
 				case Weapons.Weapon_Dir.UpWest:
-					this.X -= 20;
 					this.bulletOffset = new Vector2(BoundingBox.Width / 4, BoundingBox.Height / 4);
 					break;
 				case Weapons.Weapon_Dir.UpLeft:
-					this.X -= 20;
 					this.bulletOffset = new Vector2(-BoundingBox.Width / 4, BoundingBox.Height / 4);
 					break;
 				case Weapons.Weapon_Dir.Left:
-					this.X -= 20;
 					this.bulletOffset = new Vector2(-BoundingBox.Width / 2, BoundingBox.Height / 4);
 					break;
 				case Weapons.Weapon_Dir.DownLeft:
-					this.X -= 20;
 					this.bulletOffset = new Vector2(-BoundingBox.Width, BoundingBox.Height / 4);
 					break;
 				case Weapons.Weapon_Dir.DownWest:
-					this.X -= 20;
 					this.bulletOffset = new Vector2(-BoundingBox.Width / 2, BoundingBox.Height / 4);
 					break;
 				case Weapons.Weapon_Dir.DownEast:
-					this.X += 20;
 					this.bulletOffset = new Vector2(-BoundingBox.Width / 2, BoundingBox.Height / 4);
 					break;
 				case Weapons.Weapon_Dir.DownRight:
-					this.X += 20;
 					this.bulletOffset = new Vector2(-BoundingBox.Width / 4, BoundingBox.Height / 4);
 					break;
 				case Weapons.Weapon_Dir.Right:
-					this.X += 20;
 					this.bulletOffset = new Vector2(BoundingBox.Width / 2, BoundingBox.Height / 4);
 					break;
 				case Weapons.Weapon_Dir.UpRight:
-					this.X += 20;
 					this.bulletOffset = new Vector2(BoundingBox.Width, BoundingBox.Height / 4);
 					break;
 			}
@@ -100,11 +89,6 @@ namespace GDAPSIIGame.Weapons
 				//Increment fireTimer
 				fired -= (float)gameTime.ElapsedGameTime.TotalSeconds;
 				//Check if fireTimer meets the threshold
-				if (!Fired)
-				{
-					//Allow the user to fire again and reset timer
-					Fired = false;
-				}
 			}
 
 			base.Update(gameTime);
@@ -162,26 +146,19 @@ namespace GDAPSIIGame.Weapons
 		/// </summary>
 		/// <param name="position">The position the bullet is spawned at</param>
 		/// <param name="direction">The speed that the bullet is moving</param>
-		public override void Fire(Vector2 direction, MouseState mouseState, MouseState prevMouseState)
+		public override void Fire(Vector2 direction, MouseState thanks, MouseState abstractClasses)
 		{
-			//Check if click condition is met
-			if (mouseState.LeftButton == ButtonState.Pressed && prevMouseState.LeftButton == ButtonState.Released)
+			//Check user can fire or if they need to reload
+			if (!Fired)
 			{
-				//Check user can fire or if they need to reload
-				if (!Fired)
-				{
-					Fired = true;
-					Matrix rotationMatrix = Matrix.CreateRotationZ(Angle);
-					Vector2 bulletPosition = Vector2.Transform(bulletOffset, rotationMatrix);
-
-					ProjectileManager.Instance.Clone(ProjType, Position + bulletPosition, direction, owner);
-				}
+				Fired = true;
+				Matrix rotationMatrix = Matrix.CreateRotationZ(Angle);
+				Vector2 bulletPosition = Vector2.Transform(bulletOffset, rotationMatrix);
+				ProjectileManager.Instance.Clone(ProjType, Position, direction, owner);
 			}
 		}
 
 		public override void ReloadWeapon()
-		{
-			throw new NotImplementedException();
-		}
+		{ }
 	}
 }
