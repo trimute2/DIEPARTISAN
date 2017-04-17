@@ -35,17 +35,7 @@ namespace GDAPSIIGame.Graph
         /// <returns></returns>
         //List<GraphNode> findPath(GameObject go)
         //{
-        //
-        //}
-
-        /// <summary>
-        /// Finds the first node within a minimum distance of the given position
-        /// </summary>
-        /// <param name="minDist">Minimum distance </param>
-        /// <param name="position"></param>
-        /// <returns></returns>
-        //GraphNode findCloseNode(int minDist, Vector2 position)
-        //{
+        //    GraphNode closest = findClosestNode(go.Position);
         //
         //}
 
@@ -54,10 +44,13 @@ namespace GDAPSIIGame.Graph
         /// </summary>
         /// <param name="minDist"></param>
         /// <returns></returns>
-        //GraphNode findClosestNode(Vector2 position)
-        //{
-        //
-        //}
+        GraphNode findClosestNode(Vector2 position)
+        {
+            int X = (int)position.X;
+            int Y = (int)position.Y;
+            int uniqueNum = (1 / 2) * (X + Y) * (X + Y + 1) + Y;
+            return nodes[uniqueNum];
+        }
 
     }
 }
