@@ -18,11 +18,15 @@ namespace GDAPSIIGame.Entities
 		public TurretEnemy(int health, int moveSpeed, Texture2D texture, Vector2 position, Rectangle boundingBox) : base(health, moveSpeed, texture, position, boundingBox)
 		{
 			gun = WeaponManager.Instance.TurretGun;
+			gun.X = this.X + (BoundingBox.Width / 2);
+			gun.Y = this.Y + (BoundingBox.Height / 2);
 		}
 
         public TurretEnemy(int health, int moveSpeed, Texture2D texture, Vector2 position, Rectangle boundingBox, int scoreValue) : base(health, moveSpeed, texture, position, boundingBox, scoreValue)
 		{
 			gun = WeaponManager.Instance.TurretGun;
+			gun.X = this.X + (BoundingBox.Width / 2);
+			gun.Y = this.Y + (BoundingBox.Height / 2);
 		}
 
         public override void Update(GameTime gameTime)
@@ -42,8 +46,6 @@ namespace GDAPSIIGame.Entities
 				Shoot(Player.Instance);
             }
 			//Update weapon position
-			gun.X = this.X + (BoundingBox.Width / 2);
-			gun.Y = this.Y + (BoundingBox.Height / 2);
 			gun.Update(gameTime);
             base.Update(gameTime);
         }
