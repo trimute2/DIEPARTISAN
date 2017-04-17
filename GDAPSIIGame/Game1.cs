@@ -34,6 +34,7 @@ namespace GDAPSIIGame
 		WeaponManager weaponManager;
 		TextureManager textureManager;
         int mapSize;
+		int lvl;
 
 		public Game1()
         {
@@ -45,6 +46,7 @@ namespace GDAPSIIGame
         {
 			this.IsMouseVisible = false;
 
+			lvl = 1;
             //this.graphics.IsFullScreen = true;
 			//graphics.ToggleFullScreen();
 
@@ -83,7 +85,7 @@ namespace GDAPSIIGame
 
 			List<Thread> threads = new List<Thread>();
 
-            mapSize = 2;
+            mapSize = 1;
 
 			//Make all the threads
 			Thread tex = new Thread(() => textureManager.LoadContent(Content) );
@@ -161,7 +163,7 @@ namespace GDAPSIIGame
 					chunkManager.DeleteWalls();
 
 					//Create the new map
-					MapManager.Instance.CreateMap(textureManager.RoomTextures["WallTexture"], textureManager.RoomTextures["FloorTexture"], mapSize);
+					MapManager.Instance.CreateMap(textureManager.RoomTextures["WallTexture"], textureManager.RoomTextures["FloorTexture"], lvl);
 
 					//Go to gameplay
 					gameState = GameState.GamePlay;
@@ -204,17 +206,26 @@ namespace GDAPSIIGame
 					}
 
 					//Check if the player has beat the levels
-					if (entityManager.BeatLevel)
-					{
-						gameState = GameState.LoadingScreen;
-					}
+					//if (entityManager.BeatLevel)
+					//{
+					//	gameState = GameState.LoadingScreen;
+					//}
 
 					//Check if the player has died
 					if (Player.Instance.Health <= 0)
 					{
 						gameState = GameState.GameOver;
+						lvl = 1;
 					}
 
+					if(PodManager.Instance.Count == 0)
+					{
+						if(lvl < 5)
+						{
+							lvl++;
+						}
+						gameState = GameState.LoadingScreen;
+					}
 					break;
 
 				//When the game is paused
