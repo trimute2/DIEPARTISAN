@@ -13,10 +13,12 @@ namespace GDAPSIIGame.Graph
         /// This should be a fibonacci heap but w/e
         /// </summary>
         Dictionary<int, GraphNode> nodes;
+        GraphNode[,] adjacencyMatrix;
 
         public Graph(int numNodes)
         {
             nodes = new Dictionary<int, GraphNode>(numNodes);
+            adjacencyMatrix = new GraphNode[numNodes, numNodes];
         }
 
         /// <summary>
@@ -29,15 +31,23 @@ namespace GDAPSIIGame.Graph
         }
 
         /// <summary>
+        /// Should be called once all nodes are made. Fills Adj. Matrix.
+        /// </summary>
+        void fillAdjacencyMatrix()
+        {
+
+        }
+
+        /// <summary>
         /// Finds a __GOOD__ path to the gameobject given
         /// </summary>
         /// <param name="go"></param>
         /// <returns></returns>
-        //List<GraphNode> findPath(GameObject go)
-        //{
-        //    GraphNode closest = findClosestNode(go.Position);
-        //
-        //}
+       // List<GraphNode> findPath(GameObject go)
+       // {
+       //     GraphNode closest = findClosestNode(go.Position);
+       // 
+       // }
 
         /// <summary>
         /// Finds the first node within a minimum distance of the given position

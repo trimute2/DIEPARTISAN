@@ -133,7 +133,7 @@ namespace GDAPSIIGame
 
 			//Update mouse texture's position
 			mState = Mouse.GetState();
-			ContainMouse(mState);
+			//ContainMouse(mState);
 			mousePos = mState.Position.ToVector2();
 
 			switch (gameState)
@@ -212,7 +212,7 @@ namespace GDAPSIIGame
 					//}
 
 					//Check if the player has died
-					if (Player.Instance.Health <= 0)
+					if (Player.Instance.Health <= 0 || PodManager.Instance.LevelTime > (lvl*lvl*10))
 					{
 						gameState = GameState.GameOver;
 						lvl = 1;
