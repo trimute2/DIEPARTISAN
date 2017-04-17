@@ -126,6 +126,7 @@ namespace GDAPSIIGame
 
 			//Update mouse texture's position
 			mState = Mouse.GetState();
+			ContainMouse(mState);
 			mousePos = mState.Position.ToVector2();
 
 			switch (gameState)
@@ -333,5 +334,26 @@ namespace GDAPSIIGame
 
 			base.Draw(gameTime);
         }
+
+		private void ContainMouse(MouseState mState)
+		{
+			if(mState.X < 0)
+			{
+				Mouse.SetPosition(0, mState.Y);
+			}
+			else if(mState.X > GraphicsDevice.Viewport.Width)
+			{
+				Mouse.SetPosition(GraphicsDevice.Viewport.Width, mState.Y);
+			}
+
+			if(mState.Y < 0)
+			{
+				Mouse.SetPosition(mState.X, 0);
+			}
+			else if (mState.Y > GraphicsDevice.Viewport.Height)
+			{
+				Mouse.SetPosition(mState.X, GraphicsDevice.Viewport.Height);
+			}
+		}
     }
 }
