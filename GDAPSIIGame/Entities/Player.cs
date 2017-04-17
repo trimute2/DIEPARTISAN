@@ -400,7 +400,7 @@ namespace GDAPSIIGame
 					this.Health -= (int)((Projectile)obj).Damage;
 				}
 			}
-            else if(obj is Enemy)
+            else if(obj is MeleeEnemy)
             {
                 if (!IsHurting)
                 {
