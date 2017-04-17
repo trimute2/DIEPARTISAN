@@ -164,7 +164,7 @@ namespace GDAPSIIGame
 
 					//Create the new map
 					MapManager.Instance.CreateMap(textureManager.RoomTextures["WallTexture"], textureManager.RoomTextures["FloorTexture"], lvl);
-
+					PodManager.Instance.Reset();
 					//Go to gameplay
 					gameState = GameState.GamePlay;
 					break;
@@ -301,6 +301,7 @@ namespace GDAPSIIGame
 							0);
 					spriteBatch.DrawString(font, PodManager.Instance.GlobalScore.ToString(), new Vector2(50, 50), Color.Red);
 					spriteBatch.DrawString(font, Player.Instance.ScoreMultiplier.ToString(), new Vector2(50, 100), Color.Red);
+					spriteBatch.DrawString(font, PodManager.Instance.LevelTime.ToString(), new Vector2(50, 150), Color.Red);
 					break;
 
 				//Drawing for pause menu

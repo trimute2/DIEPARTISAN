@@ -13,11 +13,13 @@ namespace GDAPSIIGame.Pods
 		static private PodManager instance;
         private List<Pod> pods;
 		private int globalScore;
+		private float levelTime;
 
 		private PodManager()
 		{
 			pods = new List<Pod>();
 			globalScore = 0;
+			levelTime = 0f;
 		}
 
 		public int GlobalScore
@@ -45,6 +47,19 @@ namespace GDAPSIIGame.Pods
 			}
 		}
 
+		public float LevelTime
+		{
+			get
+			{
+				return levelTime;
+			}
+		}
+
+		public void Reset()
+		{
+			levelTime = 0;
+		}
+
 		public void Add(Pod p)
         {
             pods.Add(p);
@@ -65,6 +80,7 @@ namespace GDAPSIIGame.Pods
 					}
 				}
 			}
+			levelTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
 		}
 	}
 }
