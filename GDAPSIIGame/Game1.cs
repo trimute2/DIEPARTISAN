@@ -212,7 +212,7 @@ namespace GDAPSIIGame
 					//}
 
 					//Check if the player has died
-					if (Player.Instance.Health <= 0)
+					if (Player.Instance.Health <= 0 || PodManager.Instance.LevelTime > (lvl*lvl*10))
 					{
 						gameState = GameState.GameOver;
 						lvl = 1;
