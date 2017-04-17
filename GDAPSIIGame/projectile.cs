@@ -59,7 +59,7 @@ namespace GDAPSIIGame
 
 		public override void OnCollision(ICollidable obj)
 		{
-			if (!(obj is Player && owner == Owners.Player) || !(obj is Enemy && owner == Owners.Enemy))
+			if (!(obj is Player && owner == Owners.Player) && !(obj is Enemy && owner == Owners.Enemy))
 			{
 				active = false;
 			}
