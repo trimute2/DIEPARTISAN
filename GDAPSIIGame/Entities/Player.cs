@@ -221,6 +221,7 @@ namespace GDAPSIIGame
 			if(varianceTimer > 0)
 			{
 				varianceTimer -= (float)gameTime.ElapsedGameTime.TotalMilliseconds/1000;
+                updateVariance = false;
 			}else
 			{
 				varianceMultiplier = 1.0f;
@@ -400,7 +401,7 @@ namespace GDAPSIIGame
 					this.Health -= (int)((Projectile)obj).Damage;
 				}
 			}
-            else if(obj is Enemy)
+            else if(obj is MeleeEnemy)
             {
                 if (!IsHurting)
                 {

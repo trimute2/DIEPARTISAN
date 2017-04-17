@@ -10,29 +10,50 @@ namespace GDAPSIIGame
 {
     class ChunkManager
     {
-		static private ChunkManager instance; 
-        private Chunk[] chunks;
-        private const int chunkNum = 400;
+		static private ChunkManager instance;
+		private List<Chunk> chunks;
+        private int chunkNum;
         /// <summary>
 		/// number of rows of chunks
 		/// </summary>
-		private const int numRows = 20;
+		private int numRows;
         /// <summary>
         /// number of chunks per row
         /// </summary>
-        private int cpr = 20;
+        private int cpr;
 
         private ChunkManager()
         {
-			chunks = new Chunk[chunkNum];
+			chunks = new List<Chunk>();
+			//orignal code before ability to resize
+			//int id = 0;
+			//for (int i = 0; i < numrows; i++)
+			//{
+			//	for (int j = 0; j < cpr; j++)
+			//	{
+			//		chunks[id] = new chunk(
+			//			new rectangle(640 * j, 640 * i, 640, 640),
+			//			cpr, id);
+			//		id++;
+			//	}
+			//}
+			Resize(20);
+		}
+
+		public void Resize(int size)
+		{
+			chunks.Clear();
+			chunkNum = size * size;
+			numRows = size;
+			cpr = size;
 			int ID = 0;
-			for(int i = 0; i < numRows; i++)
+			for (int i = 0; i < numRows; i++)
 			{
-				for (int j = 0; j< cpr; j++)
+				for (int j = 0; j < cpr; j++)
 				{
-					chunks[ID] = new Chunk(
+					chunks.Add(new Chunk(
 						new Rectangle(640 * j, 640 * i, 640, 640),
-						cpr, ID);
+						cpr, ID));
 					ID++;
 				}
 			}

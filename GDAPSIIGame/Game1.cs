@@ -6,6 +6,7 @@ using System;
 using GDAPSIIGame.Map;
 using GDAPSIIGame.Pods;
 using System.Threading;
+using GDAPSIIGame.Weapons;
 
 namespace GDAPSIIGame
 {
@@ -30,7 +31,7 @@ namespace GDAPSIIGame
 		MouseState mState;
 		Vector2 mouseScale;
 		SpriteFont font;
-		Weapons.WeaponManager weaponManager;
+		WeaponManager weaponManager;
 		TextureManager textureManager;
         int mapSize;
 
@@ -43,7 +44,8 @@ namespace GDAPSIIGame
         protected override void Initialize()
         {
 			this.IsMouseVisible = false;
-			//this.graphics.IsFullScreen = true;
+
+            //this.graphics.IsFullScreen = true;
 			//graphics.ToggleFullScreen();
 
 			//Initialize texture manager
@@ -62,7 +64,7 @@ namespace GDAPSIIGame
 			mapManager = MapManager.Instance;
 
 			//Initialize weapon manager
-			weaponManager = Weapons.WeaponManager.Instance;
+			weaponManager = WeaponManager.Instance;
 
             //Initialize ui manager
             uiManager = new UIManager();

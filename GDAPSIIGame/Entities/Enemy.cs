@@ -5,94 +5,61 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using GDAPSIIGame.Interface;
 
 namespace GDAPSIIGame.Entities
 {
-    class Enemy : Entity
+    abstract class Enemy : Entity
     {
-		private bool awake;
-		private bool hit;
-		private int scoreValue;
+        //Fields
+        private bool awake;
+        private bool hit;
+        private int scoreValue;
 
-		public bool Awake
+        /// <summary>
+        /// If the enemy is activated by the player
+        /// </summary>
+        public bool Awake
+        {
+            get { return awake; }
+            set { awake = value; }
+        }
+
+        public int Score
+        {
+            get
+            {
+                if (hit)
+                {
+                    hit = false;
+                    return scoreValue;
+                }
+                return 0;
+            }
+        }
+
+		internal bool Hit
 		{
-			get { return awake; }
-			set { awake = value; }
+			get { return hit; }
+			set { hit = value; }
 		}
 
-		public int score
+		public override void Damage(int dmg)
 		{
-			get
-			{
-				if (hit)
-				{
-					hit = false;
-					return scoreValue;
-				}
-				return 0;
-			}
+			Awake = true;
+			Hit = true;
+			Player.Instance.updateMultiplier(this);
+			base.Damage(dmg);
 		}
 
 		public Enemy(int health, int moveSpeed, Texture2D texture, Vector2 position, Rectangle boundingBox) : base(health, moveSpeed, texture, position, boundingBox)
         {
-			awake = false;
-			scoreValue = 5;
+            awake = false;
+            scoreValue = 5;
         }
-
 		public Enemy(int health, int moveSpeed, Texture2D texture, Vector2 position, Rectangle boundingBox, int scoreValue) : base(health, moveSpeed, texture, position, boundingBox)
 		{
 			awake = false;
 			this.scoreValue = scoreValue;
 		}
-
-		public override void Update(GameTime gameTime)
-        {
-			if (!awake)
-			{
-				if (Vector2.Distance(
-					Player.Instance.BoundingBox.Center.ToVector2(),
-					this.BoundingBox.Center.ToVector2()) <= 192)
-				{
-					this.awake = true;
-				}
-			}
-			else
-			{
-				Move(Player.Instance);
-			}
-			base.Update(gameTime);
-        }
-
-		public override void Damage(int dmg)
-		{
-			awake = true;
-			hit = true;
-			Player.Instance.updateMultiplier(this);
-			base.Damage(dmg);
-		}
-
-		public void Move(GameObject thingToMoveTo)
-        {
-            Vector2 diff = Position - thingToMoveTo.Position;
-            if (diff.X > 0)
-            {
-                X--;
-            }
-            else  
-            {
-                X++;
-            }
-
-            if (diff.Y > 0)
-            {
-                Y--;
-            }
-            else
-            {
-                Y++;
-            }
-        }
-
-    }
+	}
 }

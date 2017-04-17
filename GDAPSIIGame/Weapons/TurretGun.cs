@@ -8,52 +8,28 @@ using Microsoft.Xna.Framework.Graphics;
 using GDAPSIIGame.Map;
 using Microsoft.Xna.Framework.Input;
 
-namespace GDAPSIIGame
+namespace GDAPSIIGame.Weapons
 {
-	
-    class Pistol : Weapons.Weapon
-    {
-        //Fields
-        private float fireRate;
-        private float clipSize;
-		private float clip;
-        private float reloadSpeed;
-        private float fired;
-		private float reload;
+	class TurretGun : Weapon
+	{
+		//Fields
+		private float fireRate;
+		private float reloadSpeed;
+		private float fired;
 		private Vector2 origin;
 		private Vector2 bulletOffset;
 		private Owners owner;
 		private SpriteEffects effects;
 
-        public Pistol(ProjectileType pT, Texture2D texture, Vector2 position, Rectangle boundingBox, float fireRate, float clipSize, float reloadSpeed, Vector2 origin, Owners owner)
+		public TurretGun(ProjectileType pT, Texture2D texture, Vector2 position, Rectangle boundingBox, float fireRate, Vector2 origin, Owners owner)
 			: base(pT, texture, position, boundingBox)
         {
-            this.fireRate = fireRate; //How fast until the weapon can fire again
-            this.clipSize = clipSize; //How large the clip is
-			this.clip = clipSize; //The current amount of bullets in the clip
-            this.reloadSpeed = reloadSpeed; //How long it takes to reload
-			this.reload = 0; //Timer for whether the uesr is reloading
+			this.fireRate = fireRate; //How fast until the weapon can fire again
 			this.fired = 0; //Whether the weapon has fired
 			this.origin = origin; //The origin point of the weapon (where the player holds it)
-			this.bulletOffset = new Vector2(-boundingBox.Width/2, boundingBox.Height/4);
+			this.bulletOffset = new Vector2(-boundingBox.Width / 2, boundingBox.Height / 4);
 			this.owner = owner;
 			effects = SpriteEffects.None;
-        }
-
-		/// <summary>
-		/// Whether the weapon is reloading or not
-		/// </summary>
-		public bool Reload
-		{
-			get { return reload > 0; }
-			private set
-			{
-				if (value)
-				{
-					reload = reloadSpeed;
-				}
-				else reload = 0;
-			}
 		}
 
 		/// <summary>
@@ -73,7 +49,7 @@ namespace GDAPSIIGame
 		}
 
 		public override void Update(GameTime gameTime)
-        {
+		{
 			switch (Dir)
 			{
 				case Weapons.Weapon_Dir.UpEast:
@@ -94,7 +70,7 @@ namespace GDAPSIIGame
 					break;
 				case Weapons.Weapon_Dir.DownLeft:
 					this.X -= 20;
-					this.bulletOffset = new Vector2(-BoundingBox.Width , BoundingBox.Height / 4);
+					this.bulletOffset = new Vector2(-BoundingBox.Width, BoundingBox.Height / 4);
 					break;
 				case Weapons.Weapon_Dir.DownWest:
 					this.X -= 20;
@@ -120,7 +96,7 @@ namespace GDAPSIIGame
 
 			//Control when user can fire again after just firing
 			if (Fired)
-            {
+			{
 				//Increment fireTimer
 				fired -= (float)gameTime.ElapsedGameTime.TotalSeconds;
 				//Check if fireTimer meets the threshold
@@ -129,25 +105,13 @@ namespace GDAPSIIGame
 					//Allow the user to fire again and reset timer
 					Fired = false;
 				}
-            }
-
-			if (Reload)
-			{
-				//Inrement reloadTimer
-				reload -= (float)gameTime.ElapsedGameTime.TotalSeconds;
-				//Check if reloadTimer meets the threshold
-				if (!Reload)
-				{
-					//Reload the clip
-					clip = clipSize;
-				}
 			}
 
 			base.Update(gameTime);
 		}
 
-        public override void Draw(SpriteBatch spriteBatch)
-        {
+		public override void Draw(SpriteBatch spriteBatch)
+		{
 			switch (Dir)
 			{
 				case Weapons.Weapon_Dir.UpEast:
@@ -183,8 +147,8 @@ namespace GDAPSIIGame
 			}
 
 			spriteBatch.Draw(this.Texture,
-                Camera.Instance.GetViewportPosition(this),
-                null,
+				Camera.Instance.GetViewportPosition(this),
+				null,
 				null,
 				origin,
 				Angle,
@@ -194,37 +158,30 @@ namespace GDAPSIIGame
 		}
 
 		/// <summary>
-		/// Tell the weapon it is time to reload
-		/// </summary>
-		public override void ReloadWeapon()
-		{
-			if (!Reload && clip < clipSize)
-			{
-				Reload = true;
-			}
-		}
-
-		/// <summary>
 		/// Fire a bullet from the weapon
 		/// </summary>
 		/// <param name="position">The position the bullet is spawned at</param>
 		/// <param name="direction">The speed that the bullet is moving</param>
-        public override void Fire(Vector2 direction, MouseState mouseState, MouseState prevMouseState)
-        {
+		public override void Fire(Vector2 direction, MouseState mouseState, MouseState prevMouseState)
+		{
 			//Check if click condition is met
 			if (mouseState.LeftButton == ButtonState.Pressed && prevMouseState.LeftButton == ButtonState.Released)
 			{
 				//Check user can fire or if they need to reload
-				if (!Fired && !Reload && clip > 0)
+				if (!Fired)
 				{
 					Fired = true;
-					clip--;
 					Matrix rotationMatrix = Matrix.CreateRotationZ(Angle);
 					Vector2 bulletPosition = Vector2.Transform(bulletOffset, rotationMatrix);
 
 					ProjectileManager.Instance.Clone(ProjType, Position + bulletPosition, direction, owner);
 				}
 			}
-        }
-    }
+		}
+
+		public override void ReloadWeapon()
+		{
+			throw new NotImplementedException();
+		}
+	}
 }

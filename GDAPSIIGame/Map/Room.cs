@@ -134,8 +134,8 @@ namespace GDAPSIIGame.Map
                             int moveSpeed = 1;
 
                             //Create new enemy
-                            Enemy newEnemy = 
-                                new Enemy(
+                            MeleeEnemy newEnemy = 
+                                new MeleeEnemy(
                                     health, 
                                     moveSpeed, 
                                     enemyTexture, 
