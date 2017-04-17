@@ -433,6 +433,8 @@ namespace GDAPSIIGame
 			keyState = Keyboard.GetState();
 			prevKeyState = Keyboard.GetState();
 			Health = 100;
+			this.X = 120;
+			this.Y = 180;
 
 			hurting = 0;
 			hurtBlink = 0;

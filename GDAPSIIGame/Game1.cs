@@ -33,6 +33,8 @@ namespace GDAPSIIGame
 		SpriteFont font;
 		WeaponManager weaponManager;
 		TextureManager textureManager;
+        int mapSize;
+		int lvl;
 
 		public Game1()
         {
@@ -44,6 +46,7 @@ namespace GDAPSIIGame
         {
 			this.IsMouseVisible = false;
 
+			lvl = 1;
             //this.graphics.IsFullScreen = true;
 			//graphics.ToggleFullScreen();
 
@@ -81,6 +84,8 @@ namespace GDAPSIIGame
 			spriteBatch = new SpriteBatch(GraphicsDevice);
 
 			List<Thread> threads = new List<Thread>();
+
+            mapSize = 1;
 
 			//Make all the threads
 			Thread tex = new Thread(() => textureManager.LoadContent(Content) );
@@ -158,8 +163,8 @@ namespace GDAPSIIGame
 					chunkManager.DeleteWalls();
 
 					//Create the new map
-					MapManager.Instance.CreateMap(textureManager.RoomTextures["WallTexture"], textureManager.RoomTextures["FloorTexture"]);
-
+					MapManager.Instance.CreateMap(textureManager.RoomTextures["WallTexture"], textureManager.RoomTextures["FloorTexture"], lvl);
+					PodManager.Instance.Reset();
 					//Go to gameplay
 					gameState = GameState.GamePlay;
 					break;
@@ -201,17 +206,26 @@ namespace GDAPSIIGame
 					}
 
 					//Check if the player has beat the levels
-					if (entityManager.BeatLevel)
-					{
-						gameState = GameState.LoadingScreen;
-					}
+					//if (entityManager.BeatLevel)
+					//{
+					//	gameState = GameState.LoadingScreen;
+					//}
 
 					//Check if the player has died
 					if (Player.Instance.Health <= 0)
 					{
 						gameState = GameState.GameOver;
+						lvl = 1;
 					}
 
+					if(PodManager.Instance.Count == 0)
+					{
+						if(lvl < 5)
+						{
+							lvl++;
+						}
+						gameState = GameState.LoadingScreen;
+					}
 					break;
 
 				//When the game is paused
@@ -287,6 +301,7 @@ namespace GDAPSIIGame
 							0);
 					spriteBatch.DrawString(font, PodManager.Instance.GlobalScore.ToString(), new Vector2(50, 50), Color.Red);
 					spriteBatch.DrawString(font, Player.Instance.ScoreMultiplier.ToString(), new Vector2(50, 100), Color.Red);
+					spriteBatch.DrawString(font, PodManager.Instance.LevelTime.ToString(), new Vector2(50, 150), Color.Red);
 					break;
 
 				//Drawing for pause menu

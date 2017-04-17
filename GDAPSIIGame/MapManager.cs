@@ -53,9 +53,9 @@ namespace GDAPSIIGame
 		}
 
 		//Methods
-		public void CreateMap(Texture2D wallTexture, Texture2D floorTexture)
+		public void CreateMap(Texture2D wallTexture, Texture2D floorTexture, int mapSize)
 		{
-			currMap = new Map.Map();
+			currMap = new Map.Map(mapSize);
 			currMap.initMap(floorTexture, wallTexture);
 		}
 

@@ -243,3 +243,5 @@ ModelManifest.xml
 
 # FAKE - F# Make
 .fake/
+/GDAPSIIGame/Graph/Graph.cs
+/GDAPSIIGame/Graph/GraphNode.cs

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GDAPSIIGame.Interface;
+using GDAPSIIGame.Entities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -58,7 +59,7 @@ namespace GDAPSIIGame
 
 		public override void OnCollision(ICollidable obj)
 		{
-			if (!(obj is Player && owner == Owners.Player))
+			if (!(obj is Player && owner == Owners.Player) && !(obj is Enemy && owner == Owners.Enemy))
 			{
 				active = false;
 			}

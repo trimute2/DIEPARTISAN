@@ -43,7 +43,15 @@ namespace GDAPSIIGame.Entities
 			set { hit = value; }
 		}
 
-        public Enemy(int health, int moveSpeed, Texture2D texture, Vector2 position, Rectangle boundingBox) : base(health, moveSpeed, texture, position, boundingBox)
+		public override void Damage(int dmg)
+		{
+			Awake = true;
+			Hit = true;
+			Player.Instance.updateMultiplier(this);
+			base.Damage(dmg);
+		}
+
+		public Enemy(int health, int moveSpeed, Texture2D texture, Vector2 position, Rectangle boundingBox) : base(health, moveSpeed, texture, position, boundingBox)
         {
             awake = false;
             scoreValue = 5;

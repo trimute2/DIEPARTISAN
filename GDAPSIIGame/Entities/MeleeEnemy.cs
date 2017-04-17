@@ -36,14 +36,6 @@ namespace GDAPSIIGame.Entities
 			base.Update(gameTime);
         }
 
-		public override void Damage(int dmg)
-		{
-			Awake = true;
-			Hit = true;
-			Player.Instance.updateMultiplier(this);
-			base.Damage(dmg);
-		}
-
 		public void Move(GameObject thingToMoveTo)
         {
             Vector2 diff = Position - thingToMoveTo.Position;
