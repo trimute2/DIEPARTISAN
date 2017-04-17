@@ -13,11 +13,11 @@ namespace GDAPSIIGame.Map
     class Map
     {
         List<Room> rooms = new List<Room>();
-        public Map()
+        public Map(int mapSize)
         {
             //TODO: randomize choice of rooms
             String[] files = new String[] { "testRoom1.txt", "testRoom2.txt" };
-            generateMap(files, this);
+            generateMap(files, this, mapSize);
         }
 
         public void Add(Room r)
@@ -33,9 +33,8 @@ namespace GDAPSIIGame.Map
             }
         }
 
-        public static void generateMap(String[] filenames, Map m)
+        public static void generateMap(String[] filenames, Map m, int mapSize)
         {
-            int mapSize = 2;
             Random randy = new Random();
             string filename;
             for (int i = 0; i < mapSize; i++)

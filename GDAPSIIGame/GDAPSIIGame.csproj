@@ -46,6 +46,8 @@
     <Compile Include="Game1.cs" />
     <Compile Include="Entities\Player.cs" />
     <Compile Include="GameObject.cs" />
+    <Compile Include="Graph\Graph.cs" />
+    <Compile Include="Graph\GraphNode.cs" />
     <Compile Include="Interface\ICollidable.cs" />
     <Compile Include="MapManager.cs" />
     <Compile Include="Map\Camera.cs" />

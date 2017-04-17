@@ -32,6 +32,7 @@ namespace GDAPSIIGame
 		SpriteFont font;
 		Weapons.WeaponManager weaponManager;
 		TextureManager textureManager;
+        int mapSize;
 
 		public Game1()
         {
@@ -79,6 +80,8 @@ namespace GDAPSIIGame
 			spriteBatch = new SpriteBatch(GraphicsDevice);
 
 			List<Thread> threads = new List<Thread>();
+
+            mapSize = 2;
 
 			//Make all the threads
 			Thread tex = new Thread(() => textureManager.LoadContent(Content) );
@@ -156,7 +159,7 @@ namespace GDAPSIIGame
 					chunkManager.DeleteWalls();
 
 					//Create the new map
-					MapManager.Instance.CreateMap(textureManager.RoomTextures["WallTexture"], textureManager.RoomTextures["FloorTexture"]);
+					MapManager.Instance.CreateMap(textureManager.RoomTextures["WallTexture"], textureManager.RoomTextures["FloorTexture"], mapSize);
 
 					//Go to gameplay
 					gameState = GameState.GamePlay;
