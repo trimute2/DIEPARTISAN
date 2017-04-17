@@ -133,7 +133,7 @@ namespace GDAPSIIGame
 
 			//Update mouse texture's position
 			mState = Mouse.GetState();
-			ContainMouse(mState);
+			//ContainMouse(mState);
 			mousePos = mState.Position.ToVector2();
 
 			switch (gameState)
