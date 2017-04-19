@@ -162,6 +162,8 @@ namespace GDAPSIIGame
 					entityManager.RemoveEnemies();
 					chunkManager.DeleteWalls();
 
+					chunkManager.Resize(lvl);
+					chunkManager.Add(Player.Instance);
 					//Create the new map
 					MapManager.Instance.CreateMap(textureManager.RoomTextures["WallTexture"], textureManager.RoomTextures["FloorTexture"], lvl);
 					PodManager.Instance.Reset();

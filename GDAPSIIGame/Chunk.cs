@@ -173,7 +173,7 @@ namespace GDAPSIIGame
 		}
 
 		/// <summary>
-		/// gets objects that in this chunk that overlaos with another chunk
+		/// gets objects in this chunk that overlap with another chunk
 		/// </summary>
 		/// <param name="ch">a chunk to check against</param>
 		/// <returns>a list of objects that collide with both chunks</returns>

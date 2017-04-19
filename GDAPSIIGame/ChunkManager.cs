@@ -21,6 +21,10 @@ namespace GDAPSIIGame
         /// number of chunks per row
         /// </summary>
         private int cpr;
+		private Wall top;
+		private Wall right;
+		private Wall bottom;
+		private Wall left;
 
         private ChunkManager()
         {
@@ -46,6 +50,21 @@ namespace GDAPSIIGame
 			chunkNum = size * size;
 			numRows = size;
 			cpr = size;
+			int length =  640 * size;
+			Texture2D tx = null;
+			if (TextureManager.Instance.RoomTextures.ContainsKey("WallTexture"))
+			{
+				tx = TextureManager.Instance.RoomTextures["WallTexture"];
+			}
+			top = new Wall(tx, new Vector2(0, -32),
+				new Rectangle(0, -32, length, 32));
+			right = new Wall(tx, new Vector2(length, 0),
+				new Rectangle(length, 0, 32, length));
+			bottom = new Wall(tx, new Vector2(0, length),
+				new Rectangle(0, length, length, 32));
+			left = new Wall(tx, new Vector2(-32, 0),
+				new Rectangle(-32, 0, 32, length));
+
 			int ID = 0;
 			for (int i = 0; i < numRows; i++)
 			{
@@ -145,6 +164,34 @@ namespace GDAPSIIGame
 			}
 		}
 
+		public void Bound()
+		{
+			foreach(Chunk c in chunks)
+			{
+				foreach(GameObject obj in c.Objects)
+				{
+					if(!(obj is Wall))
+					{
+						if (obj.Collide(top))
+						{
+							obj.OnCollision(top);
+						}else if (obj.Collide(bottom))
+						{
+							obj.OnCollision(bottom);
+						}
+						if (obj.Collide(left))
+						{
+							obj.OnCollision(left);
+						}else if (obj.Collide(right))
+						{
+							obj.OnCollision(right);
+						}
+					}
+				}
+			}
+
+		}
+
 		/// <summary>
 		/// checks objects that overlap one or more chunks
 		/// </summary>
@@ -195,13 +242,17 @@ namespace GDAPSIIGame
 
 		public void Update()
 		{
+			Bound();
 			ChunkIt();
 			foreach(Chunk chunk in chunks)
 			{
 				chunk.RemoveInactive();
 				chunk.CollideObjects();
 			}
-			ChunkOverlap();
+			if (chunkNum > 1)
+			{
+				ChunkOverlap();
+			}
 		}
 
 		public void DeleteWalls()
