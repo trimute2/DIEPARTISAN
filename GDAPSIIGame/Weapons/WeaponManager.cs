@@ -14,26 +14,50 @@ namespace GDAPSIIGame.Weapons
 	{
 		//Fields-----------------
 		static private WeaponManager instance;
-		Pistol pistol;
-		Rifle rifle;
-		TurretGun turretGun;
+		Texture2D playerTexture;
 
 		//Weapons
 		public Pistol Pistol
-		{ get { return pistol; } }
-
-		public Rifle Rifle
-		{ get { return rifle; } }
-
-		public TurretGun TurretGun
-		{ get {
-				return  new TurretGun(ProjectileType.TURRET,
+		{
+			get
+			{
+				return new Pistol(ProjectileType.PISTOL,
 				TextureManager.Instance.WeaponTextures["PistolTexture"],
 				Vector2.Zero,
-				new Rectangle(0, 0, 20, 60),
+				new Rectangle(0, 0, 20, 30),
+				0.2f, 100f, 0.5f,
+				new Vector2(playerTexture.Bounds.X + playerTexture.Bounds.Width, playerTexture.Bounds.Top + playerTexture.Bounds.Height / 2),
+				Owners.Player);
+			}
+		}
+
+		public Rifle Rifle
+		{
+			get
+			{
+				return new Rifle(ProjectileType.RIFLE,
+				TextureManager.Instance.WeaponTextures["PistolTexture"],
+				Vector2.Zero,
+				new Rectangle(0, 0, 20, 50),
+				0.2f, 100f, 0.5f,
+				new Vector2(playerTexture.Bounds.X + playerTexture.Bounds.Width, playerTexture.Bounds.Top + playerTexture.Bounds.Height / 2),
+				Owners.Player);
+			}
+		}
+
+		public TurretGun TurretGun
+		{
+			get
+			{
+				return new TurretGun(ProjectileType.TURRET,
+				TextureManager.Instance.WeaponTextures["PistolTexture"],
+				Vector2.Zero,
+				new Rectangle(0, 0, 10, 30),
 				1f,
 				Vector2.Zero,
-				Owners.Enemy); ; } }
+				Owners.Enemy);
+			}
+		}
 
 		//Methods----------------
 
@@ -41,28 +65,11 @@ namespace GDAPSIIGame.Weapons
 		/// Singleton Constructor
 		/// </summary>
 		private WeaponManager()
-		{
-			pistol = null;
-			rifle = null;
-		}
+		{ }
 
 		public void LoadContent(ContentManager Content)
 		{
-			Texture2D playerTexture = TextureManager.Instance.PlayerTextures["PlayerTexture"];
-			pistol = new Pistol(ProjectileType.PISTOL,
-				TextureManager.Instance.WeaponTextures["PistolTexture"],
-				Vector2.Zero,
-				new Rectangle(0, 0, 20, 30),
-				0.2f, 100f, 0.5f,
-				new Vector2(playerTexture.Bounds.X + playerTexture.Bounds.Width, playerTexture.Bounds.Top + playerTexture.Bounds.Height / 2),
-				Owners.Player);
-			rifle = new Rifle(ProjectileType.RIFLE,
-				TextureManager.Instance.WeaponTextures["PistolTexture"],
-				Vector2.Zero,
-				new Rectangle(0, 0, 20, 50),
-				0.2f, 100f, 0.5f,
-				new Vector2(playerTexture.Bounds.X + playerTexture.Bounds.Width, playerTexture.Bounds.Top + playerTexture.Bounds.Height / 2),
-				Owners.Player);
+			playerTexture = TextureManager.Instance.PlayerTextures["PlayerTexture"];
 		}
 
 		/// <summary>
