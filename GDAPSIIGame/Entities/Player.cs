@@ -398,7 +398,11 @@ namespace GDAPSIIGame
 			{
 				if (((Projectile)obj).Owner != Owners.Player)
 				{
-					this.Health -= (int)((Projectile)obj).Damage;
+					if(IsHurting == false)
+					{
+						this.Health -= (int)((Projectile)obj).Damage;
+						IsHurting = true;
+					}
 				}
 			}
             else if(obj is MeleeEnemy)
