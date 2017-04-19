@@ -135,7 +135,7 @@ namespace GDAPSIIGame.Weapons
 				null,
 				null,
 				origin,
-				Angle,
+				Angle-((float)Math.PI/2),
 				this.Scale,
 				Color.White,
 				effects);
