@@ -18,7 +18,8 @@ namespace GDAPSIIGame.Map
         FLOOR,
         WALL,
         ENEMY,
-        PLAYER
+        PLAYER,
+		TURRET
     }
 
     /// <summary>
@@ -134,8 +135,8 @@ namespace GDAPSIIGame.Map
                             int moveSpeed = 1;
 
                             //Create new enemy
-                            TurretEnemy newEnemy = 
-                                new TurretEnemy(
+                            MeleeEnemy newEnemy = 
+                                new MeleeEnemy(
                                     health, 
                                     moveSpeed, 
                                     enemyTexture, 
@@ -151,6 +152,33 @@ namespace GDAPSIIGame.Map
                             ChunkManager.Instance.Add(newEnemy);
 							pod.Add(newEnemy);
                             break;
+
+						case TileType.TURRET:
+							Vector2 currPos3 =
+							   new Vector2(
+								   position.X + tileSize * i,
+								   position.Y + tileSize * j);
+							int health2 = 3;
+							int moveSpeed2 = 1;
+
+							//Create new enemy
+							TurretEnemy turret =
+								new TurretEnemy(
+									health2,
+									moveSpeed2,
+									enemyTexture,
+									currPos3,
+									new Rectangle(
+										(int)currPos3.X,
+										(int)currPos3.Y,
+										enemySpriteWidth,
+										enemySpriteHeight));
+
+							//Add Enemy to game
+							EntityManager.Instance.Add(turret);
+							ChunkManager.Instance.Add(turret);
+							pod.Add(turret);
+							break;
 
                         case TileType.PLAYER:
                             //TODO: Decide if we want to do anything to player here
