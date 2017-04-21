@@ -45,7 +45,7 @@ namespace GDAPSIIGame
         protected override void Initialize()
         {
 			this.IsMouseVisible = false;
-
+			
 			lvl = 1;
             //this.graphics.IsFullScreen = true;
 			//graphics.ToggleFullScreen();
@@ -94,7 +94,7 @@ namespace GDAPSIIGame
 			Thread weap = new Thread(() => weaponManager.LoadContent(Content));
 			weap.Name = "Weapons";
 			threads.Add(weap);
-			Thread ent = new Thread(() => entityManager.LoadContent(Content));
+			Thread ent = new Thread(() => entityManager.LoadContent(Content, GraphicsDevice));
 			ent.Name = "Entities";
 			threads.Add(ent);
 			Thread proj = new Thread(() => projectileManager.LoadContent(Content));
@@ -135,6 +135,11 @@ namespace GDAPSIIGame
 			mState = Mouse.GetState();
 			//ContainMouse(mState);
 			mousePos = mState.Position.ToVector2();
+
+			if(kbState.IsKeyDown(Keys.F12) && previousKbState.IsKeyUp(Keys.F12))
+			{
+				graphics.ToggleFullScreen();
+			}
 
 			switch (gameState)
             {
