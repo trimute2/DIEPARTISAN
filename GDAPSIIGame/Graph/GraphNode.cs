@@ -9,10 +9,19 @@ namespace GDAPSIIGame.Graph
 {
     class GraphNode
     {
-        private int uniqueID;
+        private float uniqueID;
         private Vector2 position;
+        private List<GraphNode> neighbors;
 
-        public int UniqueID
+        public GraphNode(Vector2 position)
+        {
+            this.position = position;
+            float x = position.X;
+            float y = position.Y;
+            this.uniqueID = (.5f) * (x + y) * (x + y + 1) + y;
+        }
+
+        public float UniqueID
         {
             get { return uniqueID; }
         }
