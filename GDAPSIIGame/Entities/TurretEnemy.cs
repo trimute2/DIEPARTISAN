@@ -52,11 +52,15 @@ namespace GDAPSIIGame.Entities
             {
 				Player p = Player.Instance;
 
-				float num = RotateTowardsPoint(this.X, this.Y, p.X+(p.BoundingBox.Width/2), p.Y+(p.BoundingBox.Height/2), gun.Angle, 0.01f);
+				float newAngle = RotateTowardsPoint(this.X, this.Y, p.X+(p.BoundingBox.Width/2), p.Y+(p.BoundingBox.Height/2), gun.Angle, 0.02f);
+				gun.Angle = newAngle;
 
-				gun.Angle = num;
-
-				Shoot(Player.Instance);
+				float destinationRotation = (float)(Math.Atan2(Y - p.Y, X - p.X) + Math.PI);
+				//Shoot when only in a certain distance of player
+				if (destinationRotation < newAngle + (Math.PI / 6) && destinationRotation > newAngle - (Math.PI / 6))
+				{
+					Shoot(Player.Instance);
+				}
             }
 
 			//Update weapon
@@ -92,6 +96,10 @@ namespace GDAPSIIGame.Entities
 			}
         }
 
+		/// <summary>
+		/// Does the math to rotate towards another target at a given speed
+		/// </summary>
+		/// <returns>The new angle</returns>
 		private float RotateTowardsPoint(float srcX, float srcY, float targetX, float targetY, float currRotation, float speed)
 		{
 			float destinationRotation = (float)(Math.Atan2(srcY - targetY, srcX - targetX) + Math.PI);
