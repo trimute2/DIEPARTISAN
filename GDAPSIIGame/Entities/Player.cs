@@ -447,6 +447,9 @@ namespace GDAPSIIGame
 			effect = new SpriteEffects();
 			timeMult = 0;
 			firing = 0;
+			varianceMultiplier = 0;
+			varianceTimer = 0;
+			focusMultiplier = 0;
 		}
 
 	}

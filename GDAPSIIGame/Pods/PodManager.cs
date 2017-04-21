@@ -60,6 +60,11 @@ namespace GDAPSIIGame.Pods
 			levelTime = 0;
 		}
 
+		public void FullReset()
+		{
+			globalScore = 0;
+		}
+
 		public void Add(Pod p)
         {
             pods.Add(p);
