@@ -156,7 +156,7 @@ namespace GDAPSIIGame
 				case GameState.NewGame:
 					//Reset the player character
 					Player.Instance.ResetPlayer();
-
+					PodManager.Instance.FullReset();
 					//Go to loading screen to create a new level
 					gameState = GameState.LoadingScreen;
 					break;
@@ -247,8 +247,12 @@ namespace GDAPSIIGame
 
 				//When the Player dies
 				case GameState.GameOver:
-					gameState = GameState.Menu;
-					break;
+					kbState = Keyboard.GetState();
+					if (kbState.IsKeyDown(Keys.Enter) && !previousKbState.IsKeyDown(Keys.Enter))
+                    {
+                        gameState = GameState.NewGame;
+                    }
+                    break;
 			}
 		}
 
@@ -339,6 +343,11 @@ namespace GDAPSIIGame
 
 				//Drawing for game over
 				case GameState.GameOver:
+
+                    spriteBatch.Draw(textureManager.EnemyTextures["EnemyTexture"], new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
+					spriteBatch.DrawString(font, PodManager.Instance.GlobalScore.ToString(), new Vector2(50, 50), Color.Red);
+					spriteBatch.DrawString(font, PodManager.Instance.LevelTime.ToString(), new Vector2(50, 150), Color.Red);
+
 					//Draw the mouse texture
 					spriteBatch.Draw(mouseTex,
 							mousePos,
@@ -349,6 +358,7 @@ namespace GDAPSIIGame
 							mouseScale,
 							null,
 							0);
+
 					break;
 
 			}
