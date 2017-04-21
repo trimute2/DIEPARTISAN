@@ -45,7 +45,7 @@ namespace GDAPSIIGame
         protected override void Initialize()
         {
 			this.IsMouseVisible = false;
-
+			
 			lvl = 1;
             //this.graphics.IsFullScreen = true;
 			//graphics.ToggleFullScreen();
@@ -94,7 +94,7 @@ namespace GDAPSIIGame
 			Thread weap = new Thread(() => weaponManager.LoadContent(Content));
 			weap.Name = "Weapons";
 			threads.Add(weap);
-			Thread ent = new Thread(() => entityManager.LoadContent(Content));
+			Thread ent = new Thread(() => entityManager.LoadContent(Content, GraphicsDevice));
 			ent.Name = "Entities";
 			threads.Add(ent);
 			Thread proj = new Thread(() => projectileManager.LoadContent(Content));
@@ -136,6 +136,11 @@ namespace GDAPSIIGame
 			//ContainMouse(mState);
 			mousePos = mState.Position.ToVector2();
 
+			if(kbState.IsKeyDown(Keys.F12) && previousKbState.IsKeyUp(Keys.F12))
+			{
+				graphics.ToggleFullScreen();
+			}
+
 			switch (gameState)
             {
 				//The menu of the game
@@ -151,7 +156,7 @@ namespace GDAPSIIGame
 				case GameState.NewGame:
 					//Reset the player character
 					Player.Instance.ResetPlayer();
-
+					PodManager.Instance.FullReset();
 					//Go to loading screen to create a new level
 					gameState = GameState.LoadingScreen;
 					break;
@@ -242,8 +247,12 @@ namespace GDAPSIIGame
 
 				//When the Player dies
 				case GameState.GameOver:
-					gameState = GameState.Menu;
-					break;
+					kbState = Keyboard.GetState();
+					if (kbState.IsKeyDown(Keys.Enter) && !previousKbState.IsKeyDown(Keys.Enter))
+                    {
+                        gameState = GameState.NewGame;
+                    }
+                    break;
 			}
 		}
 
@@ -334,6 +343,11 @@ namespace GDAPSIIGame
 
 				//Drawing for game over
 				case GameState.GameOver:
+
+                    spriteBatch.Draw(textureManager.EnemyTextures["EnemyTexture"], new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
+					spriteBatch.DrawString(font, PodManager.Instance.GlobalScore.ToString(), new Vector2(50, 50), Color.Red);
+					spriteBatch.DrawString(font, PodManager.Instance.LevelTime.ToString(), new Vector2(50, 150), Color.Red);
+
 					//Draw the mouse texture
 					spriteBatch.Draw(mouseTex,
 							mousePos,
@@ -344,6 +358,7 @@ namespace GDAPSIIGame
 							mouseScale,
 							null,
 							0);
+
 					break;
 
 			}
