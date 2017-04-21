@@ -52,7 +52,7 @@ namespace GDAPSIIGame.Weapons
 				return new TurretGun(ProjectileType.TURRET,
 				TextureManager.Instance.WeaponTextures["PistolTexture"],
 				Vector2.Zero,
-				new Rectangle(0, 0, 10, 30),
+				new Rectangle(0, 0, 10, 20),
 				1f,
 				Vector2.Zero,
 				Owners.Enemy);

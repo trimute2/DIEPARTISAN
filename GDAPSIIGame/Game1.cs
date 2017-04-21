@@ -11,8 +11,8 @@ using GDAPSIIGame.Weapons;
 namespace GDAPSIIGame
 {
     enum GameState { Menu, NewGame, LoadingScreen, GamePlay, GameOver, PauseMenu}
-    
-    public class Game1 : Game
+
+	public class Game1 : Game
     {
         //Fields
         EntityManager entityManager;

@@ -27,7 +27,7 @@ namespace GDAPSIIGame.Graph
         /// <param name="newNode">Node to add</param>
         void Add(GraphNode newNode)
         {
-            nodes.Add(newNode.UniqueID, newNode);
+            //nodes.Add(newNode.UniqueID, newNode);
         }
 
         /// <summary>

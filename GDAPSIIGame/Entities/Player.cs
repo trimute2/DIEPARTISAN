@@ -14,6 +14,8 @@ using GDAPSIIGame.Interface;
 
 namespace GDAPSIIGame
 {
+	enum PlayerState { In, GamePlay, Out }
+
 	class Player : Entity
 	{
 		//Fields

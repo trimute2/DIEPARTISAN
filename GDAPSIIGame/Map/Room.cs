@@ -117,8 +117,6 @@ namespace GDAPSIIGame.Map
             int roomSize = 10;
             int enemySpriteWidth = 32;
             int enemySpriteHeight = 32;
-            int wallSpriteWidth = 32;
-            int wallSpriteHeight = 32;
 			Pod pod = new Pod();
             for (int i = 0; i < roomSize; i++)
             {

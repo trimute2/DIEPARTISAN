@@ -8,18 +8,23 @@ using Microsoft.Xna.Framework.Graphics;
 using GDAPSIIGame.Interface;
 using GDAPSIIGame.Weapons;
 using Microsoft.Xna.Framework.Input;
+using GDAPSIIGame.Map;
 
 namespace GDAPSIIGame.Entities
 {
     class TurretEnemy : Enemy
     {
 		TurretGun gun;
+		Vector2 origin;
+		Vector2 drawPos;
 
 		/// <summary>
 		/// Create the a TurretEnemy with the default score value
 		/// </summary>
 		public TurretEnemy(int health, int moveSpeed, Texture2D texture, Vector2 position, Rectangle boundingBox) : base(health, moveSpeed, texture, position, boundingBox)
 		{
+			origin = new Vector2(texture.Width/2, texture.Height/2);
+			drawPos = new Vector2(this.X + (BoundingBox.Width / 2), this.Y + (BoundingBox.Height / 2));
 			gun = WeaponManager.Instance.TurretGun;
 			gun.X = this.X + (BoundingBox.Width / 2);
 			gun.Y = this.Y + (BoundingBox.Height / 2);
@@ -52,10 +57,10 @@ namespace GDAPSIIGame.Entities
             {
 				Player p = Player.Instance;
 
-				float newAngle = RotateTowardsPoint(this.X, this.Y, p.X+(p.BoundingBox.Width/2), p.Y+(p.BoundingBox.Height/2), gun.Angle, 0.02f);
+				float newAngle = RotateTowardsPoint(this.X, this.Y, p.X, p.Y, gun.Angle, 0.02f);
 				gun.Angle = newAngle;
 
-				float destinationRotation = (float)(Math.Atan2(Y - p.Y, X - p.X) + Math.PI);
+				float destinationRotation = (float)(Math.Atan2(Y - p.Y, X - p.X ) + Math.PI);
 				//Shoot when only in a certain distance of player
 				if (destinationRotation < newAngle + (Math.PI / 6) && destinationRotation > newAngle - (Math.PI / 6))
 				{
@@ -70,8 +75,15 @@ namespace GDAPSIIGame.Entities
 
 		public override void Draw(SpriteBatch spriteBatch)
 		{
-			gun.Draw(spriteBatch);
-			base.Draw(spriteBatch);
+			//gun.Draw(spriteBatch);
+			spriteBatch.Draw(this.Texture,
+				Camera.Instance.GetViewportPosition(drawPos),
+				null,
+				null,
+				origin,
+				gun.Angle,
+				this.Scale,
+				Color.White);
 		}
 
 		public override void Damage(int dmg)
