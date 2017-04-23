@@ -127,8 +127,8 @@ namespace GDAPSIIGame.Map
                         case TileType.ENEMY:
                             Vector2 currPos = 
                                 new Vector2(
-                                    position.X + tileSize * i, 
-                                    position.Y + tileSize * j);
+                                    position.X + tileSize * i + (tileSize / 4), 
+                                    position.Y + tileSize * j + (tileSize / 4));
                             int health = 3;
                             int moveSpeed = 1;
 
@@ -154,8 +154,8 @@ namespace GDAPSIIGame.Map
 						case TileType.TURRET:
 							Vector2 currPos3 =
 							   new Vector2(
-								   position.X + tileSize * i,
-								   position.Y + tileSize * j);
+								   position.X + tileSize * i + (tileSize / 4),
+								   position.Y + tileSize * j + (tileSize/4));
 							int health2 = 3;
 							int moveSpeed2 = 1;
 
