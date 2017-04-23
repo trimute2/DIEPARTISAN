@@ -110,9 +110,10 @@ namespace GDAPSIIGame.Entities
 
 
 				//offset the player by the shortest distance
-				if(distLeft < distRight &&
+				if (distLeft < distRight &&
 					distLeft < distTop &&
-					distLeft < distBottom)
+					(distLeft < distBottom ||
+					(distLeft == distBottom && ((Wall)obj).Bellow)))
 				{
 					this.X -= distLeft+1;
 					if(this is Player && ((Player)this).Weapon != null)
@@ -120,7 +121,8 @@ namespace GDAPSIIGame.Entities
 						((Player)this).Weapon.X -= distLeft + 1;
 					}
 				}else if(distRight < distTop &&
-					distRight < distBottom)
+					(distRight < distBottom ||
+					(distRight == distBottom && ((Wall)obj).Bellow)))
 				{
 					this.X += distRight+1;
 					if (this is Player && ((Player)this).Weapon != null)

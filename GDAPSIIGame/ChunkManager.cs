@@ -97,12 +97,36 @@ namespace GDAPSIIGame
 		/// <param name="obj">the object to be added</param>
 		public void Add(GameObject obj)
 		{
+			if(obj is Wall)
+			{
+				Vector2 p = obj.Position;
+				p.X++;
+				p.Y--;
+				WallContain(p);
+			}
 			for(int i = 0; i < chunkNum; i++)
 			{
 				if (chunks[i].Contains(obj.Position))
 				{
 					chunks[i].Add(obj);
 					i = chunkNum;
+				}
+			}
+		}
+
+		private void WallContain(Vector2 c)
+		{
+			foreach (Chunk chunk in chunks)
+			{
+				foreach (GameObject obj in chunk.Objects)
+				{
+					if (obj is Wall)
+					{
+						if (obj.BoundingBox.Contains(c))
+						{
+							((Wall)obj).Bellow = true;
+						}
+					}
 				}
 			}
 		}
