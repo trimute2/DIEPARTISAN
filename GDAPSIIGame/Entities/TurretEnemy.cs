@@ -103,6 +103,7 @@ namespace GDAPSIIGame.Entities
 				Matrix m = Matrix.CreateRotationZ(gun.Angle-((float)Math.PI / 4));
 				Vector2 diff = Vector2.Transform(new Vector2(1, 1), m);
 				diff.Normalize();
+				diff = diff / 6;
 				MouseState unnecessary = Mouse.GetState();
 				gun.Fire(diff, unnecessary, unnecessary);
 			}

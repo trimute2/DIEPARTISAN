@@ -170,6 +170,7 @@ namespace GDAPSIIGame
 					//Empty all entities and walls
 					entityManager.RemoveEnemies();
 					chunkManager.DeleteWalls();
+					projectileManager.RemoveProjectiles();
 
 					chunkManager.Resize(mapSize);
 					chunkManager.Add(Player.Instance);
@@ -226,7 +227,7 @@ namespace GDAPSIIGame
 					if (Player.Instance.Health <= 0 || PodManager.Instance.LevelTime > (mapSize*mapSize*10))
 					{
 						gameState = GameState.GameOver;
-						mapSize = 1;
+						mapSize = 2;
 					}
 
 					if(PodManager.Instance.Count == 0)
@@ -272,7 +273,7 @@ namespace GDAPSIIGame
 				//Drawing for main menu
 				case GameState.Menu:
 					//Draw the menu
-					spriteBatch.Draw(textureManager.EnemyTextures["EnemyTexture"], new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
+					spriteBatch.Draw(textureManager.MenuTextures["Logo"], new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
 
 					//Draw the mouse texture
 					spriteBatch.Draw(mouseTex,
