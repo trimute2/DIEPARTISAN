@@ -7,6 +7,7 @@ using GDAPSIIGame.Map;
 using GDAPSIIGame.Pods;
 using System.Threading;
 using GDAPSIIGame.Weapons;
+using Microsoft.Xna.Framework.Content;
 
 namespace GDAPSIIGame
 {
@@ -102,28 +103,15 @@ namespace GDAPSIIGame
 			Thread ui = new Thread(() => uiManager.LoadContent(Content));
 			ui.Name = "UI";
 			threads.Add(ui);
+			Thread other = new Thread(() => LoadOther(Content));
+			other.Name = "Other";
+			threads.Add(other);
 
 			foreach (Thread t in threads)
 			{
 				t.Start();
 				t.Join();
 			}
-
-			//Make the Camera
-			Camera.Instance.setPosition(GraphicsDevice.Viewport);
-
-			font = Content.Load<SpriteFont>("Font");
-
-			pauseRect = new Texture2D(graphics.GraphicsDevice, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
-			Color[] data = new Color[GraphicsDevice.Viewport.Width * GraphicsDevice.Viewport.Height];
-			for (int i = 0; i < data.Length; ++i) data[i] = new Color(Color.Black, 0.2f);
-			pauseRect.SetData(data);
-
-			//Initiate mouse
-			mState = Mouse.GetState();
-			mouseTex = textureManager.MouseTextures["MousePointer"];
-			mousePos = new Vector2(mState.X, mState.Y);
-			mouseScale = new Vector2((float)16 / mouseTex.Width, (float)16 / mouseTex.Height);
         }
 
 		protected override void UnloadContent()
@@ -412,6 +400,25 @@ namespace GDAPSIIGame
 			{
 				Mouse.SetPosition(mState.X, GraphicsDevice.Viewport.Height);
 			}
+		}
+
+		private void LoadOther(ContentManager content)
+		{
+			//Make the Camera
+			Camera.Instance.setPosition(GraphicsDevice.Viewport);
+
+			font = Content.Load<SpriteFont>("Font");
+
+			pauseRect = new Texture2D(graphics.GraphicsDevice, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
+			Color[] data = new Color[GraphicsDevice.Viewport.Width * GraphicsDevice.Viewport.Height];
+			for (int i = 0; i < data.Length; ++i) data[i] = new Color(Color.Black, 0.2f);
+			pauseRect.SetData(data);
+
+			//Initiate mouse
+			mState = Mouse.GetState();
+			mouseTex = textureManager.MouseTextures["MousePointer"];
+			mousePos = new Vector2(mState.X, mState.Y);
+			mouseScale = new Vector2((float)16 / mouseTex.Width, (float)16 / mouseTex.Height);
 		}
 	}
 }
