@@ -12,11 +12,12 @@ namespace GDAPSIIGame.Map
 {
     class Map
     {
-        List<Room> rooms = new List<Room>();
+        private List<Room> rooms = new List<Room>();
+
         public Map(int mapSize)
         {
-            //TODO: randomize choice of rooms
-            String[] files = new String[] { "testRoom1.txt", "testRoom2.txt" };
+			//TODO: randomize choice of rooms
+			String[] files = Directory.GetFiles("../../../../Levels/", "*.cmap");
             generateMap(files, this, mapSize);
         }
 
@@ -37,29 +38,67 @@ namespace GDAPSIIGame.Map
         {
             Random randy = new Random();
             string filename;
-            for (int i = 0; i < mapSize; i++)
+			//Room coords for spawn room
+			int r = randy.Next(0, mapSize);
+			int c = randy.Next(0, mapSize);
+
+			for (int i = 0; i < mapSize; i++)
             {
                 for (int j = 0; j < mapSize; j++)
                 {
-                    filename = filenames[randy.Next(filenames.Length)];
-                    String[] lines = File.ReadAllLines("../../../../Map/" + filename);
-                    TileType[,] tiles = new TileType[10, 10];
+					//When the rows and columns match the player spawn coords
+					if (i == r && j == c)
+					{
+						filename = "playerSpawn.cmap";
 
-                    for (int k = 0; k < lines.Length; k++)
-                    {
-                        for (int l = 0; l < lines[0].Length; l++)
-                        {
+						String[] lines = File.ReadAllLines("../../../../Levels/" + filename);
+						TileType[,] tiles = new TileType[10, 10];
 
-                            //The 48 comes from the fact that 0's ascii code is 48
-                            tiles[l, k] = (TileType)(lines[l][k] - 48);
-                            //Console.WriteLine(tiles[l, k] + "----------");
-                        }
-                    }
+						for (int k = 0; k < lines.Length; k++)
+						{
+							for (int l = 0; l < lines[0].Length; l++)
+							{
 
-                    Room r = new Room(tiles, Vector2.Zero);
-                    int roomSize = 64 * 10;
+								//The 48 comes from the fact that 0's ascii code is 48
+								tiles[l, k] = (TileType)(lines[l][k] - 48);
+								//Console.WriteLine(tiles[l, k] + "----------");
+							}
+						}
 
-                    m.Add(new Room(tiles, new Vector2(i * roomSize, j * roomSize)));
+						int roomSize = 64 * 10;
+						Room ro = new Room(tiles, new Vector2(i * roomSize, j * roomSize));
+						m.Add(ro);
+					}
+					else
+					{
+						//Loop until the room is not the player's spawn room
+						while (true)
+						{
+							filename = filenames[randy.Next(filenames.Length)];
+							if (!filename.Contains("playerSpawn"))
+							{
+								break;
+							}
+						}
+						String[] lines = File.ReadAllLines("../Levels/" + filename);
+						TileType[,] tiles = new TileType[10, 10];
+
+						for (int k = 0; k < lines.Length; k++)
+						{
+							for (int l = 0; l < lines[0].Length; l++)
+							{
+
+								//The 48 comes from the fact that 0's ascii code is 48
+								tiles[l, k] = (TileType)(lines[l][k] - 48);
+								//Console.WriteLine(tiles[l, k] + "----------");
+							}
+						}
+
+
+						int roomSize = 64 * 10;
+						Room ro = new Room(tiles, new Vector2(i * roomSize, j * roomSize));
+						m.Add(ro);
+					}
                 }
             }
         }

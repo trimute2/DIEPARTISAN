@@ -14,8 +14,9 @@ namespace GDAPSIIGame
 
 	public class Game1 : Game
     {
-        //Fields
-        EntityManager entityManager;
+		//Fields
+		private static Texture2D pauseRect;
+		EntityManager entityManager;
         ProjectileManager projectileManager;
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
@@ -34,7 +35,6 @@ namespace GDAPSIIGame
 		WeaponManager weaponManager;
 		TextureManager textureManager;
         int mapSize;
-		int lvl;
 
 		public Game1()
         {
@@ -46,7 +46,8 @@ namespace GDAPSIIGame
         {
 			this.IsMouseVisible = false;
 			
-			lvl = 1;
+			mapSize = 2;
+
             //this.graphics.IsFullScreen = true;
 			//graphics.ToggleFullScreen();
 
@@ -85,8 +86,6 @@ namespace GDAPSIIGame
 
 			List<Thread> threads = new List<Thread>();
 
-            mapSize = 1;
-
 			//Make all the threads
 			Thread tex = new Thread(() => textureManager.LoadContent(Content) );
 			tex.Name = "Textures";
@@ -114,6 +113,11 @@ namespace GDAPSIIGame
 			Camera.Instance.setPosition(GraphicsDevice.Viewport);
 
 			font = Content.Load<SpriteFont>("Font");
+
+			pauseRect = new Texture2D(graphics.GraphicsDevice, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
+			Color[] data = new Color[GraphicsDevice.Viewport.Width * GraphicsDevice.Viewport.Height];
+			for (int i = 0; i < data.Length; ++i) data[i] = new Color(Color.Black, 0.2f);
+			pauseRect.SetData(data);
 
 			//Initiate mouse
 			mState = Mouse.GetState();
@@ -167,10 +171,10 @@ namespace GDAPSIIGame
 					entityManager.RemoveEnemies();
 					chunkManager.DeleteWalls();
 
-					chunkManager.Resize(lvl);
+					chunkManager.Resize(mapSize);
 					chunkManager.Add(Player.Instance);
 					//Create the new map
-					MapManager.Instance.CreateMap(textureManager.RoomTextures["WallTexture"], textureManager.RoomTextures["FloorTexture"], lvl);
+					MapManager.Instance.CreateMap(textureManager.RoomTextures["WallTexture"], textureManager.RoomTextures["FloorTexture"], mapSize);
 					PodManager.Instance.Reset();
 					//Go to gameplay
 					gameState = GameState.GamePlay;
@@ -219,17 +223,17 @@ namespace GDAPSIIGame
 					//}
 
 					//Check if the player has died
-					if (Player.Instance.Health <= 0 || PodManager.Instance.LevelTime > (lvl*lvl*10))
+					if (Player.Instance.Health <= 0 || PodManager.Instance.LevelTime > (mapSize*mapSize*10))
 					{
 						gameState = GameState.GameOver;
-						lvl = 1;
+						mapSize = 1;
 					}
 
 					if(PodManager.Instance.Count == 0)
 					{
-						if(lvl < 5)
+						if(mapSize < 5)
 						{
-							lvl++;
+							mapSize++;
 						}
 						gameState = GameState.LoadingScreen;
 					}
@@ -310,6 +314,8 @@ namespace GDAPSIIGame
 							mouseScale,
 							null,
 							0);
+
+					//Draw score things
 					spriteBatch.DrawString(font, PodManager.Instance.GlobalScore.ToString(), new Vector2(50, 50), Color.Red);
 					spriteBatch.DrawString(font, Player.Instance.ScoreMultiplier.ToString(), new Vector2(50, 100), Color.Red);
 					spriteBatch.DrawString(font, PodManager.Instance.LevelTime.ToString(), new Vector2(50, 150), Color.Red);
@@ -328,6 +334,20 @@ namespace GDAPSIIGame
 
 					//Draw UI
 					uiManager.Draw(gameTime, spriteBatch);
+
+					//Draw the mouse texture
+					spriteBatch.Draw(mouseTex,
+							mousePos,
+							null,
+							null,
+							Vector2.Zero,
+							0.0f,
+							mouseScale,
+							null,
+							0);
+
+					//Make the screen gray
+					spriteBatch.Draw(pauseRect, Vector2.Zero, Color.White);
 
 					//Draw the mouse texture
 					spriteBatch.Draw(mouseTex,
@@ -369,6 +389,9 @@ namespace GDAPSIIGame
 			base.Draw(gameTime);
         }
 
+		/// <summary>
+		/// Contains the mouse to the window
+		/// </summary>
 		private void ContainMouse(MouseState mState)
 		{
 			if(mState.X < 0)
@@ -389,5 +412,5 @@ namespace GDAPSIIGame
 				Mouse.SetPosition(mState.X, GraphicsDevice.Viewport.Height);
 			}
 		}
-    }
+	}
 }

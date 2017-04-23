@@ -179,8 +179,13 @@ namespace GDAPSIIGame.Map
 							break;
 
                         case TileType.PLAYER:
-                            //TODO: Decide if we want to do anything to player here
-                            break;
+							//TODO: Decide if we want to do anything to player here
+							Vector2 currPos4 =
+								new Vector2(
+									position.X + tileSize * i,
+									position.Y + tileSize * j);
+							Player.Instance.Position = currPos4;
+							break;
 
                         case TileType.WALL:
                             //Console.WriteLine("WALL!");
