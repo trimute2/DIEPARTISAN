@@ -273,7 +273,7 @@ namespace GDAPSIIGame
 				//Drawing for main menu
 				case GameState.Menu:
 					//Draw the menu
-					spriteBatch.Draw(textureManager.EnemyTextures["EnemyTexture"], new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
+					spriteBatch.Draw(textureManager.MenuTextures["Logo"], new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
 
 					//Draw the mouse texture
 					spriteBatch.Draw(mouseTex,

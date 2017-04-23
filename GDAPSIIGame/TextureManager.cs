@@ -20,6 +20,7 @@ namespace GDAPSIIGame
 		Dictionary<String, Texture2D> weaponTextures;
 		Dictionary<String, Texture2D> roomTextures;
 		Dictionary<String, Texture2D> mouseTextures;
+		Dictionary<String, Texture2D> menuTextures;
 
 		//Methods----------------
 
@@ -34,6 +35,7 @@ namespace GDAPSIIGame
 			weaponTextures = new Dictionary<String, Texture2D>();
 			roomTextures = new Dictionary<String, Texture2D>();
 			mouseTextures = new Dictionary<String, Texture2D>();
+			menuTextures = new Dictionary<string, Texture2D>();
 		}
 
 		/// <summary>
@@ -71,6 +73,9 @@ namespace GDAPSIIGame
 		public Dictionary<String, Texture2D> MouseTextures
 		{ get { return mouseTextures; } }
 
+		public Dictionary<String, Texture2D> MenuTextures
+		{ get { return menuTextures; } }
+
 		/// <summary>
 		/// Load in sprites
 		/// </summary>
@@ -94,6 +99,9 @@ namespace GDAPSIIGame
 			//Load room textures
 			roomTextures.Add("WallTexture", Content.Load<Texture2D>("playerBullet"));
 			roomTextures.Add("FloorTexture", Content.Load<Texture2D>("playerNew"));
+
+			//Load menu textures
+			menuTextures.Add("Logo", Content.Load<Texture2D>("tempLogo"));
 		}
 	}
 }
