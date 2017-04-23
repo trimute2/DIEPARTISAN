@@ -74,6 +74,7 @@ namespace ExternalEditor
             yMin = 10;
             xMax = 40;
             yMax = 25;
+			enemyDropDownBox.SelectedIndex = 0;
         }
 
         /// <summary>
@@ -87,6 +88,7 @@ namespace ExternalEditor
             currentTool = Tool.wall;
             CurrentToolLabel.Text = toolStripTextBox.Text = "Changed Tool: Wall";
             CurrentToolLabel.ForeColor = SystemColors.MenuHighlight;
+			enemyDropDownBox.Enabled = false;
         }
 
         /// <summary>
@@ -100,7 +102,8 @@ namespace ExternalEditor
             currentTool = Tool.delete;
             CurrentToolLabel.Text = toolStripTextBox.Text = "Changed Tool: Eraser";
             CurrentToolLabel.ForeColor = Color.Red;
-        }
+			enemyDropDownBox.Enabled = false;
+		}
 
         /// <summary>
         /// Click method for the spawn tool button.
@@ -113,7 +116,8 @@ namespace ExternalEditor
             currentTool = Tool.spawn;
             CurrentToolLabel.Text = toolStripTextBox.Text = "Changed Tool: Spawn";
             CurrentToolLabel.ForeColor = Color.LightGreen;
-        }
+			enemyDropDownBox.Enabled = false;
+		}
 
         /// <summary>
         /// Click button for the enemy tool button.
@@ -126,7 +130,8 @@ namespace ExternalEditor
             currentTool = Tool.enemy;
             CurrentToolLabel.Text = toolStripTextBox.Text = "Changed Tool: Enemy";
             CurrentToolLabel.ForeColor = Color.OrangeRed;
-        }
+			enemyDropDownBox.Enabled = true;
+		}
 
         /// <summary>
         /// Update the button access of the program based on the program state.
@@ -322,7 +327,15 @@ namespace ExternalEditor
                     break;
 
                 case (Tool.enemy):
-                    b.BackColor = Color.OrangeRed;
+					switch(enemyDropDownBox.SelectedIndex)
+					{
+						case 0:
+							b.BackColor = Color.OrangeRed;
+							break;
+						case 1:
+							b.BackColor = Color.DarkOrange;
+							break;
+					}
                     b.Text = enemyTileText;
                     break;
 
@@ -365,13 +378,18 @@ namespace ExternalEditor
             
         }
 
-        /// <summary>
-        /// Initialized the buttons for the matrix of tiles, and sets events accordingly.
-        /// </summary>
-        /// <param name="width"></param>
-        /// <param name="height"></param>
+		private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+		{
 
-        public void InitializeGrid(int width, int height)
+		}
+
+		/// <summary>
+		/// Initialized the buttons for the matrix of tiles, and sets events accordingly.
+		/// </summary>
+		/// <param name="width"></param>
+		/// <param name="height"></param>
+
+		public void InitializeGrid(int width, int height)
         {
             int gridX = 195;
             int gridY = 17;
@@ -475,14 +493,18 @@ namespace ExternalEditor
                     {
                         tiles[i, j] = 1;
                     }
-                    else if (BackColor == Color.OrangeRed)
-                    {
-                        tiles[i, j] = 2;
-                    }
-                    else if (BackColor == Color.LightGreen)
+					else if (BackColor == Color.LightGreen)
+					{
+						tiles[i, j] = 2;
+					}
+					else if (BackColor == Color.OrangeRed)
                     {
                         tiles[i, j] = 3;
                     }
+					else if (BackColor == Color.DarkOrange)
+					{
+						tiles[i, j] = 4;
+					}
                     else
                     {
                         tiles[i, j] = 0;

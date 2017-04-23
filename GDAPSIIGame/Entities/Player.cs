@@ -404,6 +404,7 @@ namespace GDAPSIIGame
 					if(IsHurting == false)
 					{
 						this.Health -= (int)((Projectile)obj).Damage;
+						Console.WriteLine(Health);
 						IsHurting = true;
 					}
 				}
@@ -412,7 +413,7 @@ namespace GDAPSIIGame
             {
                 if (!IsHurting)
                 {
-                    Health -= 20;
+                    Health -= 10;
 					IsHurting = true;
 					focusMultiplier *= 0.9f;
 					if(focusMultiplier < 1)

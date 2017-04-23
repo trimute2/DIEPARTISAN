@@ -17,8 +17,8 @@ namespace GDAPSIIGame.Map
     {
         FLOOR,
         WALL,
-        ENEMY,
         PLAYER,
+		MELEEENEMY,
 		TURRET
     }
 
@@ -124,7 +124,33 @@ namespace GDAPSIIGame.Map
                 {
                     switch (tileLayout[i, j])
                     {
-                        case TileType.ENEMY:
+						case TileType.WALL:
+							//Console.WriteLine("WALL!");
+							Vector2 currPos2 =
+								new Vector2(
+									position.X + tileSize * i,
+									position.Y + tileSize * j);
+							ChunkManager.Instance.Add(
+								new Wall(
+									wallTexture,
+									currPos2,
+									new Rectangle(
+										(int)currPos2.X,
+										(int)currPos2.Y,
+										tileSize,
+										tileSize)));
+							break;
+
+						case TileType.PLAYER:
+							Vector2 currPos4 =
+								new Vector2(
+									position.X + tileSize * i,
+									position.Y + tileSize * j);
+							Player.Instance.Position = currPos4;
+							Camera.Instance.resetPosition(Player.Instance.Position);
+							break;
+						
+						case TileType.MELEEENEMY:
                             Vector2 currPos = 
                                 new Vector2(
                                     position.X + tileSize * i + (tileSize / 4), 
@@ -157,7 +183,7 @@ namespace GDAPSIIGame.Map
 								   position.X + tileSize * i + (tileSize / 4),
 								   position.Y + tileSize * j + (tileSize/4));
 							int health2 = 3;
-							int moveSpeed2 = 1;
+							int moveSpeed2 = 0;
 
 							//Create new enemy
 							TurretEnemy turret =
@@ -177,34 +203,6 @@ namespace GDAPSIIGame.Map
 							ChunkManager.Instance.Add(turret);
 							pod.Add(turret);
 							break;
-
-                        case TileType.PLAYER:
-							//TODO: Decide if we want to do anything to player here
-							Vector2 currPos4 =
-								new Vector2(
-									position.X + tileSize * i,
-									position.Y + tileSize * j);
-							Player.Instance.Position = currPos4;
-							Camera.Instance.resetPosition(Player.Instance.Position);
-							break;
-
-                        case TileType.WALL:
-                            //Console.WriteLine("WALL!");
-                            Vector2 currPos2 =
-                                new Vector2(
-                                    position.X + tileSize * i, 
-                                    position.Y + tileSize * j);
-                            ChunkManager.Instance.Add(
-                                new Wall(
-                                    wallTexture, 
-                                    currPos2, 
-                                    new Rectangle(
-                                        (int)currPos2.X, 
-                                        (int)currPos2.Y, 
-                                        tileSize, 
-                                        tileSize)));
-                            break;
-
                     }
                     //spriteBatch.Draw(texture, new Rectangle((int)currPos.X + i * tileSize, (int)currPos.Y + j * tileSize, tileSize, tileSize), Color.White);
                 }
