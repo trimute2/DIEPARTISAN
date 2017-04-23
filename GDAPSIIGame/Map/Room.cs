@@ -185,6 +185,7 @@ namespace GDAPSIIGame.Map
 									position.X + tileSize * i,
 									position.Y + tileSize * j);
 							Player.Instance.Position = currPos4;
+							Camera.Instance.resetPosition(Player.Instance.Position);
 							break;
 
                         case TileType.WALL:
