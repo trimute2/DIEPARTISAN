@@ -94,11 +94,13 @@
   <ItemGroup>
     <MonoGameContentReference Include="Content\Content.mgcb" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Levels\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="Levels\2walls1melee.cmap" />
+    <None Include="Levels\fourTurrets.cmap" />
+    <None Include="Levels\meleeandturret.cmap" />
+    <None Include="Levels\playerSpawn.cmap" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
