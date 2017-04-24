@@ -12,13 +12,11 @@ namespace GDAPSIIGame.Graph
         /// <summary>
         /// This should be a fibonacci heap but w/e
         /// </summary>
-        Dictionary<int, GraphNode> nodes;
-        GraphNode[,] adjacencyMatrix;
+        Dictionary<float, GraphNode> nodes;
 
         public Graph(int numNodes)
         {
-            nodes = new Dictionary<int, GraphNode>(numNodes);
-            adjacencyMatrix = new GraphNode[numNodes, numNodes];
+            nodes = new Dictionary<float, GraphNode>(numNodes);
         }
 
         /// <summary>
@@ -27,38 +25,20 @@ namespace GDAPSIIGame.Graph
         /// <param name="newNode">Node to add</param>
         void Add(GraphNode newNode)
         {
-            //nodes.Add(newNode.UniqueID, newNode);
+            nodes.Add(newNode.UniqueID, newNode);
+            newNode.
         }
 
         /// <summary>
-        /// Should be called once all nodes are made. Fills Adj. Matrix.
+        /// Finds the GraphNode at the given position
         /// </summary>
-        void fillAdjacencyMatrix()
+        /// <param name="position">position of GraphNode to be returned</param>
+        /// <returns>GraphNode at given position</returns>
+        GraphNode getNode(Vector2 position)
         {
-
-        }
-
-        /// <summary>
-        /// Finds a __GOOD__ path to the gameobject given
-        /// </summary>
-        /// <param name="go"></param>
-        /// <returns></returns>
-       // List<GraphNode> findPath(GameObject go)
-       // {
-       //     GraphNode closest = findClosestNode(go.Position);
-       // 
-       // }
-
-        /// <summary>
-        /// Finds the first node within a minimum distance of the given position
-        /// </summary>
-        /// <param name="minDist"></param>
-        /// <returns></returns>
-        GraphNode findClosestNode(Vector2 position)
-        {
-            int X = (int)position.X;
-            int Y = (int)position.Y;
-            int uniqueNum = (1 / 2) * (X + Y) * (X + Y + 1) + Y;
+            float X = position.X;
+            float Y = position.Y;
+            float uniqueNum = (1 / 2) * (X + Y) * (X + Y + 1) + Y;
             return nodes[uniqueNum];
         }
 
