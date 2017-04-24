@@ -130,7 +130,7 @@ namespace GDAPSIIGame.Map
 		/// </summary>
 		/// <param name="enemyTexture">Texture of enemies in this room</param>
 		/// <param name="wallTexture">Texture of walls in this room</param>
-		public void initRoom(Texture2D roomTextures, Graph.Graph g)
+		public void initRoom(Texture2D roomTextures, Graph.Graph graph)
         {
 			//Init room's textures
 			textures = roomTextures;
