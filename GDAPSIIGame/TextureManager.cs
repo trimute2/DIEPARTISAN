@@ -102,6 +102,19 @@ namespace GDAPSIIGame
 
 			//Load menu textures
 			menuTextures.Add("Logo", Content.Load<Texture2D>("tempLogo"));
+			menuTextures.Add("Black", Content.Load<Texture2D>("black"));
+		}
+
+		/// <summary>
+		/// Gets any texture in the menuTexture dictionary
+		/// </summary>
+		public Texture2D GetMenuTexture(String name)
+		{
+			if (menuTextures.ContainsKey(name))
+			{
+				return menuTextures[name];
+			}
+			else return null;
 		}
 	}
 }
