@@ -43,12 +43,11 @@ namespace GDAPSIIGame
 
         public override void Update(GameTime gameTime)
         {
-            base.Update(gameTime);
-
             //Update the projectile's position based on the vector's values
             //Multiply it by the elapsed game time since last update in milliseconds
             this.X += direction.X * gameTime.ElapsedGameTime.Milliseconds;
             this.Y += direction.Y * gameTime.ElapsedGameTime.Milliseconds;
+			base.Update(gameTime);
         }
 
         public Projectile Clone(Vector2 position, Vector2 direction, Owners owner) {

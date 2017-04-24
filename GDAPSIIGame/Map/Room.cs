@@ -156,7 +156,7 @@ namespace GDAPSIIGame.Map
                                     position.X + tileSize * i + (tileSize / 4), 
                                     position.Y + tileSize * j + (tileSize / 4));
                             int health = 3;
-                            int moveSpeed = 1;
+                            int moveSpeed = 2;
 
                             //Create new enemy
                             MeleeEnemy newEnemy = 

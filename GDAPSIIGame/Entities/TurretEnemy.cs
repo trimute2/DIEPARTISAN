@@ -28,6 +28,7 @@ namespace GDAPSIIGame.Entities
 			gun = WeaponManager.Instance.TurretGun;
 			gun.X = this.X + (BoundingBox.Width / 2);
 			gun.Y = this.Y + (BoundingBox.Height / 2);
+			knockBackable = false;
 		}
 
 		/// <summary>
