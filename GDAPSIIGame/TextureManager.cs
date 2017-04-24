@@ -99,6 +99,7 @@ namespace GDAPSIIGame
 			//Load room textures
 			roomTextures.Add("WallTexture", Content.Load<Texture2D>("playerBullet"));
 			roomTextures.Add("FloorTexture", Content.Load<Texture2D>("playerNew"));
+			roomTextures.Add("IndoorSpriteSheet", Content.Load<Texture2D>("indoorTileset"));
 
 			//Load menu textures
 			menuTextures.Add("Logo", Content.Load<Texture2D>("tempLogo"));
@@ -106,13 +107,37 @@ namespace GDAPSIIGame
 		}
 
 		/// <summary>
-		/// Gets any texture in the menuTexture dictionary
+		/// Gets any texture in the menuTextures dictionary
 		/// </summary>
 		public Texture2D GetMenuTexture(String name)
 		{
 			if (menuTextures.ContainsKey(name))
 			{
 				return menuTextures[name];
+			}
+			else return null;
+		}
+
+		/// <summary>
+		/// Gets any texture in the roomTextures dictionary
+		/// </summary>
+		public Texture2D GetRoomTexture(String name)
+		{
+			if (roomTextures.ContainsKey(name))
+			{
+				return roomTextures[name];
+			}
+			else return null;
+		}
+
+		/// <summary>
+		/// Gets any texture in the enemyTextures dictionary
+		/// </summary>
+		public Texture2D GetEnemyTexture(String name)
+		{
+			if (enemyTextures.ContainsKey(name))
+			{
+				return enemyTextures[name];
 			}
 			else return null;
 		}

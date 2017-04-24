@@ -38,10 +38,12 @@ namespace GDAPSIIGame.Map
         private TileType[,] tileLayout;
         int connections;
         Vector2 position;
-		Texture2D wallTexture;
-		Texture2D floorTexture;
+		Texture2D textures;
+		private static int tileWidth = 32;
+		private static int tileHeight = 32;
+		private static int offset = 1;
 
-        public Room(TileType[,] tileLayout, Vector2 position)
+		public Room(TileType[,] tileLayout, Vector2 position)
         {
             this.position = position;
             this.tileLayout = tileLayout;
@@ -89,15 +91,27 @@ namespace GDAPSIIGame.Map
             {
                 for (int j = 0; j < roomSize; j++)
                 {
-                    spriteBatch.Draw(
-                        tileLayout[i, j] == TileType.WALL ? wallTexture : floorTexture,
-                        new Rectangle(
-                            (int)currPos.X + i*tileSize, 
-                            (int)currPos.Y + j*tileSize, 
-                            tileSize, 
-                            tileSize), 
-                        Color.White);
-                }
+					if (tileLayout[i, j] == TileType.WALL)
+					{
+						spriteBatch.Draw(
+							textures,
+							new Vector2(
+								(int)currPos.X + i * tileSize,
+								(int)currPos.Y + j * tileSize),
+							GetSourceRectangle(textures, 0),
+							Color.White);
+					}
+					else if (tileLayout[i, j] == TileType.FLOOR)
+					{
+						spriteBatch.Draw(
+							textures,
+							new Vector2(
+								(int)currPos.X + i * tileSize,
+								(int)currPos.Y + j * tileSize),
+							GetSourceRectangle(textures, 11),
+							Color.White);
+					}
+				}
             }
         }
 
@@ -106,11 +120,10 @@ namespace GDAPSIIGame.Map
 		/// </summary>
 		/// <param name="enemyTexture">Texture of enemies in this room</param>
 		/// <param name="wallTexture">Texture of walls in this room</param>
-		public void initRoom(Texture2D enemyTexture, Texture2D floorTexture, Texture2D wallTexture)
+		public void initRoom(Texture2D roomTextures)
         {
 			//Init room's textures
-			this.wallTexture = wallTexture;
-			this.floorTexture = floorTexture;
+			textures = roomTextures;
 
             //Should change this later
             int tileSize = 64;
@@ -124,15 +137,15 @@ namespace GDAPSIIGame.Map
                 {
                     switch (tileLayout[i, j])
                     {
+						//Create walls
 						case TileType.WALL:
-							//Console.WriteLine("WALL!");
 							Vector2 currPos2 =
 								new Vector2(
 									position.X + tileSize * i,
 									position.Y + tileSize * j);
 							ChunkManager.Instance.Add(
 								new Wall(
-									wallTexture,
+									roomTextures,
 									currPos2,
 									new Rectangle(
 										(int)currPos2.X,
@@ -140,7 +153,8 @@ namespace GDAPSIIGame.Map
 										tileSize,
 										tileSize)));
 							break;
-
+						
+						//Move player
 						case TileType.PLAYER:
 							Vector2 currPos4 =
 								new Vector2(
@@ -150,6 +164,7 @@ namespace GDAPSIIGame.Map
 							Camera.Instance.resetPosition(Player.Instance.Position);
 							break;
 						
+						//Create Melee Enemies
 						case TileType.MELEEENEMY:
                             Vector2 currPos = 
                                 new Vector2(
@@ -163,7 +178,7 @@ namespace GDAPSIIGame.Map
                                 new MeleeEnemy(
                                     health, 
                                     moveSpeed, 
-                                    enemyTexture, 
+                                    TextureManager.Instance.GetEnemyTexture("EnemyTexture"), 
                                     currPos, 
                                     new Rectangle(
                                         (int)currPos.X, 
@@ -177,6 +192,7 @@ namespace GDAPSIIGame.Map
 							pod.Add(newEnemy);
                             break;
 
+						//Create Turret Enemies
 						case TileType.TURRET:
 							Vector2 currPos3 =
 							   new Vector2(
@@ -190,7 +206,7 @@ namespace GDAPSIIGame.Map
 								new TurretEnemy(
 									health2,
 									moveSpeed2,
-									enemyTexture,
+									TextureManager.Instance.GetEnemyTexture("EnemyTexture"),
 									currPos3,
 									new Rectangle(
 										(int)currPos3.X,
@@ -204,10 +220,17 @@ namespace GDAPSIIGame.Map
 							pod.Add(turret);
 							break;
                     }
-                    //spriteBatch.Draw(texture, new Rectangle((int)currPos.X + i * tileSize, (int)currPos.Y + j * tileSize, tileSize, tileSize), Color.White);
                 }
             }
 			PodManager.Instance.Add(pod);
         }
-    }
+
+		static private Rectangle GetSourceRectangle(Texture2D tileSetTexture, int tileIndex)
+		{
+			int tileY = tileIndex / (tileSetTexture.Height / tileHeight-offset);
+			int tileX = tileIndex % (tileSetTexture.Width / tileWidth);
+
+			return new Rectangle((tileX * tileWidth), (tileY * tileHeight), tileWidth, tileHeight);
+		}
+	}
 }

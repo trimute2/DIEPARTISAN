@@ -177,7 +177,7 @@ namespace GDAPSIIGame
 					chunkManager.Resize(mapSize);
 					chunkManager.Add(Player.Instance);
 					//Create the new map
-					MapManager.Instance.CreateMap(textureManager.RoomTextures["WallTexture"], textureManager.RoomTextures["FloorTexture"], mapSize);
+					MapManager.Instance.CreateMap(textureManager.RoomTextures["IndoorSpriteSheet"], mapSize);
 					PodManager.Instance.Reset();
 					//Go to gameplay
 					gameState = GameState.GamePlay;
