@@ -406,6 +406,8 @@ namespace GDAPSIIGame
 						this.Health -= (int)((Projectile)obj).Damage;
 						Console.WriteLine(Health);
 						IsHurting = true;
+						knockBack = (obj as Projectile).Direction * 216;
+						knockBackTime = 0.2f;
 					}
 				}
 			}

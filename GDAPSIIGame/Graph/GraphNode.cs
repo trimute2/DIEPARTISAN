@@ -11,7 +11,7 @@ namespace GDAPSIIGame.Graph
     {
         private float uniqueID;
         private Vector2 position;
-        private List<GraphNode> neighbors;
+        private Dictionary<GraphNode, GraphNode> neighbors;
 
         public GraphNode(Vector2 position)
         {
@@ -19,6 +19,7 @@ namespace GDAPSIIGame.Graph
             float x = position.X;
             float y = position.Y;
             this.uniqueID = (.5f) * (x + y) * (x + y + 1) + y;
+            neighbors = new Dictionary<GraphNode, GraphNode>();
         }
 
         public float UniqueID
@@ -30,5 +31,19 @@ namespace GDAPSIIGame.Graph
         {
             get { return position; }
         }
+
+        public void AddNeighbor(GraphNode intermediateNeighbor, GraphNode newNeighbor)
+        {
+            neighbors.Add(intermediateNeighbor, newNeighbor);
+        }
+
+        public void Update()
+        {
+            foreach(KeyValuePair<GraphNode, GraphNode> neighbor in neighbors)
+            {
+
+            }
+        }
+
     }
 }

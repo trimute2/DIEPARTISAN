@@ -38,24 +38,27 @@ namespace GDAPSIIGame.Entities
 
 		public void Move(GameObject thingToMoveTo)
         {
-            Vector2 diff = Position - thingToMoveTo.Position;
-            if (diff.X > 0)
-            {
-                X--;
-            }
-            else  
-            {
-                X++;
-            }
+			if (!(knockBackTime > 0))
+			{
+				Vector2 diff = Position - thingToMoveTo.Position;
+				if (diff.X > 0)
+				{
+					X-= MoveSpeed;
+				}
+				else
+				{
+					X+= MoveSpeed;
+				}
 
-            if (diff.Y > 0)
-            {
-                Y--;
-            }
-            else
-            {
-                Y++;
-            }
+				if (diff.Y > 0)
+				{
+					Y-=MoveSpeed;
+				}
+				else
+				{
+					Y+=MoveSpeed;
+				}
+			}
         }
 
     }

@@ -3,9 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.IO;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using GDAPSIIGame.Graph;
 
 
 namespace GDAPSIIGame.Map
@@ -14,6 +12,7 @@ namespace GDAPSIIGame.Map
     {
         private List<Room> rooms = new List<Room>();
 		private MapState state;
+        private Graph.Graph graph;
 
         public Map(int mapSize)
         {
@@ -22,6 +21,7 @@ namespace GDAPSIIGame.Map
             generateMap(files, this, mapSize);
 			state = MapState.Enter;
 			UIManager.Instance.Fade = true;
+            graph = new Graph.Graph(mapSize * mapSize, 32, 32);
         }
 
         public void Add(Room r)
@@ -120,7 +120,7 @@ namespace GDAPSIIGame.Map
         {
             foreach (Room r in rooms)
             {
-                r.initRoom(roomTextures);
+                r.initRoom(roomTextures, graph);
             }
         }
     }
