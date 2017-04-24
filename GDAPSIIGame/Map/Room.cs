@@ -99,9 +99,14 @@ namespace GDAPSIIGame.Map
 								(int)currPos.X + i * tileSize,
 								(int)currPos.Y + j * tileSize),
 							GetSourceRectangle(textures, 0),
-							Color.White);
+							Color.White,
+							0f,
+							Vector2.Zero,
+							2,
+							SpriteEffects.None,
+							0);
 					}
-					else if (tileLayout[i, j] == TileType.FLOOR)
+					else
 					{
 						spriteBatch.Draw(
 							textures,
@@ -109,7 +114,12 @@ namespace GDAPSIIGame.Map
 								(int)currPos.X + i * tileSize,
 								(int)currPos.Y + j * tileSize),
 							GetSourceRectangle(textures, 11),
-							Color.White);
+							Color.White,
+							0f,
+							Vector2.Zero,
+							2,
+							SpriteEffects.None,
+							0);
 					}
 				}
             }
@@ -227,7 +237,7 @@ namespace GDAPSIIGame.Map
 
 		static private Rectangle GetSourceRectangle(Texture2D tileSetTexture, int tileIndex)
 		{
-			int tileY = tileIndex / (tileSetTexture.Height / tileHeight-offset);
+			int tileY = tileIndex / (tileSetTexture.Height / tileHeight);
 			int tileX = tileIndex % (tileSetTexture.Width / tileWidth);
 
 			return new Rectangle((tileX * tileWidth), (tileY * tileHeight), tileWidth, tileHeight);
