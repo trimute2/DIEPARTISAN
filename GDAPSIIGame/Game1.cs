@@ -41,12 +41,23 @@ namespace GDAPSIIGame
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-        }
+
+			// Resize the screen to 1024 x 768.
+			graphics.PreferredBackBufferWidth = 1024;
+			graphics.PreferredBackBufferHeight = 768;
+
+			graphics.ApplyChanges();
+		}
 
         protected override void Initialize()
         {
 			this.IsMouseVisible = false;
-			
+
+			//Window.IsBorderless = true;
+			//graphics.PreferredBackBufferWidth = GraphicsDevice.DisplayMode.Width;
+			//graphics.PreferredBackBufferHeight = GraphicsDevice.DisplayMode.Height;
+			//graphics.ApplyChanges();
+
 			mapSize = 2;
 
             //this.graphics.IsFullScreen = true;
@@ -112,7 +123,7 @@ namespace GDAPSIIGame
 				t.Start();
 				t.Join();
 			}
-        }
+		}
 
 		protected override void UnloadContent()
         {
