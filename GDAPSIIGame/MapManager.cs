@@ -10,6 +10,8 @@ using Microsoft.Xna.Framework.Input;
 
 namespace GDAPSIIGame
 {
+	enum MapState { Enter, Play, Exit, Died}
+
 	class MapManager
 	{
 		//Fields-----------------
@@ -21,20 +23,21 @@ namespace GDAPSIIGame
 		{
 			get { return currMap; }
 		}
+		public MapState State
+		{
+			get { return currMap.State; }
+			set { currMap.State = value; }
+		}
 
 
 		/// <summary>
 		/// Singleton Constructor
 		/// </summary>
 		private MapManager()
-		{
-			
-		}
+		{ }
 
 		public void LoadContent(ContentManager Content)
-		{
-
-		}
+		{ }
 
 		/// <summary>
 		/// Singleton access

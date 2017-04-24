@@ -13,12 +13,15 @@ namespace GDAPSIIGame.Map
     class Map
     {
         private List<Room> rooms = new List<Room>();
+		private MapState state;
 
         public Map(int mapSize)
         {
 			//TODO: randomize choice of rooms
 			String[] files = Directory.GetFiles("../../../../Levels/", "*.cmap");
             generateMap(files, this, mapSize);
+			state = MapState.Enter;
+			UIManager.Instance.Fade = true;
         }
 
         public void Add(Room r)
@@ -26,7 +29,13 @@ namespace GDAPSIIGame.Map
             rooms.Add(r);
         }
 
-        public void Draw(SpriteBatch spritebatch)
+		public MapState State
+		{
+			get { return state; }
+			set { state = value; }
+		}
+
+		public void Draw(SpriteBatch spritebatch)
         {
             foreach (Room r in rooms)
             {
