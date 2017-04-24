@@ -19,12 +19,18 @@ namespace GDAPSIIGame.Entities
         private int health;
         private int moveSpeed;
 		private Entity_Dir dir;
+		protected Vector2 knockBack;
+		protected float knockBackTime;
+		protected bool knockBackable;
 
         public Entity(int health, int moveSpeed, Texture2D texture, Vector2 position, Rectangle boundingBox) : base(texture, position, boundingBox)
         {
             this.health = health;
             this.moveSpeed = moveSpeed;
 			dir = Entity_Dir.Down;
+			knockBackTime = 0.0f;
+			knockBack = Vector2.Zero;
+			knockBackable = true;
         }
 
 		/// <summary>
@@ -152,9 +158,11 @@ namespace GDAPSIIGame.Entities
             }
 			else if(obj is Projectile)
 			{
-				if( (obj as Projectile).Owner == Owners.Player)
+				if( !(this is Player) &&((obj as Projectile).Owner == Owners.Player))
 				{
 					this.Damage(((Projectile)obj).Damage);
+					knockBack = (obj as Projectile).Direction *36;
+					knockBackTime = 0.2f;
 				}
 			}
 
@@ -165,6 +173,11 @@ namespace GDAPSIIGame.Entities
 			if(health <= 0)
 			{
 				active = false;
+			}
+			if(knockBackTime > 0 && knockBackable)
+			{
+				this.Position += knockBack * knockBackTime;
+				knockBackTime -= (float)gameTime.ElapsedGameTime.TotalSeconds;
 			}
 			base.Update(gameTime);
 		}
