@@ -37,6 +37,11 @@ namespace GDAPSIIGame.Graph
             neighbors.Add(intermediateNeighbor, newNeighbor);
         }
 
+        public int NumNeighbors
+        {
+            get { return neighbors.Count; }
+        }
+
         public void Update()
         {
             foreach(KeyValuePair<GraphNode, GraphNode> neighbor in neighbors)
