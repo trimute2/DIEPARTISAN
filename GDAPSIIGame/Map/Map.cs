@@ -21,7 +21,7 @@ namespace GDAPSIIGame.Map
             generateMap(files, this, mapSize);
 			state = MapState.Enter;
 			UIManager.Instance.Fade = true;
-            graph = new Graph.Graph(mapSize * mapSize, 32, 32);
+            graph = new Graph.Graph(mapSize * mapSize, 64, 64);
         }
 
         public void Add(Room r)

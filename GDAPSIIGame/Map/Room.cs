@@ -171,6 +171,14 @@ namespace GDAPSIIGame.Map
 									position.X + tileSize * i,
 									position.Y + tileSize * j);
 							Player.Instance.Position = currPos4;
+                            
+                            Vector2 currPos6 =
+                                new Vector2(
+                                    position.X + tileSize * i + (tileSize / 4),
+                                    position.Y + tileSize * j + (tileSize / 4));
+
+                            //Add this position to the graph
+                            graph.Add(new Graph.GraphNode(currPos6));
 							Camera.Instance.resetPosition(Player.Instance.Position);
 							break;
 						
@@ -180,6 +188,7 @@ namespace GDAPSIIGame.Map
                                 new Vector2(
                                     position.X + tileSize * i + (tileSize / 4), 
                                     position.Y + tileSize * j + (tileSize / 4));
+                            graph.Add(new Graph.GraphNode(currPos));
                             int health = 3;
                             int moveSpeed = 2;
 
@@ -207,7 +216,7 @@ namespace GDAPSIIGame.Map
 							Vector2 currPos3 =
 							   new Vector2(
 								   position.X + tileSize * i + (tileSize / 4),
-								   position.Y + tileSize * j + (tileSize/4));
+								   position.Y + tileSize * j + (tileSize / 4));
 							int health2 = 3;
 							int moveSpeed2 = 0;
 
@@ -224,11 +233,21 @@ namespace GDAPSIIGame.Map
 										enemySpriteWidth,
 										enemySpriteHeight));
 
-							//Add Enemy to game
-							EntityManager.Instance.Add(turret);
+                            //Add Enemy to game
+                            EntityManager.Instance.Add(turret);
 							ChunkManager.Instance.Add(turret);
 							pod.Add(turret);
 							break;
+
+                        default:
+                            Vector2 currPos5 =
+                                new Vector2(
+                                    position.X + tileSize * i + (tileSize / 2),
+                                    position.Y + tileSize * j + (tileSize / 2));
+
+                            //Add this position to the graph
+                            graph.Add(new Graph.GraphNode(currPos5));
+                            break;
                     }
                 }
             }

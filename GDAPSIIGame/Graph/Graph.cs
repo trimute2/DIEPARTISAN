@@ -19,13 +19,15 @@ namespace GDAPSIIGame.Graph
         public Graph(int numNodes, float xDistBetween, float yDistBetween)
         {
             nodes = new Dictionary<float, GraphNode>(numNodes);
+            this.xDistBetweenNodes = xDistBetween;
+            this.yDistBetweenNodes = yDistBetween;
         }
 
         /// <summary>
         /// Adds a node to the graph, connecting it to its existing neighbors
         /// </summary>
         /// <param name="newNode">Node to add</param>
-        void Add(GraphNode newNode)
+        public void Add(GraphNode newNode)
         {
             nodes.Add(newNode.UniqueID, newNode);
 
@@ -48,6 +50,9 @@ namespace GDAPSIIGame.Graph
                 newNode.AddNeighbor(nodes[leftID], nodes[leftID]);
                 nodes[leftID].AddNeighbor(newNode, newNode);
             }
+
+            //Console.WriteLine("Node {0} tried {1} and {2} and has {3} neighbors", newNode.UniqueID, aboveID, leftID, newNode.NumNeighbors);
+            //Console.WriteLine("Node created with position {0} {1}", newNode.Position.X, newNode.Position.Y);
         }
 
         /// <summary>
@@ -65,8 +70,17 @@ namespace GDAPSIIGame.Graph
 
         float getUniqueID(float X, float Y)
         {
-            return (.5f) * (X + Y) * (X + Y + 1) - Y;
+            return (.5f) * (X + Y) * (X + Y + 1) + Y;
         }
 
+        public int Size
+        {
+            get { return nodes.Count; }
+        }
+
+        public Dictionary<float, GraphNode> Nodes
+        {
+            get { return nodes; }
+        }
     }
 }
