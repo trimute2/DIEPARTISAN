@@ -25,6 +25,49 @@ namespace GDAPSIIGame
 		//Creating the max health for the player for draw reference **WILL BE UPDATED WITH PLAYER PROPERTY**
 		private int playerMaxHealth;
 
+		//Fading
+		private float fadeTimer;
+		private float fade;
+
+		private static UIManager instance;
+
+		/// <summary>
+		/// Singleton access
+		/// </summary>
+		/// <returns></returns>
+		static public UIManager Instance
+		{
+			get
+			{
+				if (instance == null)
+				{
+					instance = new UIManager();
+				}
+				return instance;
+			}
+		}
+
+		private UIManager()
+		{ }
+
+		public bool Fade
+		{
+			get { return fadeTimer > 0; }
+			set
+			{
+				if (value)
+				{
+					fadeTimer = 2f;
+					fade = 1f;
+				}
+				else
+				{
+					fadeTimer = 2f;
+					fade = 0;
+				}
+			}
+		}
+
         /// <summary>
         /// Load content from the UI Manager's assets.
         /// </summary>
@@ -50,6 +93,22 @@ namespace GDAPSIIGame
         /// <param name="gameTime"></param>
         public void Update(GameTime gameTime)
         {
+			//Fadein
+			if (MapManager.Instance.State == MapState.Enter && Fade)
+			{
+				fadeTimer -= (float)gameTime.ElapsedGameTime.TotalMilliseconds / 1000;
+				fade -= ((float)gameTime.ElapsedGameTime.TotalMilliseconds / 1000)/2;
+			}
+			else if (MapManager.Instance.State == MapState.Exit && Fade)
+			{
+				fadeTimer -= (float)gameTime.ElapsedGameTime.TotalMilliseconds / 1000;
+				fade += ((float)gameTime.ElapsedGameTime.TotalMilliseconds / 1000) / 2;
+			}
+			else if(MapManager.Instance.State == MapState.Enter)
+			{
+				MapManager.Instance.State = MapState.Play;
+			}
+
             //If the health isin't at max:
             if (Player.Instance.Health != playerMaxHealth)
             {
@@ -63,10 +122,16 @@ namespace GDAPSIIGame
         /// </summary>
         /// <param name="gameTime"></param>
         /// <param name="spriteBatch"></param>
-        public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        public void Draw(GameTime gameTime, SpriteBatch spriteBatch, GraphicsDevice GraphicsDevice)
         {
             spriteBatch.Draw(healthbarBackground, healthbarBackgroundBounding, Color.White);
             spriteBatch.Draw(healthbarForeground, healthbarForegroundBounding, Color.White);
-        }
+
+			if (MapManager.Instance.State == MapState.Enter || MapManager.Instance.State == MapState.Exit)
+			{
+				spriteBatch.Draw(TextureManager.Instance.GetMenuTexture("Black"), new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), new Color(Color.White, fade));
+			}
+
+		}
     }
 }

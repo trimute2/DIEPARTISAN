@@ -82,7 +82,7 @@ namespace GDAPSIIGame
 			weaponManager = WeaponManager.Instance;
 
             //Initialize ui manager
-            uiManager = new UIManager();
+            uiManager = UIManager.Instance;
 
 			//Initialize keyboards
 			kbState = new KeyboardState();
@@ -148,8 +148,9 @@ namespace GDAPSIIGame
             {
 				//The menu of the game
 				case GameState.Menu:
+					previousKbState = kbState;
 					kbState = Keyboard.GetState();
-					if (kbState.IsKeyDown(Keys.Enter))
+					if (kbState.IsKeyDown(Keys.Enter) && previousKbState.IsKeyUp(Keys.Enter))
 					{
 						gameState = GameState.NewGame;
 					}
@@ -160,6 +161,8 @@ namespace GDAPSIIGame
 					//Reset the player character
 					Player.Instance.ResetPlayer();
 					PodManager.Instance.FullReset();
+					//Reset the map
+					mapSize = 2;
 					//Go to loading screen to create a new level
 					gameState = GameState.LoadingScreen;
 					break;
@@ -182,13 +185,13 @@ namespace GDAPSIIGame
 
 				//Player playing a level
 				case GameState.GamePlay:
+					previousKbState = kbState;
+					kbState = Keyboard.GetState();
+
 					if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
 					{
 						Exit();
 					}
-
-					previousKbState = kbState;
-					kbState = Keyboard.GetState();
 
 					//Check if the player has paused the game
 					if (kbState.IsKeyDown(Keys.Enter) && !previousKbState.IsKeyDown(Keys.Enter))
@@ -196,46 +199,67 @@ namespace GDAPSIIGame
 						gameState = GameState.PauseMenu;
 					}
 
-					//Update entities
-					entityManager.Update(gameTime);
-
-					//Update projectiles
-					projectileManager.Update(gameTime, previousKbState, kbState);
-
-					//Update chunks
-					chunkManager.Update();
-
-					//Update UI
-					uiManager.Update(gameTime);
-
-					PodManager.Instance.Update(gameTime);
-
 					//Initialize Camera
 					if (mainCamera == null)
 					{
 						mainCamera = Camera.Instance;
 					}
 
-					//Check if the player has beat the levels
-					//if (entityManager.BeatLevel)
-					//{
-					//	gameState = GameState.LoadingScreen;
-					//}
-
-					//Check if the player has died
-					if (Player.Instance.Health <= 0 || PodManager.Instance.LevelTime > (mapSize*mapSize*10))
+					//Control for what state the map is in
+					switch (mapManager.State)
 					{
-						gameState = GameState.GameOver;
-						mapSize = 2;
-					}
+						//The level is starting
+						case MapState.Enter:
+							uiManager.Update(gameTime);
+							break;
+						
+						//The level is being played
+						case MapState.Play:
+							//The player has beat the level
+							if (PodManager.Instance.Count == 0)
+							{
+								if (mapSize < 5)
+								{
+									mapSize++;
+								}
+								uiManager.Fade = false;
+								mapManager.State = MapState.Exit;
+							}
 
-					if(PodManager.Instance.Count == 0)
-					{
-						if(mapSize < 5)
-						{
-							mapSize++;
-						}
-						gameState = GameState.LoadingScreen;
+							//Check if the player has died
+							if (Player.Instance.Health <= 0 || PodManager.Instance.LevelTime > (mapSize * mapSize * 10))
+							{
+								mapManager.State = MapState.Died;
+							}
+
+							//Update entities
+							entityManager.Update(gameTime);
+							
+							//Update projectiles
+							projectileManager.Update(gameTime, previousKbState, kbState);
+
+							//Update chunks
+							chunkManager.Update();
+
+							//Update UI
+							uiManager.Update(gameTime);
+
+							PodManager.Instance.Update(gameTime);
+							break;
+						
+						//The player is exiting the level after beating it
+						case MapState.Exit:
+							uiManager.Update(gameTime);
+							if (!uiManager.Fade)
+							{
+								gameState = GameState.LoadingScreen;
+							}
+							break;
+						
+						//The player has died on the level
+						case MapState.Died:
+							gameState = GameState.GameOver;
+							break;
 					}
 					break;
 
@@ -251,10 +275,11 @@ namespace GDAPSIIGame
 
 				//When the Player dies
 				case GameState.GameOver:
+					previousKbState = kbState;
 					kbState = Keyboard.GetState();
 					if (kbState.IsKeyDown(Keys.Enter) && !previousKbState.IsKeyDown(Keys.Enter))
                     {
-                        gameState = GameState.NewGame;
+                        gameState = GameState.Menu;
                     }
                     break;
 			}
@@ -302,7 +327,7 @@ namespace GDAPSIIGame
 					projectileManager.Draw(gameTime, spriteBatch);
 
 					//Draw UI
-					uiManager.Draw(gameTime, spriteBatch);
+					uiManager.Draw(gameTime, spriteBatch, GraphicsDevice);
 
 					//Draw the mouse texture
 					spriteBatch.Draw(mouseTex,
@@ -333,7 +358,7 @@ namespace GDAPSIIGame
 					projectileManager.Draw(gameTime, spriteBatch);
 
 					//Draw UI
-					uiManager.Draw(gameTime, spriteBatch);
+					uiManager.Draw(gameTime, spriteBatch, GraphicsDevice);
 
 					//Draw the mouse texture
 					spriteBatch.Draw(mouseTex,
