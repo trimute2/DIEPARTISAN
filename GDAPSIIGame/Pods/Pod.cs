@@ -42,7 +42,7 @@ namespace GDAPSIIGame.Pods
 		public void Update(GameTime gameTime)
 		{
 			if (!awake) {
-				for (int i = 0; i < Enemies.Count - 1; i++)
+				for (int i = 0; i < Enemies.Count; i++)
 				{
 					if (Enemies[i].Awake)
 					{
