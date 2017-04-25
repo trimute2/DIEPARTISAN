@@ -41,7 +41,6 @@ namespace GDAPSIIGame.Map
 		Texture2D textures;
 		private static int tileWidth = 32;
 		private static int tileHeight = 32;
-		private static int offset = 1;
 
 		public Room(TileType[,] tileLayout, Vector2 position)
         {
@@ -96,8 +95,8 @@ namespace GDAPSIIGame.Map
 						spriteBatch.Draw(
 							textures,
 							new Vector2(
-								(int)currPos.X + i * tileSize,
-								(int)currPos.Y + j * tileSize),
+								(int)currPos.X + (i * tileSize),
+								(int)currPos.Y + (j * tileSize)),
 							GetSourceRectangle(textures, 0),
 							Color.White,
 							0f,
@@ -171,15 +170,16 @@ namespace GDAPSIIGame.Map
 									position.X + tileSize * i,
 									position.Y + tileSize * j);
 							Player.Instance.Position = currPos4;
-                            
-                            Vector2 currPos6 =
+							Player.Instance.Weapon.Position = Player.Instance.Position;
+							Camera.Instance.resetPosition(Player.Instance.Position);
+
+							Vector2 currPos6 =
                                 new Vector2(
                                     position.X + tileSize * i + (tileSize / 4),
                                     position.Y + tileSize * j + (tileSize / 4));
 
                             //Add this position to the graph
                             graph.Add(new Graph.GraphNode(currPos6));
-							Camera.Instance.resetPosition(Player.Instance.Position);
 							break;
 						
 						//Create Melee Enemies
@@ -256,10 +256,20 @@ namespace GDAPSIIGame.Map
 
 		static private Rectangle GetSourceRectangle(Texture2D tileSetTexture, int tileIndex)
 		{
-			int tileY = tileIndex / (tileSetTexture.Height / tileHeight);
-			int tileX = tileIndex % (tileSetTexture.Width / tileWidth);
-
-			return new Rectangle((tileX * tileWidth), (tileY * tileHeight), tileWidth, tileHeight);
+			//For the first row of tiles
+			if (tileIndex < 5)
+			{
+				int tileY = tileIndex / (tileSetTexture.Height / tileHeight);
+				int tileX = tileIndex % (tileSetTexture.Width / tileWidth);
+				return new Rectangle((tileX * tileWidth), (tileY * tileHeight), tileWidth, tileHeight);
+			}
+			//For the second row of tiles
+			else
+			{
+				int tileY = tileIndex / (tileSetTexture.Height / tileHeight);
+				int tileX = tileIndex % (tileSetTexture.Width / tileWidth);
+				return new Rectangle((tileX * tileWidth) + 1, (tileY * tileHeight) + 2, tileWidth, tileHeight);
+			}			
 		}
 	}
 }
