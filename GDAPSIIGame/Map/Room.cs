@@ -32,72 +32,83 @@ namespace GDAPSIIGame.Map
         SOUTH,
         WEST
     }
-    class Room
-    {
-        //The literal tilemap of the room
-        private TileType[,] tileLayout;
-        int connections;
-        Vector2 position;
-		Texture2D textures;
+	class Room
+	{
+		//The literal tilemap of the room
+		private TileType[,] tileLayout;
+		private int[,] textureLayout;
+		int connections;
+		Vector2 position;
+		Texture2D wallTextures;
+		Texture2D floorTextures;
 		private static int tileWidth = 32;
 		private static int tileHeight = 32;
 
 		public Room(TileType[,] tileLayout, Vector2 position)
-        {
-            this.position = position;
-            this.tileLayout = tileLayout;
-            this.connections = 0;
-        }
+		{
+			this.position = position;
+			this.tileLayout = tileLayout;
+			this.textureLayout = new int[tileLayout.GetLength(0), tileLayout.GetLength(1)];
+			this.connections = 0;
+		}
 
 
 
-        /// <summary>
-        /// Matrix of Tiles belonging to this room
-        /// </summary>
-        public TileType[,] TileLayout
-        {
-            get { return tileLayout; }
-        }
+		/// <summary>
+		/// Matrix of Tiles belonging to this room
+		/// </summary>
+		public TileType[,] TileLayout
+		{
+			get { return tileLayout; }
+		}
 
-        /// <summary>
-        /// Naive implementation of rolling die to get up to 4 random rooms
-        /// Uses some fun bit shifting
-        /// </summary>
-        public void GenerateConnections(Random r)
-        {
-            int numRooms = r.Next(15) + 1;
-            int dirToConnect = 0;
+		/// <summary>
+		/// Matrix of Tiles belonging to this room
+		/// </summary>
+		public int[,] TextureLayout
+		{
+			get { return textureLayout; }
+		}
 
-            do
-            {
-                dirToConnect = r.Next(4) + 1;
-                while ((connections & dirToConnect) == dirToConnect)
-                {
-                    dirToConnect = (int)Math.Pow(2, r.Next(4));
-                }
-                connections += dirToConnect;
-                numRooms <<= 1;
-            } while ((numRooms & 8) == 0);
-            
-        }
+		/// <summary>
+		/// Naive implementation of rolling die to get up to 4 random rooms
+		/// Uses some fun bit shifting
+		/// </summary>
+		public void GenerateConnections(Random r)
+		{
+			int numRooms = r.Next(15) + 1;
+			int dirToConnect = 0;
 
-        public void Draw(SpriteBatch spriteBatch)
-        {
-            Vector2 currPos = Camera.Instance.GetViewportPosition(position);
-            int tileSize = 64;
-            int roomSize = 10;
-            for (int i = 0; i < roomSize; i++)
-            {
-                for (int j = 0; j < roomSize; j++)
-                {
+			do
+			{
+				dirToConnect = r.Next(4) + 1;
+				while ((connections & dirToConnect) == dirToConnect)
+				{
+					dirToConnect = (int)Math.Pow(2, r.Next(4));
+				}
+				connections += dirToConnect;
+				numRooms <<= 1;
+			} while ((numRooms & 8) == 0);
+
+		}
+
+		public void Draw(SpriteBatch spriteBatch)
+		{
+			Vector2 currPos = Camera.Instance.GetViewportPosition(position);
+			int tileSize = 64;
+			int roomSize = 10;
+			for (int i = 0; i < roomSize; i++)
+			{
+				for (int j = 0; j < roomSize; j++)
+				{
 					if (tileLayout[i, j] == TileType.WALL)
 					{
 						spriteBatch.Draw(
-							textures,
+							wallTextures,
 							new Vector2(
 								(int)currPos.X + (i * tileSize),
 								(int)currPos.Y + (j * tileSize)),
-							GetSourceRectangle(textures, 0),
+							GetSourceRectangle(wallTextures, 0),
 							Color.White,
 							0f,
 							Vector2.Zero,
@@ -107,12 +118,13 @@ namespace GDAPSIIGame.Map
 					}
 					else
 					{
+						int num = textureLayout[i, j];
 						spriteBatch.Draw(
-							textures,
+							floorTextures,
 							new Vector2(
 								(int)currPos.X + i * tileSize,
 								(int)currPos.Y + j * tileSize),
-							GetSourceRectangle(textures, 11),
+							GetSourceRectangle(floorTextures, textureLayout[i, j]),
 							Color.White,
 							0f,
 							Vector2.Zero,
@@ -121,31 +133,32 @@ namespace GDAPSIIGame.Map
 							0);
 					}
 				}
-            }
-        }
+			}
+		}
 
 		/// <summary>
 		/// Takes a Room and creates everything that is not a floor tile
 		/// </summary>
 		/// <param name="enemyTexture">Texture of enemies in this room</param>
 		/// <param name="wallTexture">Texture of walls in this room</param>
-		public void initRoom(Texture2D roomTextures, Graph.Graph graph)
-        {
+		public void initRoom(Texture2D wallTextures, Texture2D floorTextures, Graph.Graph graph)
+		{
 			//Init room's textures
-			textures = roomTextures;
+			this.wallTextures = wallTextures;
+			this.floorTextures = floorTextures;
 
-            //Should change this later
-            int tileSize = 64;
-            int roomSize = 10;
-            int enemySpriteWidth = 32;
-            int enemySpriteHeight = 32;
+			//Should change this later
+			int tileSize = 64;
+			int roomSize = 10;
+			int enemySpriteWidth = 32;
+			int enemySpriteHeight = 32;
 			Pod pod = new Pod();
-            for (int i = 0; i < roomSize; i++)
-            {
-                for (int j = 0; j < roomSize; j++)
-                {
-                    switch (tileLayout[i, j])
-                    {
+			for (int i = 0; i < roomSize; i++)
+			{
+				for (int j = 0; j < roomSize; j++)
+				{
+					switch (tileLayout[i, j])
+					{
 						//Create walls
 						case TileType.WALL:
 							Vector2 currPos2 =
@@ -154,7 +167,7 @@ namespace GDAPSIIGame.Map
 									position.Y + tileSize * j);
 							ChunkManager.Instance.Add(
 								new Wall(
-									roomTextures,
+									floorTextures,
 									currPos2,
 									new Rectangle(
 										(int)currPos2.X,
@@ -162,7 +175,7 @@ namespace GDAPSIIGame.Map
 										tileSize,
 										tileSize)));
 							break;
-						
+
 						//Move player
 						case TileType.PLAYER:
 							Vector2 currPos4 =
@@ -174,42 +187,42 @@ namespace GDAPSIIGame.Map
 							Camera.Instance.resetPosition(Player.Instance.Position);
 
 							Vector2 currPos6 =
-                                new Vector2(
-                                    position.X + tileSize * i + (tileSize / 4),
-                                    position.Y + tileSize * j + (tileSize / 4));
+								new Vector2(
+									position.X + tileSize * i + (tileSize / 4),
+									position.Y + tileSize * j + (tileSize / 4));
 
-                            //Add this position to the graph
-                            graph.Add(new Graph.GraphNode(currPos6));
+							//Add this position to the graph
+							graph.Add(new Graph.GraphNode(currPos6));
 							break;
-						
+
 						//Create Melee Enemies
 						case TileType.MELEEENEMY:
-                            Vector2 currPos = 
-                                new Vector2(
-                                    position.X + tileSize * i + (tileSize / 4), 
-                                    position.Y + tileSize * j + (tileSize / 4));
-                            graph.Add(new Graph.GraphNode(currPos));
-                            int health = 3;
-                            int moveSpeed = 2;
+							Vector2 currPos =
+								new Vector2(
+									position.X + tileSize * i + (tileSize / 4),
+									position.Y + tileSize * j + (tileSize / 4));
+							graph.Add(new Graph.GraphNode(currPos));
+							int health = 3;
+							int moveSpeed = 2;
 
-                            //Create new enemy
-                            MeleeEnemy newEnemy = 
-                                new MeleeEnemy(
-                                    health, 
-                                    moveSpeed, 
-                                    TextureManager.Instance.GetEnemyTexture("EnemyTexture"), 
-                                    currPos, 
-                                    new Rectangle(
-                                        (int)currPos.X, 
-                                        (int)currPos.Y, 
-                                        enemySpriteWidth,
-                                        enemySpriteHeight));
+							//Create new enemy
+							MeleeEnemy newEnemy =
+								new MeleeEnemy(
+									health,
+									moveSpeed,
+									TextureManager.Instance.GetEnemyTexture("EnemyTexture"),
+									currPos,
+									new Rectangle(
+										(int)currPos.X,
+										(int)currPos.Y,
+										enemySpriteWidth,
+										enemySpriteHeight));
 
-                            //Add Enemy to game
-                            EntityManager.Instance.Add(newEnemy);
-                            ChunkManager.Instance.Add(newEnemy);
+							//Add Enemy to game
+							EntityManager.Instance.Add(newEnemy);
+							ChunkManager.Instance.Add(newEnemy);
 							pod.Add(newEnemy);
-                            break;
+							break;
 
 						//Create Turret Enemies
 						case TileType.TURRET:
@@ -233,43 +246,170 @@ namespace GDAPSIIGame.Map
 										enemySpriteWidth,
 										enemySpriteHeight));
 
-                            //Add Enemy to game
-                            EntityManager.Instance.Add(turret);
+							//Add Enemy to game
+							EntityManager.Instance.Add(turret);
 							ChunkManager.Instance.Add(turret);
 							pod.Add(turret);
 							break;
 
-                        default:
-                            Vector2 currPos5 =
-                                new Vector2(
-                                    position.X + tileSize * i + (tileSize / 2),
-                                    position.Y + tileSize * j + (tileSize / 2));
+						default:
+							Vector2 currPos5 =
+								new Vector2(
+									position.X + tileSize * i + (tileSize / 2),
+									position.Y + tileSize * j + (tileSize / 2));
 
-                            //Add this position to the graph
-                            graph.Add(new Graph.GraphNode(currPos5));
-                            break;
-                    }
-                }
-            }
-			PodManager.Instance.Add(pod);
-        }
-
-		static private Rectangle GetSourceRectangle(Texture2D tileSetTexture, int tileIndex)
-		{
-			//For the first row of tiles
-			if (tileIndex < 5)
-			{
-				int tileY = tileIndex / (tileSetTexture.Height / tileHeight);
-				int tileX = tileIndex % (tileSetTexture.Width / tileWidth);
-				return new Rectangle((tileX * tileWidth), (tileY * tileHeight), tileWidth, tileHeight);
+							//Add this position to the graph
+							graph.Add(new Graph.GraphNode(currPos5));
+							break;
+					}
+				}
 			}
-			//For the second row of tiles
-			else
+			PodManager.Instance.Add(pod);
+
+			InitTextureMap();
+		}
+
+		/// <summary>
+		/// Decide what textures will show at each place in the map
+		/// </summary>
+		private void InitTextureMap()
+		{
+			Dictionary<int, int> convert = new Dictionary<int, int>
 			{
-				int tileY = tileIndex / (tileSetTexture.Height / tileHeight);
-				int tileX = tileIndex % (tileSetTexture.Width / tileWidth);
-				return new Rectangle((tileX * tileWidth) + 1, (tileY * tileHeight) + 2, tileWidth, tileHeight);
-			}			
+				{ 2, 1 }, { 8, 2 }, { 10, 3 }, { 11, 4 }, { 16, 5 }, { 18, 6 }, { 22, 7 }, { 24, 8 }, { 26, 9 }, { 27, 10 },
+				{ 30, 11 }, { 31, 12 }, { 64, 13 }, { 66, 14 }, { 72, 15 }, { 74, 16 }, { 75, 17 }, { 80, 18 }, { 82, 19 },
+				{ 86, 20 }, { 88, 21 }, { 90, 22 }, { 91, 23 }, { 94, 24 }, { 95, 25 }, { 104, 26 }, { 106, 27 }, { 107, 28 },
+				{ 120, 2 }, { 122, 30 }, { 123, 31 }, { 126, 32 }, { 127, 33 }, { 208, 34 }, { 210, 35 }, { 214, 36 }, { 216, 37 },
+				{ 218, 38 }, { 219, 39 }, { 222, 40 }, { 223, 41 }, { 248, 42 }, { 250, 43 }, { 251, 44 }, { 254, 45 }, { 255, 46 }, { 0, 47 }
+			};
+
+			for (int i = 0; i < tileLayout.Length; i++)
+			{
+				for (int j = 0; j < tileLayout.Length; j++)
+				{
+					//If not an edge case
+					if(i > 0 && i < tileLayout.GetLength(0)-1 && j > 0 && j < tileLayout.GetLength(1)-1)
+					{
+						if(tileLayout[i,j] == TileType.FLOOR)
+						{
+							int north, northeast, northwest;
+							int west;
+							int east;
+							int south, southeast, southwest;
+
+							//Find north value
+							if (tileLayout[i, j - 1] != TileType.WALL)
+							{
+								north = 1;
+							}
+							else north = 0;
+
+							//Find west value
+							if (tileLayout[i - 1, j] != TileType.WALL)
+							{
+								west = 1;
+							}
+							else west = 0;
+
+							//Find east value
+							if (tileLayout[i + 1, j] != TileType.WALL)
+							{
+								east = 1;
+
+							}
+							else east = 0;
+
+							//Find south value
+							if (tileLayout[i, j + 1] != TileType.WALL)
+							{
+								south = 1;
+							}
+							else south = 0;
+
+							//Find northeast value
+							if (tileLayout[i + 1, j - 1] != TileType.WALL)
+							{
+								if (north == 0 || east == 0)
+								{
+									northeast = 0;
+								}
+								else northeast = 1;
+							}
+							else northeast = 0;
+
+							//Find northwest
+							if (tileLayout[i - 1, j - 1] != TileType.WALL)
+							{
+								if (north == 0 || west == 0)
+								{
+									northwest = 0;
+								}
+								else northwest = 1;
+							}
+							else northwest = 0;
+
+							//Find southeast
+							if (tileLayout[i + 1, j + 1] != TileType.WALL)
+							{
+								if (south == 0 || east == 0)
+								{
+									southeast = 0;
+								}
+								else southeast = 1;
+							}
+							else southeast = 0;
+
+							//Find southwest
+							if (tileLayout[i - 1, j + 1] != TileType.WALL)
+							{
+								if (south == 0 || west == 0)
+								{
+									southwest = 0;
+								}
+								else southwest = 1;
+							}
+							else southwest = 0;
+
+							//Assign value to matrix
+							int bit = (1*northwest) + (2*north) + (4*northeast) + (8*west) + (16*east) + (32*southwest) + (64*south) + (128*southeast);
+							textureLayout[i, j] = convert[bit];
+						}
+						else
+						{
+							
+						}
+					}
+				}
+			}
+		}
+
+		/// <summary>
+		/// Get the rectangle for a tileset
+		/// </summary>
+		private Rectangle GetSourceRectangle(Texture2D tileSetTexture, int tileIndex)
+		{
+			//int col = 0;
+			//int row = 0;
+			//for (int i = 0; i<tileIndex; i++)
+			//{
+			//	col++;
+			//	row++;
+			//	if (col < tileSetTexture.Width / tileWidth)
+			//	{
+			//		col = 0;
+			//	}
+			//	if (row < tileSetTexture.Height / tileHeight)
+			//	{
+			//		row = 0;
+			//	}
+			//}
+
+			//int tileY = tileIndex * tileHeight;
+			int tileY = tileIndex / (tileSetTexture.Height / tileHeight);
+			//int tileX = tileIndex * tileWidth;
+			int tileX = tileIndex % (tileSetTexture.Width / tileWidth);
+
+			return new Rectangle((tileX * tileWidth), (tileY * tileHeight), tileWidth, tileHeight);
 		}
 	}
 }

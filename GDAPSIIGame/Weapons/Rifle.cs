@@ -214,6 +214,13 @@ namespace GDAPSIIGame.Weapons
 			//Check if click condition is met
 			if (mouseState.LeftButton == ButtonState.Pressed)
 			{
+				if (prevMouseState.LeftButton == ButtonState.Released)
+				{
+					if (!Fired && !Reload && clip <= 0)
+					{
+						Reload = true;
+					}
+				}
 				//Check user can fire or if they need to reload
 				if (!Fired && !Reload && clip > 0)
 				{

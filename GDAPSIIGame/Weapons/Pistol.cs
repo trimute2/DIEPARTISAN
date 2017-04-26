@@ -215,6 +215,10 @@ namespace GDAPSIIGame
 			if (mouseState.LeftButton == ButtonState.Pressed && prevMouseState.LeftButton == ButtonState.Released)
 			{
 				//Check user can fire or if they need to reload
+				if (!Fired && !Reload && clip <= 0)
+				{
+					Reload = true;
+				}
 				if (!Fired && !Reload && clip > 0)
 				{
 					Fired = true;

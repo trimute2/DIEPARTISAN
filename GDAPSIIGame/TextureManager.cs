@@ -100,6 +100,7 @@ namespace GDAPSIIGame
 			roomTextures.Add("WallTexture", Content.Load<Texture2D>("playerBullet"));
 			roomTextures.Add("FloorTexture", Content.Load<Texture2D>("playerNew"));
 			roomTextures.Add("IndoorSpriteSheet", Content.Load<Texture2D>("indoorTileset"));
+			roomTextures.Add("IndoorFloorSpriteSheet", Content.Load<Texture2D>("indoorFloorTileset"));
 
 			//Load menu textures
 			menuTextures.Add("Logo", Content.Load<Texture2D>("tempLogo"));

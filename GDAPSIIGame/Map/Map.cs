@@ -116,11 +116,11 @@ namespace GDAPSIIGame.Map
         /// <summary>
         /// Instantiates Gameobjects in Rooms, then sets spaces to floor.
         /// </summary>
-        public void initMap(Texture2D roomTextures)
+        public void initMap(Texture2D wallTextures, Texture2D floorTextures)
         {
             foreach (Room r in rooms)
             {
-                r.initRoom(roomTextures, graph);
+                r.initRoom(wallTextures, floorTextures, graph);
             }
         }
     }

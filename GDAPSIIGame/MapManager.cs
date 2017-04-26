@@ -56,10 +56,10 @@ namespace GDAPSIIGame
 		}
 
 		//Methods
-		public void CreateMap(Texture2D roomTextures, int mapSize)
+		public void CreateMap(Texture2D wallTextures, Texture2D floorTextures, int mapSize)
 		{
 			currMap = new Map.Map(mapSize);
-			currMap.initMap(roomTextures);
+			currMap.initMap(wallTextures, floorTextures);
 		}
 
 		public void Draw(SpriteBatch spriteBatch)
