@@ -401,11 +401,6 @@ namespace GDAPSIIGame.Map
 				}
 			}
 
-			//int tileY = tileIndex * tileHeight;
-			int tileY = tileIndex / (tileSetTexture.Height / tileHeight);
-			//int tileX = tileIndex * tileWidth;
-			int tileX = tileIndex % (tileSetTexture.Width / tileWidth);
-
 			return new Rectangle((col * tileWidth), (row * tileHeight), tileWidth, tileHeight);
 		}
 	}
