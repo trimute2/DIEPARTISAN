@@ -86,32 +86,41 @@ namespace GDAPSIIGame.Graph
         public void ConnectGraph()
         {
             bool done = false;
-
+            GraphNode vertex = null;
+            int attempts = 0;
             while (!done)
             {
+                attempts++;
                 done = true;
-                foreach (GraphNode vertex in nodes.Values)
+                for (int i = 0; i < nodes.Count; i++)
                 {
+                    vertex = nodes.Values.ElementAt(i);
                     if (!vertex.IsComplete)
                     {
+                        if(attempts> 10 && vertex.NumNeighbors < 100)
+                        {
+                            Console.WriteLine("{0} instead of {1}", vertex.NumNeighbors, nodes.Count);
+                        }
                         vertex.Update();
-                        if (vertex.NumNeighbors == nodes.Count || vertex.NumNeighbors == 0)
+                        if (vertex.NumNeighbors == nodes.Count)
                         {
                             vertex.IsComplete = true;
+                        }
+                        else if (vertex.NumNeighbors == 0)
+                        {
+                            Console.WriteLine("Removing" + vertex.UniqueID);
+                            nodes.Remove(vertex.UniqueID);
+                            i--;
                         }
                         else
                         {
                             done = false;
-                            Console.WriteLine("current size:" + vertex.NumNeighbors + " should be " + nodes.Count);
                         }
                     }
                 }
             }
 
-            foreach (GraphNode vertex in nodes.Values)
-            {
-                Console.WriteLine("final size:" + vertex.NumNeighbors);
-            }
+            Console.WriteLine("All nodes have {0} connections", nodes.Count);
         }
     }
 }
