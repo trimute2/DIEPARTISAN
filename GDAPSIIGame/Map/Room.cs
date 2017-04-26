@@ -291,7 +291,7 @@ namespace GDAPSIIGame.Map
 					//If not an edge case
 					if(i > 0 && i < tileLayout.GetLength(0)-1 && j > 0 && j < tileLayout.GetLength(1)-1)
 					{
-						if(tileLayout[i,j] == TileType.FLOOR)
+						if(tileLayout[i,j] != TileType.WALL)
 						{
 							int north, northeast, northwest;
 							int west;
@@ -389,28 +389,24 @@ namespace GDAPSIIGame.Map
 		/// </summary>
 		private Rectangle GetSourceRectangle(Texture2D tileSetTexture, int tileIndex)
 		{
-			//int col = 0;
-			//int row = 0;
-			//for (int i = 0; i<tileIndex; i++)
-			//{
-			//	col++;
-			//	row++;
-			//	if (col < tileSetTexture.Width / tileWidth)
-			//	{
-			//		col = 0;
-			//	}
-			//	if (row < tileSetTexture.Height / tileHeight)
-			//	{
-			//		row = 0;
-			//	}
-			//}
+			int col = 0;
+			int row = 0;
+			for (int i = 0; i<tileIndex; i++)
+			{
+				col++;
+				if (col == tileSetTexture.Width / tileWidth)
+				{
+					col = 0;
+					row++;
+				}
+			}
 
 			//int tileY = tileIndex * tileHeight;
 			int tileY = tileIndex / (tileSetTexture.Height / tileHeight);
 			//int tileX = tileIndex * tileWidth;
 			int tileX = tileIndex % (tileSetTexture.Width / tileWidth);
 
-			return new Rectangle((tileX * tileWidth), (tileY * tileHeight), tileWidth, tileHeight);
+			return new Rectangle((col * tileWidth), (row * tileHeight), tileWidth, tileHeight);
 		}
 	}
 }
