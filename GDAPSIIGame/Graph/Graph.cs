@@ -82,5 +82,36 @@ namespace GDAPSIIGame.Graph
         {
             get { return nodes; }
         }
+
+        public void ConnectGraph()
+        {
+            bool done = false;
+
+            while (!done)
+            {
+                done = true;
+                foreach (GraphNode vertex in nodes.Values)
+                {
+                    if (!vertex.IsComplete)
+                    {
+                        vertex.Update();
+                        if (vertex.NumNeighbors == nodes.Count || vertex.NumNeighbors == 0)
+                        {
+                            vertex.IsComplete = true;
+                        }
+                        else
+                        {
+                            done = false;
+                            Console.WriteLine("current size:" + vertex.NumNeighbors + " should be " + nodes.Count);
+                        }
+                    }
+                }
+            }
+
+            foreach (GraphNode vertex in nodes.Values)
+            {
+                Console.WriteLine("final size:" + vertex.NumNeighbors);
+            }
+        }
     }
 }
