@@ -335,6 +335,9 @@ namespace ExternalEditor
 						case 1:
 							b.BackColor = Color.DarkOrange;
 							break;
+						case 2:
+							b.BackColor = Color.DarkRed;
+							break;
 					}
                     b.Text = enemyTileText;
                     break;
@@ -504,6 +507,10 @@ namespace ExternalEditor
 					else if (BackColor == Color.DarkOrange)
 					{
 						tiles[i, j] = 4;
+					}
+					else if(BackColor == Color.DarkRed)
+					{
+						tiles[i, j] = 5;
 					}
                     else
                     {

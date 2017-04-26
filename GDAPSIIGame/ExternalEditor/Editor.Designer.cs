@@ -77,7 +77,7 @@
 			this.openLevelXTilesLabel.AutoSize = true;
 			this.openLevelXTilesLabel.Location = new System.Drawing.Point(22, 37);
 			this.openLevelXTilesLabel.Name = "openLevelXTilesLabel";
-			this.openLevelXTilesLabel.Size = new System.Drawing.Size(38, 14);
+			this.openLevelXTilesLabel.Size = new System.Drawing.Size(47, 16);
 			this.openLevelXTilesLabel.TabIndex = 2;
 			this.openLevelXTilesLabel.Text = "x tiles:";
 			// 
@@ -86,7 +86,7 @@
 			this.openLevelYTilesLabel.AutoSize = true;
 			this.openLevelYTilesLabel.Location = new System.Drawing.Point(23, 70);
 			this.openLevelYTilesLabel.Name = "openLevelYTilesLabel";
-			this.openLevelYTilesLabel.Size = new System.Drawing.Size(38, 14);
+			this.openLevelYTilesLabel.Size = new System.Drawing.Size(48, 16);
 			this.openLevelYTilesLabel.TabIndex = 3;
 			this.openLevelYTilesLabel.Text = "y tiles:";
 			// 
@@ -94,14 +94,14 @@
 			// 
 			this.newLevelXTilesTextbox.Location = new System.Drawing.Point(64, 33);
 			this.newLevelXTilesTextbox.Name = "newLevelXTilesTextbox";
-			this.newLevelXTilesTextbox.Size = new System.Drawing.Size(88, 20);
+			this.newLevelXTilesTextbox.Size = new System.Drawing.Size(88, 23);
 			this.newLevelXTilesTextbox.TabIndex = 4;
 			// 
 			// newLevelYTilesTextbox
 			// 
 			this.newLevelYTilesTextbox.Location = new System.Drawing.Point(64, 67);
 			this.newLevelYTilesTextbox.Name = "newLevelYTilesTextbox";
-			this.newLevelYTilesTextbox.Size = new System.Drawing.Size(88, 20);
+			this.newLevelYTilesTextbox.Size = new System.Drawing.Size(88, 23);
 			this.newLevelYTilesTextbox.TabIndex = 5;
 			// 
 			// createOpenLevelGroup
@@ -187,7 +187,7 @@
 			this.CurrentToolLabel.AutoSize = true;
 			this.CurrentToolLabel.Location = new System.Drawing.Point(12, 358);
 			this.CurrentToolLabel.Name = "CurrentToolLabel";
-			this.CurrentToolLabel.Size = new System.Drawing.Size(91, 14);
+			this.CurrentToolLabel.Size = new System.Drawing.Size(120, 16);
 			this.CurrentToolLabel.TabIndex = 12;
 			this.CurrentToolLabel.Text = "Current Tool: Wall";
 			// 
@@ -196,7 +196,7 @@
 			this.currentLevelNameLabel.AutoSize = true;
 			this.currentLevelNameLabel.Location = new System.Drawing.Point(116, 33);
 			this.currentLevelNameLabel.Name = "currentLevelNameLabel";
-			this.currentLevelNameLabel.Size = new System.Drawing.Size(36, 14);
+			this.currentLevelNameLabel.Size = new System.Drawing.Size(46, 16);
 			this.currentLevelNameLabel.TabIndex = 17;
 			this.currentLevelNameLabel.Text = ".cmap";
 			// 
@@ -204,7 +204,7 @@
 			// 
 			this.currentLevelNameTextbox.Location = new System.Drawing.Point(23, 30);
 			this.currentLevelNameTextbox.Name = "currentLevelNameTextbox";
-			this.currentLevelNameTextbox.Size = new System.Drawing.Size(87, 20);
+			this.currentLevelNameTextbox.Size = new System.Drawing.Size(87, 23);
 			this.currentLevelNameTextbox.TabIndex = 18;
 			// 
 			// currentLevelGroup
@@ -263,6 +263,7 @@
 			// 
 			// toolStrip
 			// 
+			this.toolStrip.ImageScalingSize = new System.Drawing.Size(20, 20);
 			this.toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripTextBox,
             this.toolStripXYPos});
@@ -292,16 +293,17 @@
 			this.enemyDropDownBox.FormattingEnabled = true;
 			this.enemyDropDownBox.Items.AddRange(new object[] {
             "Melee Enemy",
-            "Turret Enemy"});
+            "Turret Enemy",
+            "DashEnemy"});
 			this.enemyDropDownBox.Location = new System.Drawing.Point(37, 325);
 			this.enemyDropDownBox.Name = "enemyDropDownBox";
-			this.enemyDropDownBox.Size = new System.Drawing.Size(121, 22);
+			this.enemyDropDownBox.Size = new System.Drawing.Size(121, 24);
 			this.enemyDropDownBox.TabIndex = 23;
 			this.enemyDropDownBox.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
 			// 
 			// Editor
 			// 
-			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 14F);
+			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.AutoSize = true;
 			this.ClientSize = new System.Drawing.Size(196, 618);
