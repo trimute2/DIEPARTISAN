@@ -188,8 +188,8 @@ namespace GDAPSIIGame.Map
 							Player.Instance.CurrWeapon.ResetWeapon();
 
 							Weapons.Weapon temp = Player.Instance.CurrWeapon;
-							temp.X = currPos4.X + Player.Instance.BoundingBox.Width / 2;
-							temp.Y = currPos4.Y + Player.Instance.BoundingBox.Height / 2;
+							temp.X = currPos.X + Player.Instance.BoundingBox.Width / 2;
+							temp.Y = currPos.Y + Player.Instance.BoundingBox.Height / 2;
 							Camera.Instance.resetPosition(Player.Instance.Position);
 
 							//Add this position to the graph
