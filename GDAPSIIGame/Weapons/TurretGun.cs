@@ -47,6 +47,15 @@ namespace GDAPSIIGame.Weapons
 			}
 		}
 
+		/// <summary>
+		/// This gun does not reload do not use this property!
+		/// </summary>
+		public override bool Reload
+		{
+			get	{ return false; }
+			set	{ }
+		}
+
 		public override void Update(GameTime gameTime)
 		{
 			switch (Dir)

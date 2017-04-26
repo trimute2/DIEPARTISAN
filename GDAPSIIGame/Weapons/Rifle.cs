@@ -43,10 +43,10 @@ namespace GDAPSIIGame.Weapons
 		/// <summary>
 		/// Whether the weapon is reloading or not
 		/// </summary>
-		public bool Reload
+		public override bool Reload
 		{
 			get { return reload > 0; }
-			private set
+			set
 			{
 				if (value)
 				{
@@ -150,34 +150,34 @@ namespace GDAPSIIGame.Weapons
 		{
 			switch (Dir)
 			{
-				case Weapons.Weapon_Dir.UpEast:
+				case Weapon_Dir.UpEast:
 					effects = SpriteEffects.FlipHorizontally;
 					break;
-				case Weapons.Weapon_Dir.UpWest:
+				case Weapon_Dir.UpWest:
 					effects = SpriteEffects.None;
 					break;
-				case Weapons.Weapon_Dir.UpLeft:
+				case Weapon_Dir.UpLeft:
 					effects = SpriteEffects.None;
 					break;
-				case Weapons.Weapon_Dir.Left:
+				case Weapon_Dir.Left:
 					effects = SpriteEffects.None;
 					break;
-				case Weapons.Weapon_Dir.DownLeft:
+				case Weapon_Dir.DownLeft:
 					effects = SpriteEffects.None;
 					break;
-				case Weapons.Weapon_Dir.DownWest:
+				case Weapon_Dir.DownWest:
 					effects = SpriteEffects.None;
 					break;
-				case Weapons.Weapon_Dir.DownEast:
+				case Weapon_Dir.DownEast:
 					effects = SpriteEffects.FlipHorizontally;
 					break;
-				case Weapons.Weapon_Dir.DownRight:
+				case Weapon_Dir.DownRight:
 					effects = SpriteEffects.FlipHorizontally;
 					break;
-				case Weapons.Weapon_Dir.Right:
+				case Weapon_Dir.Right:
 					effects = SpriteEffects.FlipHorizontally;
 					break;
-				case Weapons.Weapon_Dir.UpRight:
+				case Weapon_Dir.UpRight:
 					effects = SpriteEffects.FlipHorizontally;
 					break;
 			}
@@ -226,9 +226,15 @@ namespace GDAPSIIGame.Weapons
 				{
 					Fired = true;
 					clip--;
+
+					//Take the gun's current angle (a property) and create a rotation matrix out of it
 					Matrix rotationMatrix = Matrix.CreateRotationZ(Angle);
+					//Take the rotation matrix and transform the offset vector by it
+					//The offset vector is an approximation of where the muzzle should be when added to the bullet's position
+					//Remember the bullet's position is the top left of its bouunding box
 					Vector2 bulletPosition = Vector2.Transform(bulletOffset, rotationMatrix);
 
+					//Create the bullet at the actual position of the bullet + the rotated position
 					ProjectileManager.Instance.Clone(ProjType, Position + bulletPosition, direction, owner);
 				}
 			}
@@ -237,6 +243,7 @@ namespace GDAPSIIGame.Weapons
 		public override void ResetWeapon()
 		{
 			clip = clipSize;
+			Angle = 0;
 		}
 	}
 }

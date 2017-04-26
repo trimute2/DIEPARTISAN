@@ -43,10 +43,10 @@ namespace GDAPSIIGame
 		/// <summary>
 		/// Whether the weapon is reloading or not
 		/// </summary>
-		public bool Reload
+		public override bool Reload
 		{
 			get { return reload > 0; }
-			private set
+			set
 			{
 				if (value)
 				{
@@ -234,6 +234,7 @@ namespace GDAPSIIGame
 		public override void ResetWeapon()
 		{
 			clip = clipSize;
+			Angle = 0;
 		}
 	}
 }

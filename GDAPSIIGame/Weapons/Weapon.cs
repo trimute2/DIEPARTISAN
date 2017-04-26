@@ -54,8 +54,12 @@ namespace GDAPSIIGame.Weapons
 		/// </summary>
 		public abstract bool Fired
 		{
-			get;
-			set;
+			get; set;
+		}
+
+		public abstract bool Reload
+		{
+			get; set;
 		}
 
 		/// <summary>

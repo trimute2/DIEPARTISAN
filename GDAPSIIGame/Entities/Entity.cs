@@ -122,34 +122,34 @@ namespace GDAPSIIGame.Entities
 					(distLeft == distBottom && ((Wall)obj).Bellow)))
 				{
 					this.X -= distLeft+1;
-					if(this is Player && ((Player)this).Weapon != null)
+					if(this is Player && ((Player)this).CurrWeapon != null)
 					{
-						((Player)this).Weapon.X -= distLeft + 1;
+						((Player)this).CurrWeapon.X -= distLeft + 1;
 					}
 				}else if(distRight < distTop &&
 					(distRight < distBottom ||
 					(distRight == distBottom && ((Wall)obj).Bellow)))
 				{
 					this.X += distRight+1;
-					if (this is Player && ((Player)this).Weapon != null)
+					if (this is Player && ((Player)this).CurrWeapon != null)
 					{
-						((Player)this).Weapon.X += distRight + 1;
+						((Player)this).CurrWeapon.X += distRight + 1;
 					}
 				}
 				else if(distTop < distBottom)
 				{
 					this.Y -= distTop+1;
-					if (this is Player && ((Player)this).Weapon != null)
+					if (this is Player && ((Player)this).CurrWeapon != null)
 					{
-						((Player)this).Weapon.Y -= distTop+1;
+						((Player)this).CurrWeapon.Y -= distTop+1;
 					}
 				}
 				else
 				{
 					this.Y += distBottom+1;
-					if (this is Player && ((Player)this).Weapon != null)
+					if (this is Player && ((Player)this).CurrWeapon != null)
 					{
-						((Player)this).Weapon.Y += distBottom+1;
+						((Player)this).CurrWeapon.Y += distBottom+1;
 					}
 				}
 

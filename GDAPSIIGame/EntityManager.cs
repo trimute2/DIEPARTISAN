@@ -57,14 +57,14 @@ namespace GDAPSIIGame
         {
 			Texture2D playerTexture = TextureManager.Instance.PlayerTextures["PlayerTexture"];
 			//Create the player object
-			player = Player.Instantiate(null,
+			player = Player.Instantiate(Weapons.WeaponManager.Instance.Pistol,
+				Weapons.WeaponManager.Instance.Rifle,
 				100,
 				5,
 				playerTexture,
 				new Vector2(playerTexture.Width, playerTexture.Height),
 				new Rectangle(playerTexture.Width, playerTexture.Height, 40, 60));
 			//Create the player's weapon and add it to the player
-			Player.Instance.Weapon = Weapons.WeaponManager.Instance.Rifle;
             ChunkManager.Instance.Add(player);
 		}
 

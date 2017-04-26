@@ -21,7 +21,8 @@ namespace GDAPSIIGame
 	{
 		//Fields
 		static private Player instance;
-		private Weapon weapon;
+		private Weapon[] weapons;
+		private Weapon currWeapon;
 		private MouseState mouseState;
 		private MouseState prevMouseState;
 		private KeyboardState keyState;
@@ -43,9 +44,10 @@ namespace GDAPSIIGame
 
 		//Singleton
 
-		private Player(Weapons.Weapon weapon, int health, int moveSpeed, Texture2D texture, Vector2 position, Rectangle boundingBox) : base(health, moveSpeed, texture, position, boundingBox)
+		private Player(Weapon weapon, Weapon weapon2, int health, int moveSpeed, Texture2D texture, Vector2 position, Rectangle boundingBox) : base(health, moveSpeed, texture, position, boundingBox)
 		{
-			this.weapon = weapon;
+			weapons = new Weapon[] { weapon, weapon2 };
+			currWeapon = weapons[0];
 			focusMultiplier = 1.0f;
 			focusTimer = 0f;
 			varianceMultiplier = 1.0f;
@@ -63,11 +65,11 @@ namespace GDAPSIIGame
 			firing = 0;
 		}
 
-		static public Player Instantiate(Weapon weapon, int health, int moveSpeed, Texture2D texture, Vector2 position, Rectangle boundingBox)
+		static public Player Instantiate(Weapon weapon, Weapon weapon2, int health, int moveSpeed, Texture2D texture, Vector2 position, Rectangle boundingBox)
 		{
 			if (instance == null)
 			{
-				instance = new Player(weapon, health, moveSpeed, texture, position, boundingBox);
+				instance = new Player(weapon, weapon2, health, moveSpeed, texture, position, boundingBox);
 			}
 			return instance;
 		}
@@ -85,16 +87,43 @@ namespace GDAPSIIGame
 		/// <summary>
 		/// The weapon the player is holding
 		/// </summary>
-		public Weapon Weapon
+		public Weapon CurrWeapon
 		{
-			get { return weapon; }
-			set { weapon = value; }
+			get { return currWeapon; }
+			set { currWeapon = value; }
 		}
 
-        /// <summary>
-        /// Whether the player is hurting or not
-        /// </summary>
-        public bool IsHurting
+		/// <summary>
+		/// The first weapon the player knows
+		/// </summary>
+		public Weapon Weapon
+		{
+			get { return weapons[0]; }
+			set { weapons[0] = value; }
+		}
+
+		/// <summary>
+		/// The second weapon the player knows
+		/// </summary>
+		public Weapon Weapon2
+		{
+			get { return weapons[1]; }
+			set { weapons[1] = value; }
+		}
+
+		/// <summary>
+		/// The array of weapons the player knows
+		/// </summary>
+		public Weapon[] KnownWeapons
+		{
+			get { return weapons; }
+			set { weapons = value; }
+		}
+
+		/// <summary>
+		/// Whether the player is hurting or not
+		/// </summary>
+		public bool IsHurting
         {
             get { return hurting > 0; }
             set
@@ -143,21 +172,21 @@ namespace GDAPSIIGame
 			UpdateInput(gameTime, keyState, prevKeyState);
 
 			//Update the weapons rotation
-			Vector2 camw = Camera.Instance.GetViewportPosition(Weapon.Position);
-            weapon.Angle = -((float)Math.Atan2(mouseState.X - camw.X, mouseState.Y - camw.Y));
+			Vector2 camw = Camera.Instance.GetViewportPosition(CurrWeapon.Position);
+            currWeapon.Angle = -((float)Math.Atan2(mouseState.X - camw.X, mouseState.Y - camw.Y));
 			//Update weapon position
-			weapon.X = this.X + (BoundingBox.Width / 2);
-			weapon.Y = this.Y + (BoundingBox.Height / 2);
+			 currWeapon.X = this.X + (BoundingBox.Width / 2);
+			 currWeapon.Y = this.Y + (BoundingBox.Height / 2);
 			//Update weapon
-			weapon.Update(gameTime);
+			 currWeapon.Update(gameTime);
 
 			//Fire weapon only if previous frame didn't have left button being pressed
 			if (mouseState.LeftButton == ButtonState.Pressed)
 			{
 				Vector2 direction = new Vector2((mouseState.X - camw.X) / 1, (mouseState.Y - camw.Y) / 1);
 				direction.Normalize();
-				this.Weapon.Fire(direction, mouseState, prevMouseState);
-				if (weapon.Fired)
+				this.CurrWeapon.Fire(direction, mouseState, prevMouseState);
+				if ( currWeapon.Fired)
 				{
 					IsFiring = true;
 				}
@@ -294,7 +323,7 @@ namespace GDAPSIIGame
 				color,
 				effect);
 
-			weapon.Draw(spriteBatch);
+			 currWeapon.Draw(spriteBatch);
         }
 
         /// <summary>
@@ -333,7 +362,7 @@ namespace GDAPSIIGame
 			//Player reloading
 			if (keyState.IsKeyDown(Keys.R) && prevKeyState.IsKeyUp(Keys.R))
 			{
-				this.weapon.ReloadWeapon();
+				this. currWeapon.ReloadWeapon();
 			}
 
 			//Calculates the angle between the player and the mouse
@@ -341,8 +370,30 @@ namespace GDAPSIIGame
 			//   180
 			//-90   90
 			//    0
-			Vector2 campos = Camera.Instance.GetViewportPosition(this.X+25,this.Y);
+			Vector2 campos = Camera.Instance.GetViewportPosition(this.X + 25, this.Y);
 			angle = MathHelper.ToDegrees((float)Math.Atan2(mouseState.X - campos.X, mouseState.Y - campos.Y));
+
+			//Player switching weapons from scroll wheel up
+			if (mouseState.ScrollWheelValue > prevMouseState.ScrollWheelValue)
+			{
+				InteruptReload();
+				if (currWeapon == weapons[0]) { this.currWeapon = weapons[1]; }
+				else if (currWeapon == weapons[1]) { this.currWeapon = weapons[0]; }
+				currWeapon.Dir = GetCurrentWeaponDir();
+				Vector2 camw = Camera.Instance.GetViewportPosition(CurrWeapon.Position);
+				currWeapon.Angle = -((float)Math.Atan2(mouseState.X - camw.X, mouseState.Y - camw.Y));
+			}
+
+			//Player switching weapons from scroll wheel down
+			if (mouseState.ScrollWheelValue < prevMouseState.ScrollWheelValue)
+			{
+				InteruptReload();
+				if (currWeapon == weapons[1]) { this.currWeapon = weapons[0]; }
+				else if (currWeapon == weapons[0]) { this.currWeapon = weapons[1]; }
+				currWeapon.Dir = GetCurrentWeaponDir();
+				Vector2 camw = Camera.Instance.GetViewportPosition(CurrWeapon.Position);
+				currWeapon.Angle = -((float)Math.Atan2(mouseState.X - camw.X, mouseState.Y - camw.Y));
+			}
 
 			//Use angle to find player direction
 			if ((angle < -157.5) || (angle > 157.5))
@@ -350,48 +401,48 @@ namespace GDAPSIIGame
 				this.Dir = Entity_Dir.Up;
 				if (angle < -157.5)
 				{
-					weapon.Dir = Weapon_Dir.UpWest;
+					 currWeapon.Dir = Weapon_Dir.UpWest;
 				}
-				else weapon.Dir = Weapon_Dir.UpEast;
+				else  currWeapon.Dir = Weapon_Dir.UpEast;
 			}
 			else if ((angle < 157.5) && (angle > 112.5) && this.Dir != Entity_Dir.UpRight)
 			{
 				this.Dir = Entity_Dir.UpRight;
-				weapon.Dir = Weapon_Dir.UpRight;
+				currWeapon.Dir = Weapon_Dir.UpRight;
 			}
 			else if ((angle < 112.5) && (angle > 67.5) && this.Dir != Entity_Dir.Right)
 			{
 				this.Dir = Entity_Dir.Right;
-				weapon.Dir = Weapon_Dir.Right;
+				currWeapon.Dir = Weapon_Dir.Right;
 			}
 			else if ((angle < 67.5) && (angle > 22.5) && this.Dir != Entity_Dir.DownRight)
 			{
 				this.Dir = Entity_Dir.DownRight;
-				weapon.Dir = Weapon_Dir.DownRight;
+				currWeapon.Dir = Weapon_Dir.DownRight;
 			}
 			else if ((angle < -22.5) && (angle > -67.5) && this.Dir != Entity_Dir.DownLeft)
 			{
 				this.Dir = Entity_Dir.DownLeft;
-				weapon.Dir = Weapon_Dir.DownLeft;
+				currWeapon.Dir = Weapon_Dir.DownLeft;
 			}
 			else if ((angle < -67.5) && (angle > -112.5) && this.Dir != Entity_Dir.Left)
 			{
 				this.Dir = Entity_Dir.Left;
-				weapon.Dir = Weapon_Dir.Left;
+				currWeapon.Dir = Weapon_Dir.Left;
 			}
 			else if ((angle < -112.5) && (angle > -157.5) && this.Dir != Entity_Dir.UpLeft)
 			{
 				this.Dir = Entity_Dir.UpLeft;
-				weapon.Dir = Weapon_Dir.UpLeft;
+				currWeapon.Dir = Weapon_Dir.UpLeft;
 			}
 			else if ((angle < 22.5) && (angle > -22.5))
 			{
 				this.Dir = Entity_Dir.Down;
 				if(angle < 0)
 				{
-					weapon.Dir = Weapon_Dir.DownWest;
+					 currWeapon.Dir = Weapon_Dir.DownWest;
 				}
-				else weapon.Dir = Weapon_Dir.DownEast;
+				else  currWeapon.Dir = Weapon_Dir.DownEast;
 			}
         }
 
@@ -436,6 +487,9 @@ namespace GDAPSIIGame
 			}
 		}
 
+		/// <summary>
+		/// Completely resets the player for new games
+		/// </summary>
 		public void ResetPlayer()
 		{
 			mouseState = Mouse.GetState();
@@ -443,8 +497,6 @@ namespace GDAPSIIGame
 			keyState = Keyboard.GetState();
 			prevKeyState = Keyboard.GetState();
 			Health = 100;
-			this.X = 120;
-			this.Y = 180;
 
 			this.active = true;
 			hurting = 0;
@@ -457,6 +509,67 @@ namespace GDAPSIIGame
 			varianceMultiplier = 0;
 			varianceTimer = 0;
 			focusMultiplier = 0;
+		}
+
+		/// <summary>
+		/// Partially resets the player for switching levels
+		/// </summary>
+		public void ResetPlayerNewMap()
+		{
+			mouseState = Mouse.GetState();
+			prevMouseState = Mouse.GetState();
+			keyState = Keyboard.GetState();
+			prevKeyState = Keyboard.GetState();
+
+			this.active = true;
+			hurting = 0;
+			hurtBlink = 0;
+			color = Color.White;
+			angle = 0;
+			effect = new SpriteEffects();
+			timeMult = 0;
+			firing = 0;
+			varianceMultiplier = 0;
+			varianceTimer = 0;
+			focusMultiplier = 0;
+		}
+
+		//Interupts the current weapon's reload
+		private void InteruptReload()
+		{
+			currWeapon.Reload = false;
+		}
+		
+		private Weapon_Dir GetCurrentWeaponDir()
+		{
+			switch (Dir)
+			{
+				case Entity_Dir.Up:
+					if (angle < -157.5)
+					{
+						return Weapon_Dir.UpWest;
+					}
+					else return Weapon_Dir.UpEast;
+				case Entity_Dir.UpLeft:
+					return Weapon_Dir.UpLeft;
+				case Entity_Dir.Left:
+					return Weapon_Dir.Left;
+				case Entity_Dir.DownLeft:
+					return Weapon_Dir.DownLeft;
+				case Entity_Dir.Down:
+					if (angle < 0)
+					{
+						return Weapon_Dir.DownWest;
+					}
+					return Weapon_Dir.DownEast;
+				case Entity_Dir.DownRight:
+					return Weapon_Dir.DownRight;
+				case Entity_Dir.Right:
+					return Weapon_Dir.Right;
+				case Entity_Dir.UpRight:
+					return Weapon_Dir.UpRight;
+			}
+			return Weapon_Dir.DownEast;
 		}
 
 	}

@@ -183,8 +183,13 @@ namespace GDAPSIIGame.Map
 									position.X + tileSize * i,
 									position.Y + tileSize * j);
 							Player.Instance.Position = currPos4;
-							Player.Instance.Weapon.Position = Player.Instance.Position;
-							Player.Instance.Weapon.ResetWeapon();
+							Player.Instance.ResetPlayerNewMap();
+							Player.Instance.CurrWeapon.ResetWeapon();
+
+							Weapons.Weapon temp = Player.Instance.CurrWeapon;
+							temp.X = currPos4.X + Player.Instance.BoundingBox.Width / 2;
+							temp.Y = currPos4.Y + Player.Instance.BoundingBox.Height / 2;
+
 							Camera.Instance.resetPosition(Player.Instance.Position);
 
 							Vector2 currPos6 =
