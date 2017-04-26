@@ -74,7 +74,7 @@ namespace GDAPSIIGame.Weapons
 
 		public override void Update(GameTime gameTime)
 		{
-			base.Update(gameTime);
+			
 
 			switch (Dir)
 			{
@@ -144,6 +144,7 @@ namespace GDAPSIIGame.Weapons
 					clip = clipSize;
 				}
 			}
+			base.Update(gameTime);
 		}
 
 		public override void Draw(SpriteBatch spriteBatch)
