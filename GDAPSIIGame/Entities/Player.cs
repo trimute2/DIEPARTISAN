@@ -446,6 +446,7 @@ namespace GDAPSIIGame
 			this.X = 120;
 			this.Y = 180;
 
+			this.active = true;
 			hurting = 0;
 			hurtBlink = 0;
 			color = Color.White;
