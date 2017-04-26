@@ -40,6 +40,7 @@
   <ItemGroup>
     <Compile Include="Chunk.cs" />
     <Compile Include="ChunkManager.cs" />
+    <Compile Include="Entities\DashEnemy.cs" />
     <Compile Include="Entities\Enemy.cs" />
     <Compile Include="Entities\MeleeEnemy.cs" />
     <Compile Include="Entities\Entity.cs" />

@@ -41,22 +41,35 @@ namespace GDAPSIIGame.Entities
 			if (!(knockBackTime > 0))
 			{
 				Vector2 diff = Position - thingToMoveTo.Position;
-				if (diff.X > 0)
+				if (MoveSpeed > Math.Abs(diff.X))
 				{
-					X-= MoveSpeed;
+					X = thingToMoveTo.X;
 				}
 				else
 				{
-					X+= MoveSpeed;
+					if (diff.X > 0)
+					{
+						X -= MoveSpeed;
+					}
+					else
+					{
+						X += MoveSpeed;
+					}
 				}
-
-				if (diff.Y > 0)
+				if (MoveSpeed > Math.Abs(diff.Y))
 				{
-					Y-=MoveSpeed;
+					Y = thingToMoveTo.Y;
 				}
 				else
 				{
-					Y+=MoveSpeed;
+					if (diff.Y > 0)
+					{
+						Y -= MoveSpeed;
+					}
+					else
+					{
+						Y += MoveSpeed;
+					}
 				}
 			}
         }

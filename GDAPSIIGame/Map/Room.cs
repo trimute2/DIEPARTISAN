@@ -19,7 +19,8 @@ namespace GDAPSIIGame.Map
         WALL,
         PLAYER,
 		MELEEENEMY,
-		TURRET
+		TURRET,
+		DASHENEMY
     }
 
     /// <summary>
@@ -251,6 +252,34 @@ namespace GDAPSIIGame.Map
 							EntityManager.Instance.Add(turret);
 							ChunkManager.Instance.Add(turret);
 							pod.Add(turret);
+							break;
+
+						case TileType.DASHENEMY:
+							Vector2 currPos7 =
+								new Vector2(
+									position.X + tileSize * i + (tileSize / 4),
+									position.Y + tileSize * j + (tileSize / 4));
+							graph.Add(new Graph.GraphNode(currPos7));
+							int health3 = 3;
+							int moveSpeed3 = 2;
+
+							//Create new enemy
+							DashEnemy dash =
+								new DashEnemy(
+									health3,
+									moveSpeed3,
+									TextureManager.Instance.GetEnemyTexture("EnemyTexture"),
+									currPos7,
+									new Rectangle(
+										(int)currPos7.X,
+										(int)currPos7.Y,
+										enemySpriteWidth,
+										enemySpriteHeight));
+
+							//Add Enemy to game
+							EntityManager.Instance.Add(dash);
+							ChunkManager.Instance.Add(dash);
+							pod.Add(dash);
 							break;
 
 						default:
