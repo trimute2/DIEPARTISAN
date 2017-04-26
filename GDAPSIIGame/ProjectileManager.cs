@@ -61,11 +61,11 @@ namespace GDAPSIIGame
         {
 			Texture2D texture = TextureManager.Instance.BulletTextures["PlayerBullet"];
 			//Pistol
-			hiddenProjectiles.Add(new Projectile(texture, new Vector2(-100, -100), new Rectangle(texture.Width, texture.Height, 25, 25), new Vector2(0f, 0f), 2));
+			hiddenProjectiles.Add(new Projectile(texture, new Vector2(-100, -100), new Rectangle(texture.Width, texture.Height, 25, 25), new Vector2(0f, 0f), 2, 0));
 			//Rifle
-			hiddenProjectiles.Add(new Projectile(texture, new Vector2(-100, -100), new Rectangle(texture.Width, texture.Height, 25, 25), new Vector2(0f, 0f), 1));
+			hiddenProjectiles.Add(new Projectile(texture, new Vector2(-100, -100), new Rectangle(texture.Width, texture.Height, 5, 15), new Vector2(0f, 0f), 1, 0));
 			//Turret
-			hiddenProjectiles.Add(new Projectile(texture, new Vector2(-100, -100), new Rectangle(texture.Width, texture.Height, 25, 25), new Vector2(0f, 0f), 15));
+			hiddenProjectiles.Add(new Projectile(texture, new Vector2(-100, -100), new Rectangle(texture.Width, texture.Height, 25, 25), new Vector2(0f, 0f), 15, 0));
 		}
 
         /// <summary>
@@ -118,16 +118,16 @@ namespace GDAPSIIGame
 			projectiles.Remove(p);
 		}
 
-        internal Projectile Clone(ProjectileType pT, Vector2 currPosition, Vector2 currDirection, Owners owner)
+        internal Projectile Clone(ProjectileType pT, Vector2 currPosition, Vector2 currDirection, float angle, Owners owner)
         {
             switch (pT)
             {
                 case ProjectileType.PISTOL:
-                    return hiddenProjectiles[(int)pT - 1].Clone(currPosition, currDirection, owner);
+                    return hiddenProjectiles[(int)pT - 1].Clone(currPosition, currDirection, owner, angle);
 				case ProjectileType.RIFLE:
-					return hiddenProjectiles[(int)pT - 1].Clone(currPosition, currDirection, owner);
+					return hiddenProjectiles[(int)pT - 1].Clone(currPosition, currDirection, owner, angle);
 				case ProjectileType.TURRET:
-					return hiddenProjectiles[(int)pT - 1].Clone(currPosition, currDirection, owner);
+					return hiddenProjectiles[(int)pT - 1].Clone(currPosition, currDirection, owner, angle);
 			}
             return null;
         }

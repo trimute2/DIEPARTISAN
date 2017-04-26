@@ -22,7 +22,7 @@ namespace GDAPSIIGame.Weapons
 		//Fields
 		ProjectileType projType;
 		private float angle;
-		private Weapons.Weapon_Dir dir;
+		private Weapon_Dir dir;
 
 		public Weapon(ProjectileType pT, Texture2D texture, Vector2 position, Rectangle boundingBox) : base(texture, position, boundingBox)
 		{
