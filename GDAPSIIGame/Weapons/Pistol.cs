@@ -230,5 +230,10 @@ namespace GDAPSIIGame
 				}
 			}
         }
-    }
+
+		public override void ResetWeapon()
+		{
+			clip = clipSize;
+		}
+	}
 }

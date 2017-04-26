@@ -80,5 +80,10 @@ namespace GDAPSIIGame.Weapons
 		public abstract void Fire(Vector2 direction, MouseState mouseState, MouseState prevMouseState);
 
 		public abstract void ReloadWeapon();
+
+		public virtual void ResetWeapon()
+		{
+			//i feel gross for making this like this
+		}
 	}
 }

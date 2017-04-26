@@ -184,6 +184,7 @@ namespace GDAPSIIGame.Map
 									position.Y + tileSize * j);
 							Player.Instance.Position = currPos4;
 							Player.Instance.Weapon.Position = Player.Instance.Position;
+							Player.Instance.Weapon.ResetWeapon();
 							Camera.Instance.resetPosition(Player.Instance.Position);
 
 							Vector2 currPos6 =
