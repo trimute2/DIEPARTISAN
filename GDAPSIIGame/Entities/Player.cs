@@ -452,7 +452,7 @@ namespace GDAPSIIGame
 			{
 				if (((Projectile)obj).Owner != Owners.Player)
 				{
-					if(IsHurting == false)
+					if (IsHurting == false)
 					{
 						this.Health -= (int)((Projectile)obj).Damage;
 						Console.WriteLine(Health);
@@ -462,24 +462,27 @@ namespace GDAPSIIGame
 					}
 				}
 			}
-            else if(obj is MeleeEnemy)
-            {
-                if (!IsHurting)
-                {
-                    Health -= 10;
-					IsHurting = true;
-					focusMultiplier *= 0.9f;
-					if(focusMultiplier < 1)
+			else if (obj is Enemy)
+			{
+				if ((obj is MeleeEnemy)|(obj is DashEnemy && (obj as DashEnemy).Dashing))
+				{
+					if (!IsHurting)
 					{
-						focusMultiplier = 1.0f;
+						Health -= 10;
+						IsHurting = true;
+						focusMultiplier *= 0.9f;
+						if (focusMultiplier < 1)
+						{
+							focusMultiplier = 1.0f;
+						}
+						varianceMultiplier *= 0.9f;
+						if (varianceMultiplier < 1)
+						{
+							varianceMultiplier = 1.0f;
+						}
 					}
-					varianceMultiplier *= 0.9f;
-					if(varianceMultiplier < 1)
-					{
-						varianceMultiplier = 1.0f;
-					}
-                }
-            }
+				}
+			}
 			else
 			{
 				base.OnCollision(obj);

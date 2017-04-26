@@ -19,7 +19,8 @@ namespace GDAPSIIGame.Map
         WALL,
         PLAYER,
 		MELEEENEMY,
-		TURRET
+		TURRET,
+		DASHENEMY
     }
 
     /// <summary>
@@ -157,57 +158,48 @@ namespace GDAPSIIGame.Map
 			{
 				for (int j = 0; j < roomSize; j++)
 				{
+					Vector2 currPos =
+						new Vector2(
+									position.X + tileSize * i,
+									position.Y + tileSize * j);
+					Vector2 midPos =
+						new Vector2(
+							currPos.X + (tileSize / 4),
+							currPos.Y + (tileSize / 4));
 					switch (tileLayout[i, j])
 					{
 						//Create walls
 						case TileType.WALL:
-							Vector2 currPos2 =
-								new Vector2(
-									position.X + tileSize * i,
-									position.Y + tileSize * j);
 							ChunkManager.Instance.Add(
 								new Wall(
 									floorTextures,
-									currPos2,
+									currPos,
 									new Rectangle(
-										(int)currPos2.X,
-										(int)currPos2.Y,
+										(int)currPos.X,
+										(int)currPos.Y,
 										tileSize,
 										tileSize)));
 							break;
 
 						//Move player
 						case TileType.PLAYER:
-							Vector2 currPos4 =
-								new Vector2(
-									position.X + tileSize * i,
-									position.Y + tileSize * j);
-							Player.Instance.Position = currPos4;
+							Player.Instance.Position = currPos;
 							Player.Instance.ResetPlayerNewMap();
 							Player.Instance.CurrWeapon.ResetWeapon();
 
 							Weapons.Weapon temp = Player.Instance.CurrWeapon;
 							temp.X = currPos4.X + Player.Instance.BoundingBox.Width / 2;
 							temp.Y = currPos4.Y + Player.Instance.BoundingBox.Height / 2;
-
 							Camera.Instance.resetPosition(Player.Instance.Position);
 
-							Vector2 currPos6 =
-								new Vector2(
-									position.X + tileSize * i + (tileSize / 4),
-									position.Y + tileSize * j + (tileSize / 4));
-
 							//Add this position to the graph
-							graph.Add(new Graph.GraphNode(currPos6));
+							graph.Add(new Graph.GraphNode(midPos));
 							break;
 
 						//Create Melee Enemies
 						case TileType.MELEEENEMY:
-							Vector2 currPos =
-								new Vector2(
-									position.X + tileSize * i + (tileSize / 4),
-									position.Y + tileSize * j + (tileSize / 4));
-							graph.Add(new Graph.GraphNode(currPos));
+							
+							graph.Add(new Graph.GraphNode(midPos));
 							int health = 3;
 							int moveSpeed = 2;
 
@@ -217,10 +209,10 @@ namespace GDAPSIIGame.Map
 									health,
 									moveSpeed,
 									TextureManager.Instance.GetEnemyTexture("EnemyTexture"),
-									currPos,
+									midPos,
 									new Rectangle(
-										(int)currPos.X,
-										(int)currPos.Y,
+										(int)midPos.X,
+										(int)midPos.Y,
 										enemySpriteWidth,
 										enemySpriteHeight));
 
@@ -232,10 +224,6 @@ namespace GDAPSIIGame.Map
 
 						//Create Turret Enemies
 						case TileType.TURRET:
-							Vector2 currPos3 =
-							   new Vector2(
-								   position.X + tileSize * i + (tileSize / 4),
-								   position.Y + tileSize * j + (tileSize / 4));
 							int health2 = 3;
 							int moveSpeed2 = 0;
 
@@ -245,10 +233,10 @@ namespace GDAPSIIGame.Map
 									health2,
 									moveSpeed2,
 									TextureManager.Instance.GetEnemyTexture("EnemyTexture"),
-									currPos3,
+									midPos,
 									new Rectangle(
-										(int)currPos3.X,
-										(int)currPos3.Y,
+										(int)midPos.X,
+										(int)midPos.Y,
 										enemySpriteWidth,
 										enemySpriteHeight));
 
@@ -256,6 +244,30 @@ namespace GDAPSIIGame.Map
 							EntityManager.Instance.Add(turret);
 							ChunkManager.Instance.Add(turret);
 							pod.Add(turret);
+							break;
+
+						case TileType.DASHENEMY:
+							graph.Add(new Graph.GraphNode(midPos));
+							int health3 = 3;
+							int moveSpeed3 = 2;
+
+							//Create new enemy
+							DashEnemy dash =
+								new DashEnemy(
+									health3,
+									moveSpeed3,
+									TextureManager.Instance.GetEnemyTexture("EnemyTexture"),
+									midPos,
+									new Rectangle(
+										(int)midPos.X,
+										(int)midPos.Y,
+										enemySpriteWidth,
+										enemySpriteHeight));
+
+							//Add Enemy to game
+							EntityManager.Instance.Add(dash);
+							ChunkManager.Instance.Add(dash);
+							pod.Add(dash);
 							break;
 
 						default:
