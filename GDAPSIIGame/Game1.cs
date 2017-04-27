@@ -36,6 +36,7 @@ namespace GDAPSIIGame
 		WeaponManager weaponManager;
 		TextureManager textureManager;
         int mapSize;
+		Thread l;
 
 		public Game1()
         {
@@ -169,18 +170,12 @@ namespace GDAPSIIGame
 
 				//Loading screen that generates a new level
 				case GameState.LoadingScreen:
-					//Empty all entities and walls
-					entityManager.RemoveEnemies();
-					chunkManager.DeleteWalls();
-					projectileManager.RemoveProjectiles();
-
-					chunkManager.Resize(mapSize);
-					chunkManager.Add(Player.Instance);
-					//Create the new map
-					MapManager.Instance.CreateMap(textureManager.RoomTextures["IndoorSpriteSheet"], textureManager.RoomTextures["IndoorFloorSpriteSheet"], mapSize);
-					PodManager.Instance.Reset();
-					//Go to gameplay
-					gameState = GameState.GamePlay;
+					if (l == null || l.ThreadState == ThreadState.Stopped)
+					{
+						l = new Thread(Loading);
+						l.Name = "Loading";
+						l.Start();
+					}
 					break;
 
 				//Player playing a level
@@ -313,6 +308,9 @@ namespace GDAPSIIGame
 				
 				//Drawing for loading screen
 				case GameState.LoadingScreen:
+					spriteBatch.Draw(TextureManager.Instance.GetMenuTexture("Black"),
+						new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height),
+						Color.White);
 					break;
 
 				//Drawing for gameplay
@@ -457,6 +455,22 @@ namespace GDAPSIIGame
 			mouseTex = textureManager.MouseTextures["MousePointer"];
 			mousePos = new Vector2(mState.X, mState.Y);
 			mouseScale = new Vector2((float)16 / mouseTex.Width, (float)16 / mouseTex.Height);
+		}
+
+		private void Loading()
+		{
+			//Empty all entities and walls
+			entityManager.RemoveEnemies();
+			chunkManager.DeleteWalls();
+			projectileManager.RemoveProjectiles();
+
+			chunkManager.Resize(mapSize);
+			chunkManager.Add(Player.Instance);
+			//Create the new map
+			MapManager.Instance.CreateMap(textureManager.RoomTextures["IndoorSpriteSheet"], textureManager.RoomTextures["IndoorFloorSpriteSheet"], mapSize);
+			PodManager.Instance.Reset();
+			//Go to gameplay
+			gameState = GameState.GamePlay;
 		}
 	}
 }
