@@ -12,7 +12,7 @@ namespace GDAPSIIGame.Entities
     class MeleeEnemy : Enemy
     {
 
-		public MeleeEnemy(int health, int moveSpeed, Texture2D texture, Vector2 position, Rectangle boundingBox) : base(health, moveSpeed, texture, position, boundingBox)
+		public MeleeEnemy(Texture2D texture, Vector2 position, Rectangle boundingBox, int health = 8, int moveSpeed = 2 ) : base(health, moveSpeed, texture, position, boundingBox)
 		{
 			color = Color.DarkOrange;
 		}

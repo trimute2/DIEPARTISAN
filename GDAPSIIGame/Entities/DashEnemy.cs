@@ -25,7 +25,7 @@ namespace GDAPSIIGame.Entities
 			get { return dashing; }
 		}
 
-		public DashEnemy(int health, int moveSpeed, Texture2D texture, Vector2 position, Rectangle boundingBox) : base(health, moveSpeed, texture, position, boundingBox)
+		public DashEnemy(Texture2D texture, Vector2 position, Rectangle boundingBox, int health = 3, int moveSpeed = 2) : base(health, moveSpeed, texture, position, boundingBox)
 		{
 			dashTime = 1.5f;
 			dashing = false;

@@ -241,14 +241,10 @@ namespace GDAPSIIGame.Map
 						case TileType.MELEEENEMY:
 							
 							graph.Add(new Graph.GraphNode(midPos));
-							int health = 8;
-							int moveSpeed = 2;
 
 							//Create new enemy
 							MeleeEnemy newEnemy =
 								new MeleeEnemy(
-									health,
-									moveSpeed,
 									TextureManager.Instance.GetEnemyTexture("EnemyTexture"),
 									midPos,
 									new Rectangle(
@@ -265,14 +261,9 @@ namespace GDAPSIIGame.Map
 
 						//Create Turret Enemies
 						case TileType.TURRET:
-							int health2 = 10;
-							int moveSpeed2 = 0;
-
 							//Create new enemy
 							TurretEnemy turret =
 								new TurretEnemy(
-									health2,
-									moveSpeed2,
 									TextureManager.Instance.GetEnemyTexture("EnemyTexture"),
 									midPos,
 									new Rectangle(
@@ -289,14 +280,10 @@ namespace GDAPSIIGame.Map
 
 						case TileType.DASHENEMY:
 							graph.Add(new Graph.GraphNode(midPos));
-							int health3 = 3;
-							int moveSpeed3 = 2;
 
 							//Create new enemy
 							DashEnemy dash =
 								new DashEnemy(
-									health3,
-									moveSpeed3,
 									TextureManager.Instance.GetEnemyTexture("EnemyTexture"),
 									midPos,
 									new Rectangle(

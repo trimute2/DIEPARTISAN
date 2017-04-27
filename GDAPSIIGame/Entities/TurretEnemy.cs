@@ -22,7 +22,7 @@ namespace GDAPSIIGame.Entities
 		/// <summary>
 		/// Create the a TurretEnemy with the default score value
 		/// </summary>
-		public TurretEnemy(int health, int moveSpeed, Texture2D texture, Vector2 position, Rectangle boundingBox) : base(health, moveSpeed, texture, position, boundingBox)
+		public TurretEnemy(Texture2D texture, Vector2 position, Rectangle boundingBox, int health = 10, int moveSpeed = 0) : base(health, moveSpeed, texture, position, boundingBox)
 		{
 			origin = new Vector2(texture.Width/2, texture.Height/2);
 			drawPos = new Vector2(this.X + (BoundingBox.Width / 2), this.Y + (BoundingBox.Height / 2));
