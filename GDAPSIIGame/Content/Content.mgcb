@@ -127,3 +127,14 @@
 /processorParam:TextureFormat=Color
 /build:indoorFloorTileset.png
 
+#begin uifont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:TextureFormat=Compressed
+/build:uifont
+
+#begin Quantify Bold v2.6.ttf
+/importer:
+/processor:
+/build:Quantify Bold v2.6.ttf
+
