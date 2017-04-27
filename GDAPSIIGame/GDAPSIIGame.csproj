@@ -67,6 +67,7 @@
     <Compile Include="Wall.cs" />
     <Compile Include="Weapons\Pistol.cs" />
     <Compile Include="Weapons\Rifle.cs" />
+    <Compile Include="Weapons\Shotgun.cs" />
     <Compile Include="Weapons\TurretGun.cs" />
     <Compile Include="Weapons\Weapon.cs" />
     <Compile Include="Weapons\WeaponManager.cs" />

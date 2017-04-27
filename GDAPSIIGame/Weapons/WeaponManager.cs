@@ -59,6 +59,19 @@ namespace GDAPSIIGame.Weapons
 			}
 		}
 
+		public Shotgun ShotGun
+		{
+			get
+			{
+				return new Shotgun(ProjectileType.SHOTGUN,
+				TextureManager.Instance.WeaponTextures["PistolTexture"],
+				Vector2.Zero,
+				new Rectangle(0, 0, 20, 50),
+				0.2f, 20f, 1.1f,
+				new Vector2(playerTexture.Bounds.X + playerTexture.Bounds.Width, playerTexture.Bounds.Top + playerTexture.Bounds.Height / 2),
+				Owners.Player);
+			}
+		}
 		//Methods----------------
 
 		/// <summary>

@@ -14,7 +14,8 @@ namespace GDAPSIIGame
     {
         PISTOL = 1,
 		RIFLE = 2,
-		TURRET = 3
+		TURRET = 3,
+		SHOTGUN = 4
     }
     class ProjectileManager
     {
@@ -66,6 +67,8 @@ namespace GDAPSIIGame
 			hiddenProjectiles.Add(new Projectile(texture, new Vector2(-100, -100), new Rectangle(texture.Width, texture.Height, 25, 25), new Vector2(0f, 0f), 1));
 			//Turret
 			hiddenProjectiles.Add(new Projectile(texture, new Vector2(-100, -100), new Rectangle(texture.Width, texture.Height, 25, 25), new Vector2(0f, 0f), 15));
+			//Shotgun
+			hiddenProjectiles.Add(new Projectile(texture, new Vector2(-100, -100), new Rectangle(texture.Width, texture.Height, 25, 25), Vector2.Zero, 2, 20f));
 		}
 
         /// <summary>
@@ -127,6 +130,8 @@ namespace GDAPSIIGame
 				case ProjectileType.RIFLE:
 					return hiddenProjectiles[(int)pT - 1].Clone(currPosition, currDirection, owner);
 				case ProjectileType.TURRET:
+					return hiddenProjectiles[(int)pT - 1].Clone(currPosition, currDirection, owner);
+				case ProjectileType.SHOTGUN:
 					return hiddenProjectiles[(int)pT - 1].Clone(currPosition, currDirection, owner);
 			}
             return null;
