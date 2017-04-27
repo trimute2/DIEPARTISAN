@@ -17,15 +17,36 @@ namespace GDAPSIIGame.Weapons
 	/// </summary>
 	enum Weapon_Dir { UpEast, UpWest, UpLeft, Left, DownLeft, DownWest, DownEast, DownRight, Right, UpRight }
 
+	enum Range
+	{
+		Infinite, Short, Medium, Long
+	}
+
 	abstract class Weapon : GameObject
 	{
 		//Fields
-		ProjectileType projType;
+		protected ProjectileType projType;
 		private float angle;
+		private float range;
 		private Weapon_Dir dir;
 
-		public Weapon(ProjectileType pT, Texture2D texture, Vector2 position, Rectangle boundingBox) : base(texture, position, boundingBox)
+		public Weapon(ProjectileType pT, Texture2D texture, Vector2 position, Rectangle boundingBox, Range range = Range.Infinite) : base(texture, position, boundingBox)
 		{
+			switch (range)
+			{
+				case Range.Short:
+					this.range = 200;
+					break;
+				case Range.Medium:
+					this.range = 400;
+					break;
+				case Range.Long:
+					this.range = 600;
+					break;
+				default:
+					this.range = Projectile.INFINITE;
+					break;
+			}
 			projType = pT;
 			this.angle = 0; //The angle of the weapon in radians
 			this.dir = Weapons.Weapon_Dir.DownWest; //The direction of the weapon for drawing
@@ -37,7 +58,7 @@ namespace GDAPSIIGame.Weapons
 		public ProjectileType ProjType
 		{
 			get { return projType; }
-			set { projType = value; }
+			//set { projType = value; }
 		}
 
 		/// <summary>
@@ -49,6 +70,10 @@ namespace GDAPSIIGame.Weapons
 			set { angle = value; }
 		}
 
+		public float WeapRange
+		{
+			get { return range; }
+		}
 		/// <summary>
 		/// Whether the weapon is firing or not
 		/// </summary>

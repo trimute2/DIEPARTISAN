@@ -26,7 +26,7 @@ namespace GDAPSIIGame.Weapons
 		private SpriteEffects effects;
 
 		public Rifle(ProjectileType pT, Texture2D texture, Vector2 position, Rectangle boundingBox, float fireRate, float clipSize, float reloadSpeed, Vector2 origin, Owners owner)
-			: base(pT, texture, position, boundingBox)
+			: base(pT, texture, position, boundingBox, Range.Long)
         {
 			this.fireRate = fireRate; //How fast until the weapon can fire again
 			this.clipSize = clipSize; //How large the clip is
@@ -236,7 +236,7 @@ namespace GDAPSIIGame.Weapons
 					Vector2 bulletPosition = Vector2.Transform(bulletOffset, rotationMatrix);
 
 					//Create the bullet at the actual position of the bullet + the rotated position
-					ProjectileManager.Instance.Clone(ProjType, Position + bulletPosition, direction, Angle, owner);
+					ProjectileManager.Instance.Clone(ProjType, Position + bulletPosition, direction, Angle, owner, WeapRange);
 				}
 			}
 		}

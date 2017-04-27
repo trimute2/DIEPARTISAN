@@ -23,7 +23,7 @@ namespace GDAPSIIGame.Weapons
 		private Random rand;
 
 		public Shotgun(ProjectileType pT, Texture2D texture, Vector2 position, Rectangle boundingBox, float fireRate, float clipSize, float reloadSpeed, Vector2 origin, Owners owner)
-			: base(pT, texture, position, boundingBox)
+			: base(pT, texture, position, boundingBox, Range.Short)
         {
 			this.fireRate = fireRate; //How fast until the weapon can fire again
 			this.clipSize = clipSize; //How large the clip is
@@ -241,9 +241,9 @@ namespace GDAPSIIGame.Weapons
 					Vector2 direction2 = Vector2.Transform(direction, b2);
 					Vector2 direction3 = Vector2.Transform(direction, b3);
 					//Create the bullet at the actual position of the bullet + the rotated position
-					ProjectileManager.Instance.Clone(ProjType, Position + bulletPosition, direction1, Angle, owner);
-					ProjectileManager.Instance.Clone(ProjType, Position + bulletPosition, direction2, Angle, owner);
-					ProjectileManager.Instance.Clone(ProjType, Position + bulletPosition, direction3, Angle, owner);
+					ProjectileManager.Instance.Clone(ProjType, Position + bulletPosition, direction1, Angle, owner, WeapRange);
+					ProjectileManager.Instance.Clone(ProjType, Position + bulletPosition, direction2, Angle, owner, WeapRange);
+					ProjectileManager.Instance.Clone(ProjType, Position + bulletPosition, direction3, Angle, owner, WeapRange);
 
 				}
 			}
