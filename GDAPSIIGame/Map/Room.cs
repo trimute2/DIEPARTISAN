@@ -241,7 +241,7 @@ namespace GDAPSIIGame.Map
 						case TileType.MELEEENEMY:
 							
 							graph.Add(new Graph.GraphNode(midPos));
-							int health = 3;
+							int health = 8;
 							int moveSpeed = 2;
 
 							//Create new enemy
@@ -265,7 +265,7 @@ namespace GDAPSIIGame.Map
 
 						//Create Turret Enemies
 						case TileType.TURRET:
-							int health2 = 3;
+							int health2 = 10;
 							int moveSpeed2 = 0;
 
 							//Create new enemy

@@ -62,9 +62,9 @@ namespace GDAPSIIGame
         {
 			Texture2D texture = TextureManager.Instance.BulletTextures["PlayerBullet"];
 			//Pistol
-			hiddenProjectiles.Add(new Projectile(texture, new Vector2(-100, -100), new Rectangle(texture.Width, texture.Height, 25, 25), new Vector2(0f, 0f), 2, 0));
+			hiddenProjectiles.Add(new Projectile(texture, new Vector2(-100, -100), new Rectangle(texture.Width, texture.Height, 10, 10), new Vector2(0f, 0f), 4, 0));
 			//Rifle
-			hiddenProjectiles.Add(new Projectile(texture, new Vector2(-100, -100), new Rectangle(texture.Width, texture.Height, 5, 15), new Vector2(0f, 0f), 1, 0));
+			hiddenProjectiles.Add(new Projectile(texture, new Vector2(-100, -100), new Rectangle(texture.Width, texture.Height, 10, 15), new Vector2(0f, 0f), 2, 0));
 			//Turret
 			hiddenProjectiles.Add(new Projectile(texture, new Vector2(-100, -100), new Rectangle(texture.Width, texture.Height, 25, 25), new Vector2(0f, 0f), 15, 0));
 			//Shotgun

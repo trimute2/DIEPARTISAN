@@ -168,17 +168,12 @@ namespace GDAPSIIGame
 			prevKeyState = keyState;
 			keyState = Keyboard.GetState();
 
-			//Update player movement
-			UpdateInput(gameTime, keyState, prevKeyState);
-
-			//Update the weapons rotation
 			Vector2 camw = Camera.Instance.GetViewportPosition(CurrWeapon.Position);
-            currWeapon.Angle = -((float)Math.Atan2(mouseState.X - camw.X, mouseState.Y - camw.Y));
-			//Update weapon position
-			 currWeapon.X = this.X + (BoundingBox.Width / 2);
-			 currWeapon.Y = this.Y + (BoundingBox.Height / 2);
-			//Update weapon
-			 currWeapon.Update(gameTime);
+
+			//Update player movement
+			UpdateInput(gameTime, keyState, prevKeyState, camw);
+
+            UpdateWeapon(gameTime, camw);
 
 			//Fire weapon only if previous frame didn't have left button being pressed
 			if (mouseState.LeftButton == ButtonState.Pressed)
@@ -330,7 +325,7 @@ namespace GDAPSIIGame
         /// Parses Input during updates
         /// </summary>
         /// <param name="keyState">KeyboardState</param>
-        public void UpdateInput(GameTime gameTime, KeyboardState keyState, KeyboardState prevKeyState)
+        public void UpdateInput(GameTime gameTime, KeyboardState keyState, KeyboardState prevKeyState, Vector2 camw)
         {
             timeMult = (float)gameTime.ElapsedGameTime.TotalSeconds / ((float)1/60);
 
@@ -372,28 +367,6 @@ namespace GDAPSIIGame
 			//    0
 			Vector2 campos = Camera.Instance.GetViewportPosition(this.X + 25, this.Y);
 			angle = MathHelper.ToDegrees((float)Math.Atan2(mouseState.X - campos.X, mouseState.Y - campos.Y));
-
-			//Player switching weapons from scroll wheel up
-			if (mouseState.ScrollWheelValue > prevMouseState.ScrollWheelValue)
-			{
-				InteruptReload();
-				if (currWeapon == weapons[0]) { this.currWeapon = weapons[1]; }
-				else if (currWeapon == weapons[1]) { this.currWeapon = weapons[0]; }
-				currWeapon.Dir = GetCurrentWeaponDir();
-				Vector2 camw = Camera.Instance.GetViewportPosition(CurrWeapon.Position);
-				currWeapon.Angle = -((float)Math.Atan2(mouseState.X - camw.X, mouseState.Y - camw.Y));
-			}
-
-			//Player switching weapons from scroll wheel down
-			if (mouseState.ScrollWheelValue < prevMouseState.ScrollWheelValue)
-			{
-				InteruptReload();
-				if (currWeapon == weapons[1]) { this.currWeapon = weapons[0]; }
-				else if (currWeapon == weapons[0]) { this.currWeapon = weapons[1]; }
-				currWeapon.Dir = GetCurrentWeaponDir();
-				Vector2 camw = Camera.Instance.GetViewportPosition(CurrWeapon.Position);
-				currWeapon.Angle = -((float)Math.Atan2(mouseState.X - camw.X, mouseState.Y - camw.Y));
-			}
 
 			//Use angle to find player direction
 			if ((angle < -157.5) || (angle > 157.5))
@@ -443,6 +416,28 @@ namespace GDAPSIIGame
 					 currWeapon.Dir = Weapon_Dir.DownWest;
 				}
 				else  currWeapon.Dir = Weapon_Dir.DownEast;
+			}
+
+            //Player switching weapons from scroll wheel up
+            if (mouseState.ScrollWheelValue > prevMouseState.ScrollWheelValue)
+            {
+                InteruptReload();
+                Weapon_Dir oldDir = currWeapon.Dir;
+                if (currWeapon == weapons[0]) { this.currWeapon = weapons[1]; }
+                else if (currWeapon == weapons[1]) { this.currWeapon = weapons[0]; }
+				currWeapon.Dir = oldDir;
+				UpdateWeapon(gameTime, camw);
+            }
+
+            //Player switching weapons from scroll wheel down
+            if (mouseState.ScrollWheelValue < prevMouseState.ScrollWheelValue)
+            {
+                InteruptReload();
+				Weapon_Dir oldDir = currWeapon.Dir;
+				if (currWeapon == weapons[1]) { this.currWeapon = weapons[0]; }
+                else if (currWeapon == weapons[0]) { this.currWeapon = weapons[1]; }
+				currWeapon.Dir = oldDir;
+				UpdateWeapon(gameTime, camw);
 			}
         }
 
@@ -543,6 +538,17 @@ namespace GDAPSIIGame
 			currWeapon.Reload = false;
 		}
 		
+        private void UpdateWeapon(GameTime gameTime, Vector2 camw)
+        {
+            //Update the weapons rotation
+            currWeapon.Angle = -((float)Math.Atan2(mouseState.X - camw.X, mouseState.Y - camw.Y));
+            //Update weapon position
+            currWeapon.X = this.X + (BoundingBox.Width / 2);
+            currWeapon.Y = this.Y + (BoundingBox.Height / 2);
+            //Update weapon
+            currWeapon.Update(gameTime);
+        }
+
 		private Weapon_Dir GetCurrentWeaponDir()
 		{
 			switch (Dir)
