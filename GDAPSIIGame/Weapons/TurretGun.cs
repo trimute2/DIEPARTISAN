@@ -155,7 +155,7 @@ namespace GDAPSIIGame.Weapons
 		/// </summary>
 		/// <param name="position">The position the bullet is spawned at</param>
 		/// <param name="direction">The speed that the bullet is moving</param>
-		public override void Fire(Vector2 direction, MouseState thanks, MouseState abstractClasses)
+		public override bool Fire(Vector2 direction, MouseState thanks, MouseState abstractClasses)
 		{
 			//Check user can fire or if they need to reload
 			if (!Fired)
@@ -164,7 +164,9 @@ namespace GDAPSIIGame.Weapons
 				Matrix rotationMatrix = Matrix.CreateRotationZ(Angle);
 				Vector2 bulletPosition = Vector2.Transform(bulletOffset, rotationMatrix);
 				ProjectileManager.Instance.Clone(ProjType, Position, direction, Angle, owner, WeapRange);
+				return true;
 			}
+			return false;
 		}
 
 		public override void ReloadWeapon()

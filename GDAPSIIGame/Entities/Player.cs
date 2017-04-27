@@ -148,7 +148,7 @@ namespace GDAPSIIGame
 			{
 				if (value)
 				{
-					firing = 0.05f;
+					firing = 0.2f;
 				}
 			}
 		}
@@ -182,8 +182,7 @@ namespace GDAPSIIGame
 			{
 				Vector2 direction = new Vector2((mouseState.X - camw.X) / 1, (mouseState.Y - camw.Y) / 1);
 				direction.Normalize();
-				this.CurrWeapon.Fire(direction, mouseState, prevMouseState);
-				if ( currWeapon.Fired)
+				if (this.CurrWeapon.Fire(direction, mouseState, prevMouseState))
 				{
 					IsFiring = true;
 				}

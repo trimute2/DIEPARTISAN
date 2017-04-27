@@ -14,9 +14,10 @@ namespace GDAPSIIGame.Entities
 {
     class TurretEnemy : Enemy
     {
-		TurretGun gun;
-		Vector2 origin;
-		Vector2 drawPos;
+		private TurretGun gun;
+		private Vector2 origin;
+		private Vector2 drawPos;
+		private bool fired;
 
 		/// <summary>
 		/// Create the a TurretEnemy with the default score value
@@ -106,7 +107,7 @@ namespace GDAPSIIGame.Entities
 				diff.Normalize();
 				diff = diff / 6;
 				MouseState unnecessary = Mouse.GetState();
-				gun.Fire(diff, unnecessary, unnecessary);
+				fired = gun.Fire(diff, unnecessary, unnecessary);
 			}
         }
 

@@ -208,7 +208,7 @@ namespace GDAPSIIGame.Weapons
 		/// </summary>
 		/// <param name="position">The position the bullet is spawned at</param>
 		/// <param name="direction">The speed that the bullet is moving</param>
-		public override void Fire(Vector2 direction, MouseState mouseState, MouseState prevMouseState)
+		public override bool Fire(Vector2 direction, MouseState mouseState, MouseState prevMouseState)
 		{
 			//Check if click condition is met
 			if (mouseState.LeftButton == ButtonState.Pressed)
@@ -218,6 +218,7 @@ namespace GDAPSIIGame.Weapons
 					if (!Fired && !Reload && clip <= 0)
 					{
 						Reload = true;
+						return false;
 					}
 				}
 				//Check user can fire or if they need to reload
@@ -244,9 +245,10 @@ namespace GDAPSIIGame.Weapons
 					ProjectileManager.Instance.Clone(ProjType, Position + bulletPosition, direction1, Angle, owner, WeapRange);
 					ProjectileManager.Instance.Clone(ProjType, Position + bulletPosition, direction2, Angle, owner, WeapRange);
 					ProjectileManager.Instance.Clone(ProjType, Position + bulletPosition, direction3, Angle, owner, WeapRange);
-
+					return true;
 				}
 			}
+			return false;
 		}
 
 		public override void ResetWeapon()
