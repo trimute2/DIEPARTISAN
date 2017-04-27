@@ -50,27 +50,30 @@ namespace GDAPSIIGame.Graph
 
         public bool IsComplete
         {
-            get; set; 
+            get; set;
         }
 
         /// <summary>
         /// Expands a given node's neighbor list by one expansion 
         /// </summary>
-        public void Update()
+        public void Update(int maxSize)
         {
             //Iterate over all nodes this node can currently get to
             int size = NumNeighbors;
             GraphNode neighbor = null;
-            for(int i = 0; i < size; i++)
+            for (int i = 0; i < size; i++)
             {
-                neighbor = neighbors.Keys.ElementAt(i);
-                //Iterate over all nodes that the current neighbor connects to
-                foreach (GraphNode possibleNewNeighbor in neighbor.Neighbors.Keys)
+                if (NumNeighbors < maxSize)
                 {
-                    //If we can't already connect to that node, add it
-                    if (!neighbors.Keys.Contains(possibleNewNeighbor))
+                    neighbor = neighbors.Keys.ElementAt(i);
+                    //Iterate over all nodes that the current neighbor connects to
+                    foreach (GraphNode possibleNewNeighbor in neighbor.Neighbors.Keys)
                     {
-                        neighbors.Add(possibleNewNeighbor, neighbor);
+                        //If we can't already connect to that node, add it
+                        if (!neighbors.Keys.Contains(possibleNewNeighbor) && possibleNewNeighbor != this)
+                        {
+                            neighbors.Add(possibleNewNeighbor, neighbor);
+                        }
                     }
                 }
             }

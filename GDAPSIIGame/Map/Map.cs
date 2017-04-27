@@ -130,7 +130,7 @@ namespace GDAPSIIGame.Map
             {
                 r.initRoom(wallTextures, floorTextures, graph);
             }
-            //graph.ConnectGraph();
+            graph.ConnectGraph();
         }
     }
 }

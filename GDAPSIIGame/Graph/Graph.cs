@@ -90,6 +90,7 @@ namespace GDAPSIIGame.Graph
             int attempts = 0;
             while (!done)
             {
+                Console.WriteLine("Try " + attempts);
                 attempts++;
                 done = true;
                 for (int i = 0; i < nodes.Count; i++)
@@ -97,21 +98,26 @@ namespace GDAPSIIGame.Graph
                     vertex = nodes.Values.ElementAt(i);
                     if (!vertex.IsComplete)
                     {
-                        if(attempts> 10 && vertex.NumNeighbors < 100)
+                        if(attempts == 10 && vertex.NumNeighbors < 10)
                         {
                             Console.WriteLine("{0} instead of {1}", vertex.NumNeighbors, nodes.Count);
-                        }
-                        vertex.Update();
-                        if (vertex.NumNeighbors == nodes.Count)
-                        {
-                            vertex.IsComplete = true;
-                        }
-                        else if (vertex.NumNeighbors == 0)
-                        {
-                            Console.WriteLine("Removing" + vertex.UniqueID);
+                            Console.WriteLine("{0}, {1}", vertex.Position.X, vertex.Position.Y);
                             nodes.Remove(vertex.UniqueID);
                             i--;
                         }
+                        vertex.Update(nodes.Count - 1);
+                        if (vertex.NumNeighbors == nodes.Count - 1)
+                        {
+                            vertex.IsComplete = true;
+                        }
+                        /*else if (vertex.NumNeighbors == 0)
+                        {
+                            Console.WriteLine("Removing" + vertex.UniqueID);
+
+                            nodes.Remove(vertex.UniqueID);
+                            Console.WriteLine("{0}, {1}", vertex.Position.X, vertex.Position.Y);
+                            i--;
+                        }*/
                         else
                         {
                             done = false;

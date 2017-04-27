@@ -312,13 +312,8 @@ namespace GDAPSIIGame.Map
 							break;
 
 						default:
-							Vector2 currPos5 =
-								new Vector2(
-									position.X + tileSize * i + (tileSize / 2),
-									position.Y + tileSize * j + (tileSize / 2));
-
 							//Add this position to the graph
-							graph.Add(new Graph.GraphNode(currPos5));
+							graph.Add(new Graph.GraphNode(midPos));
 							break;
 					}
 				}
