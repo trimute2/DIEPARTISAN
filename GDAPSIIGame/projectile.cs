@@ -66,7 +66,7 @@ namespace GDAPSIIGame
 			{
 				if(distance > 0)
 				{
-					distance -= this.Position.Length() * gameTime.ElapsedGameTime.Milliseconds;
+					distance -= this.direction.Length() * gameTime.ElapsedGameTime.Milliseconds;
 				}
 				else
 				{
@@ -90,14 +90,15 @@ namespace GDAPSIIGame
 		}
 
 		public Projectile Clone(Vector2 position, Vector2 direction, Owners owner, float angle) {
-            Projectile p = new Projectile(this.Texture, position, this.BoundingBox, direction, this.damage, angle, owner);
+            Projectile p = new Projectile(this.Texture, position, this.BoundingBox, direction, this.damage, angle, distance, owner);
             ProjectileManager.Instance.Add(p);
             return p;
         }
 
 		public override void OnCollision(ICollidable obj)
 		{
-			if (!(obj is Player && owner == Owners.Player) && !(obj is Enemy && owner == Owners.Enemy))
+			if (!(owner == Owners.Player && (obj is Player || (obj is Projectile && (obj as Projectile).owner == Owners.Player)))
+				&& !(obj is Enemy && owner == Owners.Enemy))
 			{
 				active = false;
 			}

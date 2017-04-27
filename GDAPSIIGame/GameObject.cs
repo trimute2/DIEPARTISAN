@@ -17,14 +17,17 @@ namespace GDAPSIIGame
         private Vector2 position;
         private Rectangle boundingBox;
         private Vector2 scale;
+		protected Color color;
 		public bool active;
 
 		public GameObject(Texture2D texture, Vector2 position, Rectangle boundingBox) {
+			this.color = Color.White;
             this.texture = texture;
             this.position = position;
             this.boundingBox = boundingBox;
 			//Console.WriteLine(texture.Width);
 			//Console.WriteLine(boundingBox.Width);
+			
 			if (texture != null)
 			{
 				scale = new Vector2((float)boundingBox.Width / texture.Width, (float)boundingBox.Height / texture.Height);
@@ -85,7 +88,7 @@ namespace GDAPSIIGame
                     Vector2.Zero,
                     0.0f,
                     scale,
-                    null,
+                    color,
                     0);
             }
         }

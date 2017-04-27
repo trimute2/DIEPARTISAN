@@ -228,16 +228,23 @@ namespace GDAPSIIGame.Weapons
 					float degree = (float)(Math.PI / 180);
 					//Take the gun's current angle (a property) and create a rotation matrix out of it
 					Matrix rotationMatrix = Matrix.CreateRotationZ(Angle);
-					Matrix b1 = Matrix.CreateRotationZ(degree * rand.Next(-3, 4));
-					Matrix b2 = Matrix.CreateRotationZ(degree * rand.Next(-3, 4));
-					Matrix b3 = Matrix.CreateRotationZ(degree * rand.Next(-3, 4));
+					Matrix b1 = Matrix.CreateRotationZ(degree * rand.Next(-10, 11));
+					Matrix b2 = Matrix.CreateRotationZ(degree * rand.Next(-10, 11));
+					Matrix b3 = Matrix.CreateRotationZ(degree * rand.Next(-10, 11));
+					
 					//Take the rotation matrix and transform the offset vector by it
 					//The offset vector is an approximation of where the muzzle should be when added to the bullet's position
 					//Remember the bullet's position is the top left of its bouunding box
 					Vector2 bulletPosition = Vector2.Transform(bulletOffset, rotationMatrix);
 
+					Vector2 direction1 = Vector2.Transform(direction, b1);
+					Vector2 direction2 = Vector2.Transform(direction, b2);
+					Vector2 direction3 = Vector2.Transform(direction, b3);
 					//Create the bullet at the actual position of the bullet + the rotated position
-					ProjectileManager.Instance.Clone(ProjType, Position + bulletPosition, direction, Angle, owner);
+					ProjectileManager.Instance.Clone(ProjType, Position + bulletPosition, direction1, Angle, owner);
+					ProjectileManager.Instance.Clone(ProjType, Position + bulletPosition, direction2, Angle, owner);
+					ProjectileManager.Instance.Clone(ProjType, Position + bulletPosition, direction3, Angle, owner);
+
 				}
 			}
 		}

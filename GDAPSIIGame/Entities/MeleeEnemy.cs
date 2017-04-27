@@ -13,10 +13,14 @@ namespace GDAPSIIGame.Entities
     {
 
 		public MeleeEnemy(int health, int moveSpeed, Texture2D texture, Vector2 position, Rectangle boundingBox) : base(health, moveSpeed, texture, position, boundingBox)
-		{ }
+		{
+			color = Color.DarkOrange;
+		}
 
 		public MeleeEnemy(int health, int moveSpeed, Texture2D texture, Vector2 position, Rectangle boundingBox, int scoreValue) : base(health, moveSpeed, texture, position, boundingBox)
-		{ }
+		{
+			color = Color.DarkOrange;
+		}
 
 		public override void Update(GameTime gameTime)
         {
