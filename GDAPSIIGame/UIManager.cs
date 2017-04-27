@@ -11,6 +11,8 @@ namespace GDAPSIIGame
 {
     class UIManager
     {
+        private SpriteFont font;
+        private Vector2 scoreBounding;
         //Instantiate Textures and Rectangles for healthbox
         private Texture2D healthbarBackground;
         private Texture2D healthbarForeground;
@@ -80,6 +82,12 @@ namespace GDAPSIIGame
             healthbarY = 10;
             healthbarWidth = 80;
             healthbarHeight = 20;
+            //Set X and Y values for the game score.
+            scoreBounding.X = 10;
+            scoreBounding.Y = 10;
+
+            font = Content.Load<SpriteFont>("uifont");
+
             //load textures for the healthbox
             healthbarBackground = Content.Load<Texture2D>("blackbar");
             healthbarForeground = Content.Load<Texture2D>("redbar");
@@ -126,6 +134,13 @@ namespace GDAPSIIGame
         {
             spriteBatch.Draw(healthbarBackground, healthbarBackgroundBounding, Color.White);
             spriteBatch.Draw(healthbarForeground, healthbarForegroundBounding, Color.White);
+
+            spriteBatch.DrawString(
+                spriteFont: font,
+                position: scoreBounding,
+                color: Color.Black,
+                text: "Test"
+                );
 
 			if (MapManager.Instance.State == MapState.Enter || MapManager.Instance.State == MapState.Exit)
 			{
