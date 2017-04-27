@@ -68,7 +68,7 @@ namespace GDAPSIIGame
 			//Turret
 			hiddenProjectiles.Add(new Projectile(texture, new Vector2(-100, -100), new Rectangle(texture.Width, texture.Height, 25, 25), new Vector2(0f, 0f), 15, 0));
 			//Shotgun
-			hiddenProjectiles.Add(new Projectile(texture, new Vector2(-100, -100), new Rectangle(texture.Width, texture.Height, 25, 25), Vector2.Zero, 2, 0, 20f));
+			hiddenProjectiles.Add(new Projectile(texture, new Vector2(-100, -100), new Rectangle(texture.Width, texture.Height, 25, 25), Vector2.Zero, 2, 0, 200f));
 		}
 
         /// <summary>
