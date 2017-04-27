@@ -99,6 +99,7 @@
   <ItemGroup />
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="Levels\Symetrical.cmap" />
     <None Include="Levels\2walls1melee.cmap" />
     <None Include="Levels\cross1.cmap" />
     <None Include="Levels\fourTurrets.cmap" />
