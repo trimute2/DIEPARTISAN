@@ -285,7 +285,7 @@ namespace GDAPSIIGame
 			GraphicsDevice.Clear(Color.CornflowerBlue);
 
 			//Begin SpriteBatch
-			spriteBatch.Begin();
+			spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, null, null);
 
 			switch (gameState)
 			{	
@@ -454,7 +454,7 @@ namespace GDAPSIIGame
 			mState = Mouse.GetState();
 			mouseTex = textureManager.MouseTextures["MousePointer"];
 			mousePos = new Vector2(mState.X, mState.Y);
-			mouseScale = new Vector2((float)16 / mouseTex.Width, (float)16 / mouseTex.Height);
+			mouseScale = new Vector2((float)21 / mouseTex.Width, (float)22 / mouseTex.Height);
 		}
 
 		private void Loading()

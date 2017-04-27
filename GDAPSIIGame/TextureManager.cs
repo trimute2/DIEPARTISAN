@@ -94,7 +94,7 @@ namespace GDAPSIIGame
 			weaponTextures.Add("PistolTexture", Content.Load<Texture2D>("playerBullet"));
 
 			//Load mouse textures
-			mouseTextures.Add("MousePointer", Content.Load<Texture2D>("playerNew"));
+			mouseTextures.Add("MousePointer", Content.Load<Texture2D>("cursor"));
 
 			//Load room textures
 			roomTextures.Add("WallTexture", Content.Load<Texture2D>("playerBullet"));
