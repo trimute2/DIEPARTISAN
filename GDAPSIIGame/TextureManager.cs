@@ -101,6 +101,8 @@ namespace GDAPSIIGame
 			roomTextures.Add("FloorTexture", Content.Load<Texture2D>("playerNew"));
 			roomTextures.Add("IndoorSpriteSheet", Content.Load<Texture2D>("indoorTileset"));
 			roomTextures.Add("IndoorFloorSpriteSheet", Content.Load<Texture2D>("indoorFloorTileset"));
+			roomTextures.Add("playerSpawnBackground", Content.Load<Texture2D>("spawnRoomBackground"));
+			roomTextures.Add("playerSpawnForeground", Content.Load<Texture2D>("spawnRoomForeground"));
 
 			//Load menu textures
 			menuTextures.Add("Logo", Content.Load<Texture2D>("tempLogo"));

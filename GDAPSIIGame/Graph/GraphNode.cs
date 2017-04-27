@@ -20,6 +20,7 @@ namespace GDAPSIIGame.Graph
             float y = position.Y;
             this.uniqueID = (.5f) * (x + y) * (x + y + 1) + y;
             neighbors = new Dictionary<GraphNode, GraphNode>();
+            IsComplete = false;
         }
 
         public float UniqueID
@@ -42,11 +43,36 @@ namespace GDAPSIIGame.Graph
             get { return neighbors.Count; }
         }
 
+        public Dictionary<GraphNode, GraphNode> Neighbors
+        {
+            get { return neighbors; }
+        }
+
+        public bool IsComplete
+        {
+            get; set; 
+        }
+
+        /// <summary>
+        /// Expands a given node's neighbor list by one expansion 
+        /// </summary>
         public void Update()
         {
-            foreach(KeyValuePair<GraphNode, GraphNode> neighbor in neighbors)
+            //Iterate over all nodes this node can currently get to
+            int size = NumNeighbors;
+            GraphNode neighbor = null;
+            for(int i = 0; i < size; i++)
             {
-
+                neighbor = neighbors.Keys.ElementAt(i);
+                //Iterate over all nodes that the current neighbor connects to
+                foreach (GraphNode possibleNewNeighbor in neighbor.Neighbors.Keys)
+                {
+                    //If we can't already connect to that node, add it
+                    if (!neighbors.Keys.Contains(possibleNewNeighbor))
+                    {
+                        neighbors.Add(possibleNewNeighbor, neighbor);
+                    }
+                }
             }
         }
 
