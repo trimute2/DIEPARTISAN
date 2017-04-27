@@ -30,6 +30,7 @@ namespace GDAPSIIGame.Entities
 			dashTime = 1.5f;
 			dashing = false;
 			dashSpeed = 4f;
+			color = Color.Red;
 		}
 
 		public DashEnemy(int health, int moveSpeed, Texture2D texture, Vector2 position, Rectangle boundingBox, int scoreValue) : base(health, moveSpeed, texture, position, boundingBox)
@@ -37,6 +38,7 @@ namespace GDAPSIIGame.Entities
 			dashTime = 1.5f;
 			dashing = false;
 			dashSpeed = 4f;
+			color = Color.Red;
 		}
 
 		public override void Update(GameTime gameTime)
