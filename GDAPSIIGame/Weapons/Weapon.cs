@@ -19,7 +19,7 @@ namespace GDAPSIIGame.Weapons
 
 	enum Range
 	{
-		Infinite, Short, Medium, Long
+		Infinite=-10, Short=200, Medium=400, Long=600
 	}
 
 	abstract class Weapon : GameObject
@@ -32,21 +32,22 @@ namespace GDAPSIIGame.Weapons
 
 		public Weapon(ProjectileType pT, Texture2D texture, Vector2 position, Rectangle boundingBox, Range range = Range.Infinite) : base(texture, position, boundingBox)
 		{
-			switch (range)
-			{
-				case Range.Short:
-					this.range = 200;
-					break;
-				case Range.Medium:
-					this.range = 400;
-					break;
-				case Range.Long:
-					this.range = 600;
-					break;
-				default:
-					this.range = Projectile.INFINITE;
-					break;
-			}
+			//switch (range)
+			//{
+			//	case Range.Short:
+			//		this.range = 200;
+			//		break;
+			//	case Range.Medium:
+			//		this.range = 400;
+			//		break;
+			//	case Range.Long:
+			//		this.range = 600;
+			//		break;
+			//	default:
+			//		this.range = Projectile.INFINITE;
+			//		break;
+			//}
+			this.range = (float)range;
 			projType = pT;
 			this.angle = 0; //The angle of the weapon in radians
 			this.dir = Weapons.Weapon_Dir.DownWest; //The direction of the weapon for drawing

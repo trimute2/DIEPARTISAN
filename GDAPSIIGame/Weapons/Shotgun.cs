@@ -22,8 +22,8 @@ namespace GDAPSIIGame.Weapons
 		private SpriteEffects effects;
 		private Random rand;
 
-		public Shotgun(ProjectileType pT, Texture2D texture, Vector2 position, Rectangle boundingBox, float fireRate, float clipSize, float reloadSpeed, Vector2 origin, Owners owner)
-			: base(pT, texture, position, boundingBox, Range.Short)
+		public Shotgun(ProjectileType pT, Texture2D texture, Vector2 position, Rectangle boundingBox, float fireRate, float clipSize, float reloadSpeed, Vector2 origin, Owners owner, Range range)
+			: base(pT, texture, position, boundingBox, range)
         {
 			this.fireRate = fireRate; //How fast until the weapon can fire again
 			this.clipSize = clipSize; //How large the clip is
