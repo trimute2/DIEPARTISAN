@@ -23,6 +23,7 @@ namespace GDAPSIIGame
 		static private Player instance;
 		private Weapon[] weapons;
 		private Weapon currWeapon;
+		private int weaponId;
 		private MouseState mouseState;
 		private MouseState prevMouseState;
 		private KeyboardState keyState;
@@ -44,10 +45,11 @@ namespace GDAPSIIGame
 
 		//Singleton
 
-		private Player(Weapon weapon, Weapon weapon2, int health, int moveSpeed, Texture2D texture, Vector2 position, Rectangle boundingBox) : base(health, moveSpeed, texture, position, boundingBox)
+		private Player(Weapon weapon, Weapon weapon2, Weapon weapon3, int health, int moveSpeed, Texture2D texture, Vector2 position, Rectangle boundingBox) : base(health, moveSpeed, texture, position, boundingBox)
 		{
-			weapons = new Weapon[] { weapon, weapon2 };
+			weapons = new Weapon[] { weapon, weapon2, weapon3 };
 			currWeapon = weapons[0];
+			weaponId = 0;
 			focusMultiplier = 1.0f;
 			focusTimer = 0f;
 			varianceMultiplier = 1.0f;
@@ -65,11 +67,11 @@ namespace GDAPSIIGame
 			firing = 0;
 		}
 
-		static public Player Instantiate(Weapon weapon, Weapon weapon2, int health, int moveSpeed, Texture2D texture, Vector2 position, Rectangle boundingBox)
+		static public Player Instantiate(Weapon weapon, Weapon weapon2, Weapon weapon3, int health, int moveSpeed, Texture2D texture, Vector2 position, Rectangle boundingBox)
 		{
 			if (instance == null)
 			{
-				instance = new Player(weapon, weapon2, health, moveSpeed, texture, position, boundingBox);
+				instance = new Player(weapon, weapon2, weapon3, health, moveSpeed, texture, position, boundingBox);
 			}
 			return instance;
 		}
@@ -423,8 +425,16 @@ namespace GDAPSIIGame
             {
                 InteruptReload();
                 Weapon_Dir oldDir = currWeapon.Dir;
-                if (currWeapon == weapons[0]) { this.currWeapon = weapons[1]; }
-                else if (currWeapon == weapons[1]) { this.currWeapon = weapons[0]; }
+				if(weaponId == weapons.Length-1)
+				{
+					weaponId = 0;
+				}else
+				{
+					weaponId++;
+				}
+				currWeapon = weapons[weaponId];
+				//if (currWeapon == weapons[0]) { this.currWeapon = weapons[1]; 
+				//else if (currWeapon == weapons[1]) { this.currWeapon = weapons[0]; }
 				currWeapon.Dir = oldDir;
 				UpdateWeapon(gameTime, camw);
             }
@@ -434,8 +444,16 @@ namespace GDAPSIIGame
             {
                 InteruptReload();
 				Weapon_Dir oldDir = currWeapon.Dir;
-				if (currWeapon == weapons[1]) { this.currWeapon = weapons[0]; }
-                else if (currWeapon == weapons[0]) { this.currWeapon = weapons[1]; }
+				if (weaponId == 0)
+				{
+					weaponId = weapons.Length - 1;
+				}else
+				{
+					weaponId--;
+				}
+				//if (currWeapon == weapons[1]) { this.currWeapon = weapons[0]; }
+				//else if (currWeapon == weapons[0]) { this.currWeapon = weapons[1]; }
+				currWeapon = weapons[weaponId];
 				currWeapon.Dir = oldDir;
 				UpdateWeapon(gameTime, camw);
 			}

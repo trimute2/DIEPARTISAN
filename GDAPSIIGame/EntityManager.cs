@@ -59,6 +59,7 @@ namespace GDAPSIIGame
 			//Create the player object
 			player = Player.Instantiate(Weapons.WeaponManager.Instance.Pistol,
 				Weapons.WeaponManager.Instance.Rifle,
+				Weapons.WeaponManager.Instance.ShotGun,
 				100,
 				5,
 				playerTexture,
