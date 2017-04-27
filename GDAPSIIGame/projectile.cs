@@ -22,6 +22,7 @@ namespace GDAPSIIGame
 		private Owners owner;
 		private float angle;
 		private float distance;
+		public const float INFINITE = -10f;
 
         //Properties
         public Vector2 Direction { get { return direction; } set { direction = value; } }
@@ -43,7 +44,7 @@ namespace GDAPSIIGame
             this.direction = direction;
             this.damage = damage;
 			this.owner = owner;
-			distance = -10;
+			distance = INFINITE;
         }
 
 		public Projectile(Texture2D texture, Vector2 position, Rectangle boundingBox, Vector2 direction, int damage, float angle, float distance, Owners owner = Owners.None) : base(texture, position, boundingBox)
@@ -62,7 +63,7 @@ namespace GDAPSIIGame
             this.X += direction.X * gameTime.ElapsedGameTime.Milliseconds;
             this.Y += direction.Y * gameTime.ElapsedGameTime.Milliseconds;
 
-			if(distance != -10)
+			if(distance != INFINITE)
 			{
 				if(distance > 0)
 				{
@@ -89,8 +90,12 @@ namespace GDAPSIIGame
 				SpriteEffects.None);
 		}
 
-		public Projectile Clone(Vector2 position, Vector2 direction, Owners owner, float angle) {
-            Projectile p = new Projectile(this.Texture, position, this.BoundingBox, direction, this.damage, angle, distance, owner);
+		public Projectile Clone(Vector2 position, Vector2 direction, Owners owner, float angle, float distance = INFINITE) {
+			if(distance != INFINITE)
+			{
+				this.distance = distance;
+			}
+            Projectile p = new Projectile(this.Texture, position, this.BoundingBox, direction, this.damage, angle, this.distance, owner);
             ProjectileManager.Instance.Add(p);
             return p;
         }

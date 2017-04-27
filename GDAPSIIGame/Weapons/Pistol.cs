@@ -8,10 +8,10 @@ using Microsoft.Xna.Framework.Graphics;
 using GDAPSIIGame.Map;
 using Microsoft.Xna.Framework.Input;
 
-namespace GDAPSIIGame
+namespace GDAPSIIGame.Weapons
 {
 	
-    class Pistol : Weapons.Weapon
+    class Pistol : Weapon
     {
         //Fields
         private float fireRate;
@@ -26,7 +26,7 @@ namespace GDAPSIIGame
 		private SpriteEffects effects;
 
         public Pistol(ProjectileType pT, Texture2D texture, Vector2 position, Rectangle boundingBox, float fireRate, float clipSize, float reloadSpeed, Vector2 origin, Owners owner)
-			: base(pT, texture, position, boundingBox)
+			: base(pT, texture, position, boundingBox, Range.Medium)
         {
             this.fireRate = fireRate; //How fast until the weapon can fire again
             this.clipSize = clipSize; //How large the clip is
@@ -226,7 +226,7 @@ namespace GDAPSIIGame
 					Matrix rotationMatrix = Matrix.CreateRotationZ(Angle);
 					Vector2 bulletPosition = Vector2.Transform(bulletOffset, rotationMatrix);
 
-					ProjectileManager.Instance.Clone(ProjType, Position + bulletPosition, direction, Angle, owner);
+					ProjectileManager.Instance.Clone(ProjType, Position + bulletPosition, direction, Angle, owner, WeapRange);
 				}
 			}
         }

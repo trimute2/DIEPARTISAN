@@ -68,7 +68,7 @@ namespace GDAPSIIGame
 			//Turret
 			hiddenProjectiles.Add(new Projectile(texture, new Vector2(-100, -100), new Rectangle(texture.Width, texture.Height, 25, 25), new Vector2(0f, 0f), 15, 0));
 			//Shotgun
-			hiddenProjectiles.Add(new Projectile(texture, new Vector2(-100, -100), new Rectangle(texture.Width, texture.Height, 25, 25), Vector2.Zero, 2, 0, 200f));
+			hiddenProjectiles.Add(new Projectile(texture, new Vector2(-100, -100), new Rectangle(texture.Width, texture.Height, 25, 25), Vector2.Zero, 2, 0));
 		}
 
         /// <summary>
@@ -121,18 +121,18 @@ namespace GDAPSIIGame
 			projectiles.Remove(p);
 		}
 
-        internal Projectile Clone(ProjectileType pT, Vector2 currPosition, Vector2 currDirection, float angle, Owners owner)
+        internal Projectile Clone(ProjectileType pT, Vector2 currPosition, Vector2 currDirection, float angle, Owners owner, float range)
         {
             switch (pT)
             {
                 case ProjectileType.PISTOL:
-                    return hiddenProjectiles[(int)pT - 1].Clone(currPosition, currDirection, owner, angle);
+                    return hiddenProjectiles[(int)pT - 1].Clone(currPosition, currDirection, owner, angle, range);
 				case ProjectileType.RIFLE:
-					return hiddenProjectiles[(int)pT - 1].Clone(currPosition, currDirection, owner, angle);
+					return hiddenProjectiles[(int)pT - 1].Clone(currPosition, currDirection, owner, angle, range);
 				case ProjectileType.TURRET:
-					return hiddenProjectiles[(int)pT - 1].Clone(currPosition, currDirection, owner, angle);
+					return hiddenProjectiles[(int)pT - 1].Clone(currPosition, currDirection, owner, angle, range);
 				case ProjectileType.SHOTGUN:
-					return hiddenProjectiles[(int)pT - 1].Clone(currPosition, currDirection, owner, angle);
+					return hiddenProjectiles[(int)pT - 1].Clone(currPosition, currDirection, owner, angle, range);
 			}
             return null;
         }
