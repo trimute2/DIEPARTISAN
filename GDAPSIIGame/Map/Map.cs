@@ -43,15 +43,7 @@ namespace GDAPSIIGame.Map
             }
         }
 
-		public void DrawForeground(SpriteBatch spritebatch)
-		{
-			foreach (Room r in rooms)
-			{
-				r.DrawForeground(spritebatch);
-			}
-		}
-
-		public static void generateMap(String[] filenames, Map m, int mapSize)
+        public static void generateMap(String[] filenames, Map m, int mapSize)
         {
             Random randy = new Random();
             string filename;

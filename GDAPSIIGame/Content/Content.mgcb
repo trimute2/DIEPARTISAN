@@ -134,29 +134,7 @@
 /build:uifont
 
 #begin Quantify Bold v2.6.ttf
-/copy:Quantify Bold v2.6.ttf
-
-#begin spawnRoomForeground.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:spawnRoomForeground.png
-
-#begin spawnRoomBackground.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:spawnRoomBackground.png
+/importer:
+/processor:
+/build:Quantify Bold v2.6.ttf
 

@@ -66,10 +66,5 @@ namespace GDAPSIIGame
 		{
 			currMap.Draw(spriteBatch);
 		}
-
-		public void DrawForeground(SpriteBatch spriteBatch)
-		{
-			currMap.DrawForeground(spriteBatch);
-		}
 	}
 }

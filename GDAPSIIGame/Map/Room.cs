@@ -44,7 +44,6 @@ namespace GDAPSIIGame.Map
 		Texture2D floorTextures;
 		private static int tileWidth = 32;
 		private static int tileHeight = 32;
-		private bool spawnroom;
 
 		public Room(TileType[,] tileLayout, Vector2 position)
 		{
@@ -52,7 +51,6 @@ namespace GDAPSIIGame.Map
 			this.tileLayout = tileLayout;
 			this.textureLayout = new int[tileLayout.GetLength(0), tileLayout.GetLength(1)];
 			this.connections = 0;
-			spawnroom = false;
 		}
 
 
@@ -100,80 +98,42 @@ namespace GDAPSIIGame.Map
 			Vector2 currPos = Camera.Instance.GetViewportPosition(position);
 			int tileSize = 64;
 			int roomSize = 10;
-			if (!spawnroom)
+			for (int i = 0; i < roomSize; i++)
 			{
-				for (int i = 0; i < roomSize; i++)
+				for (int j = 0; j < roomSize; j++)
 				{
-					for (int j = 0; j < roomSize; j++)
+					if (tileLayout[i, j] == TileType.WALL)
 					{
-						if (tileLayout[i, j] == TileType.WALL)
-						{
-							spriteBatch.Draw(
-								wallTextures,
-								new Vector2(
-									(int)currPos.X + (i * tileSize),
-									(int)currPos.Y + (j * tileSize)),
-								GetSourceRectangle(wallTextures, 0),
-								Color.White,
-								0f,
-								Vector2.Zero,
-								2,
-								SpriteEffects.None,
-								0);
-						}
-						else
-						{
-							int num = textureLayout[i, j];
-							spriteBatch.Draw(
-								floorTextures,
-								new Vector2(
-									(int)currPos.X + i * tileSize,
-									(int)currPos.Y + j * tileSize),
-								GetSourceRectangle(floorTextures, textureLayout[i, j]),
-								Color.White,
-								0f,
-								Vector2.Zero,
-								2,
-								SpriteEffects.None,
-								0);
-						}
+						spriteBatch.Draw(
+							wallTextures,
+							new Vector2(
+								(int)currPos.X + (i * tileSize),
+								(int)currPos.Y + (j * tileSize)),
+							GetSourceRectangle(wallTextures, 0),
+							Color.White,
+							0f,
+							Vector2.Zero,
+							2,
+							SpriteEffects.None,
+							0);
+					}
+					else
+					{
+						int num = textureLayout[i, j];
+						spriteBatch.Draw(
+							floorTextures,
+							new Vector2(
+								(int)currPos.X + i * tileSize,
+								(int)currPos.Y + j * tileSize),
+							GetSourceRectangle(floorTextures, textureLayout[i, j]),
+							Color.White,
+							0f,
+							Vector2.Zero,
+							2,
+							SpriteEffects.None,
+							0);
 					}
 				}
-			}
-			else
-			{
-				spriteBatch.Draw(
-					TextureManager.Instance.GetRoomTexture("playerSpawnBackground"),
-					new Vector2(
-						(int)currPos.X,
-						(int)currPos.Y),
-					null,
-					Color.White,
-					0f,
-					Vector2.Zero,
-					2,
-					SpriteEffects.None,
-					0);
-			}
-		}
-
-		public void DrawForeground(SpriteBatch spriteBatch)
-		{
-			if (spawnroom)
-			{
-				Vector2 currPos = Camera.Instance.GetViewportPosition(position);
-				spriteBatch.Draw(
-					TextureManager.Instance.GetRoomTexture("playerSpawnForeground"),
-					new Vector2(
-						(int)currPos.X,
-						(int)currPos.Y),
-					null,
-					Color.White,
-					0f,
-					Vector2.Zero,
-					2,
-					SpriteEffects.None,
-					0);
 			}
 		}
 
@@ -234,7 +194,6 @@ namespace GDAPSIIGame.Map
 
 							//Add this position to the graph
 							graph.Add(new Graph.GraphNode(midPos));
-							spawnroom = true;
 							break;
 
 						//Create Melee Enemies

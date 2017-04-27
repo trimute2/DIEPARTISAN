@@ -326,8 +326,6 @@ namespace GDAPSIIGame
 					//Draw projectiles
 					projectileManager.Draw(gameTime, spriteBatch);
 
-					mapManager.DrawForeground(spriteBatch);
-
 					//Draw UI
 					uiManager.Draw(gameTime, spriteBatch, GraphicsDevice);
 
