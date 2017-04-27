@@ -237,7 +237,7 @@ namespace GDAPSIIGame.Weapons
 					Vector2 bulletPosition = Vector2.Transform(bulletOffset, rotationMatrix);
 
 					//Create the bullet at the actual position of the bullet + the rotated position
-					ProjectileManager.Instance.Clone(ProjType, Position + bulletPosition, direction, Angle, owner);
+					ProjectileManager.Instance.Clone(ProjType, Position + bulletPosition, direction, owner);
 				}
 			}
 		}
