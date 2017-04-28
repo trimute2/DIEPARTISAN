@@ -199,3 +199,9 @@
 /processorParam:TextureFormat=Color
 /build:healthhead.png
 
+#begin uifont.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:TextureFormat=Compressed
+/build:uifont.spritefont
+
