@@ -129,6 +129,13 @@ namespace GDAPSIIGame
 					}
 				}
 			}
+			for(int i = 0; i < Objects.Count; i++)
+			{
+				if(objects[i] is Wall)
+				{
+					ContainCollision(objects[i]);
+				}
+			}
 		}
 
 		public void RemoveInactive()
@@ -188,6 +195,18 @@ namespace GDAPSIIGame
 				}
 			}
 			return overlap;
+		}
+
+		public void ContainCollision(GameObject obj)
+		{
+			foreach(GameObject otherObj in objects)
+			{
+				if(otherObj != obj&&!(otherObj is Projectile) && obj.Collide(otherObj))
+				{
+					otherObj.OnCollision(obj);
+					ContainCollision(otherObj);
+				}
+			}
 		}
 
 	}
