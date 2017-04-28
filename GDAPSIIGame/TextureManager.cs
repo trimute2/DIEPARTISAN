@@ -81,6 +81,11 @@ namespace GDAPSIIGame
 		public Dictionary<String, SpriteFont> Fonts
 		{ get { return fonts; } }
 
+		internal void InitialLoadContent(ContentManager Content)
+		{
+			menuTextures.Add("Black", Content.Load<Texture2D>("black"));
+		}
+
 		/// <summary>
 		/// Load in sprites
 		/// </summary>
@@ -111,20 +116,56 @@ namespace GDAPSIIGame
 
 			//Load menu textures
 			menuTextures.Add("Logo", Content.Load<Texture2D>("tempLogo"));
-			menuTextures.Add("Black", Content.Load<Texture2D>("black"));
 
 			//Add fonts
 			fonts.Add("uifont", Content.Load<SpriteFont>("uifont"));
 		}
 
 		/// <summary>
-		/// Gets any texture in the menuTextures dictionary
+		/// Gets any texture in the playerTextures dictionary
 		/// </summary>
-		public Texture2D GetMenuTexture(String name)
+		public Texture2D GetPlayerTexture(String name)
 		{
-			if (menuTextures.ContainsKey(name))
+			if (playerTextures.ContainsKey(name))
 			{
-				return menuTextures[name];
+				return playerTextures[name];
+			}
+			else return null;
+		}
+
+
+		/// <summary>
+		/// Gets any texture in the enemyTextures dictionary
+		/// </summary>
+		public Texture2D GetEnemyTexture(String name)
+		{
+			if (enemyTextures.ContainsKey(name))
+			{
+				return enemyTextures[name];
+			}
+			else return null;
+		}
+
+		/// <summary>
+		/// Gets any texture in the bulletTextures dictionary
+		/// </summary>
+		public Texture2D GetBulletTexture(String name)
+		{
+			if (bulletTextures.ContainsKey(name))
+			{
+				return bulletTextures[name];
+			}
+			else return null;
+		}
+
+		/// <summary>
+		/// Gets any texture in the weaponTextures dictionary
+		/// </summary>
+		public Texture2D GetWeaponTexture(String name)
+		{
+			if (weaponTextures.ContainsKey(name))
+			{
+				return weaponTextures[name];
 			}
 			else return null;
 		}
@@ -142,19 +183,31 @@ namespace GDAPSIIGame
 		}
 
 		/// <summary>
-		/// Gets any texture in the enemyTextures dictionary
+		/// Gets any texture in the mouseTextures dictionary
 		/// </summary>
-		public Texture2D GetEnemyTexture(String name)
+		public Texture2D GetMouseTexture(String name)
 		{
-			if (enemyTextures.ContainsKey(name))
+			if (mouseTextures.ContainsKey(name))
 			{
-				return enemyTextures[name];
+				return mouseTextures[name];
 			}
 			else return null;
 		}
 
 		/// <summary>
-		/// Gets any texture in the enemyTextures dictionary
+		/// Gets any texture in the menuTextures dictionary
+		/// </summary>
+		public Texture2D GetMenuTexture(String name)
+		{
+			if (menuTextures.ContainsKey(name))
+			{
+				return menuTextures[name];
+			}
+			else return null;
+		}
+
+		/// <summary>
+		/// Gets any font in the fonts dictionary
 		/// </summary>
 		public SpriteFont GetFont(String name)
 		{

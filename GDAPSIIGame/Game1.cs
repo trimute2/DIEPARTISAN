@@ -11,7 +11,7 @@ using Microsoft.Xna.Framework.Content;
 
 namespace GDAPSIIGame
 {
-    enum GameState { Menu, NewGame, LoadingScreen, GamePlay, GameOver, PauseMenu}
+    enum GameState { InitialLoad, Menu, NewGame, LoadingScreen, GamePlay, GameOver, PauseMenu}
 
 	public class Game1 : Game
     {
@@ -37,6 +37,7 @@ namespace GDAPSIIGame
 		TextureManager textureManager;
         int mapSize;
 		Thread l;
+		bool startLoad;
 
 		public Game1()
         {
@@ -58,8 +59,6 @@ namespace GDAPSIIGame
 			//graphics.PreferredBackBufferWidth = GraphicsDevice.DisplayMode.Width;
 			//graphics.PreferredBackBufferHeight = GraphicsDevice.DisplayMode.Height;
 			//graphics.ApplyChanges();
-
-			mapSize = 2;
 
             //this.graphics.IsFullScreen = true;
 			//graphics.ToggleFullScreen();
@@ -85,51 +84,19 @@ namespace GDAPSIIGame
             //Initialize ui manager
             uiManager = UIManager.Instance;
 
-			//Initialize keyboards
-			kbState = new KeyboardState();
-			previousKbState = kbState;
-
-			gameState = GameState.Menu;
+			gameState = GameState.InitialLoad;
 			base.Initialize();
         }
 
         protected override void LoadContent()
         {
 			spriteBatch = new SpriteBatch(GraphicsDevice);
-
-			List<Thread> threads = new List<Thread>();
-
-			//Make all the threads
-			Thread tex = new Thread(() => textureManager.LoadContent(Content) );
-			tex.Name = "Textures";
-			threads.Add(tex);
-			Thread weap = new Thread(() => weaponManager.LoadContent(Content));
-			weap.Name = "Weapons";
-			threads.Add(weap);
-			Thread ent = new Thread(() => entityManager.LoadContent(Content, GraphicsDevice));
-			ent.Name = "Entities";
-			threads.Add(ent);
-			Thread proj = new Thread(() => projectileManager.LoadContent(Content));
-			proj.Name = "Name";
-			threads.Add(proj);
-			Thread ui = new Thread(() => uiManager.LoadContent(Content));
-			ui.Name = "UI";
-			threads.Add(ui);
-			Thread other = new Thread(() => LoadOther(Content));
-			other.Name = "Other";
-			threads.Add(other);
-
-			foreach (Thread t in threads)
-			{
-				t.Start();
-				t.Join();
-			}
+			startLoad = true;
+			textureManager.InitialLoadContent(Content);
 		}
 
 		protected override void UnloadContent()
-        {
-
-        }
+        { }
 
 		protected override void Update(GameTime gameTime)
 		{
@@ -147,6 +114,14 @@ namespace GDAPSIIGame
 
 			switch (gameState)
             {
+				case GameState.InitialLoad:
+					if (startLoad)
+					{
+						InitialLoad();
+						startLoad = false;
+					}
+					break;
+
 				//The menu of the game
 				case GameState.Menu:
 					previousKbState = kbState;
@@ -288,11 +263,16 @@ namespace GDAPSIIGame
 			spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, null, null);
 
 			switch (gameState)
-			{	
+			{
+				case GameState.InitialLoad:
+					spriteBatch.Draw(TextureManager.Instance.GetMenuTexture("Black"),
+						new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height),
+						Color.White);
+					break;
 				//Drawing for main menu
 				case GameState.Menu:
 					//Draw the menu
-					spriteBatch.Draw(textureManager.MenuTextures["Logo"], new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
+					spriteBatch.Draw(textureManager.GetMenuTexture("Logo"), new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
 
 					//Draw the mouse texture
 					spriteBatch.Draw(mouseTex,
@@ -438,8 +418,41 @@ namespace GDAPSIIGame
 			}
 		}
 
+		private void InitialLoad()
+		{
+			List<Thread> threads = new List<Thread>();
+
+			//Make all the threads
+			Thread tex = new Thread(() => textureManager.LoadContent(Content));
+			tex.Name = "Textures";
+			threads.Add(tex);
+			Thread weap = new Thread(() => weaponManager.LoadContent(Content));
+			weap.Name = "Weapons";
+			threads.Add(weap);
+			Thread ent = new Thread(() => entityManager.LoadContent(Content, GraphicsDevice));
+			ent.Name = "Entities";
+			threads.Add(ent);
+			Thread proj = new Thread(() => projectileManager.LoadContent(Content));
+			proj.Name = "Name";
+			threads.Add(proj);
+			Thread ui = new Thread(() => uiManager.LoadContent(Content));
+			ui.Name = "UI";
+			threads.Add(ui);
+			Thread other = new Thread(() => LoadOther(Content));
+			other.Name = "Other";
+			threads.Add(other);
+
+			foreach (Thread t in threads)
+			{
+				t.Start();
+				t.Join();
+			}
+		}
+
 		private void LoadOther(ContentManager content)
 		{
+			mapSize = 2;
+
 			//Make the Camera
 			Camera.Instance.setPosition(GraphicsDevice.Viewport);
 
@@ -450,11 +463,16 @@ namespace GDAPSIIGame
 
 			font = textureManager.GetFont("uifont");
 
+			//Initialize keyboards
+			kbState = new KeyboardState();
+			previousKbState = kbState;
+
 			//Initiate mouse
 			mState = Mouse.GetState();
 			mouseTex = textureManager.MouseTextures["MousePointer"];
 			mousePos = new Vector2(mState.X, mState.Y);
 			mouseScale = new Vector2((float)21 / mouseTex.Width, (float)22 / mouseTex.Height);
+			gameState = GameState.Menu;
 		}
 
 		private void Loading()
