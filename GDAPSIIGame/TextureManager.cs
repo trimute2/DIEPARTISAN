@@ -114,7 +114,7 @@ namespace GDAPSIIGame
 			menuTextures.Add("Black", Content.Load<Texture2D>("black"));
 
 			//Add fonts
-			fonts.Add("uifont", Content.Load<SpriteFont>("uifont"));
+			fonts.Add("uifont", Content.Load<SpriteFont>("font"));
 		}
 
 		/// <summary>
