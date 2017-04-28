@@ -443,12 +443,12 @@ namespace GDAPSIIGame
 			//Make the Camera
 			Camera.Instance.setPosition(GraphicsDevice.Viewport);
 
-			font = Content.Load<SpriteFont>("Font");
-
 			pauseRect = new Texture2D(graphics.GraphicsDevice, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
 			Color[] data = new Color[GraphicsDevice.Viewport.Width * GraphicsDevice.Viewport.Height];
 			for (int i = 0; i < data.Length; ++i) data[i] = new Color(Color.Black, 0.2f);
 			pauseRect.SetData(data);
+
+			font = textureManager.GetFont("uifont");
 
 			//Initiate mouse
 			mState = Mouse.GetState();

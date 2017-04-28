@@ -86,7 +86,7 @@ namespace GDAPSIIGame
             scoreBounding.X = 10;
             scoreBounding.Y = 10;
 
-            font = Content.Load<SpriteFont>("uifont");
+			font = TextureManager.Instance.GetFont("uifont");
 
             //load textures for the healthbox
             healthbarBackground = Content.Load<Texture2D>("blackbar");

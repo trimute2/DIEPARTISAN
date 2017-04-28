@@ -21,6 +21,7 @@ namespace GDAPSIIGame
 		Dictionary<String, Texture2D> roomTextures;
 		Dictionary<String, Texture2D> mouseTextures;
 		Dictionary<String, Texture2D> menuTextures;
+		Dictionary<String, SpriteFont> fonts;
 
 		//Methods----------------
 
@@ -36,6 +37,7 @@ namespace GDAPSIIGame
 			roomTextures = new Dictionary<String, Texture2D>();
 			mouseTextures = new Dictionary<String, Texture2D>();
 			menuTextures = new Dictionary<string, Texture2D>();
+			fonts = new Dictionary<string, SpriteFont>();
 		}
 
 		/// <summary>
@@ -76,6 +78,9 @@ namespace GDAPSIIGame
 		public Dictionary<String, Texture2D> MenuTextures
 		{ get { return menuTextures; } }
 
+		public Dictionary<String, SpriteFont> Fonts
+		{ get { return fonts; } }
+
 		/// <summary>
 		/// Load in sprites
 		/// </summary>
@@ -107,6 +112,9 @@ namespace GDAPSIIGame
 			//Load menu textures
 			menuTextures.Add("Logo", Content.Load<Texture2D>("tempLogo"));
 			menuTextures.Add("Black", Content.Load<Texture2D>("black"));
+
+			//Add fonts
+			fonts.Add("uifont", Content.Load<SpriteFont>("uifont"));
 		}
 
 		/// <summary>
@@ -141,6 +149,18 @@ namespace GDAPSIIGame
 			if (enemyTextures.ContainsKey(name))
 			{
 				return enemyTextures[name];
+			}
+			else return null;
+		}
+
+		/// <summary>
+		/// Gets any texture in the enemyTextures dictionary
+		/// </summary>
+		public SpriteFont GetFont(String name)
+		{
+			if (fonts.ContainsKey(name))
+			{
+				return fonts[name];
 			}
 			else return null;
 		}
