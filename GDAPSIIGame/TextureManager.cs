@@ -81,6 +81,11 @@ namespace GDAPSIIGame
 		public Dictionary<String, SpriteFont> Fonts
 		{ get { return fonts; } }
 
+		internal void InitialLoadContent(ContentManager Content)
+		{
+			menuTextures.Add("Black", Content.Load<Texture2D>("black"));
+		}
+
 		/// <summary>
 		/// Load in sprites
 		/// </summary>
@@ -111,10 +116,6 @@ namespace GDAPSIIGame
 
 			//Load menu textures
 			menuTextures.Add("Logo", Content.Load<Texture2D>("tempLogo"));
-			menuTextures.Add("Black", Content.Load<Texture2D>("black"));
-
-			//Add fonts
-			fonts.Add("uifont", Content.Load<SpriteFont>("uifont"));
 		}
 
 		/// <summary>

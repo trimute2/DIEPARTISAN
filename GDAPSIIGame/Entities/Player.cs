@@ -30,7 +30,6 @@ namespace GDAPSIIGame
 		private KeyboardState prevKeyState;
 		private float hurting;
         private float hurtBlink;
-        private Color color;
 		private float angle;
 		private SpriteEffects effect;
 		private float timeMult;
