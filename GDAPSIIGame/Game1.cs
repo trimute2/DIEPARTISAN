@@ -92,6 +92,7 @@ namespace GDAPSIIGame
         {
 			spriteBatch = new SpriteBatch(GraphicsDevice);
 			startLoad = true;
+			//textureManager.InitialLoadContent(Content);
 		}
 
 		protected override void UnloadContent()
@@ -318,6 +319,11 @@ namespace GDAPSIIGame
 							mouseScale,
 							null,
 							0);
+
+					//Draw score things
+					spriteBatch.DrawString(font, PodManager.Instance.GlobalScore.ToString(), new Vector2(50, 50), Color.Red);
+					spriteBatch.DrawString(font, Player.Instance.ScoreMultiplier.ToString(), new Vector2(50, 100), Color.Red);
+					spriteBatch.DrawString(font, ((mapSize * mapSize * 10) - PodManager.Instance.LevelTime).ToString(), new Vector2(50, 150), Color.Red);
 					break;
 
 				//Drawing for pause menu
@@ -455,7 +461,7 @@ namespace GDAPSIIGame
 			for (int i = 0; i < data.Length; ++i) data[i] = new Color(Color.Black, 0.2f);
 			pauseRect.SetData(data);
 
-            font = content.Load<SpriteFont>("font");
+			font = textureManager.GetFont("uifont");
 
 			//Initialize keyboards
 			kbState = new KeyboardState();
