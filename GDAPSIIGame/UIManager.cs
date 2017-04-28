@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using GDAPSIIGame.Pods;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -12,17 +13,13 @@ namespace GDAPSIIGame
     class UIManager
     {
         private Vector2 scoreBounding;
+        private SpriteFont font;
         //Instantiate Textures and Rectangles for healthbox
         private Texture2D healthbarBackground;
         private Texture2D healthbarForeground;
-        private Rectangle healthbarBackgroundBounding;
-        private Rectangle healthbarForegroundBounding;
-        //X and Y screen values for drawing the healthbox
-        private int healthbarX;
-        private int healthbarY;
-        //Height and Width values for the default full healthbox
-        private int healthbarWidth;
-        private int healthbarHeight;
+        private Texture2D healthbarHead;
+        private Texture2D ammoIcon;
+        private Texture2D pistolIcon;
 		//Creating the max health for the player for draw reference **WILL BE UPDATED WITH PLAYER PROPERTY**
 		private int playerMaxHealth;
 
@@ -76,20 +73,17 @@ namespace GDAPSIIGame
         internal void LoadContent(ContentManager Content)
         {
 			playerMaxHealth = Player.Instance.Health;
-            //Set X and Y values for the healthbar, as well as values for the bounding box.
-            healthbarX = 10;
-            healthbarY = 10;
-            healthbarWidth = 80;
-            healthbarHeight = 20;
             //Set X and Y values for the game score.
             scoreBounding.X = 10;
             scoreBounding.Y = 10;
-
+            //load font texture
+            font = Content.Load<SpriteFont>("font");
             //load textures for the healthbox
             healthbarBackground = Content.Load<Texture2D>("healthbarbg");
             healthbarForeground = Content.Load<Texture2D>("health");
-            //set both the background and foreground of the healthbox to the same bounding area
-            healthbarBackgroundBounding = healthbarForegroundBounding = new Rectangle(new Point(healthbarX, healthbarY), new Point(healthbarWidth, healthbarHeight));
+            healthbarHead = Content.Load<Texture2D>("healthhead");
+            ammoIcon = Content.Load<Texture2D>("bullets");
+            pistolIcon = Content.Load<Texture2D>("pistolicon");
 		}
 
         /// <summary>
@@ -113,13 +107,6 @@ namespace GDAPSIIGame
 			{
 				MapManager.Instance.State = MapState.Play;
 			}
-
-            //If the health isin't at max:
-            if (Player.Instance.Health != playerMaxHealth)
-            {
-                double percentHealth = (int)(Player.Instance.Health / playerMaxHealth);
-                healthbarForegroundBounding.Width -= (int)(percentHealth * healthbarWidth);
-            }
         }
 
         /// <summary>
@@ -129,10 +116,21 @@ namespace GDAPSIIGame
         /// <param name="spriteBatch"></param>
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch, GraphicsDevice GraphicsDevice)
         {
-            spriteBatch.Draw(healthbarBackground, healthbarBackgroundBounding, Color.White);
-            spriteBatch.Draw(healthbarForeground, healthbarForegroundBounding, Color.White);
+            spriteBatch.Draw(healthbarBackground, new Vector2(40, 20), Color.White);
+            spriteBatch.Draw(healthbarForeground, new Vector2(43, 23), Color.White);
+            spriteBatch.Draw(healthbarHead, new Vector2(14, 10), Color.White);
+            
+            if(Player.Instance.CurrWeapon is Weapons.Pistol)
+            {
+                spriteBatch.Draw(pistolIcon, new Vector2(14, 50), Color.White);
+            }
 
-			if (MapManager.Instance.State == MapState.Enter || MapManager.Instance.State == MapState.Exit)
+            spriteBatch.Draw(ammoIcon, new Vector2(14, 110), Color.White);
+
+            spriteBatch.DrawString(font, PodManager.Instance.GlobalScore.ToString(), new Vector2(50, 50), Color.Red);
+            spriteBatch.DrawString(font, Player.Instance.ScoreMultiplier.ToString(), new Vector2(50, 100), Color.Red);
+
+            if (MapManager.Instance.State == MapState.Enter || MapManager.Instance.State == MapState.Exit)
 			{
 				spriteBatch.Draw(TextureManager.Instance.GetMenuTexture("Black"), new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), new Color(Color.White, fade));
 			}

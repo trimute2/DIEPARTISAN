@@ -92,7 +92,7 @@ namespace GDAPSIIGame
         {
 			spriteBatch = new SpriteBatch(GraphicsDevice);
 			startLoad = true;
-			textureManager.InitialLoadContent(Content);
+			//textureManager.InitialLoadContent(Content);
 		}
 
 		protected override void UnloadContent()
