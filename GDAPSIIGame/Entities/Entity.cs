@@ -13,6 +13,7 @@ namespace GDAPSIIGame.Entities
 	/// The direction the entity is facing
 	/// </summary>
 	public enum Entity_Dir { Up, UpLeft, Left, DownLeft, Down, DownRight, Right, UpRight }
+	public enum Entity_State { Idling, Moving}
 
     public class Entity : GameObject
     {
