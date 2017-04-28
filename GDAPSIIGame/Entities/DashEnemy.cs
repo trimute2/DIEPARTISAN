@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GDAPSIIGame.Interface;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -13,6 +14,8 @@ namespace GDAPSIIGame.Entities
 
 		private float dashTime;
 		private bool dashing;
+		private bool bump;
+		private float bumpTime;
 		private float dashSpeed;
 
 		public float DashTime
@@ -28,17 +31,21 @@ namespace GDAPSIIGame.Entities
 		public DashEnemy(Texture2D texture, Vector2 position, Rectangle boundingBox, int health = 3, int moveSpeed = 2) : base(health, moveSpeed, texture, position, boundingBox)
 		{
 			dashTime = 1.5f;
+			bumpTime = 0.01f;
 			dashing = false;
 			dashSpeed = 4f;
 			color = Color.Red;
+			bump = false;
 		}
 
 		public DashEnemy(int health, int moveSpeed, Texture2D texture, Vector2 position, Rectangle boundingBox, int scoreValue) : base(health, moveSpeed, texture, position, boundingBox)
 		{
 			dashTime = 1.5f;
+			bumpTime = 0.01f;
 			dashing = false;
 			dashSpeed = 4f;
 			color = Color.Red;
+			bump = false;
 		}
 
 		public override void Update(GameTime gameTime)
@@ -54,7 +61,16 @@ namespace GDAPSIIGame.Entities
 			}
 			else
 			{
-				if (!(knockBackTime > 0))
+				if (bump)
+				{
+					if(bumpTime > 0)
+					{
+						bumpTime -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+					}else
+					{
+						bump = false;
+					}
+				}else if (!(knockBackTime > 0))
 				{
 					dashTime -= (float)gameTime.ElapsedGameTime.TotalSeconds;
 				}
@@ -80,7 +96,7 @@ namespace GDAPSIIGame.Entities
 			if (!(knockBackTime > 0))
 			{
 				Vector2 diff = Position - thingToMoveTo.Position;
-				if (dashing)
+				if (dashing && !bump)
 				{
 					if (MoveSpeed * dashSpeed > Math.Abs(diff.X))
 					{
@@ -149,5 +165,14 @@ namespace GDAPSIIGame.Entities
 			}
 		}
 
-	}
+        public override void OnCollision(ICollidable obj)
+        {
+            if(obj is Enemy)
+			{
+				bump = true;
+				bumpTime = 0.01f;
+			}
+			base.OnCollision(obj);
+        }
+    }
 }
