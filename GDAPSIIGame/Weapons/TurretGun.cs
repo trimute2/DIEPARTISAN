@@ -169,6 +169,19 @@ namespace GDAPSIIGame.Weapons
 			return false;
 		}
 
+		public override bool Fire(Vector2 direction, GamePadState gpState, GamePadState prevGpState)
+		{
+			if (!Fired)
+			{
+				Fired = true;
+				Matrix rotationMatrix = Matrix.CreateRotationZ(Angle);
+				Vector2 bulletPosition = Vector2.Transform(bulletOffset, rotationMatrix);
+				ProjectileManager.Instance.Clone(ProjType, Position, direction, Angle, owner, WeapRange);
+				return true;
+			}
+			return false;
+		}
+
 		public override void ReloadWeapon()
 		{ }
 	}

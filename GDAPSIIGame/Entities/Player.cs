@@ -28,6 +28,8 @@ namespace GDAPSIIGame
 		private MouseState prevMouseState;
 		private KeyboardState keyState;
 		private KeyboardState prevKeyState;
+		private GamePadState gpState;
+		private GamePadState prevGpState;
 		private float hurting;
         private float hurtBlink;
 		private float angle;
@@ -57,6 +59,8 @@ namespace GDAPSIIGame
 			prevMouseState = Mouse.GetState();
 			keyState = Keyboard.GetState();
 			prevKeyState = Keyboard.GetState();
+			gpState = GamePad.GetState(PlayerIndex.One, GamePadDeadZone.Circular);
+			prevGpState = GamePad.GetState(PlayerIndex.One, GamePadDeadZone.Circular);
 			hurting = 0;
             hurtBlink = 0;
             color = Color.White;
@@ -159,8 +163,8 @@ namespace GDAPSIIGame
 
 		//Methods
 		public override void Update(GameTime gameTime)
-        {
-            //base.Update(gameTime);
+		{
+			//base.Update(gameTime);
 			//Mouse state
 			prevMouseState = mouseState;
 			mouseState = Mouse.GetState();
@@ -169,21 +173,43 @@ namespace GDAPSIIGame
 			prevKeyState = keyState;
 			keyState = Keyboard.GetState();
 
+			prevGpState = gpState;
+			gpState = GamePad.GetState(PlayerIndex.One, GamePadDeadZone.Circular);
 			Vector2 camw = Camera.Instance.GetViewportPosition(CurrWeapon.Position);
 
 			//Update player movement
-			UpdateInput(gameTime, keyState, prevKeyState, camw);
-
+			if (gpState.IsConnected)
+			{
+				UpdateInput(gameTime, gpState, prevGpState, camw);
+			}else {
+				UpdateInput(gameTime, keyState, prevKeyState, camw);
+			}
             UpdateWeapon(gameTime, camw);
 
-			//Fire weapon only if previous frame didn't have left button being pressed
-			if (mouseState.LeftButton == ButtonState.Pressed)
+			if (gpState.IsConnected)
 			{
-				Vector2 direction = new Vector2((mouseState.X - camw.X) / 1, (mouseState.Y - camw.Y) / 1);
-				direction.Normalize();
-				if (this.CurrWeapon.Fire(direction, mouseState, prevMouseState))
+				if (gpState.IsButtonDown(Buttons.RightTrigger))
 				{
-					IsFiring = true;
+					Vector2 direction = gpState.ThumbSticks.Right;
+					direction.Y *= -1;
+					direction.Normalize();
+					if (this.CurrWeapon.Fire(direction, mouseState, prevMouseState))
+					{
+						IsFiring = true;
+					}
+				}
+			}
+			else
+			{
+				//Fire weapon only if previous frame didn't have left button being pressed
+				if (mouseState.LeftButton == ButtonState.Pressed)
+				{
+					Vector2 direction = new Vector2((mouseState.X - camw.X) / 1, (mouseState.Y - camw.Y) / 1);
+					direction.Normalize();
+					if (this.CurrWeapon.Fire(direction, mouseState, prevMouseState))
+					{
+						IsFiring = true;
+					}
 				}
 			}
 
@@ -457,6 +483,142 @@ namespace GDAPSIIGame
 			}
         }
 
+		public void UpdateInput(GameTime gameTime, GamePadState gpState, GamePadState prevGpState, Vector2 camw)
+		{
+			timeMult = (float)gameTime.ElapsedGameTime.TotalSeconds / ((float)1 / 60);
+
+			if (gpState.IsButtonDown(Buttons.LeftThumbstickUp))
+			{
+				this.Y -= this.MoveSpeed * timeMult;
+				//Camera.Instance.Y -= (int)(this.MoveSpeed*timeMult);
+			}
+			else if (gpState.IsButtonDown(Buttons.LeftThumbstickDown))
+			{
+				this.Y += this.MoveSpeed * timeMult;
+				//Camera.Instance.Y += (int)(this.MoveSpeed * timeMult);
+			}
+
+			if (gpState.IsButtonDown(Buttons.LeftThumbstickRight))
+			{
+				this.X += this.MoveSpeed * timeMult;
+				//Camera.Instance.X += (int)(this.MoveSpeed * timeMult);
+			}
+			else if (gpState.IsButtonDown(Buttons.LeftThumbstickLeft))
+			{
+				this.X -= this.MoveSpeed * timeMult;
+				//Camera.Instance.X -= (int)(this.MoveSpeed * timeMult);
+			}
+
+			//Player reloading
+			if (gpState.IsButtonDown(Buttons.RightShoulder) && prevGpState.IsButtonUp(Buttons.RightShoulder))
+			{
+				this.currWeapon.ReloadWeapon();
+			}
+
+
+			//Calculates the angle between the player and the mouse
+			//See below
+			//   180
+			//-90   90
+			//    0
+			if (gpState.ThumbSticks.Right != Vector2.Zero)
+			{
+				angle = MathHelper.ToDegrees((float)Math.Atan2(gpState.ThumbSticks.Right.X, gpState.ThumbSticks.Right.Y * -1));
+
+				//Use angle to find player direction
+				if ((angle < -157.5) || (angle > 157.5))
+				{
+					this.Dir = Entity_Dir.Up;
+					if (angle < -157.5)
+					{
+						currWeapon.Dir = Weapon_Dir.UpWest;
+					}
+					else currWeapon.Dir = Weapon_Dir.UpEast;
+				}
+				else if ((angle < 157.5) && (angle > 112.5) && this.Dir != Entity_Dir.UpRight)
+				{
+					this.Dir = Entity_Dir.UpRight;
+					currWeapon.Dir = Weapon_Dir.UpRight;
+				}
+				else if ((angle < 112.5) && (angle > 67.5) && this.Dir != Entity_Dir.Right)
+				{
+					this.Dir = Entity_Dir.Right;
+					currWeapon.Dir = Weapon_Dir.Right;
+				}
+				else if ((angle < 67.5) && (angle > 22.5) && this.Dir != Entity_Dir.DownRight)
+				{
+					this.Dir = Entity_Dir.DownRight;
+					currWeapon.Dir = Weapon_Dir.DownRight;
+				}
+				else if ((angle < -22.5) && (angle > -67.5) && this.Dir != Entity_Dir.DownLeft)
+				{
+					this.Dir = Entity_Dir.DownLeft;
+					currWeapon.Dir = Weapon_Dir.DownLeft;
+				}
+				else if ((angle < -67.5) && (angle > -112.5) && this.Dir != Entity_Dir.Left)
+				{
+					this.Dir = Entity_Dir.Left;
+					currWeapon.Dir = Weapon_Dir.Left;
+				}
+				else if ((angle < -112.5) && (angle > -157.5) && this.Dir != Entity_Dir.UpLeft)
+				{
+					this.Dir = Entity_Dir.UpLeft;
+					currWeapon.Dir = Weapon_Dir.UpLeft;
+				}
+				else if ((angle < 22.5) && (angle > -22.5))
+				{
+					this.Dir = Entity_Dir.Down;
+					if (angle < 0)
+					{
+						currWeapon.Dir = Weapon_Dir.DownWest;
+					}
+					else currWeapon.Dir = Weapon_Dir.DownEast;
+				}
+			}
+
+			
+			//Player switching weapons from scroll wheel up
+			if ((gpState.IsButtonDown(Buttons.LeftShoulder)&&prevGpState.IsButtonUp(Buttons.LeftShoulder))
+				|| (gpState.IsButtonDown(Buttons.DPadUp) && prevGpState.IsButtonUp(Buttons.DPadUp)))
+			{
+				InteruptReload();
+				Weapon_Dir oldDir = currWeapon.Dir;
+				if (weaponId == weapons.Length - 1)
+				{
+					weaponId = 0;
+				}
+				else
+				{
+					weaponId++;
+				}
+				currWeapon = weapons[weaponId];
+				//if (currWeapon == weapons[0]) { this.currWeapon = weapons[1]; 
+				//else if (currWeapon == weapons[1]) { this.currWeapon = weapons[0]; }
+				currWeapon.Dir = oldDir;
+				UpdateWeapon(gameTime, camw);
+			}
+
+			//Player switching weapons from scroll wheel down
+			if (gpState.IsButtonDown(Buttons.DPadDown) && prevGpState.IsButtonUp(Buttons.DPadDown))
+			{
+				InteruptReload();
+				Weapon_Dir oldDir = currWeapon.Dir;
+				if (weaponId == 0)
+				{
+					weaponId = weapons.Length - 1;
+				}
+				else
+				{
+					weaponId--;
+				}
+				//if (currWeapon == weapons[1]) { this.currWeapon = weapons[0]; }
+				//else if (currWeapon == weapons[0]) { this.currWeapon = weapons[1]; }
+				currWeapon = weapons[weaponId];
+				currWeapon.Dir = oldDir;
+				UpdateWeapon(gameTime, camw);
+			}
+		}
+
 		public override void OnCollision(ICollidable obj)
 		{
 			if (obj is Projectile)
@@ -556,8 +718,15 @@ namespace GDAPSIIGame
 		
         private void UpdateWeapon(GameTime gameTime, Vector2 camw)
         {
-            //Update the weapons rotation
-            currWeapon.Angle = -((float)Math.Atan2(mouseState.X - camw.X, mouseState.Y - camw.Y));
+			//Update the weapons rotation
+			if (gpState.IsConnected)
+			{
+				currWeapon.Angle = -((float)Math.Atan2(gpState.ThumbSticks.Right.X, gpState.ThumbSticks.Right.Y * -1));
+			}
+			else
+			{
+				currWeapon.Angle = -((float)Math.Atan2(mouseState.X - camw.X, mouseState.Y - camw.Y));
+			}
             //Update weapon position
             currWeapon.X = this.X + (BoundingBox.Width / 2);
             currWeapon.Y = this.Y + (BoundingBox.Height / 2);

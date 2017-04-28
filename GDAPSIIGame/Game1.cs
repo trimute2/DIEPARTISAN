@@ -23,6 +23,8 @@ namespace GDAPSIIGame
         SpriteBatch spriteBatch;
         KeyboardState kbState;
 		KeyboardState previousKbState;
+		GamePadState gpState;
+		GamePadState previousGpState;
 		ChunkManager chunkManager;
 		MapManager mapManager;
         UIManager uiManager;
@@ -126,7 +128,10 @@ namespace GDAPSIIGame
 				case GameState.Menu:
 					previousKbState = kbState;
 					kbState = Keyboard.GetState();
-					if (kbState.IsKeyDown(Keys.Enter) && previousKbState.IsKeyUp(Keys.Enter))
+					previousGpState = gpState;
+					gpState = GamePad.GetState(PlayerIndex.One, GamePadDeadZone.Circular);
+					if((gpState.IsConnected && (gpState.IsButtonDown(Buttons.Start)&&previousGpState.IsButtonUp(Buttons.Start))) ||
+						(kbState.IsKeyDown(Keys.Enter) && previousKbState.IsKeyUp(Keys.Enter)))
 					{
 						gameState = GameState.NewGame;
 					}
@@ -157,6 +162,8 @@ namespace GDAPSIIGame
 				case GameState.GamePlay:
 					previousKbState = kbState;
 					kbState = Keyboard.GetState();
+					previousGpState = gpState;
+					gpState = GamePad.GetState(PlayerIndex.One, GamePadDeadZone.Circular);
 
 					if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
 					{
@@ -164,7 +171,8 @@ namespace GDAPSIIGame
 					}
 
 					//Check if the player has paused the game
-					if (kbState.IsKeyDown(Keys.Enter) && !previousKbState.IsKeyDown(Keys.Enter))
+					if ((gpState.IsConnected && (gpState.IsButtonDown(Buttons.Start) && previousGpState.IsButtonUp(Buttons.Start))) ||
+						(kbState.IsKeyDown(Keys.Enter) && previousKbState.IsKeyUp(Keys.Enter)))
 					{
 						gameState = GameState.PauseMenu;
 					}

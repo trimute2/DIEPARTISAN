@@ -234,6 +234,31 @@ namespace GDAPSIIGame.Weapons
 			return false;
         }
 
+		public override bool Fire(Vector2 direction, GamePadState gpState, GamePadState prevGpState)
+		{
+			//Check if click condition is met
+			if (gpState.IsButtonDown(Buttons.RightTrigger) && gpState.IsButtonUp(Buttons.RightTrigger))
+			{
+				//Check user can fire or if they need to reload
+				if (!Fired && !Reload && clip <= 0)
+				{
+					Reload = true;
+					return false;
+				}
+				if (!Fired && !Reload && clip > 0)
+				{
+					Fired = true;
+					clip--;
+					Matrix rotationMatrix = Matrix.CreateRotationZ(Angle);
+					Vector2 bulletPosition = Vector2.Transform(bulletOffset, rotationMatrix);
+
+					ProjectileManager.Instance.Clone(ProjType, Position + bulletPosition, direction, Angle, owner, WeapRange);
+					return true;
+				}
+			}
+			return false;
+		}
+
 		public override void ResetWeapon()
 		{
 			clip = clipSize;

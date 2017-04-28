@@ -109,6 +109,8 @@ namespace GDAPSIIGame.Weapons
 
 		public abstract bool Fire(Vector2 direction, MouseState mouseState, MouseState prevMouseState);
 
+		public abstract bool Fire(Vector2 direction, GamePadState gpState, GamePadState prevGpState);
+
 		public abstract void ReloadWeapon();
 
 		public virtual void ResetWeapon()
