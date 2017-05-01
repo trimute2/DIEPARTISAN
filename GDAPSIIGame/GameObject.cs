@@ -76,6 +76,11 @@ namespace GDAPSIIGame
 			set { active = value; }
 		}
 
+		public bool Drawable()
+		{
+			Vector2 camPos = Camera.Instance.GetViewportPosition(this);
+			return Camera.Instance.InBounds(camPos);
+		}
 
 		public virtual void Draw(SpriteBatch spriteBatch) {
             Vector2 camPos = Camera.Instance.GetViewportPosition(this);

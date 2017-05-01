@@ -102,7 +102,10 @@ namespace GDAPSIIGame
 
 			foreach (Projectile p in Projectiles)
 			{
-				p.Draw(spriteBatch);
+				if (p.Drawable())
+				{
+					p.Draw(spriteBatch);
+				}
 			}
         }
 

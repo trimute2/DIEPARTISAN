@@ -143,7 +143,7 @@ namespace GDAPSIIGame
 					Player.Instance.ResetPlayer();
 					PodManager.Instance.FullReset();
 					//Reset the map
-					mapSize = 2;
+					mapSize = 4;
 					//Go to loading screen to create a new level
 					gameState = GameState.LoadingScreen;
 					break;
@@ -454,7 +454,7 @@ namespace GDAPSIIGame
 
 		private void LoadOther(ContentManager content)
 		{
-			mapSize = 2;
+			mapSize = 4;
 
 			//Make the Camera
 			Camera.Instance.setPosition(GraphicsDevice.Viewport);

@@ -96,7 +96,21 @@ namespace GDAPSIIGame.Entities
 			if (!(knockBackTime > 0))
 			{
 				Vector2 diff = Position - thingToMoveTo.Position;
-				if (dashing && !bump)
+				float speed = MoveSpeed;
+				if(dashing && !bump)
+				{
+					speed *= dashSpeed;
+				}
+				if (speed >= diff.Length())
+				{
+					Position = thingToMoveTo.Position;
+				}
+				else
+				{
+					diff.Normalize();
+					this.Position -= diff * speed;
+				}
+				/*if (dashing && !bump)
 				{
 					if (MoveSpeed * dashSpeed > Math.Abs(diff.X))
 					{
@@ -161,18 +175,18 @@ namespace GDAPSIIGame.Entities
 							Y += MoveSpeed;
 						}
 					}
-				}
+				}*/
 			}
 		}
 
-        public override void OnCollision(ICollidable obj)
+        /*public override void OnCollision(ICollidable obj)
         {
             if(obj is Enemy)
 			{
-				bump = true;
-				bumpTime = 0.01f;
+				//bump = true;
+				//bumpTime = 0.01f;
 			}
 			base.OnCollision(obj);
-        }
+        }*/
     }
 }

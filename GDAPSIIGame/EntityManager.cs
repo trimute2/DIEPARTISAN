@@ -99,7 +99,10 @@ namespace GDAPSIIGame
             //Player.Draw(spriteBatch);
 			foreach (Entity en in enemies)
 			{
-				en.Draw(spriteBatch);
+				if (en.Drawable())
+				{
+					en.Draw(spriteBatch);
+				}
 			}
 			player.Draw(spriteBatch);
         }
