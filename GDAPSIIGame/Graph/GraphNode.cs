@@ -60,24 +60,43 @@ namespace GDAPSIIGame.Graph
         {
             //Iterate over all nodes this node can currently get to
             int size = NumNeighbors;
+            int prevNumNeighbors = NumNeighbors;
             GraphNode neighbor = null;
-            for (int i = 0; i < size; i++)
+            for (int i = prevIterNumNeighbors; i < size; i++)
             {
                 if (NumNeighbors < maxSize)
                 {
-                    neighbor = neighbors.Keys.ElementAt(i);
+                    lock (neighbors)
+                    {
+                        neighbor = neighbors.Keys.ElementAt(i);
+                    }
                     //Iterate over all nodes that the current neighbor connects to
-                    foreach (GraphNode possibleNewNeighbor in neighbor.Neighbors.Keys)
+
+                    List<GraphNode> internalNeighbors = null;
+                    lock (neighbor.Neighbors)
+                    {
+                        internalNeighbors = neighbor.Neighbors.Keys.ToList();
+                    }
+                    foreach (GraphNode possibleNewNeighbor in internalNeighbors)
                     {
                         //If we can't already connect to that node, add it
-                        if (!neighbors.Keys.Contains(possibleNewNeighbor) && possibleNewNeighbor != this)
+                        lock (neighbors)
                         {
-                            neighbors.Add(possibleNewNeighbor, neighbor);
+                            if (!neighbors.Keys.Contains(possibleNewNeighbor) && possibleNewNeighbor != this)
+                            {
+                                neighbors.Add(possibleNewNeighbor, neighbor);
+                            }
                         }
                     }
+
+
                 }
             }
+
+            prevIterNumNeighbors = prevNumNeighbors;
         }
+
+        public int prevIterNumNeighbors { get; set; }
 
     }
 }

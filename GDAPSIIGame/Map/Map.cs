@@ -4,7 +4,7 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 using GDAPSIIGame.Graph;
-
+using System.Threading;
 
 namespace GDAPSIIGame.Map
 {
@@ -130,7 +130,25 @@ namespace GDAPSIIGame.Map
             {
                 r.initRoom(wallTextures, floorTextures, graph);
             }
-            graph.ConnectGraph();
+            List<Thread> updates = new List<Thread>(20);
+            while(!graph.IsConnected)
+            {
+                Thread t = new Thread(graph.ConnectGraph);
+                updates.Add(t);
+                t.Start();
+            }
+            /*
+            foreach (Thread t in updates)
+            {
+                t.Start();
+                //Thread.Sleep(10000);
+            }
+            */
+            foreach (Thread t in updates)
+            {
+                t.Join();
+            }
+            
         }
     }
 }
