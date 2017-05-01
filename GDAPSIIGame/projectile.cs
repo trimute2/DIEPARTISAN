@@ -7,6 +7,7 @@ using GDAPSIIGame.Interface;
 using GDAPSIIGame.Entities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using GDAPSIIGame.Map;
 
 namespace GDAPSIIGame
 {
@@ -93,7 +94,10 @@ namespace GDAPSIIGame
 
 		public override void Draw(SpriteBatch spriteBatch)
 		{
-			spriteBatch.Draw(this.Texture,
+			Vector2 camPos = Camera.Instance.GetViewportPosition(this);
+			if (Camera.Instance.InBounds(camPos))
+			{
+				spriteBatch.Draw(this.Texture,
 				Map.Camera.Instance.GetViewportPosition(this),
 				null,
 				null,
@@ -102,6 +106,7 @@ namespace GDAPSIIGame
 				this.Scale,
 				Color.White,
 				SpriteEffects.None);
+			}
 		}
 
 		public Projectile Clone(Vector2 position, Vector2 direction, Owners owner, float angle, float distance = INFINITE) {

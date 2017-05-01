@@ -104,7 +104,7 @@ namespace GDAPSIIGame.Entities
 			{
 				//Vector2 diff = new Vector2 ( thingToShootAt.Position.X - Position.X, thingToShootAt.Position.Y - Position.Y);
 				Matrix m = Matrix.CreateRotationZ(gun.Angle-((float)Math.PI / 4));
-				Vector2 diff = Vector2.Transform(new Vector2(1, 1), m);
+				Vector2 diff = Vector2.Transform(Vector2.One, m);
 				diff.Normalize();
 				diff = diff / 6;
 				MouseState unnecessary = Mouse.GetState();

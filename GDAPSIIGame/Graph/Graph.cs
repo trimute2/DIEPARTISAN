@@ -3,7 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Timers;
 
 namespace GDAPSIIGame.Graph
 {
@@ -21,6 +23,7 @@ namespace GDAPSIIGame.Graph
             nodes = new Dictionary<float, GraphNode>(numNodes);
             this.xDistBetweenNodes = xDistBetween;
             this.yDistBetweenNodes = yDistBetween;
+            IsConnected = false;
         }
 
         /// <summary>
@@ -88,24 +91,31 @@ namespace GDAPSIIGame.Graph
             bool done = false;
             GraphNode vertex = null;
             int attempts = 0;
+            //System.Timers.Timer t = new System.Timers.Timer(1000);
+            //t.Start();
+            int timeElapsed = 0;
+            //t.Elapsed += ((a, b) => { timeElapsed++; });
             while (!done)
             {
-                Console.WriteLine("Try " + attempts);
                 attempts++;
+                //Console.WriteLine("Iteration " + attempts);
                 done = true;
                 for (int i = 0; i < nodes.Count; i++)
                 {
                     vertex = nodes.Values.ElementAt(i);
                     if (!vertex.IsComplete)
                     {
-                        if(attempts == 10 && vertex.NumNeighbors < 10)
+                        /*if(attempts == 10 && vertex.NumNeighbors < 10)
                         {
                             Console.WriteLine("{0} instead of {1}", vertex.NumNeighbors, nodes.Count);
                             Console.WriteLine("{0}, {1}", vertex.Position.X, vertex.Position.Y);
                             nodes.Remove(vertex.UniqueID);
                             i--;
-                        }
-                        vertex.Update(nodes.Count - 1);
+                        }*/
+                        //Thread update = new Thread(() => {
+                            vertex.Update(nodes.Count - 1);
+                       // });
+                        //update.Start();
                         if (vertex.NumNeighbors == nodes.Count - 1)
                         {
                             vertex.IsComplete = true;
@@ -124,9 +134,28 @@ namespace GDAPSIIGame.Graph
                         }
                     }
                 }
+                IsConnected = true;
+                //Console.WriteLine("All nodes have {0} connections on average", MeanNeighbors);
+                //Console.WriteLine(timeElapsed);
             }
 
-            Console.WriteLine("All nodes have {0} connections", nodes.Count);
+
+            //t.Stop();
+        }
+
+        public bool IsConnected { get; set; }
+
+        public int MeanNeighbors
+        {
+            get
+            {
+                int sum = 0;
+                foreach (GraphNode node in nodes.Values)
+                {
+                    sum += node.NumNeighbors;
+                }
+                return sum / nodes.Count;
+            }
         }
     }
 }
