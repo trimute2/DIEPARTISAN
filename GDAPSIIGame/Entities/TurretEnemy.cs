@@ -143,5 +143,13 @@ namespace GDAPSIIGame.Entities
 			}
 			return currRotation;
 		}
+
+		public override void OnCollision(ICollidable obj)
+		{
+			if (!(obj is Enemy))
+			{
+				base.OnCollision(obj);
+			}
+		}
 	}
 }
