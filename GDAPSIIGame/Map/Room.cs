@@ -182,7 +182,7 @@ namespace GDAPSIIGame.Map
 		/// </summary>
 		/// <param name="enemyTexture">Texture of enemies in this room</param>
 		/// <param name="wallTexture">Texture of walls in this room</param>
-		public void initRoom(Texture2D wallTextures, Texture2D floorTextures, Graph.Graph graph)
+		public void initRoom(Texture2D wallTextures, Texture2D floorTextures/*, Graph.Graph graph*/)
 		{
 			//Init room's textures
 			this.wallTextures = wallTextures;
@@ -233,14 +233,14 @@ namespace GDAPSIIGame.Map
 							Camera.Instance.resetPosition(Player.Instance.Position);
 
 							//Add this position to the graph
-							graph.Add(new Graph.GraphNode(midPos));
+							//graph.Add(new Graph.GraphNode(midPos));
 							spawnroom = true;
 							break;
 
 						//Create Melee Enemies
 						case TileType.MELEEENEMY:
 							
-							graph.Add(new Graph.GraphNode(midPos));
+							//graph.Add(new Graph.GraphNode(midPos));
 
 							//Create new enemy
 							MeleeEnemy newEnemy =
@@ -279,7 +279,7 @@ namespace GDAPSIIGame.Map
 							break;
 
 						case TileType.DASHENEMY:
-							graph.Add(new Graph.GraphNode(midPos));
+							//graph.Add(new Graph.GraphNode(midPos));
 
 							//Create new enemy
 							DashEnemy dash =
@@ -300,7 +300,7 @@ namespace GDAPSIIGame.Map
 
 						default:
 							//Add this position to the graph
-							graph.Add(new Graph.GraphNode(midPos));
+							//graph.Add(new Graph.GraphNode(midPos));
 							break;
 					}
 				}

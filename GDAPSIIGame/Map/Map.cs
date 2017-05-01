@@ -12,7 +12,7 @@ namespace GDAPSIIGame.Map
     {
         private List<Room> rooms = new List<Room>();
 		private MapState state;
-        private Graph.Graph graph;
+        //private Graph.Graph graph;
 
         public Map(int mapSize)
         {
@@ -21,7 +21,7 @@ namespace GDAPSIIGame.Map
             generateMap(files, this, mapSize);
 			state = MapState.Enter;
 			UIManager.Instance.Fade = true;
-            graph = new Graph.Graph(mapSize * mapSize, 64, 64);
+            //graph = new Graph.Graph(mapSize * mapSize, 64, 64);
         }
 
         public void Add(Room r)
@@ -128,9 +128,9 @@ namespace GDAPSIIGame.Map
         {
             foreach (Room r in rooms)
             {
-                r.initRoom(wallTextures, floorTextures, graph);
+                r.initRoom(wallTextures, floorTextures/*, graph*/);
             }
-            graph.ConnectGraph();
+            //graph.ConnectGraph();
         }
     }
 }

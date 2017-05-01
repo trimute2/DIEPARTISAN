@@ -25,6 +25,7 @@ namespace GDAPSIIGame
 		/// the ID of the chunk
 		/// </summary>
 		private int chunkID;
+		private int recLevl;
 
 		/// <summary>
 		/// the list of all GameObjects in the chunk
@@ -46,6 +47,7 @@ namespace GDAPSIIGame
 			this.cpr = cpr;
 			chunkID = ID;
 			objects = new List<GameObject>();
+			recLevl = 0;
 		}
 
 		/// <summary>
@@ -133,6 +135,7 @@ namespace GDAPSIIGame
 			{
 				if(objects[i] is Wall)
 				{
+					recLevl = 0;
 					ContainCollision(objects[i]);
 				}
 			}
@@ -204,7 +207,21 @@ namespace GDAPSIIGame
 				if(obj.Collide(otherObj) && !(otherObj is Projectile) && otherObj != obj)
 				{
 					otherObj.OnCollision(obj);
-					ContainCollision(otherObj);
+					recLevl++;
+					ContainCollision(otherObj, obj);
+				}
+			}
+		}
+
+		private void ContainCollision(GameObject obj, GameObject caller)
+		{
+			foreach (GameObject otherObj in objects)
+			{
+				if (obj.Collide(otherObj) && !(otherObj is Projectile) && otherObj != caller && otherObj != obj)
+				{
+					otherObj.OnCollision(obj);
+					recLevl++;
+					ContainCollision(otherObj , obj);
 				}
 			}
 		}
