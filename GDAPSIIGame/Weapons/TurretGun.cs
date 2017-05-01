@@ -21,7 +21,7 @@ namespace GDAPSIIGame.Weapons
 		private SpriteEffects effects;
 
 		public TurretGun(ProjectileType pT, Texture2D texture, Vector2 position, Rectangle boundingBox, float fireRate, Vector2 origin, Owners owner)
-			: base(pT, texture, position, boundingBox, Range.Medium)
+			: base(pT, texture, position, boundingBox, Range.Long)
         {
 			this.fireRate = fireRate; //How fast until the weapon can fire again
 			this.fired = 0; //Whether the weapon has fired

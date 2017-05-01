@@ -50,7 +50,7 @@ namespace GDAPSIIGame.Weapons
 			this.range = (float)range;
 			projType = pT;
 			this.angle = 0; //The angle of the weapon in radians
-			this.dir = Weapons.Weapon_Dir.DownWest; //The direction of the weapon for drawing
+			this.dir = Weapon_Dir.DownWest; //The direction of the weapon for drawing
 		}
 
 		/// <summary>
