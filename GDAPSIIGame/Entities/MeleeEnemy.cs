@@ -35,17 +35,27 @@ namespace GDAPSIIGame.Entities
 			}
 			else
 			{
-				Move(Player.Instance);
+				Move(Player.Instance, gameTime);
 			}
 			base.Update(gameTime);
         }
 
-		public void Move(GameObject thingToMoveTo)
+		public void Move(GameObject thingToMoveTo, GameTime gt)
         {
 			if (!(knockBackTime > 0))
 			{
+				float timeMult = (float)gt.ElapsedGameTime.TotalSeconds / ((float)1 / 60);
 				Vector2 diff = Position - thingToMoveTo.Position;
-				if (MoveSpeed > Math.Abs(diff.X))
+				if(MoveSpeed >= diff.Length())
+				{
+					Position = thingToMoveTo.Position;
+				}else
+				{
+					diff.Normalize();
+					this.Position -= diff * MoveSpeed;
+				}
+
+				/*if (MoveSpeed > Math.Abs(diff.X))
 				{
 					X = thingToMoveTo.X;
 				}
@@ -74,7 +84,7 @@ namespace GDAPSIIGame.Entities
 					{
 						Y += MoveSpeed;
 					}
-				}
+				}*/
 			}
         }
 

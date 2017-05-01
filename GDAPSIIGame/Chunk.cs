@@ -201,7 +201,7 @@ namespace GDAPSIIGame
 		{
 			foreach(GameObject otherObj in objects)
 			{
-				if(otherObj != obj&&!(otherObj is Projectile) && obj.Collide(otherObj))
+				if(obj.Collide(otherObj) && !(otherObj is Projectile) && otherObj != obj)
 				{
 					otherObj.OnCollision(obj);
 					ContainCollision(otherObj);

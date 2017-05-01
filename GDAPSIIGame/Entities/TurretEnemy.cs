@@ -59,12 +59,13 @@ namespace GDAPSIIGame.Entities
             {
 				Player p = Player.Instance;
 
-				float newAngle = RotateTowardsPoint(this.X, this.Y, p.X, p.Y, gun.Angle, 0.02f);
+				float newAngle = RotateTowardsPoint(this.X, this.Y, p.BoundingBox.Center.X, p.BoundingBox.Center.Y, gun.Angle, 0.02f);
 				gun.Angle = newAngle;
 
 				float destinationRotation = (float)(Math.Atan2(Y - p.Y, X - p.X ) + Math.PI);
-				//Shoot when only in a certain distance of player
-				if (destinationRotation < newAngle + (Math.PI / 6) && destinationRotation > newAngle - (Math.PI / 6))
+				if((Vector2.Distance(p.BoundingBox.Center.ToVector2(),this.BoundingBox.Center.ToVector2()) <= 400) &&
+				//Only shoot when facing the player
+				(destinationRotation < newAngle + (Math.PI / 6) && destinationRotation > newAngle - (Math.PI / 6)))
 				{
 					Shoot(Player.Instance);
 				}
