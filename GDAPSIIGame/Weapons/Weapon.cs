@@ -97,15 +97,15 @@ namespace GDAPSIIGame.Weapons
 			set { dir = value; }
 		}
 
-		public override void Update(GameTime gameTime)
+		/*public override void Update(GameTime gameTime)
 		{
 			base.Update(gameTime);
 		}
 
-		public override void Draw(SpriteBatch spriteBatch)
+		/*public override void Draw(SpriteBatch spriteBatch)
 		{
 			base.Draw(spriteBatch);
-		}
+		}*/
 
 		public abstract bool Fire(Vector2 direction, MouseState mouseState, MouseState prevMouseState);
 

@@ -96,6 +96,20 @@ namespace GDAPSIIGame.Entities
 			if (!(knockBackTime > 0))
 			{
 				Vector2 diff = Position - thingToMoveTo.Position;
+				/*float speed = MoveSpeed;
+				if(dashing && !bump)
+				{
+					speed *= dashSpeed;
+				}
+				if (speed >= diff.Length())
+				{
+					Position = thingToMoveTo.Position;
+				}
+				else
+				{
+					diff.Normalize();
+					this.Position -= diff * speed;
+				}*/
 				if (dashing && !bump)
 				{
 					if (MoveSpeed * dashSpeed > Math.Abs(diff.X))
