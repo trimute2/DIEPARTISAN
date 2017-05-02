@@ -284,7 +284,7 @@ namespace GDAPSIIGame
 
 					//Draw the mouse texture
 					spriteBatch.Draw(mouseTex,
-							mousePos,
+							mousePos - new Vector2(10, 13),
 							null,
 							null,
 							Vector2.Zero,
@@ -319,7 +319,7 @@ namespace GDAPSIIGame
 
 					//Draw the mouse texture
 					spriteBatch.Draw(mouseTex,
-							mousePos,
+							mousePos - new Vector2(10, 13),
 							null,
 							null,
 							Vector2.Zero,
@@ -348,7 +348,7 @@ namespace GDAPSIIGame
 
 					//Draw the mouse texture
 					spriteBatch.Draw(mouseTex,
-							mousePos,
+							mousePos - new Vector2(10, 13),
 							null,
 							null,
 							Vector2.Zero,
@@ -367,7 +367,7 @@ namespace GDAPSIIGame
 
 					//Draw the mouse texture
 					spriteBatch.Draw(mouseTex,
-							mousePos,
+							mousePos - new Vector2(10, 13),
 							null,
 							null,
 							Vector2.Zero,
