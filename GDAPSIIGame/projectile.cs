@@ -49,7 +49,7 @@ namespace GDAPSIIGame
         /// <param name="texture"></param>
         /// <param name="position"></param>
         /// <param name="direction"></param>
-        public Projectile(Texture2D texture, Vector2 position, Rectangle boundingBox, Vector2 direction, int damage, float angle, Owners owner = Owners.None, int knockback = 36, Destroy_Type destroyType = Destroy_Type.Projectiles ) : base(texture, position, boundingBox)
+        public Projectile(Texture2D texture, Vector2 position, Rectangle boundingBox, Vector2 direction, int damage, float angle, Owners owner = Owners.None, int knockback = 36, Destroy_Type destroyType = Destroy_Type.None ) : base(texture, position, boundingBox)
         {
 			this.angle = angle;
             this.direction = direction;
@@ -60,7 +60,7 @@ namespace GDAPSIIGame
             distance = INFINITE;
         }
 
-		public Projectile(Texture2D texture, Vector2 position, Rectangle boundingBox, Vector2 direction, int damage, float angle, float distance, Owners owner = Owners.None, int knockback = 36, Destroy_Type destroyType = Destroy_Type.Projectiles) : base(texture, position, boundingBox)
+		public Projectile(Texture2D texture, Vector2 position, Rectangle boundingBox, Vector2 direction, int damage, float angle, float distance, Owners owner = Owners.None, int knockback = 36, Destroy_Type destroyType = Destroy_Type.None) : base(texture, position, boundingBox)
 		{
 			this.angle = angle;
 			this.direction = direction;
@@ -121,7 +121,7 @@ namespace GDAPSIIGame
 
 		public override void OnCollision(ICollidable obj)
 		{
-			if (!(owner == Owners.Player && (obj is Player || (obj is Projectile && (obj as Projectile).owner == Owners.Player && (obj as Projectile).destroyType != Destroy_Type.None)))
+			if (!(owner == Owners.Player && (obj is Player || (obj is Projectile && (obj as Projectile).owner == Owners.Player)))
 				&& !(obj is Enemy && owner == Owners.Enemy))
 			{
 				active = false;

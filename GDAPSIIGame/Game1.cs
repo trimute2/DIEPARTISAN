@@ -343,17 +343,6 @@ namespace GDAPSIIGame
 					//Draw UI
 					uiManager.Draw(gameTime, spriteBatch, GraphicsDevice);
 
-					//Draw the mouse texture
-					spriteBatch.Draw(mouseTex,
-							mousePos,
-							null,
-							null,
-							Vector2.Zero,
-							0.0f,
-							mouseScale,
-							null,
-							0);
-
 					//Make the screen gray
 					spriteBatch.Draw(pauseRect, Vector2.Zero, Color.White);
 

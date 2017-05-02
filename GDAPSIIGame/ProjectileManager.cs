@@ -64,11 +64,11 @@ namespace GDAPSIIGame
 			//Pistol
 			hiddenProjectiles.Add(new Projectile(texture, new Vector2(-100, -100), new Rectangle(texture.Width, texture.Height, 10, 10), new Vector2(0f, 0f), 3, 0, Owners.None, 24, Destroy_Type.None));
 			//Rifle
-			hiddenProjectiles.Add(new Projectile(texture, new Vector2(-100, -100), new Rectangle(texture.Width, texture.Height, 10, 15), new Vector2(0f, 0f), 2, 0, Owners.None, 12));
+			hiddenProjectiles.Add(new Projectile(texture, new Vector2(-100, -100), new Rectangle(texture.Width, texture.Height, 10, 15), new Vector2(0f, 0f), 2, 0, Owners.None, 12, Destroy_Type.Projectiles));
 			//Turret
 			hiddenProjectiles.Add(new Projectile(texture, new Vector2(-100, -100), new Rectangle(texture.Width, texture.Height, 25, 25), new Vector2(0f, 0f), 15, 0));
 			//Shotgun
-			hiddenProjectiles.Add(new Projectile(texture, new Vector2(-100, -100), new Rectangle(texture.Width, texture.Height, 25, 25), Vector2.Zero, 1, 0, Owners.None, 60));
+			hiddenProjectiles.Add(new Projectile(texture, new Vector2(-100, -100), new Rectangle(texture.Width, texture.Height, 25, 25), Vector2.Zero, 1, 0, Owners.None, 60, Destroy_Type.Projectiles));
 		}
 
         /// <summary>
