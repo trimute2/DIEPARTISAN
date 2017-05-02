@@ -20,6 +20,7 @@ namespace GDAPSIIGame
         private Texture2D healthbarHead;
         private Texture2D ammoIcon;
         private Texture2D pistolIcon;
+        private Texture2D shotgunIcon;
 		//Creating the max health for the player for draw reference **WILL BE UPDATED WITH PLAYER PROPERTY**
 		private int playerMaxHealth;
 
@@ -84,6 +85,7 @@ namespace GDAPSIIGame
             healthbarHead = Content.Load<Texture2D>("healthhead");
             ammoIcon = Content.Load<Texture2D>("bullets");
             pistolIcon = Content.Load<Texture2D>("pistolicon");
+            shotgunIcon = Content.Load<Texture2D>("shotgunicon");
 		}
 
         /// <summary>
@@ -124,8 +126,13 @@ namespace GDAPSIIGame
             {
                 spriteBatch.Draw(pistolIcon, new Vector2(14, 50), Color.White);
             }
+            else
+            if (Player.Instance.CurrWeapon is Weapons.Shotgun)
+            {
+                spriteBatch.Draw(shotgunIcon, new Vector2(14, 50), Color.White);
+            }
 
-            spriteBatch.Draw(ammoIcon, new Vector2(14, 110), Color.White);
+                spriteBatch.Draw(ammoIcon, new Vector2(14, 110), Color.White);
 
             spriteBatch.DrawString(font, PodManager.Instance.GlobalScore.ToString(), new Vector2(50, 50), Color.Red);
             spriteBatch.DrawString(font, Player.Instance.ScoreMultiplier.ToString(), new Vector2(50, 100), Color.Red);
