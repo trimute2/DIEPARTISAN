@@ -235,3 +235,9 @@
 /processorParam:TextureFormat=Color
 /build:cursor.png
 
+#begin UIText.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:TextureFormat=Compressed
+/build:UIText.spritefont
+

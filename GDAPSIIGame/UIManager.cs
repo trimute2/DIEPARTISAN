@@ -1,18 +1,21 @@
 ﻿using GDAPSIIGame.Pods;
+using GDAPSIIGame.Map;
+using GDAPSIIGame.Weapons;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 
 namespace GDAPSIIGame
 {
     class UIManager
     {
-        private Vector2 scoreBounding;
         private SpriteFont font;
         //Instantiate Textures and Rectangles for healthbox
         private Texture2D healthbarBackground;
@@ -21,8 +24,9 @@ namespace GDAPSIIGame
         private Texture2D ammoIcon;
         private Texture2D pistolIcon;
         private Texture2D shotgunIcon;
-		//Creating the max health for the player for draw reference **WILL BE UPDATED WITH PLAYER PROPERTY**
+		//Creating the max health for the player for draw reference
 		private int playerMaxHealth;
+        private float healthBarWidth;
 
 		//Fading
 		private float fadeTimer;
@@ -74,9 +78,6 @@ namespace GDAPSIIGame
         internal void LoadContent(ContentManager Content)
         {
 			playerMaxHealth = Player.Instance.Health;
-            //Set X and Y values for the game score.
-            scoreBounding.X = 10;
-            scoreBounding.Y = 10;
             //load font texture
             font = Content.Load<SpriteFont>("font");
             //load textures for the healthbox
@@ -86,6 +87,7 @@ namespace GDAPSIIGame
             ammoIcon = Content.Load<Texture2D>("bullets");
             pistolIcon = Content.Load<Texture2D>("pistolicon");
             shotgunIcon = Content.Load<Texture2D>("shotgunicon");
+            font = Content.Load<SpriteFont>("UIText");
 		}
 
         /// <summary>
@@ -109,6 +111,17 @@ namespace GDAPSIIGame
 			{
 				MapManager.Instance.State = MapState.Play;
 			}
+
+            if(Player.Instance.Health != playerMaxHealth)
+            {
+                double percent = (double)Player.Instance.Health / (double)playerMaxHealth;
+                healthBarWidth = (float)(percent * healthbarForeground.Width);
+                Debug.WriteLine("HEALTHBAR WIDTH: " + percent + " * " + healthbarForeground.Width + " = " + healthBarWidth);
+            }
+            else
+            {
+                healthBarWidth = healthbarForeground.Width;
+            }
         }
 
         /// <summary>
@@ -119,7 +132,12 @@ namespace GDAPSIIGame
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch, GraphicsDevice GraphicsDevice)
         {
             spriteBatch.Draw(healthbarBackground, new Vector2(40, 20), Color.White);
-            spriteBatch.Draw(healthbarForeground, new Vector2(43, 23), Color.White);
+            spriteBatch.Draw(
+                texture: healthbarForeground,
+                position: new Vector2(43,23),
+                sourceRectangle: new Rectangle(new Point(0,0), new Point((int)healthBarWidth,15)), 
+                color: Color.White
+                );
             spriteBatch.Draw(healthbarHead, new Vector2(14, 10), Color.White);
             
             if(Player.Instance.CurrWeapon is Weapons.Pistol)
@@ -132,16 +150,36 @@ namespace GDAPSIIGame
                 spriteBatch.Draw(shotgunIcon, new Vector2(14, 50), Color.White);
             }
 
-                spriteBatch.Draw(ammoIcon, new Vector2(14, 110), Color.White);
-
-            spriteBatch.DrawString(font, PodManager.Instance.GlobalScore.ToString(), new Vector2(50, 50), Color.Red);
-            spriteBatch.DrawString(font, Player.Instance.ScoreMultiplier.ToString(), new Vector2(50, 100), Color.Red);
+            spriteBatch.Draw(ammoIcon, new Vector2(14, 110), Color.White);
 
             if (MapManager.Instance.State == MapState.Enter || MapManager.Instance.State == MapState.Exit)
 			{
 				spriteBatch.Draw(TextureManager.Instance.GetMenuTexture("Black"), new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), new Color(Color.White, fade));
 			}
 
-		}
+            if(Player.Instance.CurrWeapon.Reload)
+            {
+                spriteBatch.DrawString(
+                    text: "RELOADING...",
+                    color: Color.Black,
+                    spriteFont: font,
+                    position: Camera.Instance.GetViewportPosition(Player.Instance) + new Vector2(-18)
+                    );
+
+                spriteBatch.DrawString(
+                    text: "RELOADING...",
+                    color: Color.White,
+                    spriteFont: font,
+                    position: Camera.Instance.GetViewportPosition(Player.Instance) + new Vector2(-20)
+                    );
+            }
+
+            spriteBatch.DrawString(
+                    text: Player.Instance.CurrWeapon.,
+                    color: Color.Black,
+                    spriteFont: font,
+                    position: Camera.Instance.GetViewportPosition(Player.Instance) + new Vector2(-18)
+                    );
+        }
     }
 }
