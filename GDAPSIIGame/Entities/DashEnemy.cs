@@ -50,6 +50,7 @@ namespace GDAPSIIGame.Entities
 
 		public override void Update(GameTime gameTime)
 		{
+			previousPosition = Position;
 			if (!Awake)
 			{
 				if (Vector2.Distance(

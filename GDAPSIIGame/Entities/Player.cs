@@ -164,6 +164,7 @@ namespace GDAPSIIGame
 		//Methods
 		public override void Update(GameTime gameTime)
 		{
+			previousPosition = Position;
 			//base.Update(gameTime);
 			//Mouse state
 			prevMouseState = mouseState;

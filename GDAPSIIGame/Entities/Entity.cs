@@ -20,6 +20,8 @@ namespace GDAPSIIGame.Entities
         private int health;
         private int moveSpeed;
 		private Entity_Dir dir;
+		private Vector2 currentMove;
+		protected Vector2 previousPosition;
 		protected Vector2 knockBack;
 		protected float knockBackTime;
 		protected bool knockBackable;
@@ -32,6 +34,8 @@ namespace GDAPSIIGame.Entities
 			knockBackTime = 0.0f;
 			knockBack = Vector2.Zero;
 			knockBackable = true;
+			previousPosition = position;
+			currentMove = Vector2.Zero;
         }
 
 		/// <summary>
@@ -115,7 +119,27 @@ namespace GDAPSIIGame.Entities
                 float distTop = point.Y - bb.Top;
                 float distBottom = bb.Bottom - point.Y;
 
-
+				if (Math.Abs(currentMove.X) > bb.Width / 2)
+				{
+					if(currentMove.X > 0)
+					{
+						distRight = float.MaxValue;
+					}else
+					{
+						distLeft = float.MaxValue;
+					}
+				}
+				if (Math.Abs(currentMove.Y) > bb.Height / 2)
+				{
+					if (currentMove.Y > 0)
+					{
+						distBottom = float.MaxValue;
+					}
+					else
+					{
+						distTop = float.MaxValue;
+					}
+				}
 				//offset the player by the shortest distance
 				if (distLeft < distRight &&
 					distLeft < distTop &&
@@ -154,6 +178,8 @@ namespace GDAPSIIGame.Entities
 					}
 				}
 
+				currentMove = Position - previousPosition;
+
 				this.ResetBound();
 
             }
@@ -180,6 +206,7 @@ namespace GDAPSIIGame.Entities
 				this.Position += knockBack * knockBackTime;
 				knockBackTime -= (float)gameTime.ElapsedGameTime.TotalSeconds;
 			}
+			currentMove = Position - previousPosition;
 			base.Update(gameTime);
 		}
 
