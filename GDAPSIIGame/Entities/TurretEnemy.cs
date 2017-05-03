@@ -63,7 +63,7 @@ namespace GDAPSIIGame.Entities
 				gun.Angle = newAngle;
 
 				float destinationRotation = (float)(Math.Atan2(Y - p.Y, X - p.X ) + Math.PI);
-				if((Vector2.Distance(p.BoundingBox.Center.ToVector2(),this.BoundingBox.Center.ToVector2()) <= 400) &&
+				if((Vector2.Distance(p.BoundingBox.Center.ToVector2(),this.BoundingBox.Center.ToVector2()) <= gun.WeapRange) &&
 				//Only shoot when facing the player
 				(destinationRotation < newAngle + (Math.PI / 6) && destinationRotation > newAngle - (Math.PI / 6)))
 				{

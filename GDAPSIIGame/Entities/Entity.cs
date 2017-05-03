@@ -180,7 +180,7 @@ namespace GDAPSIIGame.Entities
 				this.Position += knockBack * knockBackTime;
 				knockBackTime -= (float)gameTime.ElapsedGameTime.TotalSeconds;
 			}
-			else base.Update(gameTime);
+			base.Update(gameTime);
 		}
 
 	}
