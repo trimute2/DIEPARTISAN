@@ -83,6 +83,22 @@ namespace GDAPSIIGame.Weapons
 			get; set;
 		}
 
+		/// <summary>
+		/// The maximum ammo a weapon has
+		/// </summary>
+		public abstract int MaxAmmo
+		{
+			get;
+		}
+
+		/// <summary>
+		/// The current amount of ammo in the weapon's clip
+		/// </summary>
+		public abstract int CurrAmmo
+		{
+			get;
+		}
+
 		public abstract bool Reload
 		{
 			get; set;

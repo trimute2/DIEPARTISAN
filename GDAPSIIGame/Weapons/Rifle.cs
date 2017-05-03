@@ -15,8 +15,8 @@ namespace GDAPSIIGame.Weapons
 	{
 		//Fields
 		private float fireRate;
-		private float clipSize;
-		private float clip;
+		private int clipSize;
+		private int clip;
 		private float reloadSpeed;
 		private float fired;
 		private float reload;
@@ -25,7 +25,7 @@ namespace GDAPSIIGame.Weapons
 		private Owners owner;
 		private SpriteEffects effects;
 
-		public Rifle(ProjectileType pT, Texture2D texture, Vector2 position, Rectangle boundingBox, float fireRate, float clipSize, float reloadSpeed, Vector2 origin, Owners owner, Range range)
+		public Rifle(ProjectileType pT, Texture2D texture, Vector2 position, Rectangle boundingBox, float fireRate, int clipSize, float reloadSpeed, Vector2 origin, Owners owner, Range range)
 			: base(pT, texture, position, boundingBox, range)
         {
 			this.fireRate = fireRate; //How fast until the weapon can fire again
@@ -70,6 +70,22 @@ namespace GDAPSIIGame.Weapons
 				}
 				else fired = 0;
 			}
+		}
+
+		/// <summary>
+		/// The maximum amont of ammo in the clip
+		/// </summary>
+		public override int MaxAmmo
+		{
+			get { return clipSize; }
+		}
+
+		/// <summary>
+		/// The current amount of ammo in the clip
+		/// </summary>
+		public override int CurrAmmo
+		{
+			get { return clip; }
 		}
 
 		public override void Update(GameTime gameTime)

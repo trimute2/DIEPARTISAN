@@ -175,7 +175,7 @@ namespace GDAPSIIGame
             }
 
             spriteBatch.DrawString(
-                    text: Player.Instance.CurrWeapon.,
+                    text: ""+Player.Instance.CurrWeapon.CurrAmmo,
                     color: Color.Black,
                     spriteFont: font,
                     position: Camera.Instance.GetViewportPosition(Player.Instance) + new Vector2(-18)

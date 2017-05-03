@@ -56,6 +56,18 @@ namespace GDAPSIIGame.Weapons
 			set	{ }
 		}
 
+		/// <summary>
+		/// This gun does not use an ammo system!
+		/// </summary>
+		public override int MaxAmmo
+		{ get { return 0; } }
+
+		/// <summary>
+		/// This gun does not use an ammo system!
+		/// </summary>
+		public override int CurrAmmo
+		{ get { return 0; } }
+
 		public override void Update(GameTime gameTime)
 		{
 			switch (Dir)
