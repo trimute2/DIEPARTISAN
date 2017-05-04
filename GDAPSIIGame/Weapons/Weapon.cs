@@ -123,9 +123,7 @@ namespace GDAPSIIGame.Weapons
 			base.Draw(spriteBatch);
 		}*/
 
-		public abstract bool Fire(Vector2 direction, MouseState mouseState, MouseState prevMouseState);
-
-		public abstract bool Fire(Vector2 direction, GamePadState gpState, GamePadState prevGpState);
+		public abstract bool Fire(Vector2 direction);
 
 		public abstract void ReloadWeapon();
 

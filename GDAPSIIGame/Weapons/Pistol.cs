@@ -219,37 +219,12 @@ namespace GDAPSIIGame.Weapons
 		/// <summary>
 		/// Fire a bullet from the weapon
 		/// </summary>
-		/// <param name="position">The position the bullet is spawned at</param>
 		/// <param name="direction">The speed that the bullet is moving</param>
-        public override bool Fire(Vector2 direction, MouseState mouseState, MouseState prevMouseState)
-        {
-			//Check if click condition is met
-			if (mouseState.LeftButton == ButtonState.Pressed && prevMouseState.LeftButton == ButtonState.Released)
-			{
-				//Check user can fire or if they need to reload
-				if (!Fired && !Reload && clip <= 0)
-				{
-					Reload = true;
-					return false;
-				}
-				if (!Fired && !Reload && clip > 0)
-				{
-					Fired = true;
-					clip--;
-					Matrix rotationMatrix = Matrix.CreateRotationZ(Angle);
-					Vector2 bulletPosition = Vector2.Transform(bulletOffset, rotationMatrix);
-
-					ProjectileManager.Instance.Clone(ProjType, Position + bulletPosition, direction, Angle, owner, WeapRange);
-					return true;
-				}
-			}
-			return false;
-        }
-
-		public override bool Fire(Vector2 direction, GamePadState gpState, GamePadState prevGpState)
+		public override bool Fire(Vector2 direction)
 		{
+			ControlManager controlManager = ControlManager.Instance;
 			//Check if click condition is met
-			if (gpState.IsButtonDown(Buttons.RightTrigger) && gpState.IsButtonUp(Buttons.RightTrigger))
+			if (controlManager.ControlPressed(Control_Types.Fire, false) && controlManager.ControlReleased(Control_Types.Fire, true))
 			{
 				//Check user can fire or if they need to reload
 				if (!Fired && !Reload && clip <= 0)
