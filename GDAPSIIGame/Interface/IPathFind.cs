@@ -19,7 +19,7 @@ namespace GDAPSIIGame.Interface
         /// <summary>
         /// Gets the current path
         /// </summary>
-        List<GraphNode> Path { get; set; }
+        List<Vector2> RecentTargets { get; set; }
 
         /// <summary>
         /// Generates the path to the target
