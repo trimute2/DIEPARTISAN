@@ -214,7 +214,7 @@ namespace GDAPSIIGame
 							}
 
 							//Check if the player has died
-							if (Player.Instance.Health <= 0 || PodManager.Instance.LevelTime > (mapSize * mapSize * 10))
+							if (Player.Instance.Health <= 0 || PodManager.Instance.LevelTime > (mapSize * mapSize * 15))
 							{
 								mapManager.State = MapState.Died;
 							}
