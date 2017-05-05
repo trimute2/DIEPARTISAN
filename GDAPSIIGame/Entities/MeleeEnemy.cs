@@ -17,19 +17,19 @@ namespace GDAPSIIGame.Entities
         /// </summary>
         public Vector2 CurrentTarget { get; set; }
 
-        public List<GraphNode> Path { get; set; }
+        public List<Vector2> RecentTargets { get; set; }
 
         public MeleeEnemy(Texture2D texture, Vector2 position, Rectangle boundingBox, int health = 8, int moveSpeed = 2) : base(health, moveSpeed, texture, position, boundingBox)
         {
             color = Color.DarkOrange;
-            Path = new List<GraphNode>();
+            RecentTargets = new List<Vector2>();
             CurrentTarget = Vector2.Zero;
         }
 
         public MeleeEnemy(int health, int moveSpeed, Texture2D texture, Vector2 position, Rectangle boundingBox, int scoreValue) : base(health, moveSpeed, texture, position, boundingBox)
         {
             color = Color.DarkOrange;
-            Path = new List<GraphNode>();
+            RecentTargets = new List<Vector2>();
             CurrentTarget = Vector2.Zero;
         }
 
@@ -37,7 +37,7 @@ namespace GDAPSIIGame.Entities
         {
             if (Awake)
             {
-                if (CurrentTarget == Vector2.Zero || Vector2.Distance(CurrentTarget, Position) < 4)
+                if (CurrentTarget == Vector2.Zero || Vector2.Distance(CurrentTarget, Position) < 5)
                 {
                     //Console.WriteLine("Close");
                     /*
@@ -49,14 +49,14 @@ namespace GDAPSIIGame.Entities
                     }*/
                     //else
                     //{
-                        //CurrentTarget = Player.Instance.Position;
-                        FindNextTarget(Player.Instance.Position, Graph.Graph.Instance);
+                    //CurrentTarget = Player.Instance.Position;
+                    FindNextTarget(Player.Instance.Position, Graph.Graph.Instance);
                     //}
                 }
                 else
                 {
-                        //Console.WriteLine("New paf + {0}", Position.X);
-                        //FindNextTarget(Player.Instance.Position, Graph.Graph.Instance);
+                    //Console.WriteLine("New paf + {0}", Position.X);
+                    //FindNextTarget(Player.Instance.Position, Graph.Graph.Instance);
                 }
             }
             if (!Awake)
@@ -125,11 +125,11 @@ namespace GDAPSIIGame.Entities
 
         public void FindNextTarget(Vector2 position, Graph.Graph graph)
         {
+            //Find closest Node to self and goal
             GraphNode closestToGoal = graph.FindClosestNode(position);
             GraphNode closestToMe = graph.FindClosestNode(this.Position);
-            List<GraphNode> path = new List<GraphNode>();
             float currDistance = float.MaxValue;
-            
+
             GraphNode currNode = closestToGoal;
             /*
             GraphNode prevNode = closestToMe;
@@ -139,28 +139,33 @@ namespace GDAPSIIGame.Entities
                 currNode = closestToMe.Neighbors[currNode];
             }
             */
-            foreach(GraphNode node in closestToMe.Neighbors.Values)
+
+            //Find closest Node to player from neighbors
+            foreach (GraphNode node in closestToMe.Neighbors.Values)
             {
-                float thisDistance = Vector2.Distance(node.Position, closestToGoal.Position);
-                if (thisDistance < currDistance)
+                if (!RecentTargets.Contains(node.Position))
                 {
-                    currNode = node;
-                    currDistance = thisDistance;
+                    float thisDistance = Vector2.Distance(node.Position, closestToGoal.Position);
+                    if (thisDistance < currDistance)
+                    {
+                        currNode = node;
+                        currDistance = thisDistance;
+                    }
                 }
             }
 
+            //Keep track of recent nodes so we don't loop
+            while(RecentTargets.Count > 3)
+            {
+                RecentTargets.RemoveAt(0);
+            }
             //path.Reverse();
             //path.Insert(0, closestToMe);
             //showPath();
-            CurrentTarget = currNode.Position;
-        }
 
-        public void showPath()
-        {
-            foreach (GraphNode node in Path)
-            {
-                Console.WriteLine(node.Position.X);
-            }
+            //Set target and add to recenttargets so we don't move backwards
+            CurrentTarget = currNode.Position;
+            RecentTargets.Add(CurrentTarget);
         }
     }
 }
