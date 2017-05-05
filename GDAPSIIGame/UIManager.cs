@@ -116,7 +116,7 @@ namespace GDAPSIIGame
             {
                 double percent = (double)Player.Instance.Health / (double)playerMaxHealth;
                 healthBarWidth = (float)(percent * healthbarForeground.Width);
-                Debug.WriteLine("HEALTHBAR WIDTH: " + percent + " * " + healthbarForeground.Width + " = " + healthBarWidth);
+                //Debug.WriteLine("HEALTHBAR WIDTH: " + percent + " * " + healthbarForeground.Width + " = " + healthBarWidth);
             }
             else
             {

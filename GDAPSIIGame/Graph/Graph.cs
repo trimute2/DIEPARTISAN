@@ -18,12 +18,24 @@ namespace GDAPSIIGame.Graph
         private float xDistBetweenNodes;
         private float yDistBetweenNodes;
 
+
+
         public Graph(int numNodes, float xDistBetween, float yDistBetween)
         {
             nodes = new Dictionary<float, GraphNode>(numNodes);
             this.xDistBetweenNodes = xDistBetween;
             this.yDistBetweenNodes = yDistBetween;
             IsConnected = false;
+            instance = this;
+        }
+
+        static private Graph instance;
+
+        static public Graph Instance {
+            get
+            {
+                return instance;
+            }
         }
 
         /// <summary>
@@ -71,6 +83,12 @@ namespace GDAPSIIGame.Graph
             return nodes[uniqueNum];
         }
 
+        /// <summary>
+        /// User to uniquely identify nodes. Formula creates unique num based on 2 nums.
+        /// </summary>
+        /// <param name="X"></param>
+        /// <param name="Y"></param>
+        /// <returns>Returns a unique identifier based on the numbers given</returns>
         float getUniqueID(float X, float Y)
         {
             return (.5f) * (X + Y) * (X + Y + 1) + Y;
@@ -88,6 +106,7 @@ namespace GDAPSIIGame.Graph
 
         public void ConnectGraph()
         {
+            Random r = new Random();
             bool done = false;
             GraphNode vertex = null;
             int attempts = 0;
@@ -102,7 +121,7 @@ namespace GDAPSIIGame.Graph
                 done = true;
                 for (int i = 0; i < nodes.Count; i++)
                 {
-                    vertex = nodes.Values.ElementAt(i);
+                    vertex = nodes.Values.ElementAt(r.Next(nodes.Count));
                     if (!vertex.IsComplete)
                     {
                         /*if(attempts == 10 && vertex.NumNeighbors < 10)
@@ -134,10 +153,10 @@ namespace GDAPSIIGame.Graph
                         }
                     }
                 }
-                IsConnected = true;
-                //Console.WriteLine("All nodes have {0} connections on average", MeanNeighbors);
                 //Console.WriteLine(timeElapsed);
             }
+            Console.WriteLine("All nodes have {0} connections on average", MeanNeighbors);
+            IsConnected = true;
 
 
             //t.Stop();
@@ -145,6 +164,31 @@ namespace GDAPSIIGame.Graph
 
         public bool IsConnected { get; set; }
 
+        public GraphNode FindClosestNode(float X, float Y)
+        {
+            return nodes[getUniqueID(X - (X % 64), (Y - (Y % 64)))];
+        }
+
+        public GraphNode FindClosestNode(Vector2 position)
+        {
+            float dist = float.MaxValue;
+            GraphNode bestNode = null;
+            foreach (GraphNode node in Graph.Instance.Nodes.Values)
+            {
+                float newDist = Vector2.Distance(node.Position, position);
+                if (newDist < dist)
+                {
+                    dist = newDist;
+                    bestNode = node;
+                }
+            }
+
+            return bestNode;
+        }
+
+        /// <summary>
+        /// Gets average number of neighbors of nodes in graph
+        /// </summary>
         public int MeanNeighbors
         {
             get

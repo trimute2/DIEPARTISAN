@@ -21,6 +21,7 @@ namespace GDAPSIIGame.Graph
             this.uniqueID = (.5f) * (x + y) * (x + y + 1) + y;
             neighbors = new Dictionary<GraphNode, GraphNode>();
             IsComplete = false;
+            //Console.WriteLine(position);
         }
 
         public float UniqueID
@@ -33,9 +34,14 @@ namespace GDAPSIIGame.Graph
             get { return position; }
         }
 
-        public void AddNeighbor(GraphNode intermediateNeighbor, GraphNode newNeighbor)
+        /// <summary>
+        /// Adds a new node to this nodes list of reachable neighbors.
+        /// </summary>
+        /// <param name="intermediateNeighbor"></param>
+        /// <param name="newNeighbor"></param>
+        public void AddNeighbor(GraphNode newNeighbor, GraphNode intermediateNeighbor)
         {
-            neighbors.Add(intermediateNeighbor, newNeighbor);
+            neighbors.Add(newNeighbor, intermediateNeighbor);
         }
 
         public int NumNeighbors
