@@ -37,7 +37,7 @@ namespace GDAPSIIGame.Entities
         {
             if (Awake)
             {
-                if (CurrentTarget == Vector2.Zero || Vector2.Distance(CurrentTarget, Position) < 2)
+                if (CurrentTarget == Vector2.Zero || Vector2.Distance(CurrentTarget, Position) < 4)
                 {
                     //Console.WriteLine("Close");
                     /*
@@ -128,19 +128,31 @@ namespace GDAPSIIGame.Entities
             GraphNode closestToGoal = graph.FindClosestNode(position);
             GraphNode closestToMe = graph.FindClosestNode(this.Position);
             List<GraphNode> path = new List<GraphNode>();
-
+            float currDistance = float.MaxValue;
+            
             GraphNode currNode = closestToGoal;
+            /*
             GraphNode prevNode = closestToMe;
             while (currNode != closestToMe && closestToMe.Neighbors[currNode] != currNode)
             {
                 prevNode = currNode;
                 currNode = closestToMe.Neighbors[currNode];
             }
+            */
+            foreach(GraphNode node in closestToMe.Neighbors.Values)
+            {
+                float thisDistance = Vector2.Distance(node.Position, closestToGoal.Position);
+                if (thisDistance < currDistance)
+                {
+                    currNode = node;
+                    currDistance = thisDistance;
+                }
+            }
 
             //path.Reverse();
             //path.Insert(0, closestToMe);
             //showPath();
-            CurrentTarget = prevNode.Position;
+            CurrentTarget = currNode.Position;
         }
 
         public void showPath()

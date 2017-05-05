@@ -130,6 +130,7 @@ namespace GDAPSIIGame.Map
             {
                 r.initRoom(wallTextures, floorTextures, graph);
             }
+            /*
             List<Thread> updates = new List<Thread>(20);
             while(!graph.IsConnected)
             {
@@ -137,6 +138,7 @@ namespace GDAPSIIGame.Map
                 updates.Add(t);
                 t.Start();
             }
+            */
             /*
             foreach (Thread t in updates)
             {
@@ -144,10 +146,12 @@ namespace GDAPSIIGame.Map
                 //Thread.Sleep(10000);
             }
             */
+            /*
             foreach (Thread t in updates)
             {
                 t.Join();
             }
+            */
             
         }
     }
