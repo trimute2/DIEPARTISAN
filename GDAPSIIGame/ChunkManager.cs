@@ -56,14 +56,14 @@ namespace GDAPSIIGame
 			{
 				tx = TextureManager.Instance.RoomTextures["WallTexture"];
 			}
-			top = new Wall(tx, new Vector2(0, -32),
-				new Rectangle(0, -32, length, 32));
+			top = new Wall(tx, new Vector2(0, -96),
+				new Rectangle(0, -96, length, 96));
 			right = new Wall(tx, new Vector2(length, 0),
-				new Rectangle(length, 0, 32, length));
+				new Rectangle(length, 0, 96, length));
 			bottom = new Wall(tx, new Vector2(0, length),
-				new Rectangle(0, length, length, 32));
-			left = new Wall(tx, new Vector2(-32, 0),
-				new Rectangle(-32, 0, 32, length));
+				new Rectangle(0, length, length, 96));
+			left = new Wall(tx, new Vector2(-96, 0),
+				new Rectangle(-96, 0, 96, length));
 
 			int ID = 0;
 			for (int i = 0; i < numRows; i++)

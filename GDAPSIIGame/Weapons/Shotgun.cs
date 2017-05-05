@@ -217,57 +217,14 @@ namespace GDAPSIIGame.Weapons
 		/// <summary>
 		/// Fire a bullet from the weapon
 		/// </summary>
-		/// <param name="position">The position the bullet is spawned at</param>
 		/// <param name="direction">The speed that the bullet is moving</param>
-		public override bool Fire(Vector2 direction, MouseState mouseState, MouseState prevMouseState)
+		public override bool Fire(Vector2 direction)
 		{
+			ControlManager controlManager = ControlManager.Instance;
 			//Check if click condition is met
-			if (mouseState.LeftButton == ButtonState.Pressed)
+			if (controlManager.ControlPressed(Control_Types.Fire, false))
 			{
-				if (prevMouseState.LeftButton == ButtonState.Released)
-				{
-					if (!Fired && !Reload && clip <= 0)
-					{
-						Reload = true;
-						return false;
-					}
-				}
-				//Check user can fire or if they need to reload
-				if (!Fired && !Reload && clip > 0)
-				{
-					Fired = true;
-					clip--;
-					float degree = (float)(Math.PI / 180);
-					//Take the gun's current angle (a property) and create a rotation matrix out of it
-					Matrix rotationMatrix = Matrix.CreateRotationZ(Angle);
-					Matrix b1 = Matrix.CreateRotationZ(degree * rand.Next(-10, 11));
-					Matrix b2 = Matrix.CreateRotationZ(degree * rand.Next(-10, 11));
-					Matrix b3 = Matrix.CreateRotationZ(degree * rand.Next(-10, 11));
-					
-					//Take the rotation matrix and transform the offset vector by it
-					//The offset vector is an approximation of where the muzzle should be when added to the bullet's position
-					//Remember the bullet's position is the top left of its bouunding box
-					Vector2 bulletPosition = Vector2.Transform(bulletOffset, rotationMatrix);
-
-					Vector2 direction1 = Vector2.Transform(direction, b1);
-					Vector2 direction2 = Vector2.Transform(direction, b2);
-					Vector2 direction3 = Vector2.Transform(direction, b3);
-					//Create the bullet at the actual position of the bullet + the rotated position
-					ProjectileManager.Instance.Clone(ProjType, Position + bulletPosition, direction1, Angle, owner, WeapRange);
-					ProjectileManager.Instance.Clone(ProjType, Position + bulletPosition, direction2, Angle, owner, WeapRange);
-					ProjectileManager.Instance.Clone(ProjType, Position + bulletPosition, direction3, Angle, owner, WeapRange);
-					return true;
-				}
-			}
-			return false;
-		}
-
-		public override bool Fire(Vector2 direction, GamePadState gpState, GamePadState prevGpState)
-		{
-			//Check if click condition is met
-			if (gpState.IsButtonDown(Buttons.RightTrigger))
-			{
-				if (gpState.IsButtonUp(Buttons.RightTrigger))
+				if (controlManager.ControlReleased(Control_Types.Fire, true))
 				{
 					if (!Fired && !Reload && clip <= 0)
 					{

@@ -36,6 +36,7 @@ namespace GDAPSIIGame
 		private SpriteEffects effect;
 		private float timeMult;
 		private float firing;
+		private ControlManager controlManager;
 
 		private float focusMultiplier;
 		private float focusTimer;
@@ -68,6 +69,7 @@ namespace GDAPSIIGame
 			effect = new SpriteEffects();
 			timeMult = 0;
 			firing = 0;
+			controlManager = ControlManager.Instance;
 		}
 
 		static public Player Instantiate(Weapon weapon, Weapon weapon2, Weapon weapon3, int health, int moveSpeed, Texture2D texture, Vector2 position, Rectangle boundingBox)
@@ -164,6 +166,10 @@ namespace GDAPSIIGame
 		//Methods
 		public override void Update(GameTime gameTime)
 		{
+			//Get the newest ControlManager
+			controlManager = ControlManager.Instance;
+
+			previousPosition = Position;
 			//base.Update(gameTime);
 			//Mouse state
 			prevMouseState = mouseState;
@@ -178,35 +184,29 @@ namespace GDAPSIIGame
 			Vector2 camw = Camera.Instance.GetViewportPosition(CurrWeapon.Position);
 
 			//Update player movement
-			if (gpState.IsConnected)
-			{
-				UpdateInput(gameTime, gpState, prevGpState, camw);
-			}else {
-				UpdateInput(gameTime, keyState, prevKeyState, camw);
-			}
+			UpdateInput(gameTime, camw);
+
             UpdateWeapon(gameTime, camw);
 
-			if (gpState.IsConnected)
+				//Fire weapon only if previous frame didn't have left button being pressed
+			if (controlManager.ControlPressed(Control_Types.Fire, false))
 			{
-				if (gpState.IsButtonDown(Buttons.RightTrigger))
+				Vector2 direction;
+				if (controlManager.Mode == Control_Mode.GamePad)
 				{
-					Vector2 direction = gpState.ThumbSticks.Right;
+					direction = gpState.ThumbSticks.Right;
 					direction.Y *= -1;
 					direction.Normalize();
-					if (this.CurrWeapon.Fire(direction, mouseState, prevMouseState))
+					if (gpState.ThumbSticks.Right != Vector2.Zero && this.CurrWeapon.Fire(direction))
 					{
 						IsFiring = true;
 					}
 				}
-			}
-			else
-			{
-				//Fire weapon only if previous frame didn't have left button being pressed
-				if (mouseState.LeftButton == ButtonState.Pressed)
+				else
 				{
-					Vector2 direction = new Vector2((mouseState.X - camw.X) / 1, (mouseState.Y - camw.Y) / 1);
+					direction = new Vector2((mouseState.X - camw.X) / 1, (mouseState.Y - camw.Y) / 1);
 					direction.Normalize();
-					if (this.CurrWeapon.Fire(direction, mouseState, prevMouseState))
+					if (this.CurrWeapon.Fire(direction))
 					{
 						IsFiring = true;
 					}
@@ -347,11 +347,171 @@ namespace GDAPSIIGame
 			 currWeapon.Draw(spriteBatch);
         }
 
-        /// <summary>
-        /// Parses Input during updates
-        /// </summary>
-        /// <param name="keyState">KeyboardState</param>
-        public void UpdateInput(GameTime gameTime, KeyboardState keyState, KeyboardState prevKeyState, Vector2 camw)
+		/// <summary>
+		/// Parses Input during updates
+		/// </summary>
+		public void UpdateInput(GameTime gameTime, Vector2 camw)
+		{
+			timeMult = (float)gameTime.ElapsedGameTime.TotalSeconds / ((float)1 / 60);
+
+			//Basic keyboard movement
+			if (controlManager.ControlPressed(Control_Types.Forward, false))
+			{
+				if (controlManager.Mode == Control_Mode.GamePad)
+				{
+					this.Y -= (gpState.ThumbSticks.Left.Y * timeMult) * MoveSpeed;
+				}
+				else this.Y -= this.MoveSpeed * timeMult;
+			}
+			else if (controlManager.ControlPressed(Control_Types.Backward, false))
+			{
+				if (controlManager.Mode == Control_Mode.GamePad)
+				{
+					this.Y -= (gpState.ThumbSticks.Left.Y * timeMult) * MoveSpeed;
+				}
+				else this.Y += this.MoveSpeed * timeMult;
+			}
+
+			if (controlManager.ControlPressed(Control_Types.Right, false))
+			{
+				if (controlManager.Mode == Control_Mode.GamePad)
+				{
+					this.X += (gpState.ThumbSticks.Left.X * timeMult) * MoveSpeed;
+				}
+				else this.X += this.MoveSpeed * timeMult;
+			}
+			else if (controlManager.ControlPressed(Control_Types.Left, false))
+			{
+				if (controlManager.Mode == Control_Mode.GamePad)
+				{
+					this.X += (gpState.ThumbSticks.Left.X * timeMult) * MoveSpeed;
+				}
+				else this.X -= this.MoveSpeed * timeMult;
+			}
+
+			//Player reloading
+			if (controlManager.ControlPressed(Control_Types.Reload, false))
+			{
+				this.currWeapon.ReloadWeapon();
+			}
+
+			//Calculates the angle between the player and the mouse
+			//See below
+			//   180
+			//-90   90
+			//    0
+			if (controlManager.Mode == Control_Mode.KBM)
+			{
+				Vector2 campos = Camera.Instance.GetViewportPosition(this.X + 25, this.Y);
+				angle = MathHelper.ToDegrees((float)Math.Atan2(mouseState.X - campos.X, mouseState.Y - campos.Y));
+			}
+			else
+			{
+				if (gpState.ThumbSticks.Right != Vector2.Zero)
+				{
+					angle = MathHelper.ToDegrees((float)Math.Atan2(gpState.ThumbSticks.Right.X, gpState.ThumbSticks.Right.Y * -1));
+				}
+			}
+
+			if ((controlManager.Mode == Control_Mode.GamePad && gpState.ThumbSticks.Right != Vector2.Zero) || controlManager.Mode == Control_Mode.KBM)
+			{
+				//Use angle to find player direction
+				if ((angle < -157.5) || (angle > 157.5))
+				{
+					this.Dir = Entity_Dir.Up;
+					if (angle < -157.5)
+					{
+						currWeapon.Dir = Weapon_Dir.UpWest;
+					}
+					else currWeapon.Dir = Weapon_Dir.UpEast;
+				}
+				else if ((angle < 157.5) && (angle > 112.5) && this.Dir != Entity_Dir.UpRight)
+				{
+					this.Dir = Entity_Dir.UpRight;
+					currWeapon.Dir = Weapon_Dir.UpRight;
+				}
+				else if ((angle < 112.5) && (angle > 67.5) && this.Dir != Entity_Dir.Right)
+				{
+					this.Dir = Entity_Dir.Right;
+					currWeapon.Dir = Weapon_Dir.Right;
+				}
+				else if ((angle < 67.5) && (angle > 22.5) && this.Dir != Entity_Dir.DownRight)
+				{
+					this.Dir = Entity_Dir.DownRight;
+					currWeapon.Dir = Weapon_Dir.DownRight;
+				}
+				else if ((angle < -22.5) && (angle > -67.5) && this.Dir != Entity_Dir.DownLeft)
+				{
+					this.Dir = Entity_Dir.DownLeft;
+					currWeapon.Dir = Weapon_Dir.DownLeft;
+				}
+				else if ((angle < -67.5) && (angle > -112.5) && this.Dir != Entity_Dir.Left)
+				{
+					this.Dir = Entity_Dir.Left;
+					currWeapon.Dir = Weapon_Dir.Left;
+				}
+				else if ((angle < -112.5) && (angle > -157.5) && this.Dir != Entity_Dir.UpLeft)
+				{
+					this.Dir = Entity_Dir.UpLeft;
+					currWeapon.Dir = Weapon_Dir.UpLeft;
+				}
+				else if ((angle < 22.5) && (angle > -22.5))
+				{
+					this.Dir = Entity_Dir.Down;
+					if (angle < 0)
+					{
+						currWeapon.Dir = Weapon_Dir.DownWest;
+					}
+					else currWeapon.Dir = Weapon_Dir.DownEast;
+				}
+			}
+
+			//Player switching weapons
+			if (controlManager.ControlPressed(Control_Types.NextWeapon, false) && controlManager.ControlReleased(Control_Types.NextWeapon, true))
+			{
+				InteruptReload();
+				Weapon_Dir oldDir = currWeapon.Dir;
+				if (weaponId == weapons.Length - 1)
+				{
+					weaponId = 0;
+				}
+				else
+				{
+					weaponId++;
+				}
+				currWeapon = weapons[weaponId];
+				//if (currWeapon == weapons[0]) { this.currWeapon = weapons[1]; 
+				//else if (currWeapon == weapons[1]) { this.currWeapon = weapons[0]; }
+				currWeapon.Dir = oldDir;
+				UpdateWeapon(gameTime, camw);
+			}
+			else if (controlManager.ControlPressed(Control_Types.PrevWeapon, false) && controlManager.ControlReleased(Control_Types.PrevWeapon, true))
+			{
+				InteruptReload();
+				Weapon_Dir oldDir = currWeapon.Dir;
+				if (weaponId == 0)
+				{
+					weaponId = weapons.Length - 1;
+				}
+				else
+				{
+					weaponId--;
+				}
+				//if (currWeapon == weapons[1]) { this.currWeapon = weapons[0]; }
+				//else if (currWeapon == weapons[0]) { this.currWeapon = weapons[1]; }
+				currWeapon = weapons[weaponId];
+				currWeapon.Dir = oldDir;
+				UpdateWeapon(gameTime, camw);
+			}
+
+
+		}
+
+		/// <summary>
+		/// Parses Input during updates
+		/// </summary>
+		/// <param name="keyState">KeyboardState</param>
+		public void UpdateInput(GameTime gameTime, KeyboardState keyState, KeyboardState prevKeyState, Vector2 camw)
         {
             timeMult = (float)gameTime.ElapsedGameTime.TotalSeconds / ((float)1/60);
 
@@ -719,9 +879,10 @@ namespace GDAPSIIGame
         private void UpdateWeapon(GameTime gameTime, Vector2 camw)
         {
 			//Update the weapons rotation
-			if (gpState.IsConnected)
+			if (controlManager.Mode == Control_Mode.GamePad)
 			{
-				currWeapon.Angle = -((float)Math.Atan2(gpState.ThumbSticks.Right.X, gpState.ThumbSticks.Right.Y * -1));
+				if (gpState.ThumbSticks.Right != Vector2.Zero)
+				{ currWeapon.Angle = -((float)Math.Atan2(gpState.ThumbSticks.Right.X, gpState.ThumbSticks.Right.Y * -1)); }
 			}
 			else
 			{

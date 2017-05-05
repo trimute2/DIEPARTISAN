@@ -37,6 +37,7 @@ namespace GDAPSIIGame
 		SpriteFont font;
 		WeaponManager weaponManager;
 		TextureManager textureManager;
+		ControlManager controlManager;
         int mapSize;
 		Thread l;
 		bool startLoad;
@@ -70,6 +71,8 @@ namespace GDAPSIIGame
 
             //Initialize entity manager
             entityManager = EntityManager.Instance;
+
+			controlManager = ControlManager.Instance;
 
             //Initialize the chunk manager
             chunkManager = ChunkManager.Instance;
@@ -107,15 +110,23 @@ namespace GDAPSIIGame
 			//Update mouse texture's position
 			mState = Mouse.GetState();
 			//ContainMouse(mState);
-			mousePos = mState.Position.ToVector2();
-
-			if(kbState.IsKeyDown(Keys.F12) && previousKbState.IsKeyUp(Keys.F12))
+			if (controlManager.Mode == Control_Mode.KBM)
 			{
-				graphics.ToggleFullScreen();
+				mousePos = mState.Position.ToVector2();
+			}
+			else
+			{
+				//Get the correct position for the thumbsticks and make it look good
+				Vector2 thumb = gpState.ThumbSticks.Right;
+				thumb.Y *= -1;
+				mousePos = Camera.Instance.GetViewportPosition(Player.Instance.Position +
+					new Vector2(Player.Instance.BoundingBox.Width / 2, Player.Instance.BoundingBox.Height / 2)
+					+ (thumb * 200));
 			}
 
 			switch (gameState)
             {
+				//The initial loading of the game
 				case GameState.InitialLoad:
 					if (startLoad)
 					{
@@ -126,12 +137,11 @@ namespace GDAPSIIGame
 
 				//The menu of the game
 				case GameState.Menu:
-					previousKbState = kbState;
-					kbState = Keyboard.GetState();
-					previousGpState = gpState;
-					gpState = GamePad.GetState(PlayerIndex.One, GamePadDeadZone.Circular);
-					if((gpState.IsConnected && (gpState.IsButtonDown(Buttons.Start)&&previousGpState.IsButtonUp(Buttons.Start))) ||
-						(kbState.IsKeyDown(Keys.Enter) && previousKbState.IsKeyUp(Keys.Enter)))
+					//Update controls
+					controlManager.Update();
+
+					//Get input
+					if (controlManager.ControlPressed(Control_Types.Interact, false) && controlManager.ControlReleased(Control_Types.Interact, true))
 					{
 						gameState = GameState.NewGame;
 					}
@@ -160,8 +170,8 @@ namespace GDAPSIIGame
 
 				//Player playing a level
 				case GameState.GamePlay:
-					previousKbState = kbState;
-					kbState = Keyboard.GetState();
+					controlManager.Update();
+
 					previousGpState = gpState;
 					gpState = GamePad.GetState(PlayerIndex.One, GamePadDeadZone.Circular);
 
@@ -171,8 +181,7 @@ namespace GDAPSIIGame
 					}
 
 					//Check if the player has paused the game
-					if ((gpState.IsConnected && (gpState.IsButtonDown(Buttons.Start) && previousGpState.IsButtonUp(Buttons.Start))) ||
-						(kbState.IsKeyDown(Keys.Enter) && previousKbState.IsKeyUp(Keys.Enter)))
+					if (controlManager.ControlPressed(Control_Types.Interact, false) && controlManager.ControlReleased(Control_Types.Interact, true))
 					{
 						gameState = GameState.PauseMenu;
 					}
@@ -243,9 +252,10 @@ namespace GDAPSIIGame
 
 				//When the game is paused
 				case GameState.PauseMenu:
-					previousKbState = kbState;
-					kbState = Keyboard.GetState();
-					if (kbState.IsKeyDown(Keys.Enter) && !previousKbState.IsKeyDown(Keys.Enter))
+					controlManager.Update();
+
+					//Get input
+					if (controlManager.ControlPressed(Control_Types.Interact, false) && controlManager.ControlReleased(Control_Types.Interact, true))
 					{
 						gameState = GameState.GamePlay;
 					}
@@ -253,13 +263,14 @@ namespace GDAPSIIGame
 
 				//When the Player dies
 				case GameState.GameOver:
-					previousKbState = kbState;
-					kbState = Keyboard.GetState();
-					if (kbState.IsKeyDown(Keys.Enter) && !previousKbState.IsKeyDown(Keys.Enter))
-                    {
-                        gameState = GameState.Menu;
-                    }
-                    break;
+					controlManager.Update();
+
+					//Get input
+					if (controlManager.ControlPressed(Control_Types.Interact, false) && controlManager.ControlReleased(Control_Types.Interact, true))
+					{
+						gameState = GameState.Menu;
+					}
+					break;
 			}
 		}
 

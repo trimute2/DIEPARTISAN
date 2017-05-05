@@ -107,8 +107,7 @@ namespace GDAPSIIGame.Entities
 				Vector2 diff = Vector2.Transform(Vector2.One, m);
 				diff.Normalize();
 				diff = diff / 6;
-				MouseState unnecessary = Mouse.GetState();
-				fired = gun.Fire(diff, unnecessary, unnecessary);
+				fired = gun.Fire(diff);
 			}
         }
 
