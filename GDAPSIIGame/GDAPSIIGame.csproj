@@ -54,6 +54,7 @@
     <Compile Include="Graph\Graph.cs" />
     <Compile Include="Graph\GraphNode.cs" />
     <Compile Include="Interface\ICollidable.cs" />
+    <Compile Include="Interface\IPathFind.cs" />
     <Compile Include="MapManager.cs" />
     <Compile Include="Map\Camera.cs" />
     <Compile Include="Map\Map.cs" />

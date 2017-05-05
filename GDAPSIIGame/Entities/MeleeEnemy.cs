@@ -10,7 +10,7 @@ using GDAPSIIGame.Graph;
 
 namespace GDAPSIIGame.Entities
 {
-    class MeleeEnemy : Enemy, IPathfind
+    class MeleeEnemy : Enemy, IPathFind
     {
         /// <summary>
         /// Current target to move towards
