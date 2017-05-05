@@ -11,7 +11,7 @@ using Microsoft.Xna.Framework.Content;
 
 namespace GDAPSIIGame
 {
-    enum GameState { InitialLoad, Menu, NewGame, LoadingScreen, GamePlay, GameOver, PauseMenu}
+    enum GameState { InitialLoad, Menu, NewGame, LoadingScreen, GamePlay, GameOver, PauseMenu }
 
 	public class Game1 : Game
     {

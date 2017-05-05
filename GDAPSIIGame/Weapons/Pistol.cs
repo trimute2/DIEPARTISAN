@@ -224,7 +224,7 @@ namespace GDAPSIIGame.Weapons
 		{
 			ControlManager controlManager = ControlManager.Instance;
 			//Check if click condition is met
-			if (controlManager.ControlPressed(Control_Types.Fire, false) && controlManager.ControlReleased(Control_Types.Fire, true))
+			if (controlManager.ControlPressed(Control_Types.Fire, false, false) && controlManager.ControlReleased(Control_Types.Fire, true, false))
 			{
 				//Check user can fire or if they need to reload
 				if (!Fired && !Reload && clip <= 0)

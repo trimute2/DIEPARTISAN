@@ -188,7 +188,7 @@ namespace GDAPSIIGame
 
             UpdateWeapon(gameTime, camw);
 
-				//Fire weapon only if previous frame didn't have left button being pressed
+			//Fire weapon only if previous frame didn't have left button being pressed
 			if (controlManager.ControlPressed(Control_Types.Fire, false))
 			{
 				Vector2 direction;
@@ -507,141 +507,6 @@ namespace GDAPSIIGame
 
 		}
 
-		/// <summary>
-		/// Parses Input during updates
-		/// </summary>
-		/// <param name="keyState">KeyboardState</param>
-		public void UpdateInput(GameTime gameTime, KeyboardState keyState, KeyboardState prevKeyState, Vector2 camw)
-        {
-            timeMult = (float)gameTime.ElapsedGameTime.TotalSeconds / ((float)1/60);
-
-			//Basic keyboard movement
-			if (keyState.IsKeyDown(Keys.W) || keyState.IsKeyDown(Keys.Up))
-			{
-				this.Y -= this.MoveSpeed * timeMult;
-				//Camera.Instance.Y -= (int)(this.MoveSpeed*timeMult);
-			}
-			else if (keyState.IsKeyDown(Keys.S) || keyState.IsKeyDown(Keys.Down))
-			{
-				this.Y += this.MoveSpeed * timeMult;
-				//Camera.Instance.Y += (int)(this.MoveSpeed * timeMult);
-			}
-
-			if (keyState.IsKeyDown(Keys.D) || keyState.IsKeyDown(Keys.Right))
-			{
-				this.X += this.MoveSpeed * timeMult;
-				//Camera.Instance.X += (int)(this.MoveSpeed * timeMult);
-			}
-			else if (keyState.IsKeyDown(Keys.A) || keyState.IsKeyDown(Keys.Left))
-			{
-				this.X -= this.MoveSpeed * timeMult;
-				//Camera.Instance.X -= (int)(this.MoveSpeed * timeMult);
-			}
-
-            
-
-			//Player reloading
-			if (keyState.IsKeyDown(Keys.R) && prevKeyState.IsKeyUp(Keys.R))
-			{
-				this. currWeapon.ReloadWeapon();
-			}
-
-			//Calculates the angle between the player and the mouse
-			//See below
-			//   180
-			//-90   90
-			//    0
-			Vector2 campos = Camera.Instance.GetViewportPosition(this.X + 25, this.Y);
-			angle = MathHelper.ToDegrees((float)Math.Atan2(mouseState.X - campos.X, mouseState.Y - campos.Y));
-
-			//Use angle to find player direction
-			if ((angle < -157.5) || (angle > 157.5))
-			{
-				this.Dir = Entity_Dir.Up;
-				if (angle < -157.5)
-				{
-					 currWeapon.Dir = Weapon_Dir.UpWest;
-				}
-				else  currWeapon.Dir = Weapon_Dir.UpEast;
-			}
-			else if ((angle < 157.5) && (angle > 112.5) && this.Dir != Entity_Dir.UpRight)
-			{
-				this.Dir = Entity_Dir.UpRight;
-				currWeapon.Dir = Weapon_Dir.UpRight;
-			}
-			else if ((angle < 112.5) && (angle > 67.5) && this.Dir != Entity_Dir.Right)
-			{
-				this.Dir = Entity_Dir.Right;
-				currWeapon.Dir = Weapon_Dir.Right;
-			}
-			else if ((angle < 67.5) && (angle > 22.5) && this.Dir != Entity_Dir.DownRight)
-			{
-				this.Dir = Entity_Dir.DownRight;
-				currWeapon.Dir = Weapon_Dir.DownRight;
-			}
-			else if ((angle < -22.5) && (angle > -67.5) && this.Dir != Entity_Dir.DownLeft)
-			{
-				this.Dir = Entity_Dir.DownLeft;
-				currWeapon.Dir = Weapon_Dir.DownLeft;
-			}
-			else if ((angle < -67.5) && (angle > -112.5) && this.Dir != Entity_Dir.Left)
-			{
-				this.Dir = Entity_Dir.Left;
-				currWeapon.Dir = Weapon_Dir.Left;
-			}
-			else if ((angle < -112.5) && (angle > -157.5) && this.Dir != Entity_Dir.UpLeft)
-			{
-				this.Dir = Entity_Dir.UpLeft;
-				currWeapon.Dir = Weapon_Dir.UpLeft;
-			}
-			else if ((angle < 22.5) && (angle > -22.5))
-			{
-				this.Dir = Entity_Dir.Down;
-				if(angle < 0)
-				{
-					 currWeapon.Dir = Weapon_Dir.DownWest;
-				}
-				else  currWeapon.Dir = Weapon_Dir.DownEast;
-			}
-
-            //Player switching weapons from scroll wheel up
-            if (mouseState.ScrollWheelValue > prevMouseState.ScrollWheelValue)
-            {
-                InteruptReload();
-                Weapon_Dir oldDir = currWeapon.Dir;
-				if(weaponId == weapons.Length-1)
-				{
-					weaponId = 0;
-				}else
-				{
-					weaponId++;
-				}
-				currWeapon = weapons[weaponId];
-				//if (currWeapon == weapons[0]) { this.currWeapon = weapons[1]; 
-				//else if (currWeapon == weapons[1]) { this.currWeapon = weapons[0]; }
-				currWeapon.Dir = oldDir;
-				UpdateWeapon(gameTime, camw);
-            }
-
-            //Player switching weapons from scroll wheel down
-            if (mouseState.ScrollWheelValue < prevMouseState.ScrollWheelValue)
-            {
-                InteruptReload();
-				Weapon_Dir oldDir = currWeapon.Dir;
-				if (weaponId == 0)
-				{
-					weaponId = weapons.Length - 1;
-				}else
-				{
-					weaponId--;
-				}
-				//if (currWeapon == weapons[1]) { this.currWeapon = weapons[0]; }
-				//else if (currWeapon == weapons[0]) { this.currWeapon = weapons[1]; }
-				currWeapon = weapons[weaponId];
-				currWeapon.Dir = oldDir;
-				UpdateWeapon(gameTime, camw);
-			}
-        }
 
 		public void UpdateInput(GameTime gameTime, GamePadState gpState, GamePadState prevGpState, Vector2 camw)
 		{
@@ -845,6 +710,11 @@ namespace GDAPSIIGame
 			varianceMultiplier = 0;
 			varianceTimer = 0;
 			focusMultiplier = 0;
+
+            foreach (Weapon w in weapons)
+            {
+                w.ResetWeapon();
+            }
 		}
 
 		/// <summary>
@@ -868,7 +738,12 @@ namespace GDAPSIIGame
 			varianceMultiplier = 0;
 			varianceTimer = 0;
 			focusMultiplier = 0;
-		}
+
+            foreach (Weapon w in weapons)
+            {
+                w.ResetWeapon();
+            }
+        }
 
 		//Interupts the current weapon's reload
 		private void InteruptReload()
@@ -894,38 +769,5 @@ namespace GDAPSIIGame
             //Update weapon
             currWeapon.Update(gameTime);
         }
-
-		private Weapon_Dir GetCurrentWeaponDir()
-		{
-			switch (Dir)
-			{
-				case Entity_Dir.Up:
-					if (angle < -157.5)
-					{
-						return Weapon_Dir.UpWest;
-					}
-					else return Weapon_Dir.UpEast;
-				case Entity_Dir.UpLeft:
-					return Weapon_Dir.UpLeft;
-				case Entity_Dir.Left:
-					return Weapon_Dir.Left;
-				case Entity_Dir.DownLeft:
-					return Weapon_Dir.DownLeft;
-				case Entity_Dir.Down:
-					if (angle < 0)
-					{
-						return Weapon_Dir.DownWest;
-					}
-					return Weapon_Dir.DownEast;
-				case Entity_Dir.DownRight:
-					return Weapon_Dir.DownRight;
-				case Entity_Dir.Right:
-					return Weapon_Dir.Right;
-				case Entity_Dir.UpRight:
-					return Weapon_Dir.UpRight;
-			}
-			return Weapon_Dir.DownEast;
-		}
-
 	}
 }
