@@ -26,6 +26,6 @@ namespace GDAPSIIGame.Interface
         /// </summary>
         /// <param name="position"></param>
         /// <param name="graph"></param>
-        void GeneratePath(Vector2 position, Graph.Graph graph);
+        void FindNextTarget(Vector2 position, Graph.Graph graph);
     }
 }

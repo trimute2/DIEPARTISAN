@@ -23,42 +23,40 @@ namespace GDAPSIIGame.Entities
         {
             color = Color.DarkOrange;
             Path = new List<GraphNode>();
-            CurrentTarget = Player.Instance.Position;
+            CurrentTarget = Vector2.Zero;
         }
 
         public MeleeEnemy(int health, int moveSpeed, Texture2D texture, Vector2 position, Rectangle boundingBox, int scoreValue) : base(health, moveSpeed, texture, position, boundingBox)
         {
             color = Color.DarkOrange;
             Path = new List<GraphNode>();
-            CurrentTarget = Player.Instance.Position;
+            CurrentTarget = Vector2.Zero;
         }
 
         public override void Update(GameTime gameTime)
         {
             if (Awake)
             {
-                if (Vector2.Distance(CurrentTarget, Position) < 5)
+                if (CurrentTarget == Vector2.Zero || Vector2.Distance(CurrentTarget, Position) < 2)
                 {
                     //Console.WriteLine("Close");
+                    /*
                     if (Path.Count > 0)
                     {
                         CurrentTarget = Path[0].Position;
                         Path.RemoveAt(0);
                         Console.WriteLine("Next");
-                    }
-                    else
-                    {
-                        CurrentTarget = Player.Instance.Position;
-                        //GeneratePath(Player.Instance.Position, Graph.Graph.Instance);
-                    }
+                    }*/
+                    //else
+                    //{
+                        //CurrentTarget = Player.Instance.Position;
+                        FindNextTarget(Player.Instance.Position, Graph.Graph.Instance);
+                    //}
                 }
                 else
                 {
-                    if (Path.Count == 0)
-                    {
                         //Console.WriteLine("New paf + {0}", Position.X);
-                        GeneratePath(Player.Instance.Position, Graph.Graph.Instance);
-                    }
+                        //FindNextTarget(Player.Instance.Position, Graph.Graph.Instance);
                 }
             }
             if (!Awake)
@@ -125,22 +123,24 @@ namespace GDAPSIIGame.Entities
             }
         }
 
-        public void GeneratePath(Vector2 position, Graph.Graph graph)
+        public void FindNextTarget(Vector2 position, Graph.Graph graph)
         {
             GraphNode closestToGoal = graph.FindClosestNode(position);
             GraphNode closestToMe = graph.FindClosestNode(this.Position);
             List<GraphNode> path = new List<GraphNode>();
 
             GraphNode currNode = closestToGoal;
+            GraphNode prevNode = closestToMe;
             while (currNode != closestToMe && closestToMe.Neighbors[currNode] != currNode)
             {
-                path.Add(currNode);
+                prevNode = currNode;
                 currNode = closestToMe.Neighbors[currNode];
             }
 
-            path.Reverse();
-            path.Insert(0, closestToMe);
-            showPath();
+            //path.Reverse();
+            //path.Insert(0, closestToMe);
+            //showPath();
+            CurrentTarget = prevNode.Position;
         }
 
         public void showPath()

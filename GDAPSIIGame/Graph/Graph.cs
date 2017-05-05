@@ -25,7 +25,7 @@ namespace GDAPSIIGame.Graph
             nodes = new Dictionary<float, GraphNode>(numNodes);
             this.xDistBetweenNodes = xDistBetween;
             this.yDistBetweenNodes = yDistBetween;
-            IsConnected = false;
+            //IsConnected = false;
             instance = this;
         }
 
@@ -107,18 +107,18 @@ namespace GDAPSIIGame.Graph
         public void ConnectGraph()
         {
             Random r = new Random();
-            bool done = false;
+            //bool done = false;
             GraphNode vertex = null;
             int attempts = 0;
             //System.Timers.Timer t = new System.Timers.Timer(1000);
             //t.Start();
-            int timeElapsed = 0;
+            //int timeElapsed = 0;
             //t.Elapsed += ((a, b) => { timeElapsed++; });
-            while (!done)
+            while (!IsConnected)
             {
                 attempts++;
                 //Console.WriteLine("Iteration " + attempts);
-                done = true;
+                //done = true;
                 for (int i = 0; i < nodes.Count; i++)
                 {
                     vertex = nodes.Values.ElementAt(r.Next(nodes.Count));
@@ -132,13 +132,18 @@ namespace GDAPSIIGame.Graph
                             i--;
                         }*/
                         //Thread update = new Thread(() => {
-                            vertex.Update(nodes.Count - 1);
+                        vertex.Update(nodes.Count - 1);
                        // });
                         //update.Start();
                         if (vertex.NumNeighbors == nodes.Count - 1)
                         {
                             vertex.IsComplete = true;
                         }
+                        /*
+                        else
+                        {
+                            done = false;
+                        }*/
                         /*else if (vertex.NumNeighbors == 0)
                         {
                             Console.WriteLine("Removing" + vertex.UniqueID);
@@ -147,22 +152,27 @@ namespace GDAPSIIGame.Graph
                             Console.WriteLine("{0}, {1}", vertex.Position.X, vertex.Position.Y);
                             i--;
                         }*/
-                        else
-                        {
-                            done = false;
-                        }
+
                     }
                 }
                 //Console.WriteLine(timeElapsed);
             }
             Console.WriteLine("All nodes have {0} connections on average", MeanNeighbors);
-            IsConnected = true;
 
 
             //t.Stop();
         }
 
-        public bool IsConnected { get; set; }
+        public bool IsConnected {
+            get {
+                bool done = true;
+                foreach(GraphNode node in nodes.Values)
+                {
+                    done &= node.IsComplete;
+                }
+                return done;
+            }
+        }
 
         public GraphNode FindClosestNode(float X, float Y)
         {
