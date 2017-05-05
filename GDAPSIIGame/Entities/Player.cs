@@ -467,7 +467,7 @@ namespace GDAPSIIGame
 			}
 
 			//Player switching weapons
-			if (controlManager.ControlPressed(Control_Types.NextWeapon, false) && controlManager.ControlReleased(Control_Types.NextWeapon, true))
+			if (controlManager.ControlPressed(Control_Types.NextWeapon, false) && !controlManager.ControlPressed(Control_Types.NextWeapon, true))
 			{
 				InteruptReload();
 				Weapon_Dir oldDir = currWeapon.Dir;
@@ -485,7 +485,7 @@ namespace GDAPSIIGame
 				currWeapon.Dir = oldDir;
 				UpdateWeapon(gameTime, camw);
 			}
-			else if (controlManager.ControlPressed(Control_Types.PrevWeapon, false) && controlManager.ControlReleased(Control_Types.PrevWeapon, true))
+			else if (controlManager.ControlPressed(Control_Types.PrevWeapon, false) && !controlManager.ControlPressed(Control_Types.PrevWeapon, true))
 			{
 				InteruptReload();
 				Weapon_Dir oldDir = currWeapon.Dir;
@@ -505,143 +505,6 @@ namespace GDAPSIIGame
 			}
 
 
-		}
-
-
-		public void UpdateInput(GameTime gameTime, GamePadState gpState, GamePadState prevGpState, Vector2 camw)
-		{
-			timeMult = (float)gameTime.ElapsedGameTime.TotalSeconds / ((float)1 / 60);
-
-			if (gpState.IsButtonDown(Buttons.LeftThumbstickUp))
-			{
-				this.Y -= this.MoveSpeed * timeMult;
-				//Camera.Instance.Y -= (int)(this.MoveSpeed*timeMult);
-			}
-			else if (gpState.IsButtonDown(Buttons.LeftThumbstickDown))
-			{
-				this.Y += this.MoveSpeed * timeMult;
-				//Camera.Instance.Y += (int)(this.MoveSpeed * timeMult);
-			}
-
-			if (gpState.IsButtonDown(Buttons.LeftThumbstickRight))
-			{
-				this.X += this.MoveSpeed * timeMult;
-				//Camera.Instance.X += (int)(this.MoveSpeed * timeMult);
-			}
-			else if (gpState.IsButtonDown(Buttons.LeftThumbstickLeft))
-			{
-				this.X -= this.MoveSpeed * timeMult;
-				//Camera.Instance.X -= (int)(this.MoveSpeed * timeMult);
-			}
-
-			//Player reloading
-			if (gpState.IsButtonDown(Buttons.RightShoulder) && prevGpState.IsButtonUp(Buttons.RightShoulder))
-			{
-				this.currWeapon.ReloadWeapon();
-			}
-
-
-			//Calculates the angle between the player and the mouse
-			//See below
-			//   180
-			//-90   90
-			//    0
-			if (gpState.ThumbSticks.Right != Vector2.Zero)
-			{
-				angle = MathHelper.ToDegrees((float)Math.Atan2(gpState.ThumbSticks.Right.X, gpState.ThumbSticks.Right.Y * -1));
-
-				//Use angle to find player direction
-				if ((angle < -157.5) || (angle > 157.5))
-				{
-					this.Dir = Entity_Dir.Up;
-					if (angle < -157.5)
-					{
-						currWeapon.Dir = Weapon_Dir.UpWest;
-					}
-					else currWeapon.Dir = Weapon_Dir.UpEast;
-				}
-				else if ((angle < 157.5) && (angle > 112.5) && this.Dir != Entity_Dir.UpRight)
-				{
-					this.Dir = Entity_Dir.UpRight;
-					currWeapon.Dir = Weapon_Dir.UpRight;
-				}
-				else if ((angle < 112.5) && (angle > 67.5) && this.Dir != Entity_Dir.Right)
-				{
-					this.Dir = Entity_Dir.Right;
-					currWeapon.Dir = Weapon_Dir.Right;
-				}
-				else if ((angle < 67.5) && (angle > 22.5) && this.Dir != Entity_Dir.DownRight)
-				{
-					this.Dir = Entity_Dir.DownRight;
-					currWeapon.Dir = Weapon_Dir.DownRight;
-				}
-				else if ((angle < -22.5) && (angle > -67.5) && this.Dir != Entity_Dir.DownLeft)
-				{
-					this.Dir = Entity_Dir.DownLeft;
-					currWeapon.Dir = Weapon_Dir.DownLeft;
-				}
-				else if ((angle < -67.5) && (angle > -112.5) && this.Dir != Entity_Dir.Left)
-				{
-					this.Dir = Entity_Dir.Left;
-					currWeapon.Dir = Weapon_Dir.Left;
-				}
-				else if ((angle < -112.5) && (angle > -157.5) && this.Dir != Entity_Dir.UpLeft)
-				{
-					this.Dir = Entity_Dir.UpLeft;
-					currWeapon.Dir = Weapon_Dir.UpLeft;
-				}
-				else if ((angle < 22.5) && (angle > -22.5))
-				{
-					this.Dir = Entity_Dir.Down;
-					if (angle < 0)
-					{
-						currWeapon.Dir = Weapon_Dir.DownWest;
-					}
-					else currWeapon.Dir = Weapon_Dir.DownEast;
-				}
-			}
-
-			
-			//Player switching weapons from scroll wheel up
-			if ((gpState.IsButtonDown(Buttons.LeftShoulder)&&prevGpState.IsButtonUp(Buttons.LeftShoulder))
-				|| (gpState.IsButtonDown(Buttons.DPadUp) && prevGpState.IsButtonUp(Buttons.DPadUp)))
-			{
-				InteruptReload();
-				Weapon_Dir oldDir = currWeapon.Dir;
-				if (weaponId == weapons.Length - 1)
-				{
-					weaponId = 0;
-				}
-				else
-				{
-					weaponId++;
-				}
-				currWeapon = weapons[weaponId];
-				//if (currWeapon == weapons[0]) { this.currWeapon = weapons[1]; 
-				//else if (currWeapon == weapons[1]) { this.currWeapon = weapons[0]; }
-				currWeapon.Dir = oldDir;
-				UpdateWeapon(gameTime, camw);
-			}
-
-			//Player switching weapons from scroll wheel down
-			if (gpState.IsButtonDown(Buttons.DPadDown) && prevGpState.IsButtonUp(Buttons.DPadDown))
-			{
-				InteruptReload();
-				Weapon_Dir oldDir = currWeapon.Dir;
-				if (weaponId == 0)
-				{
-					weaponId = weapons.Length - 1;
-				}
-				else
-				{
-					weaponId--;
-				}
-				//if (currWeapon == weapons[1]) { this.currWeapon = weapons[0]; }
-				//else if (currWeapon == weapons[0]) { this.currWeapon = weapons[1]; }
-				currWeapon = weapons[weaponId];
-				currWeapon.Dir = oldDir;
-				UpdateWeapon(gameTime, camw);
-			}
 		}
 
 		public override void OnCollision(ICollidable obj)

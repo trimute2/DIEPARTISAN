@@ -148,8 +148,9 @@ namespace GDAPSIIGame
 			controls[(int)Control_Types.Interact].SetControl(Buttons.A);
 			controls[(int)Control_Types.Fire].SetControl(Buttons.RightTrigger);
 			controls[(int)Control_Types.NextWeapon].SetControl(Buttons.DPadUp);
-            controls[(int)Control_Types.NextWeapon].SetAlternate(Control_Types.NextWeapon, Keys.LeftControl, Buttons.LeftShoulder);
-            controls[(int)Control_Types.PrevWeapon].SetControl(Buttons.DPadDown);
+            controls[(int)Control_Types.NextWeapon].SetAlternate(Control_Types.NextWeapon, Keys.LeftControl);
+			controls[(int)Control_Types.NextWeapon].SetAlternate(Control_Types.NextWeapon, Buttons.LeftShoulder);
+			controls[(int)Control_Types.PrevWeapon].SetControl(Buttons.DPadDown);
 
 		}
 
@@ -204,14 +205,12 @@ namespace GDAPSIIGame
         public bool ControlPressed(Control_Types cont, bool prev, bool alt)
 		{
             Control c;
-            //Check the alternate f0irst
-            if (!alt && controls[(int)cont].Alternate != null)
-            { if (ControlPressed(cont, prev, true)) { return true; } }
-
-            if (alt)
+			//If checking for alternate controls, check for it
+			if (alt)
             { c = controls[(int)cont].Alternate; }
             else c = controls[(int)cont];
 
+			bool action = false;
             //Check if looking for previous states
             if (!prev)
 			{
@@ -224,7 +223,7 @@ namespace GDAPSIIGame
 					}
 					else return kbs.IsKeyDown(c.KeyboardControl);
 				}
-				else
+				else if(c.HasGamePadControl)
 				{
 					if (c.GamePadControl == Buttons.RightTrigger)
 					{
@@ -234,7 +233,7 @@ namespace GDAPSIIGame
 					{
 						return gps.Triggers.Left > 0;
 					}
-					else return gps.IsButtonDown((c.GamePadControl));
+					else return gps.IsButtonDown(c.GamePadControl);
 				}
 			}
 			else
@@ -248,7 +247,7 @@ namespace GDAPSIIGame
 					}
 					else return prevKbs.IsKeyDown(c.KeyboardControl);
 				}
-				else
+				else if (c.HasGamePadControl)
 				{
 					if (c.GamePadControl == Buttons.RightTrigger)
 					{
@@ -262,9 +261,25 @@ namespace GDAPSIIGame
 					{
 						return true;
 					}
-					else return prevGps.IsButtonDown((c.GamePadControl));
+					else return prevGps.IsButtonDown(c.GamePadControl);
 				}
 			}
+
+			//Bunch of crap to get alternate controls working
+
+			if (alt)
+			{
+				return action;
+			}
+
+			bool altAction = false;
+			//Check the alternate
+			if (!alt && controls[(int)cont].Alternate != null)
+			{
+				altAction = ControlPressed(cont, prev, true);
+			}
+
+			return altAction != action || (altAction && action);
 		}
 
 		/// <summary>
@@ -272,15 +287,13 @@ namespace GDAPSIIGame
 		/// </summary>
 		public bool ControlReleased(Control_Types cont, bool prev, bool alt)
 		{
-            Control c;
-            //Check the alternate f0irst
-            if (!alt &&  controls[(int)cont].Alternate != null)
-            { if (ControlReleased(cont, prev, true)) { return true; } }
-
-            if (alt)
+			Control c;
+			//If checking for alternate controls, check for it
+			if (alt)
             { c = controls[(int)cont].Alternate; }
             else c = controls[(int)cont];
 
+			bool action = false;
             //Check if looking for previous states
             if (!prev)
 			{
@@ -289,21 +302,21 @@ namespace GDAPSIIGame
 				{
 					if (c.IsMouseControl)
 					{
-						return CheckMouseReleased(cont, prev, alt);
+						action = CheckMouseReleased(cont, prev, alt);
 					}
-					else return kbs.IsKeyUp(c.KeyboardControl);
+					else action = kbs.IsKeyUp(c.KeyboardControl);
 				}
-				else
+				else if (c.HasGamePadControl)
 				{
 					if (c.GamePadControl == Buttons.RightTrigger)
 					{
-						return gps.Triggers.Right == 0;
+						action = gps.Triggers.Right == 0;
 					}
 					else if (c.GamePadControl == Buttons.LeftTrigger)
 					{
-						return gps.Triggers.Left == 0;
+						action = gps.Triggers.Left == 0;
 					}
-					else return gps.IsButtonUp((c.GamePadControl));
+					else action = gps.IsButtonUp(c.GamePadControl);
 				}
 			}
 			else
@@ -313,22 +326,41 @@ namespace GDAPSIIGame
 				{
 					if (c.IsMouseControl)
 					{
-						return CheckMouseReleased(cont, prev, alt);
+						action = CheckMouseReleased(cont, prev, alt);
 					}
-					else return prevKbs.IsKeyUp(c.KeyboardControl);
+					else action = prevKbs.IsKeyUp(c.KeyboardControl);
 				}
-				else
+				else if(c.HasGamePadControl)
 				{
 					if (c.GamePadControl == Buttons.RightTrigger)
 					{
-						return prevGps.Triggers.Right == 0;
+						action = prevGps.Triggers.Right == 0;
 					}
 					else if (c.GamePadControl == Buttons.LeftTrigger)
 					{
-						return prevGps.Triggers.Left == 0;
+						action = prevGps.Triggers.Left == 0;
 					}
-					else return prevGps.IsButtonUp((c.GamePadControl));
+					else action = prevGps.IsButtonUp(c.GamePadControl);
 				}
+			}
+
+
+			//Bunch of crap to get alternate controls working
+
+			if (alt)
+			{
+				return action;
+			}
+			else
+			{
+				bool altAction = false;
+				//Check the alternate
+				if (!alt && controls[(int)cont].Alternate != null)
+				{
+					altAction = ControlReleased(cont, prev, true);
+				}
+
+				return (altAction != action) || (altAction && action);
 			}
 		}
 
@@ -342,7 +374,8 @@ namespace GDAPSIIGame
             if (!alt &&  controls[(int)cont].Alternate != null)
             { if (CheckMousePressed(cont, prev, true)) { return true; } }
 
-            if (alt)
+			//If checking for alternate controls, check for it
+			if (alt)
             { c = controls[(int)cont].Alternate; }
             else c = controls[(int)cont];
 
@@ -404,6 +437,7 @@ namespace GDAPSIIGame
             if (!alt && controls[(int)cont].Alternate != null)
             { if (CheckMouseReleased(cont, prev, true)) { return true; } }
 
+			//If checking for alternate controls, check for it
             if (alt)
             { c = controls[(int)cont].Alternate; }
             else c = controls[(int)cont];

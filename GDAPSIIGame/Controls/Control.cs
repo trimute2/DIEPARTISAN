@@ -18,6 +18,7 @@ namespace GDAPSIIGame.Controls
 		MouseButtons mControl;
         Control alternate;
         bool isAlternate;
+		bool hasGamePadControl;
 
 		//Properties
 		public Keys KeyboardControl
@@ -35,6 +36,9 @@ namespace GDAPSIIGame.Controls
         public Control Alternate
         { get { return alternate; } }
 
+		public bool HasGamePadControl
+		{ get { return hasGamePadControl; } }
+
 		//Constructors
 		public Control()
 		{ }
@@ -42,27 +46,41 @@ namespace GDAPSIIGame.Controls
 		/// <summary>
 		/// Constructor for a keyboard control
 		/// </summary>
-		public Control(Control_Types name, Keys kbControl, Buttons gpControl)
+		public Control(Control_Types name, Keys kbControl)
 		{
 			this.name = name;
 			mouse = false;
 			this.kbControl = kbControl;
-			this.gpControl = gpControl;
 			mControl = MouseButtons.None;
             alternate = null;
+			hasGamePadControl = false;
+		}
+
+		/// <summary>
+		/// Constructor for a keyboard control
+		/// </summary>
+		public Control(Control_Types name,  Buttons gpControl)
+		{
+			this.name = name;
+			mouse = false;
+			this.kbControl = Keys.None;
+			this.gpControl = gpControl;
+			mControl = MouseButtons.None;
+			alternate = null;
+			hasGamePadControl = true;
 		}
 
 		/// <summary>
 		/// Constructor for a mouse control
 		/// </summary>
-		public Control(Control_Types name, MouseButtons mControl, Buttons gpControl)
+		public Control(Control_Types name, MouseButtons mControl)
 		{
 			this.name = name;
 			mouse = true;
 			this.mControl = mControl;
-			this.gpControl = gpControl;
 			kbControl = Keys.None;
             alternate = null;
+			hasGamePadControl = false;
 		}
 
 		public void SetControl(Keys kbc)
@@ -80,26 +98,65 @@ namespace GDAPSIIGame.Controls
 		public void SetControl(Buttons gpc)
 		{
 			this.gpControl = gpc;
+			hasGamePadControl = true;
 		}
 
-        public void SetAlternate(Control_Types name, Keys kbControl, Buttons gpControl)
+		public void RemoveGamePadControl()
+		{
+			hasGamePadControl = false;
+		}
+
+		public bool HasControls()
+		{
+			return ((kbControl != Keys.None) || (mControl != MouseButtons.None) || (hasGamePadControl));
+		}
+
+        public void SetAlternate(Control_Types name, Keys kbControl)
         {
             if(!isAlternate)
             {
-                isAlternate = false;
-                alternate = new Control(name, kbControl, gpControl);
-                alternate.isAlternate = true;
+				if (alternate == null)
+				{
+					alternate = new Control(name, kbControl);
+					alternate.isAlternate = true;
+				}
+				else
+				{
+					alternate.SetControl(kbControl);
+				}
             }
         }
 
-        public void SetAlternate(Control_Types name, MouseButtons mControl, Buttons gpControl)
+        public void SetAlternate(Control_Types name, MouseButtons mControl)
         {
-            if (!isAlternate)
-            {
-                isAlternate = false;
-                alternate = new Control(name, mControl, gpControl);
-                alternate.isAlternate = true;
-            }
-        }
-    }
+			if (!isAlternate)
+			{
+				if (alternate == null)
+				{
+					alternate = new Control(name, mControl);
+					alternate.isAlternate = true;
+				}
+				else
+				{
+					alternate.SetControl(mControl);
+				}
+			}
+		}
+
+		public void SetAlternate(Control_Types name, Buttons gpControl)
+		{
+			if (!isAlternate)
+			{
+				if (alternate == null)
+				{
+					alternate = new Control(name, gpControl);
+					alternate.isAlternate = true;
+				}
+				else
+				{
+					alternate.SetControl(gpControl);
+				}
+			}
+		}
+	}
 }
