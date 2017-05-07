@@ -486,10 +486,11 @@ namespace GDAPSIIGame
 			projectileManager.RemoveProjectiles();
 
 			chunkManager.Resize(mapSize);
-			chunkManager.Add(Player.Instance);
 			//Create the new map
 			MapManager.Instance.CreateMap(textureManager.RoomTextures["IndoorSpriteSheet"], textureManager.RoomTextures["IndoorFloorSpriteSheet"], mapSize);
 			PodManager.Instance.Reset();
+			//Add the player to chunk
+			chunkManager.Add(Player.Instance);
 			//Go to gameplay
 			gameState = GameState.GamePlay;
 		}
