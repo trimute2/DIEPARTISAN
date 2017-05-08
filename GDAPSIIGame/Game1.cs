@@ -47,9 +47,9 @@ namespace GDAPSIIGame
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
 
-			// Resize the screen to 1024 x 768.
-			graphics.PreferredBackBufferWidth = 1024;
-			graphics.PreferredBackBufferHeight = 768;
+			// Resize the screen to 1152 x 648.
+			graphics.PreferredBackBufferWidth = 1152;
+			graphics.PreferredBackBufferHeight = 648;
 
 			graphics.ApplyChanges();
 		}
