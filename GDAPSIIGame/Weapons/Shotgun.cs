@@ -251,9 +251,9 @@ namespace GDAPSIIGame.Weapons
 					Vector2 direction2 = Vector2.Transform(direction, b2);
 					Vector2 direction3 = Vector2.Transform(direction, b3);
 					//Create the bullet at the actual position of the bullet + the rotated position
-					ProjectileManager.Instance.Clone(ProjType, Position + bulletPosition, direction1, Angle, owner, WeapRange);
-					ProjectileManager.Instance.Clone(ProjType, Position + bulletPosition, direction2, Angle, owner, WeapRange);
-					ProjectileManager.Instance.Clone(ProjType, Position + bulletPosition, direction3, Angle, owner, WeapRange);
+					ProjectileManager.Instance.Clone(ProjType, Position + bulletPosition, direction1, Angle + ((float)Math.PI / 2), owner, WeapRange);
+					ProjectileManager.Instance.Clone(ProjType, Position + bulletPosition, direction2, Angle + ((float)Math.PI / 2), owner, WeapRange);
+					ProjectileManager.Instance.Clone(ProjType, Position + bulletPosition, direction3, Angle + ((float)Math.PI / 2), owner, WeapRange);
 					return true;
 				}
 			}
