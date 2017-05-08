@@ -16,8 +16,6 @@ namespace GDAPSIIGame.Controls
 		Keys kbControl;
 		Buttons gpControl;
 		MouseButtons mControl;
-        Control alternate;
-        bool isAlternate;
 		bool hasGamePadControl;
 
 		//Properties
@@ -33,15 +31,18 @@ namespace GDAPSIIGame.Controls
 		public bool IsMouseControl
 		{ get { return mouse; } }
 
-        public Control Alternate
-        { get { return alternate; } }
-
 		public bool HasGamePadControl
 		{ get { return hasGamePadControl; } }
 
 		//Constructors
-		public Control()
-		{ }
+		public Control(Control_Types name)
+		{
+            this.name = name;
+            hasGamePadControl = false;
+            mouse = false;
+            this.kbControl = Keys.None;
+            mControl = MouseButtons.None;
+        }
 
 		/// <summary>
 		/// Constructor for a keyboard control
@@ -52,7 +53,6 @@ namespace GDAPSIIGame.Controls
 			mouse = false;
 			this.kbControl = kbControl;
 			mControl = MouseButtons.None;
-            alternate = null;
 			hasGamePadControl = false;
 		}
 
@@ -66,7 +66,6 @@ namespace GDAPSIIGame.Controls
 			this.kbControl = Keys.None;
 			this.gpControl = gpControl;
 			mControl = MouseButtons.None;
-			alternate = null;
 			hasGamePadControl = true;
 		}
 
@@ -79,7 +78,6 @@ namespace GDAPSIIGame.Controls
 			mouse = true;
 			this.mControl = mControl;
 			kbControl = Keys.None;
-            alternate = null;
 			hasGamePadControl = false;
 		}
 
@@ -109,54 +107,6 @@ namespace GDAPSIIGame.Controls
 		public bool HasControls()
 		{
 			return ((kbControl != Keys.None) || (mControl != MouseButtons.None) || (hasGamePadControl));
-		}
-
-        public void SetAlternate(Control_Types name, Keys kbControl)
-        {
-            if(!isAlternate)
-            {
-				if (alternate == null)
-				{
-					alternate = new Control(name, kbControl);
-					alternate.isAlternate = true;
-				}
-				else
-				{
-					alternate.SetControl(kbControl);
-				}
-            }
-        }
-
-        public void SetAlternate(Control_Types name, MouseButtons mControl)
-        {
-			if (!isAlternate)
-			{
-				if (alternate == null)
-				{
-					alternate = new Control(name, mControl);
-					alternate.isAlternate = true;
-				}
-				else
-				{
-					alternate.SetControl(mControl);
-				}
-			}
-		}
-
-		public void SetAlternate(Control_Types name, Buttons gpControl)
-		{
-			if (!isAlternate)
-			{
-				if (alternate == null)
-				{
-					alternate = new Control(name, gpControl);
-					alternate.isAlternate = true;
-				}
-				else
-				{
-					alternate.SetControl(gpControl);
-				}
-			}
 		}
 	}
 }

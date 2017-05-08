@@ -189,7 +189,7 @@ namespace GDAPSIIGame
             UpdateWeapon(gameTime, camw);
 
 			//Fire weapon only if previous frame didn't have left button being pressed
-			if (controlManager.ControlPressed(Control_Types.Fire, false))
+			if (controlManager.ControlPressed(Control_Types.Fire))
 			{
 				Vector2 direction;
 				if (controlManager.Mode == Control_Mode.GamePad)
@@ -355,7 +355,7 @@ namespace GDAPSIIGame
 			timeMult = (float)gameTime.ElapsedGameTime.TotalSeconds / ((float)1 / 60);
 
 			//Basic keyboard movement
-			if (controlManager.ControlPressed(Control_Types.Forward, false))
+			if (controlManager.ControlPressed(Control_Types.Forward))
 			{
 				if (controlManager.Mode == Control_Mode.GamePad)
 				{
@@ -363,7 +363,7 @@ namespace GDAPSIIGame
 				}
 				else this.Y -= this.MoveSpeed * timeMult;
 			}
-			else if (controlManager.ControlPressed(Control_Types.Backward, false))
+			else if (controlManager.ControlPressed(Control_Types.Backward))
 			{
 				if (controlManager.Mode == Control_Mode.GamePad)
 				{
@@ -372,7 +372,7 @@ namespace GDAPSIIGame
 				else this.Y += this.MoveSpeed * timeMult;
 			}
 
-			if (controlManager.ControlPressed(Control_Types.Right, false))
+			if (controlManager.ControlPressed(Control_Types.Right))
 			{
 				if (controlManager.Mode == Control_Mode.GamePad)
 				{
@@ -380,7 +380,7 @@ namespace GDAPSIIGame
 				}
 				else this.X += this.MoveSpeed * timeMult;
 			}
-			else if (controlManager.ControlPressed(Control_Types.Left, false))
+			else if (controlManager.ControlPressed(Control_Types.Left))
 			{
 				if (controlManager.Mode == Control_Mode.GamePad)
 				{
@@ -390,7 +390,7 @@ namespace GDAPSIIGame
 			}
 
 			//Player reloading
-			if (controlManager.ControlPressed(Control_Types.Reload, false))
+			if (controlManager.ControlPressed(Control_Types.Reload))
 			{
 				this.currWeapon.ReloadWeapon();
 			}
@@ -467,7 +467,7 @@ namespace GDAPSIIGame
 			}
 
 			//Player switching weapons
-			if (controlManager.ControlPressed(Control_Types.NextWeapon, false) && !controlManager.ControlPressed(Control_Types.NextWeapon, true))
+			if (controlManager.ControlPressedControlPrevReleased(Control_Types.NextWeapon))
 			{
 				InteruptReload();
 				Weapon_Dir oldDir = currWeapon.Dir;
@@ -485,7 +485,7 @@ namespace GDAPSIIGame
 				currWeapon.Dir = oldDir;
 				UpdateWeapon(gameTime, camw);
 			}
-			else if (controlManager.ControlPressed(Control_Types.PrevWeapon, false) && !controlManager.ControlPressed(Control_Types.PrevWeapon, true))
+			else if (controlManager.ControlPressedControlPrevReleased(Control_Types.PrevWeapon))
 			{
 				InteruptReload();
 				Weapon_Dir oldDir = currWeapon.Dir;

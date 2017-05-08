@@ -140,8 +140,8 @@ namespace GDAPSIIGame
 					//Update controls
 					controlManager.Update();
 
-					//Get input
-					if (controlManager.ControlPressed(Control_Types.Interact, false) && controlManager.ControlReleased(Control_Types.Interact, true))
+                    //Get input
+                    if (controlManager.ControlPressedControlPrevReleased(Control_Types.Interact))
 					{
 						gameState = GameState.NewGame;
 					}
@@ -181,7 +181,7 @@ namespace GDAPSIIGame
 					}
 
 					//Check if the player has paused the game
-					if (controlManager.ControlPressed(Control_Types.Interact, false) && controlManager.ControlReleased(Control_Types.Interact, true))
+					if (controlManager.ControlPressedControlPrevReleased(Control_Types.Interact))
 					{
 						gameState = GameState.PauseMenu;
 					}
@@ -255,7 +255,7 @@ namespace GDAPSIIGame
 					controlManager.Update();
 
 					//Get input
-					if (controlManager.ControlPressed(Control_Types.Interact, false) && controlManager.ControlReleased(Control_Types.Interact, true))
+					if (controlManager.ControlPressedControlPrevReleased(Control_Types.Interact))
 					{
 						gameState = GameState.GamePlay;
 					}
@@ -266,8 +266,8 @@ namespace GDAPSIIGame
 					controlManager.Update();
 
 					//Get input
-					if (controlManager.ControlPressed(Control_Types.Interact, false) && controlManager.ControlReleased(Control_Types.Interact, true))
-					{
+					if (controlManager.ControlPressedControlPrevReleased(Control_Types.Interact))
+                    {
 						gameState = GameState.Menu;
 					}
 					break;

@@ -229,9 +229,9 @@ namespace GDAPSIIGame.Weapons
 		{
 			ControlManager controlManager = ControlManager.Instance;
 			//Check if click condition is met
-			if (controlManager.ControlPressed(Control_Types.Fire, false))
+			if (controlManager.ControlPressed(Control_Types.Fire))
 			{
-				if (controlManager.ControlReleased(Control_Types.Fire, true))
+				if (controlManager.ControlReleased(Control_Types.Fire))
 				{
 					if (!Fired && !Reload && clip <= 0)
 					{
@@ -262,7 +262,8 @@ namespace GDAPSIIGame.Weapons
 
 		public override void ResetWeapon()
 		{
-			clip = clipSize;
+            Reload = false;
+            clip = clipSize;
 			Angle = 0;
 		}
 	}

@@ -17,7 +17,8 @@ namespace GDAPSIIGame
 	{
 		static private ControlManager instance;
 		private List<Control> controls;
-		private Control_Mode mode;
+        private List<Control> alternateControls;
+        private Control_Mode mode;
 
 		//States
 		private MouseState ms;
@@ -34,7 +35,8 @@ namespace GDAPSIIGame
 		private ControlManager()
 		{
 			controls = new List<Control>();
-			mode = Control_Mode.KBM;
+            alternateControls = new List<Control>();
+            mode = Control_Mode.KBM;
 
 			//Current states
 			gps = GamePad.GetState(PlayerIndex.One, GamePadDeadZone.Circular);
@@ -148,8 +150,8 @@ namespace GDAPSIIGame
 			controls[(int)Control_Types.Interact].SetControl(Buttons.A);
 			controls[(int)Control_Types.Fire].SetControl(Buttons.RightTrigger);
 			controls[(int)Control_Types.NextWeapon].SetControl(Buttons.DPadUp);
-            controls[(int)Control_Types.NextWeapon].SetAlternate(Control_Types.NextWeapon, Keys.LeftControl);
-			controls[(int)Control_Types.NextWeapon].SetAlternate(Control_Types.NextWeapon, Buttons.LeftShoulder);
+            alternateControls[(int)Control_Types.NextWeapon].SetControl(Keys.LeftControl);
+			alternateControls[(int)Control_Types.NextWeapon].SetControl(Buttons.LeftShoulder);
 			controls[(int)Control_Types.PrevWeapon].SetControl(Buttons.DPadDown);
 
 		}
@@ -158,7 +160,8 @@ namespace GDAPSIIGame
 		{
 			for(int i = 0; i < 9; i++)
 			{
-				controls.Add(new Control());
+				controls.Add(new Control((Control_Types)i));
+                alternateControls.Add(new Control((Control_Types)i));
 			}
 			SetDefaults();
 		}
@@ -189,304 +192,303 @@ namespace GDAPSIIGame
 			return controls[(int)cont].GamePadControl;
 		}
 
-        public bool ControlPressed(Control_Types cont, bool prev)
+        /// <summary>
+        /// Checks if the current state is pressed and the previous state is released. Includes alternates
+        /// </summary>
+        public bool ControlPressedControlPrevReleased(Control_Types cont)
         {
-            return ControlPressed(cont, prev, false);
+            return (ControlPressed(cont, false, false) && ControlReleased(cont, true, false)) || (ControlPressed(cont, false, true) && ControlReleased(cont, true, true));
         }
 
-        public bool ControlReleased(Control_Types cont, bool prev)
+        /// <summary>
+        /// Checks if the current state is pressed
+        /// </summary>
+        public bool ControlPressed(Control_Types cont)
         {
-            return ControlReleased(cont, prev, false);
+            return (ControlPressed(cont, false, false)) || (ControlPressed(cont, false, true));
+        }
+
+        /// <summary>
+        /// Checks if the current state is released
+        /// </summary>
+        public bool ControlReleased(Control_Types cont)
+        {
+            return (ControlReleased(cont, false, false)) || (ControlReleased(cont, false, true));
+        }
+
+        /// <summary>
+        /// Checks if the previous state is pressed
+        /// </summary>
+        public bool ControPrevPressed(Control_Types cont)
+        {
+            return (ControlPressed(cont, true, false)) || (ControlPressed(cont, true, true));
+        }
+
+        /// <summary>
+        /// Checks if the previous state is released
+        /// </summary>
+        public bool ControlPrevReleased(Control_Types cont)
+        {
+            return (ControlReleased(cont, true, false)) || (ControlReleased(cont, true, true));
         }
 
         /// <summary>
         /// Checks if the inputted control is pressed
         /// </summary>
-        public bool ControlPressed(Control_Types cont, bool prev, bool alt)
+        private bool ControlPressed(Control_Types cont, bool prev, bool alt)
 		{
             Control c;
 			//If checking for alternate controls, check for it
 			if (alt)
-            { c = controls[(int)cont].Alternate; }
+            { c = alternateControls[(int)cont]; }
             else c = controls[(int)cont];
 
-			bool action = false;
-            //Check if looking for previous states
-            if (!prev)
-			{
-				//Check for control mode
-				if (mode == Control_Mode.KBM)
-				{
-					if (c.IsMouseControl)
-					{
-						return CheckMousePressed(cont, prev, alt);
-					}
-					else return kbs.IsKeyDown(c.KeyboardControl);
-				}
-				else if(c.HasGamePadControl)
-				{
-					if (c.GamePadControl == Buttons.RightTrigger)
-					{
-						return gps.Triggers.Right > 0;
-					}
-					else if (c.GamePadControl == Buttons.LeftTrigger)
-					{
-						return gps.Triggers.Left > 0;
-					}
-					else return gps.IsButtonDown(c.GamePadControl);
-				}
-			}
-			else
-			{
-				//Check for control mode
-				if (mode == Control_Mode.KBM)
-				{
-					if (c.IsMouseControl)
-					{
-						return CheckMousePressed(cont, prev, alt);
-					}
-					else return prevKbs.IsKeyDown(c.KeyboardControl);
-				}
-				else if (c.HasGamePadControl)
-				{
-					if (c.GamePadControl == Buttons.RightTrigger)
-					{
-						return prevGps.Triggers.Right > 0;
-					}
-					else if (c.GamePadControl == Buttons.LeftTrigger)
-					{
-						return prevGps.Triggers.Left > 0;
-					}
-					else if (c.GamePadControl == Buttons.RightStick)
-					{
-						return true;
-					}
-					else return prevGps.IsButtonDown(c.GamePadControl);
-				}
-			}
-
-			//Bunch of crap to get alternate controls working
-
-			if (alt)
-			{
-				return action;
-			}
-
-			bool altAction = false;
-			//Check the alternate
-			if (!alt && controls[(int)cont].Alternate != null)
-			{
-				altAction = ControlPressed(cont, prev, true);
-			}
-
-			return altAction != action || (altAction && action);
+            if (c != null)
+            {
+                //Check if looking for previous states
+                if (!prev)
+                {
+                    //Check for control mode
+                    if (mode == Control_Mode.KBM)
+                    {
+                        if (c.IsMouseControl)
+                        {
+                            return CheckMousePressed(cont, prev, alt);
+                        }
+                        else return kbs.IsKeyDown(c.KeyboardControl);
+                    }
+                    else if (c.HasGamePadControl)
+                    {
+                        if (c.GamePadControl == Buttons.RightTrigger)
+                        {
+                            return gps.Triggers.Right > 0;
+                        }
+                        else if (c.GamePadControl == Buttons.LeftTrigger)
+                        {
+                            return gps.Triggers.Left > 0;
+                        }
+                        else return gps.IsButtonDown(c.GamePadControl);
+                    }
+                }
+                else
+                {
+                    //Check for control mode
+                    if (mode == Control_Mode.KBM)
+                    {
+                        if (c.IsMouseControl)
+                        {
+                            return CheckMousePressed(cont, prev, alt);
+                        }
+                        else return prevKbs.IsKeyDown(c.KeyboardControl);
+                    }
+                    else if (c.HasGamePadControl)
+                    {
+                        if (c.GamePadControl == Buttons.RightTrigger)
+                        {
+                            return prevGps.Triggers.Right > 0;
+                        }
+                        else if (c.GamePadControl == Buttons.LeftTrigger)
+                        {
+                            return prevGps.Triggers.Left > 0;
+                        }
+                        else if (c.GamePadControl == Buttons.RightStick)
+                        {
+                            return true;
+                        }
+                        else return prevGps.IsButtonDown(c.GamePadControl);
+                    }
+                }
+            }
+            return false;
 		}
 
 		/// <summary>
 		/// Checks if the inputted control is released
 		/// </summary>
-		public bool ControlReleased(Control_Types cont, bool prev, bool alt)
+		private bool ControlReleased(Control_Types cont, bool prev, bool alt)
 		{
-			Control c;
-			//If checking for alternate controls, check for it
-			if (alt)
-            { c = controls[(int)cont].Alternate; }
+            Control c;
+            //If checking for alternate controls, check for it
+            if (alt)
+            { c = alternateControls[(int)cont]; }
             else c = controls[(int)cont];
 
-			bool action = false;
-            //Check if looking for previous states
-            if (!prev)
-			{
-				//Check for control mode
-				if (mode == Control_Mode.KBM)
-				{
-					if (c.IsMouseControl)
-					{
-						action = CheckMouseReleased(cont, prev, alt);
-					}
-					else action = kbs.IsKeyUp(c.KeyboardControl);
-				}
-				else if (c.HasGamePadControl)
-				{
-					if (c.GamePadControl == Buttons.RightTrigger)
-					{
-						action = gps.Triggers.Right == 0;
-					}
-					else if (c.GamePadControl == Buttons.LeftTrigger)
-					{
-						action = gps.Triggers.Left == 0;
-					}
-					else action = gps.IsButtonUp(c.GamePadControl);
-				}
-			}
-			else
-			{
-				//Check for control mode
-				if (mode == Control_Mode.KBM)
-				{
-					if (c.IsMouseControl)
-					{
-						action = CheckMouseReleased(cont, prev, alt);
-					}
-					else action = prevKbs.IsKeyUp(c.KeyboardControl);
-				}
-				else if(c.HasGamePadControl)
-				{
-					if (c.GamePadControl == Buttons.RightTrigger)
-					{
-						action = prevGps.Triggers.Right == 0;
-					}
-					else if (c.GamePadControl == Buttons.LeftTrigger)
-					{
-						action = prevGps.Triggers.Left == 0;
-					}
-					else action = prevGps.IsButtonUp(c.GamePadControl);
-				}
-			}
-
-
-			//Bunch of crap to get alternate controls working
-
-			if (alt)
-			{
-				return action;
-			}
-			else
-			{
-				bool altAction = false;
-				//Check the alternate
-				if (!alt && controls[(int)cont].Alternate != null)
-				{
-					altAction = ControlReleased(cont, prev, true);
-				}
-
-				return (altAction != action) || (altAction && action);
-			}
+            if (c != null)
+            {
+                //Check if looking for previous states
+                if (!prev)
+                {
+                    //Check for control mode
+                    if (mode == Control_Mode.KBM)
+                    {
+                        if (c.IsMouseControl)
+                        {
+                            return CheckMouseReleased(cont, prev, alt);
+                        }
+                        else return kbs.IsKeyUp(c.KeyboardControl);
+                    }
+                    else if (c.HasGamePadControl)
+                    {
+                        if (c.GamePadControl == Buttons.RightTrigger)
+                        {
+                            return gps.Triggers.Right == 0;
+                        }
+                        else if (c.GamePadControl == Buttons.LeftTrigger)
+                        {
+                            return gps.Triggers.Left == 0;
+                        }
+                        else return gps.IsButtonUp(c.GamePadControl);
+                    }
+                }
+                else
+                {
+                    //Check for control mode
+                    if (mode == Control_Mode.KBM)
+                    {
+                        if (c.IsMouseControl)
+                        {
+                            return CheckMouseReleased(cont, prev, alt);
+                        }
+                        else return prevKbs.IsKeyUp(c.KeyboardControl);
+                    }
+                    else if (c.HasGamePadControl)
+                    {
+                        if (c.GamePadControl == Buttons.RightTrigger)
+                        {
+                            return prevGps.Triggers.Right == 0;
+                        }
+                        else if (c.GamePadControl == Buttons.LeftTrigger)
+                        {
+                            return prevGps.Triggers.Left == 0;
+                        }
+                        else return prevGps.IsButtonUp(c.GamePadControl);
+                    }
+                }
+            }
+            return false;
 		}
 
 		/// <summary>
 		/// Checks if the status of the inputted mouse control is pressed
 		/// </summary>
-		public bool CheckMousePressed(Control_Types cont, bool prev, bool alt)
+		private bool CheckMousePressed(Control_Types cont, bool prev, bool alt)
 		{
             Control c;
-            //Check the alternate first
-            if (!alt &&  controls[(int)cont].Alternate != null)
-            { if (CheckMousePressed(cont, prev, true)) { return true; } }
-
-			//If checking for alternate controls, check for it
-			if (alt)
-            { c = controls[(int)cont].Alternate; }
+            //If checking for alternate controls, check for it
+            if (alt)
+            { c = alternateControls[(int)cont]; }
             else c = controls[(int)cont];
 
-            //Check if looking for previous states
-            if (!prev)
-			{
-				switch (c.MouseControl)
-				{
-					case MouseButtons.LeftButton:
-						return ms.LeftButton == ButtonState.Pressed;
-					case MouseButtons.MiddleButton:
-						return ms.MiddleButton == ButtonState.Pressed;
-					case MouseButtons.RightButton:
-						return ms.RightButton == ButtonState.Pressed;
-					case MouseButtons.XButton1:
-						return ms.XButton1 == ButtonState.Pressed;
-					case MouseButtons.XButton2:
-						return ms.XButton2 == ButtonState.Pressed;
-					case MouseButtons.ScrollUp:
-						return ms.ScrollWheelValue > prevMs.ScrollWheelValue;
-					case MouseButtons.ScrollDown:
-						return ms.ScrollWheelValue < prevMs.ScrollWheelValue;
-					case MouseButtons.None:
-						return false;
-				}
-			}
-			else
-			{
-				switch (c.MouseControl)
-				{
-					case MouseButtons.LeftButton:
-						return prevMs.LeftButton == ButtonState.Pressed;
-					case MouseButtons.MiddleButton:
-						return prevMs.MiddleButton == ButtonState.Pressed;
-					case MouseButtons.RightButton:
-						return prevMs.RightButton == ButtonState.Pressed;
-					case MouseButtons.XButton1:
-						return prevMs.XButton1 == ButtonState.Pressed;
-					case MouseButtons.XButton2:
-						return prevMs.XButton2 == ButtonState.Pressed;
-					case MouseButtons.ScrollUp:
-						return prevMs.ScrollWheelValue > prevPrevMs.ScrollWheelValue;
-					case MouseButtons.ScrollDown:
-						return prevMs.ScrollWheelValue < prevPrevMs.ScrollWheelValue;
-					case MouseButtons.None:
-						return false;
-				}
-			}
+            if (c != null)
+            {
+                //Check if looking for previous states
+                if (!prev)
+                {
+                    switch (c.MouseControl)
+                    {
+                        case MouseButtons.LeftButton:
+                            return ms.LeftButton == ButtonState.Pressed;
+                        case MouseButtons.MiddleButton:
+                            return ms.MiddleButton == ButtonState.Pressed;
+                        case MouseButtons.RightButton:
+                            return ms.RightButton == ButtonState.Pressed;
+                        case MouseButtons.XButton1:
+                            return ms.XButton1 == ButtonState.Pressed;
+                        case MouseButtons.XButton2:
+                            return ms.XButton2 == ButtonState.Pressed;
+                        case MouseButtons.ScrollUp:
+                            return ms.ScrollWheelValue > prevMs.ScrollWheelValue;
+                        case MouseButtons.ScrollDown:
+                            return ms.ScrollWheelValue < prevMs.ScrollWheelValue;
+                        case MouseButtons.None:
+                            return false;
+                    }
+                }
+                else
+                {
+                    switch (c.MouseControl)
+                    {
+                        case MouseButtons.LeftButton:
+                            return prevMs.LeftButton == ButtonState.Pressed;
+                        case MouseButtons.MiddleButton:
+                            return prevMs.MiddleButton == ButtonState.Pressed;
+                        case MouseButtons.RightButton:
+                            return prevMs.RightButton == ButtonState.Pressed;
+                        case MouseButtons.XButton1:
+                            return prevMs.XButton1 == ButtonState.Pressed;
+                        case MouseButtons.XButton2:
+                            return prevMs.XButton2 == ButtonState.Pressed;
+                        case MouseButtons.ScrollUp:
+                            return prevMs.ScrollWheelValue > prevPrevMs.ScrollWheelValue;
+                        case MouseButtons.ScrollDown:
+                            return prevMs.ScrollWheelValue < prevPrevMs.ScrollWheelValue;
+                        case MouseButtons.None:
+                            return false;
+                    }
+                }
+            }
 			return false;
 		}
 
 		/// <summary>
 		/// Checks if the status of the inputted mouse control is released
 		/// </summary>
-		public bool CheckMouseReleased(Control_Types cont, bool prev, bool alt)
+		private bool CheckMouseReleased(Control_Types cont, bool prev, bool alt)
 		{
             Control c;
-            //Check the alternate first
-            if (!alt && controls[(int)cont].Alternate != null)
-            { if (CheckMouseReleased(cont, prev, true)) { return true; } }
-
-			//If checking for alternate controls, check for it
+            //If checking for alternate controls, check for it
             if (alt)
-            { c = controls[(int)cont].Alternate; }
+            { c = alternateControls[(int)cont]; }
             else c = controls[(int)cont];
 
-            //Check if looking for previous states
-            if (!prev)
-			{
-				switch (c.MouseControl)
-				{
-					case MouseButtons.LeftButton:
-						return ms.LeftButton == ButtonState.Released;
-					case MouseButtons.MiddleButton:
-						return ms.MiddleButton == ButtonState.Released;
-					case MouseButtons.RightButton:
-						return ms.RightButton == ButtonState.Released;
-					case MouseButtons.XButton1:
-						return ms.XButton1 == ButtonState.Released;
-					case MouseButtons.XButton2:
-						return ms.XButton2 == ButtonState.Released;
-					case MouseButtons.ScrollUp:
-						return ms.ScrollWheelValue == prevMs.ScrollWheelValue;
-					case MouseButtons.ScrollDown:
-						return ms.ScrollWheelValue == prevMs.ScrollWheelValue;
-					case MouseButtons.None:
-						return false;
-				}
-			}
-			else
-			{
-				switch (c.MouseControl)
-				{
-					case MouseButtons.LeftButton:
-						return prevMs.LeftButton == ButtonState.Released;
-					case MouseButtons.MiddleButton:
-						return prevMs.MiddleButton == ButtonState.Released;
-					case MouseButtons.RightButton:
-						return prevMs.RightButton == ButtonState.Released;
-					case MouseButtons.XButton1:
-						return prevMs.XButton1 == ButtonState.Released;
-					case MouseButtons.XButton2:
-						return prevMs.XButton2 == ButtonState.Released;
-					case MouseButtons.ScrollUp:
-						return prevMs.ScrollWheelValue == prevPrevMs.ScrollWheelValue;
-					case MouseButtons.ScrollDown:
-						return prevMs.ScrollWheelValue == prevPrevMs.ScrollWheelValue;
-					case MouseButtons.None:
-						return false;
-				}
-			}
+            if (c != null)
+            {
+                //Check if looking for previous states
+                if (!prev)
+                {
+                    switch (c.MouseControl)
+                    {
+                        case MouseButtons.LeftButton:
+                            return ms.LeftButton == ButtonState.Released;
+                        case MouseButtons.MiddleButton:
+                            return ms.MiddleButton == ButtonState.Released;
+                        case MouseButtons.RightButton:
+                            return ms.RightButton == ButtonState.Released;
+                        case MouseButtons.XButton1:
+                            return ms.XButton1 == ButtonState.Released;
+                        case MouseButtons.XButton2:
+                            return ms.XButton2 == ButtonState.Released;
+                        case MouseButtons.ScrollUp:
+                            return ms.ScrollWheelValue == prevMs.ScrollWheelValue;
+                        case MouseButtons.ScrollDown:
+                            return ms.ScrollWheelValue == prevMs.ScrollWheelValue;
+                        case MouseButtons.None:
+                            return false;
+                    }
+                }
+                else
+                {
+                    switch (c.MouseControl)
+                    {
+                        case MouseButtons.LeftButton:
+                            return prevMs.LeftButton == ButtonState.Released;
+                        case MouseButtons.MiddleButton:
+                            return prevMs.MiddleButton == ButtonState.Released;
+                        case MouseButtons.RightButton:
+                            return prevMs.RightButton == ButtonState.Released;
+                        case MouseButtons.XButton1:
+                            return prevMs.XButton1 == ButtonState.Released;
+                        case MouseButtons.XButton2:
+                            return prevMs.XButton2 == ButtonState.Released;
+                        case MouseButtons.ScrollUp:
+                            return prevMs.ScrollWheelValue == prevPrevMs.ScrollWheelValue;
+                        case MouseButtons.ScrollDown:
+                            return prevMs.ScrollWheelValue == prevPrevMs.ScrollWheelValue;
+                        case MouseButtons.None:
+                            return false;
+                    }
+                }
+            }
 			return false;
 		}
 	}
