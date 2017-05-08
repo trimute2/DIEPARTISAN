@@ -604,9 +604,10 @@ namespace GDAPSIIGame
 			effect = new SpriteEffects();
 			timeMult = 0;
 			firing = 0;
-			varianceMultiplier = 0;
+			varianceMultiplier = 1;
 			varianceTimer = 0;
-			focusMultiplier = 0;
+			focusMultiplier = 1;
+			focusTimer = 0;
 
             foreach (Weapon w in weapons)
             {

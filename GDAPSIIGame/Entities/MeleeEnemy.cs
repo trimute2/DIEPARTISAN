@@ -19,7 +19,7 @@ namespace GDAPSIIGame.Entities
 
         public List<Vector2> RecentTargets { get; set; }
 
-        public MeleeEnemy(Texture2D texture, Vector2 position, Rectangle boundingBox, int health = 8, int moveSpeed = 4) : base(health, moveSpeed, texture, position, boundingBox)
+        public MeleeEnemy(Texture2D texture, Vector2 position, Rectangle boundingBox, int health = 8, int moveSpeed = 5) : base(health, moveSpeed, texture, position, boundingBox)
         {
             color = Color.DarkOrange;
             RecentTargets = new List<Vector2>();
