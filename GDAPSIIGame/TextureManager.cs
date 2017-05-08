@@ -98,13 +98,19 @@ namespace GDAPSIIGame
 			enemyTextures.Add("EnemyTexture", Content.Load<Texture2D>("playerNew"));
 
 			//Load bullet textures
-			bulletTextures.Add("PlayerBullet", Content.Load<Texture2D>("playerBullet"));
+			bulletTextures.Add("PlayerBullet", Content.Load<Texture2D>("bullet"));
 
-			//Load weapon textures
-			weaponTextures.Add("PistolTexture", Content.Load<Texture2D>("playerBullet"));
+			//Load pistol texture
+			weaponTextures.Add("PistolTexture", Content.Load<Texture2D>("pistolweapon"));
 
-			//Load mouse textures
-			mouseTextures.Add("MousePointer", Content.Load<Texture2D>("cursor"));
+            //Load shotgun texture
+            weaponTextures.Add("ShotgunTexture", Content.Load<Texture2D>("shotgunweapon"));
+
+            //Load rifle texture
+            weaponTextures.Add("RifleTexture", Content.Load<Texture2D>("rifleweapon"));
+
+            //Load mouse textures
+            mouseTextures.Add("MousePointer", Content.Load<Texture2D>("cursor"));
 
 			//Load room textures
 			roomTextures.Add("WallTexture", Content.Load<Texture2D>("playerBullet"));
