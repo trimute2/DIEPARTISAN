@@ -191,7 +191,21 @@ namespace GDAPSIIGame
                 color: Color.White
                 );
 
-            if(Player.Instance.CurrWeapon.Reload)
+            spriteBatch.DrawString(
+                spriteFont: font,
+                text: EntityManager.Instance.NumEnemies + "",
+                position: new Vector2(60, 150),
+                color: Color.White
+                );
+
+			spriteBatch.DrawString(
+				spriteFont: font,
+				text: Player.Instance.ScoreMultiplier + "",
+				position: new Vector2(60, 190),
+				color: Color.White
+				);
+
+			if (Player.Instance.CurrWeapon.Reload)
             {
                 spriteBatch.Draw(
                     texture: reloadIcon,

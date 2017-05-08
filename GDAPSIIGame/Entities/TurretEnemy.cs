@@ -106,7 +106,7 @@ namespace GDAPSIIGame.Entities
 				Matrix m = Matrix.CreateRotationZ(gun.Angle-((float)Math.PI / 4));
 				Vector2 diff = Vector2.Transform(Vector2.One, m);
 				diff.Normalize();
-				diff = diff / 6;
+				diff = diff / 3;
 				fired = gun.Fire(diff);
 			}
         }

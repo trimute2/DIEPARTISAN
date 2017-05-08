@@ -32,7 +32,8 @@ namespace GDAPSIIGame.Weapons
 			this.reload = 0; //Timer for whether the uesr is reloading
 			this.fired = 0; //Whether the weapon has fired
 			this.origin = origin; //The origin point of the weapon (where the player holds it)
-			this.bulletOffset = new Vector2(-boundingBox.Width / 2, boundingBox.Height / 4);
+			//this.bulletOffset = new Vector2(-boundingBox.Width / 2, boundingBox.Height / 4);
+			this.bulletOffset = Vector2.Zero;
 			this.owner = owner;
 			effects = SpriteEffects.None;
 			rand = new Random();
@@ -89,43 +90,43 @@ namespace GDAPSIIGame.Weapons
 			{
 				case Weapons.Weapon_Dir.UpEast:
 					this.X += 20;
-					this.bulletOffset = new Vector2(BoundingBox.Width / 4, BoundingBox.Height / 4);
+					//this.bulletOffset = new Vector2(BoundingBox.Width / 4, BoundingBox.Height / 4);
 					break;
 				case Weapons.Weapon_Dir.UpWest:
 					this.X -= 20;
-					this.bulletOffset = new Vector2(BoundingBox.Width / 4, BoundingBox.Height / 4);
+					//this.bulletOffset = new Vector2(BoundingBox.Width / 4, BoundingBox.Height / 4);
 					break;
 				case Weapons.Weapon_Dir.UpLeft:
 					this.X -= 20;
-					this.bulletOffset = new Vector2(-BoundingBox.Width / 4, BoundingBox.Height / 4);
+					//this.bulletOffset = new Vector2(-BoundingBox.Width / 4, BoundingBox.Height / 4);
 					break;
 				case Weapons.Weapon_Dir.Left:
 					this.X -= 20;
-					this.bulletOffset = new Vector2(-BoundingBox.Width / 2, BoundingBox.Height / 4);
+					//this.bulletOffset = new Vector2(-BoundingBox.Width / 2, BoundingBox.Height / 4);
 					break;
 				case Weapons.Weapon_Dir.DownLeft:
 					this.X -= 20;
-					this.bulletOffset = new Vector2(-BoundingBox.Width, BoundingBox.Height / 4);
+					//this.bulletOffset = new Vector2(-BoundingBox.Width, BoundingBox.Height / 4);
 					break;
 				case Weapons.Weapon_Dir.DownWest:
 					this.X -= 20;
-					this.bulletOffset = new Vector2(-BoundingBox.Width / 2, BoundingBox.Height / 4);
+					//this.bulletOffset = new Vector2(-BoundingBox.Width / 2, BoundingBox.Height / 4);
 					break;
 				case Weapons.Weapon_Dir.DownEast:
 					this.X += 20;
-					this.bulletOffset = new Vector2(-BoundingBox.Width / 2, BoundingBox.Height / 4);
+					//this.bulletOffset = new Vector2(-BoundingBox.Width / 2, BoundingBox.Height / 4);
 					break;
 				case Weapons.Weapon_Dir.DownRight:
 					this.X += 20;
-					this.bulletOffset = new Vector2(-BoundingBox.Width / 4, BoundingBox.Height / 4);
+					//this.bulletOffset = new Vector2(-BoundingBox.Width / 4, BoundingBox.Height / 4);
 					break;
 				case Weapons.Weapon_Dir.Right:
 					this.X += 20;
-					this.bulletOffset = new Vector2(BoundingBox.Width / 2, BoundingBox.Height / 4);
+					//this.bulletOffset = new Vector2(BoundingBox.Width / 2, BoundingBox.Height / 4);
 					break;
 				case Weapons.Weapon_Dir.UpRight:
 					this.X += 20;
-					this.bulletOffset = new Vector2(BoundingBox.Width, BoundingBox.Height / 4);
+					//this.bulletOffset = new Vector2(BoundingBox.Width, BoundingBox.Height / 4);
 					break;
 			}
 

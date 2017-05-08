@@ -38,6 +38,7 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Button.cs" />
     <Compile Include="Chunk.cs" />
     <Compile Include="ChunkManager.cs" />
     <Compile Include="Controls\Control.cs" />
@@ -59,6 +60,7 @@
     <Compile Include="Map\Camera.cs" />
     <Compile Include="Map\Map.cs" />
     <Compile Include="Map\Room.cs" />
+    <Compile Include="MenuManager.cs" />
     <Compile Include="Pods\Pod.cs" />
     <Compile Include="Pods\PodManager.cs" />
     <Compile Include="Program.cs" />

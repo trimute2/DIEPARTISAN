@@ -25,10 +25,10 @@ namespace GDAPSIIGame.Weapons
 				TextureManager.Instance.WeaponTextures["PistolTexture"],
 				Vector2.Zero,
 				new Rectangle(0, 0, 20, 30),
-				0.15f, 6, 0.9f,
+				0.15f, 6, 0.45f,
 				new Vector2(playerTexture.Bounds.X + playerTexture.Bounds.Width, playerTexture.Bounds.Top + playerTexture.Bounds.Height / 2),
 				Owners.Player,
-				Range.Short);
+				Range.Medium);
 			}
 		}
 
@@ -40,7 +40,7 @@ namespace GDAPSIIGame.Weapons
 				TextureManager.Instance.WeaponTextures["RifleTexture"],
 				Vector2.Zero,
 				new Rectangle(0, 0, 20, 50),
-				0.11f, 20, 1.7f,
+				0.11f, 20, 0.85f,
 				new Vector2(playerTexture.Bounds.X + playerTexture.Bounds.Width, playerTexture.Bounds.Top + playerTexture.Bounds.Height / 2),
 				Owners.Player,
 				Range.Long);
@@ -55,7 +55,7 @@ namespace GDAPSIIGame.Weapons
 				TextureManager.Instance.WeaponTextures["PistolTexture"],
 				Vector2.Zero,
 				new Rectangle(0, 0, 10, 20),
-				1f,
+				2f,
 				Vector2.Zero,
 				Owners.Enemy);
 			}
@@ -70,10 +70,10 @@ namespace GDAPSIIGame.Weapons
 				Vector2.Zero,
 				new Rectangle(0, 0, 20, 50),
 				//fire rate, clip size, reload speed
-				0.75f, 10, 1.1f,
+				0.75f, 10, 0.55f,
 				new Vector2(playerTexture.Bounds.X + playerTexture.Bounds.Width, playerTexture.Bounds.Top + playerTexture.Bounds.Height / 2),
 				Owners.Player,
-				Range.Medium);
+				Range.Short);
 			}
 		}
 		//Methods----------------
