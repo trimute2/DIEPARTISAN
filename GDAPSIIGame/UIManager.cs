@@ -24,6 +24,7 @@ namespace GDAPSIIGame
         private Texture2D ammoIcon;
         private Texture2D pistolIcon;
         private Texture2D shotgunIcon;
+        private Texture2D reloadIcon;
 		//Creating the max health for the player for draw reference
 		private int playerMaxHealth;
         private float healthBarWidth;
@@ -31,6 +32,8 @@ namespace GDAPSIIGame
 		//Fading
 		private float fadeTimer;
 		private float fade;
+
+        private float scalar;
 
 		private static UIManager instance;
 
@@ -87,8 +90,9 @@ namespace GDAPSIIGame
             ammoIcon = Content.Load<Texture2D>("bullets");
             pistolIcon = Content.Load<Texture2D>("pistolicon");
             shotgunIcon = Content.Load<Texture2D>("shotgunicon");
+            reloadIcon = Content.Load<Texture2D>("reloadIcon");
             font = Content.Load<SpriteFont>("UIText");
-		}
+        }
 
         /// <summary>
         /// Update the UI Manager once per frame. Managed through Game1.cs.
@@ -96,6 +100,8 @@ namespace GDAPSIIGame
         /// <param name="gameTime"></param>
         public void Update(GameTime gameTime)
         {
+            scalar += .3f;
+
 			//Fadein
 			if (MapManager.Instance.State == MapState.Enter && Fade)
 			{
@@ -132,54 +138,68 @@ namespace GDAPSIIGame
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch, GraphicsDevice GraphicsDevice)
         {
             spriteBatch.Draw(healthbarBackground, new Vector2(40, 20), Color.White);
+
             spriteBatch.Draw(
                 texture: healthbarForeground,
                 position: new Vector2(43,23),
                 sourceRectangle: new Rectangle(new Point(0,0), new Point((int)healthBarWidth,15)), 
                 color: Color.White
                 );
+
             spriteBatch.Draw(healthbarHead, new Vector2(14, 10), Color.White);
             
             if(Player.Instance.CurrWeapon is Weapons.Pistol)
             {
-                spriteBatch.Draw(pistolIcon, new Vector2(14, 50), Color.White);
+                spriteBatch.Draw(
+                    pistolIcon, 
+                    new Vector2(14, 50), 
+                    Color.White
+                    );
             }
             else
             if (Player.Instance.CurrWeapon is Weapons.Shotgun)
             {
-                spriteBatch.Draw(shotgunIcon, new Vector2(14, 50), Color.White);
+                spriteBatch.Draw(
+                    shotgunIcon, 
+                    new Vector2(14, 50), 
+                    Color.White
+                    );
             }
 
             spriteBatch.Draw(ammoIcon, new Vector2(14, 110), Color.White);
 
             if (MapManager.Instance.State == MapState.Enter || MapManager.Instance.State == MapState.Exit)
 			{
-				spriteBatch.Draw(TextureManager.Instance.GetMenuTexture("Black"), new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), new Color(Color.White, fade));
+				spriteBatch.Draw(
+                    TextureManager.Instance.GetMenuTexture("Black"), 
+                    new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), 
+                    new Color(Color.White, fade)
+                    );
 			}
+
+            spriteBatch.DrawString(
+                spriteFont: font,
+                text: Player.Instance.CurrWeapon.CurrAmmo + "",
+                position: new Vector2(57, 113),
+                color: Color.Black
+                );
+
+            spriteBatch.DrawString(
+                spriteFont: font,
+                text: Player.Instance.CurrWeapon.CurrAmmo + "",
+                position: new Vector2(60, 110),
+                color: Color.White
+                );
 
             if(Player.Instance.CurrWeapon.Reload)
             {
-                spriteBatch.DrawString(
-                    text: "RELOADING...",
-                    color: Color.Black,
-                    spriteFont: font,
-                    position: Camera.Instance.GetViewportPosition(Player.Instance) + new Vector2(-18)
-                    );
-
-                spriteBatch.DrawString(
-                    text: "RELOADING...",
-                    color: Color.White,
-                    spriteFont: font,
-                    position: Camera.Instance.GetViewportPosition(Player.Instance) + new Vector2(-20)
+                spriteBatch.Draw(
+                    texture: reloadIcon,
+                    origin: new Vector2(reloadIcon.Width/2, reloadIcon.Height/2),
+                    position: Camera.Instance.GetViewportPosition(Player.Instance),
+                    rotation: scalar
                     );
             }
-
-            spriteBatch.DrawString(
-                    text: ""+Player.Instance.CurrWeapon.CurrAmmo,
-                    color: Color.Black,
-                    spriteFont: font,
-                    position: Camera.Instance.GetViewportPosition(Player.Instance) + new Vector2(-18)
-                    );
         }
     }
 }
