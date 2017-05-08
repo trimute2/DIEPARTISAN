@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using GDAPSIIGame.Controls;
+using Newtonsoft.Json;
+using System.IO;
 
 namespace GDAPSIIGame
 {
@@ -164,7 +166,40 @@ namespace GDAPSIIGame
                 alternateControls.Add(new Control((Control_Types)i));
 			}
 			SetDefaults();
-		}
+
+            ////Define StreamReader
+            //StreamReader input = null;
+
+            ////Try catch to get input
+            //try
+            //{
+            //    input = new StreamReader("controls");
+            //    if (input != null)
+            //    {
+            //        String line;
+            //        while ((line = input.ReadLine()) != null)
+            //        {
+            //            controls.Add((Control)JsonConvert.DeserializeObject(line));
+            //        }
+            //    }
+            //}
+            //catch (FileNotFoundException fe)
+            //{
+            //    for (int i = 0; i < 9; i++)
+            //    {
+            //        controls.Add(new Control((Control_Types)i));
+            //        alternateControls.Add(new Control((Control_Types)i));
+            //    }
+            //    SetDefaults();
+            //}
+            //catch (Exception e)
+            //{
+            //    //Print error message
+            //    Console.WriteLine("Error with file: " + e.Message);
+            //}
+            ////Close the StreamReader
+            //finally { if (input != null) { input.Close(); } }
+        }
 
 		public void SaveControlFile()
 		{
