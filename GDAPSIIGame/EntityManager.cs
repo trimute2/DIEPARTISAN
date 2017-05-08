@@ -120,5 +120,10 @@ namespace GDAPSIIGame
 			}
 			enemies.Clear();
 		}
+
+        public int NumEnemies
+        {
+            get { return enemies.Count; }
+        }
     }
 }
