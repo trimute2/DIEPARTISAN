@@ -280,6 +280,11 @@ namespace GDAPSIIGame
 				varianceMultiplier = 1.0f;
 			}
 
+			if(ScoreMultiplier >= 3 && Health < 100)
+			{
+				Health += 1;
+			}
+
 			base.Update(gameTime);
         }
 
@@ -287,15 +292,15 @@ namespace GDAPSIIGame
 		{
 			if(lastHit == e)
 			{
-				focusMultiplier += 0.1f;
-				focusTimer = 5f;
+				focusMultiplier += 0.05f;
+				focusTimer = 3f;
 				updateVariance = false;
 			}else
 			{
 				if (updateVariance)
 				{
 					varianceMultiplier += 0.1f;
-					varianceTimer = 5f;
+					varianceTimer = 3.5f;
 				}
 				updateVariance = true;
 				lastHit = e;
@@ -570,9 +575,10 @@ namespace GDAPSIIGame
 			effect = new SpriteEffects();
 			timeMult = 0;
 			firing = 0;
-			varianceMultiplier = 0;
+			varianceMultiplier = 1;
 			varianceTimer = 0;
-			focusMultiplier = 0;
+			focusMultiplier = 1;
+			focusTimer = 0;
 
             foreach (Weapon w in weapons)
             {

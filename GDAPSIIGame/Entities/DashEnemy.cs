@@ -28,12 +28,12 @@ namespace GDAPSIIGame.Entities
 			get { return dashing; }
 		}
 
-		public DashEnemy(Texture2D texture, Vector2 position, Rectangle boundingBox, int health = 3, int moveSpeed = 2) : base(health, moveSpeed, texture, position, boundingBox)
+		public DashEnemy(Texture2D texture, Vector2 position, Rectangle boundingBox, int health = 3, int moveSpeed = 4) : base(health, moveSpeed, texture, position, boundingBox)
 		{
 			dashTime = 1.5f;
 			bumpTime = 0.01f;
 			dashing = false;
-			dashSpeed = 4f;
+			dashSpeed = 8f;
 			color = Color.Red;
 			bump = false;
 		}
