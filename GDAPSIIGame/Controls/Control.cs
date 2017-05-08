@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using Newtonsoft.Json;
 
 namespace GDAPSIIGame.Controls
 {
@@ -17,9 +18,13 @@ namespace GDAPSIIGame.Controls
 		Buttons gpControl;
 		MouseButtons mControl;
 		bool hasGamePadControl;
+        bool isAlternate;
 
-		//Properties
-		public Keys KeyboardControl
+        //Properties
+        public Control_Types Name
+        { get { return name; } }
+
+        public Keys KeyboardControl
 		{ get { return kbControl; } }
 
 		public Buttons GamePadControl
@@ -31,8 +36,23 @@ namespace GDAPSIIGame.Controls
 		public bool IsMouseControl
 		{ get { return mouse; } }
 
-		public bool HasGamePadControl
+        public bool IsAlternate
+        { get { return isAlternate; } }
+
+        public bool HasGamePadControl
 		{ get { return hasGamePadControl; } }
+
+		[JsonConstructor]
+		public Control(Control_Types Name, Keys KeyBoardControl, Buttons GamePadControl, MouseButtons MouseControl, bool IsMouseControl, bool IsAlternate, bool HasGamePadControl)
+		{
+			this.name = Name;
+			this.kbControl = KeyBoardControl;
+			this.gpControl = GamePadControl;
+			this.mControl = MouseControl;
+			this.mouse = IsMouseControl;
+			this.isAlternate = IsAlternate;
+			this.hasGamePadControl = HasGamePadControl;
+		}
 
 		//Constructors
 		public Control(Control_Types name)
@@ -40,6 +60,7 @@ namespace GDAPSIIGame.Controls
             this.name = name;
             hasGamePadControl = false;
             mouse = false;
+            isAlternate = false;
             this.kbControl = Keys.None;
             mControl = MouseButtons.None;
         }
@@ -53,7 +74,8 @@ namespace GDAPSIIGame.Controls
 			mouse = false;
 			this.kbControl = kbControl;
 			mControl = MouseButtons.None;
-			hasGamePadControl = false;
+            isAlternate = false;
+            hasGamePadControl = false;
 		}
 
 		/// <summary>
@@ -64,7 +86,8 @@ namespace GDAPSIIGame.Controls
 			this.name = name;
 			mouse = false;
 			this.kbControl = Keys.None;
-			this.gpControl = gpControl;
+            isAlternate = false;
+            this.gpControl = gpControl;
 			mControl = MouseButtons.None;
 			hasGamePadControl = true;
 		}
@@ -76,27 +99,31 @@ namespace GDAPSIIGame.Controls
 		{
 			this.name = name;
 			mouse = true;
-			this.mControl = mControl;
+            isAlternate = false;
+            this.mControl = mControl;
 			kbControl = Keys.None;
 			hasGamePadControl = false;
 		}
 
-		public void SetControl(Keys kbc)
+		public void SetControl(Keys kbc, bool alt)
 		{
 			this.kbControl = kbc;
-			mouse = false;
+            isAlternate = alt;
+            mouse = false;
 		}
 
-		public void SetControl(MouseButtons mc)
+		public void SetControl(MouseButtons mc, bool alt)
 		{
 			this.mControl = mc;
-			mouse = true;
+            isAlternate = alt;
+            mouse = true;
 		}
 
-		public void SetControl(Buttons gpc)
+		public void SetControl(Buttons gpc, bool alt)
 		{
 			this.gpControl = gpc;
-			hasGamePadControl = true;
+            isAlternate = alt;
+            hasGamePadControl = true;
 		}
 
 		public void RemoveGamePadControl()

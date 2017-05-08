@@ -131,80 +131,138 @@ namespace GDAPSIIGame
 		public void SetDefaults()
 		{
 			//Set movement for keyboard+mouse
-			controls[(int)Control_Types.Forward].SetControl(Keys.W);
-			controls[(int)Control_Types.Backward].SetControl(Keys.S);
-			controls[(int)Control_Types.Left].SetControl(Keys.A);
-			controls[(int)Control_Types.Right].SetControl(Keys.D);
+			controls[(int)Control_Types.Forward].SetControl(Keys.W, false);
+			controls[(int)Control_Types.Backward].SetControl(Keys.S, false);
+			controls[(int)Control_Types.Left].SetControl(Keys.A, false);
+			controls[(int)Control_Types.Right].SetControl(Keys.D, false);
 			//Set gameplay controls for keyboard+mouse
-			controls[(int)Control_Types.Reload].SetControl(Keys.R);
-			controls[(int)Control_Types.Interact].SetControl(Keys.Enter);
-			controls[(int)Control_Types.Fire].SetControl(MouseButtons.LeftButton);
-			controls[(int)Control_Types.NextWeapon].SetControl(MouseButtons.ScrollUp);
-			controls[(int)Control_Types.PrevWeapon].SetControl(MouseButtons.ScrollDown);
+			controls[(int)Control_Types.Reload].SetControl(Keys.R, false);
+			controls[(int)Control_Types.Interact].SetControl(Keys.Enter, false);
+			controls[(int)Control_Types.Fire].SetControl(MouseButtons.LeftButton, false);
+			controls[(int)Control_Types.NextWeapon].SetControl(MouseButtons.ScrollUp, false);
+			controls[(int)Control_Types.PrevWeapon].SetControl(MouseButtons.ScrollDown, false);
+            alternateControls[(int)Control_Types.NextWeapon].SetControl(Keys.LeftControl, true);
 
-			//Set movement for gamepad
-			controls[(int)Control_Types.Forward].SetControl(Buttons.LeftThumbstickUp);
-			controls[(int)Control_Types.Backward].SetControl(Buttons.LeftThumbstickDown);
-			controls[(int)Control_Types.Left].SetControl(Buttons.LeftThumbstickLeft);
-			controls[(int)Control_Types.Right].SetControl(Buttons.LeftThumbstickRight);
+            //Set movement for gamepad
+            controls[(int)Control_Types.Forward].SetControl(Buttons.LeftThumbstickUp, false);
+			controls[(int)Control_Types.Backward].SetControl(Buttons.LeftThumbstickDown, false);
+			controls[(int)Control_Types.Left].SetControl(Buttons.LeftThumbstickLeft, false);
+			controls[(int)Control_Types.Right].SetControl(Buttons.LeftThumbstickRight, false);
 			//Set gameplay controls for gamepad
-			controls[(int)Control_Types.Reload].SetControl(Buttons.RightShoulder);
-			controls[(int)Control_Types.Interact].SetControl(Buttons.A);
-			controls[(int)Control_Types.Fire].SetControl(Buttons.RightTrigger);
-			controls[(int)Control_Types.NextWeapon].SetControl(Buttons.DPadUp);
-            alternateControls[(int)Control_Types.NextWeapon].SetControl(Keys.LeftControl);
-			alternateControls[(int)Control_Types.NextWeapon].SetControl(Buttons.LeftShoulder);
-			controls[(int)Control_Types.PrevWeapon].SetControl(Buttons.DPadDown);
+			controls[(int)Control_Types.Reload].SetControl(Buttons.RightShoulder, false);
+			controls[(int)Control_Types.Interact].SetControl(Buttons.A, false);
+			controls[(int)Control_Types.Fire].SetControl(Buttons.RightTrigger, false);
+			controls[(int)Control_Types.NextWeapon].SetControl(Buttons.DPadUp, false);
+			alternateControls[(int)Control_Types.NextWeapon].SetControl(Buttons.LeftShoulder, true);
+			controls[(int)Control_Types.PrevWeapon].SetControl(Buttons.DPadDown, false);
 
 		}
 
+		/// <summary>
+		/// Read in controls from a file
+		/// </summary>
 		public void ReadControlFile()
 		{
-			for(int i = 0; i < 9; i++)
-			{
-				controls.Add(new Control((Control_Types)i));
-                alternateControls.Add(new Control((Control_Types)i));
-			}
-			SetDefaults();
+            //Define StreamReader
+            StreamReader input = null;
 
-            ////Define StreamReader
-            //StreamReader input = null;
+            //Try catch to get input
+            try
+            {
+				String path = Path.Combine(Environment.GetFolderPath(
+					Environment.SpecialFolder.MyDoc‌​uments), "DIE-PARTISAN", "controls.txt");
 
-            ////Try catch to get input
-            //try
-            //{
-            //    input = new StreamReader("controls");
-            //    if (input != null)
-            //    {
-            //        String line;
-            //        while ((line = input.ReadLine()) != null)
-            //        {
-            //            controls.Add((Control)JsonConvert.DeserializeObject(line));
-            //        }
-            //    }
-            //}
-            //catch (FileNotFoundException fe)
-            //{
-            //    for (int i = 0; i < 9; i++)
-            //    {
-            //        controls.Add(new Control((Control_Types)i));
-            //        alternateControls.Add(new Control((Control_Types)i));
-            //    }
-            //    SetDefaults();
-            //}
-            //catch (Exception e)
-            //{
-            //    //Print error message
-            //    Console.WriteLine("Error with file: " + e.Message);
-            //}
-            ////Close the StreamReader
-            //finally { if (input != null) { input.Close(); } }
+				if (Directory.Exists(Path.Combine(Environment.GetFolderPath(
+					Environment.SpecialFolder.MyDoc‌​uments), "DIE-PARTISAN")))
+				{
+					input = new StreamReader(path);
+					if (input != null)
+					{
+						for (int i = 0; i < 9; i++)
+						{
+							controls.Add(new Control((Control_Types)i));
+							alternateControls.Add(new Control((Control_Types)i));
+						}
+
+						String line;
+						while ((line = input.ReadLine()) != null)
+						{
+							Control c = JsonConvert.DeserializeObject<Control>(line);
+							if (!c.IsAlternate)
+							{
+								controls[(int)c.Name] = c;
+							}
+							else
+							{
+								alternateControls[(int)c.Name] = c;
+							}
+						}
+					}
+				}
+				else
+				{
+					Directory.CreateDirectory(Path.Combine(Environment.GetFolderPath(
+					Environment.SpecialFolder.MyDoc‌​uments), "DIE-PARTISAN"));
+					for (int i = 0; i < 9; i++)
+					{
+						controls.Add(new Control((Control_Types)i));
+						alternateControls.Add(new Control((Control_Types)i));
+					}
+					SetDefaults();
+					SaveControlFile();
+				}
+            }
+            catch (FileNotFoundException)
+            {
+				Directory.CreateDirectory(Path.Combine(Environment.GetFolderPath(
+					Environment.SpecialFolder.MyDoc‌​uments), "DIE-PARTISAN"));
+				for (int i = 0; i < 9; i++)
+                {
+                    controls.Add(new Control((Control_Types)i));
+                    alternateControls.Add(new Control((Control_Types)i));
+                }
+                SetDefaults();
+				SaveControlFile();
+            }
+            //Close the StreamReader
+            finally { if (input != null) { input.Close(); } }
         }
 
+        /// <summary>
+        /// Save the controls to a external file
+        /// </summary>
 		public void SaveControlFile()
 		{
+            //Declare streamwriter
+            StreamWriter output = null;
 
-		}
+            //Try catch to write controls
+            try
+            {
+				String path = Path.Combine(Environment.GetFolderPath(
+					Environment.SpecialFolder.MyDoc‌​uments), "DIE-PARTISAN", "controls.txt");
+				//Write controls
+				output = new StreamWriter(path);
+                foreach (Control c in controls)
+                {
+                    output.WriteLine(JsonConvert.SerializeObject(c));
+                }
+                foreach (Control c in alternateControls)
+                {
+					if (c.IsAlternate)
+					{
+						output.WriteLine(JsonConvert.SerializeObject(c));
+					}
+                }
+            }
+            catch (Exception e)
+            {
+                //Print error message
+                Console.WriteLine("Error with file: " + e.Message);
+            }
+            //Close the StreamReader
+            finally { if (output != null) { output.Close(); } }
+        }
 
 		//Return respective controls
 		public String GetControl(Control_Types cont)
