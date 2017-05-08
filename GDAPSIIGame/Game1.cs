@@ -276,7 +276,7 @@ namespace GDAPSIIGame
 
 		protected override void Draw(GameTime gameTime)
         {
-			GraphicsDevice.Clear(Color.CornflowerBlue);
+			GraphicsDevice.Clear(Color.Black);
 
 			//Begin SpriteBatch
 			spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, null, null);

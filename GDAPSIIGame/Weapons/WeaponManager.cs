@@ -37,7 +37,7 @@ namespace GDAPSIIGame.Weapons
 			get
 			{
 				return new Rifle(ProjectileType.RIFLE,
-				TextureManager.Instance.WeaponTextures["PistolTexture"],
+				TextureManager.Instance.WeaponTextures["RifleTexture"],
 				Vector2.Zero,
 				new Rectangle(0, 0, 20, 50),
 				0.11f, 20, 1.7f,
@@ -66,7 +66,7 @@ namespace GDAPSIIGame.Weapons
 			get
 			{
 				return new Shotgun(ProjectileType.SHOTGUN,
-				TextureManager.Instance.WeaponTextures["PistolTexture"],
+				TextureManager.Instance.WeaponTextures["ShotgunTexture"],
 				Vector2.Zero,
 				new Rectangle(0, 0, 20, 50),
 				//fire rate, clip size, reload speed

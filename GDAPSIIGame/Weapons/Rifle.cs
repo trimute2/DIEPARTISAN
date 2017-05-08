@@ -165,50 +165,48 @@ namespace GDAPSIIGame.Weapons
 
 		public override void Draw(SpriteBatch spriteBatch)
 		{
-			switch (Dir)
-			{
-				case Weapon_Dir.UpEast:
-					effects = SpriteEffects.FlipHorizontally;
-					break;
-				case Weapon_Dir.UpWest:
-					effects = SpriteEffects.None;
-					break;
-				case Weapon_Dir.UpLeft:
-					effects = SpriteEffects.None;
-					break;
-				case Weapon_Dir.Left:
-					effects = SpriteEffects.None;
-					break;
-				case Weapon_Dir.DownLeft:
-					effects = SpriteEffects.None;
-					break;
-				case Weapon_Dir.DownWest:
-					effects = SpriteEffects.None;
-					break;
-				case Weapon_Dir.DownEast:
-					effects = SpriteEffects.FlipHorizontally;
-					break;
-				case Weapon_Dir.DownRight:
-					effects = SpriteEffects.FlipHorizontally;
-					break;
-				case Weapon_Dir.Right:
-					effects = SpriteEffects.FlipHorizontally;
-					break;
-				case Weapon_Dir.UpRight:
-					effects = SpriteEffects.FlipHorizontally;
-					break;
-			}
+            switch (Dir)
+            {
+                case Weapons.Weapon_Dir.UpWest:
+                case Weapons.Weapon_Dir.UpLeft:
+                case Weapons.Weapon_Dir.Left:
+                case Weapons.Weapon_Dir.DownLeft:
+                case Weapons.Weapon_Dir.DownWest:
+                    effects = SpriteEffects.None;
+                    break;
 
-			spriteBatch.Draw(this.Texture,
-				Camera.Instance.GetViewportPosition(this),
-				null,
-				null,
-				origin,
-				Angle,
-				this.Scale,
-				Color.White,
-				effects);
-		}
+                case Weapons.Weapon_Dir.UpEast:
+                case Weapons.Weapon_Dir.DownEast:
+                case Weapons.Weapon_Dir.DownRight:
+                case Weapons.Weapon_Dir.Right:
+                case Weapons.Weapon_Dir.UpRight:
+                    effects = SpriteEffects.FlipVertically;
+                    break;
+            }
+
+            if(effects == SpriteEffects.FlipVertically)
+            {
+                spriteBatch.Draw(
+                texture: this.Texture,
+                position: new Vector2(Camera.Instance.GetViewportPosition(Player.Instance).X + 10, Camera.Instance.GetViewportPosition(Player.Instance).Y + 35),
+                origin: new Vector2(0, this.Texture.Height / 2),
+                rotation: Angle - 4.8f,
+                effects: effects,
+                color: Color.White
+                );
+            }
+            else if(effects == SpriteEffects.None)
+            {
+                spriteBatch.Draw(
+                texture: this.Texture,
+                position: new Vector2(Camera.Instance.GetViewportPosition(Player.Instance).X + 30, Camera.Instance.GetViewportPosition(Player.Instance).Y + 35),
+                origin: new Vector2(0, this.Texture.Height / 2),
+                rotation: Angle - 4.8f,
+                effects: effects,
+                color: Color.White
+                );
+            }
+        }
 
 		/// <summary>
 		/// Tell the weapon it is time to reload
