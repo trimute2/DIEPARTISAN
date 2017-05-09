@@ -35,8 +35,9 @@ namespace GDAPSIIGame.Weapons
 			this.reload = 0; //Timer for whether the uesr is reloading
 			this.fired = 0; //Whether the weapon has fired
 			this.origin = origin; //The origin point of the weapon (where the player holds it)
-			//this.bulletOffset = new Vector2(-boundingBox.Width / 2, boundingBox.Height / 4);
-			this.bulletOffset = Vector2.Zero;
+								  //this.bulletOffset = new Vector2(-boundingBox.Width / 2, boundingBox.Height / 4);
+								  //this.bulletOffset = Vector2.Zero;
+			this.bulletOffset = new Vector2(boundingBox.Height / 4, 2*boundingBox.Width);
 			this.owner = owner;
 			effects = SpriteEffects.None;
 		}
@@ -95,45 +96,23 @@ namespace GDAPSIIGame.Weapons
 
 			switch (Dir)
 			{
-				case Weapons.Weapon_Dir.UpEast:
-					this.X += 20;
-					//this.bulletOffset = new Vector2(BoundingBox.Width / 4, BoundingBox.Height / 4);
-					break;
 				case Weapons.Weapon_Dir.UpWest:
-					this.X -= 20;
-					//this.bulletOffset = new Vector2(BoundingBox.Width / 4, BoundingBox.Height / 4);
-					break;
 				case Weapons.Weapon_Dir.UpLeft:
-					this.X -= 20;
-					//this.bulletOffset = new Vector2(-BoundingBox.Width / 4, BoundingBox.Height / 4);
-					break;
 				case Weapons.Weapon_Dir.Left:
-					this.X -= 20;
-					//this.bulletOffset = new Vector2(-BoundingBox.Width / 2, BoundingBox.Height / 4);
-					break;
 				case Weapons.Weapon_Dir.DownLeft:
-					this.X -= 20;
-					//this.bulletOffset = new Vector2(-BoundingBox.Width, BoundingBox.Height / 4);
-					break;
 				case Weapons.Weapon_Dir.DownWest:
-					this.X -= 20;
+					this.X += 30;
 					//this.bulletOffset = new Vector2(-BoundingBox.Width / 2, BoundingBox.Height / 4);
+					//bulletOffset.Y = -BoundingBox.Width / 2;
 					break;
 				case Weapons.Weapon_Dir.DownEast:
-					this.X += 20;
-					//this.bulletOffset = new Vector2(-BoundingBox.Width / 2, BoundingBox.Height / 4);
-					break;
 				case Weapons.Weapon_Dir.DownRight:
-					this.X += 20;
-					//this.bulletOffset = new Vector2(-BoundingBox.Width / 4, BoundingBox.Height / 4);
-					break;
 				case Weapons.Weapon_Dir.Right:
-					this.X += 20;
-					//this.bulletOffset = new Vector2(BoundingBox.Width / 2, BoundingBox.Height / 4);
-					break;
 				case Weapons.Weapon_Dir.UpRight:
-					this.X += 20;
+				case Weapon_Dir.UpEast:
+					this.X += 10;
 					//this.bulletOffset = new Vector2(BoundingBox.Width, BoundingBox.Height / 4);
+					//bulletOffset.Y = -BoundingBox.Width;
 					break;
 			}
 
@@ -189,8 +168,9 @@ namespace GDAPSIIGame.Weapons
             {
                 spriteBatch.Draw(
                 texture: this.Texture,
-                position: new Vector2(Camera.Instance.GetViewportPosition(Player.Instance).X + 10, Camera.Instance.GetViewportPosition(Player.Instance).Y + 35),
-                origin: new Vector2(0, this.Texture.Height / 2),
+				//position: new Vector2(Camera.Instance.GetViewportPosition(Player.Instance).X + 10, Camera.Instance.GetViewportPosition(Player.Instance).Y + 35),
+				position: Camera.Instance.GetViewportPosition(this.Position),
+				origin: new Vector2(0, this.Texture.Height / 2),
                 rotation: Angle - 4.8f,
                 effects: effects,
                 color: Color.White
@@ -200,8 +180,9 @@ namespace GDAPSIIGame.Weapons
             {
                 spriteBatch.Draw(
                 texture: this.Texture,
-                position: new Vector2(Camera.Instance.GetViewportPosition(Player.Instance).X + 30, Camera.Instance.GetViewportPosition(Player.Instance).Y + 35),
-                origin: new Vector2(0, this.Texture.Height / 2),
+				//position: new Vector2(Camera.Instance.GetViewportPosition(Player.Instance).X + 30, Camera.Instance.GetViewportPosition(Player.Instance).Y + 35),
+				position: Camera.Instance.GetViewportPosition(this.Position),
+				origin: new Vector2(0, this.Texture.Height / 2),
                 rotation: Angle - 4.8f,
                 effects: effects,
                 color: Color.White

@@ -633,9 +633,9 @@ namespace GDAPSIIGame
 			{
 				currWeapon.Angle = -((float)Math.Atan2(mouseState.X - camw.X, mouseState.Y - camw.Y));
 			}
-            //Update weapon position
-            currWeapon.X = this.X + (BoundingBox.Width / 2);
-            currWeapon.Y = this.Y + (BoundingBox.Height / 2);
+			//Update weapon position
+			currWeapon.X = this.X;
+            currWeapon.Y = this.Y + 35;
             //Update weapon
             currWeapon.Update(gameTime);
         }
