@@ -188,8 +188,11 @@ namespace GDAPSIIGame.Entities
 				if( !(this is Player) &&((obj as Projectile).Owner == Owners.Player))
 				{
 					this.Damage(((Projectile)obj).Damage);
-					knockBack = (obj as Projectile).Direction * (obj as Projectile).Knockback;
-					knockBackTime = 0.2f;
+					if ((obj as Projectile).Knockback != 0)
+					{
+						knockBack = (obj as Projectile).Direction * (obj as Projectile).Knockback;
+						knockBackTime = 0.2f;
+					}
 				}
 			}
 
