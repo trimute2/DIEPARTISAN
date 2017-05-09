@@ -37,7 +37,7 @@ namespace GDAPSIIGame.Weapons
 			this.origin = origin; //The origin point of the weapon (where the player holds it)
 								  //this.bulletOffset = new Vector2(-boundingBox.Width / 2, boundingBox.Height / 4);
 								  //this.bulletOffset = new Vector2(boundingBox.Height/2,-boundingBox.Width/2);
-			this.bulletOffset = Vector2.Zero;
+			this.bulletOffset = new Vector2(boundingBox.Height / 4, boundingBox.Width / 2);
 			this.owner = owner;
 			effects = SpriteEffects.FlipVertically;
 		}
