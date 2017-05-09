@@ -104,6 +104,8 @@
   <ItemGroup />
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="Levels\EnemyFilledRuins1.cmap" />
+    <None Include="Levels\EnemyFilledRuins2.cmap" />
     <None Include="Levels\Star.cmap" />
     <None Include="Levels\Symetrical.cmap" />
     <None Include="Levels\2walls1melee.cmap" />
