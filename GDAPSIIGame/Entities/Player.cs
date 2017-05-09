@@ -31,7 +31,7 @@ namespace GDAPSIIGame
 		private GamePadState gpState;
 		private GamePadState prevGpState;
 		private float hurting;
-        private float hurtBlink;
+		private float hurtBlink;
 		private float angle;
 		private SpriteEffects effect;
 		private float timeMult;
@@ -63,8 +63,8 @@ namespace GDAPSIIGame
 			gpState = GamePad.GetState(PlayerIndex.One, GamePadDeadZone.Circular);
 			prevGpState = GamePad.GetState(PlayerIndex.One, GamePadDeadZone.Circular);
 			hurting = 0;
-            hurtBlink = 0;
-            color = Color.White;
+			hurtBlink = 0;
+			color = Color.White;
 			angle = 0;
 			effect = new SpriteEffects();
 			timeMult = 0;
@@ -131,17 +131,17 @@ namespace GDAPSIIGame
 		/// Whether the player is hurting or not
 		/// </summary>
 		public bool IsHurting
-        {
-            get { return hurting > 0; }
-            set
-            {
+		{
+			get { return hurting > 0; }
+			set
+			{
 				if (value)
-                {
+				{
 					hurting = 1.5f;
 					hurtBlink = 0f;
-                }
-            }
-        }
+				}
+			}
+		}
 
 		/// <summary>
 		/// Whether the player is firing their weapon or not
@@ -160,7 +160,7 @@ namespace GDAPSIIGame
 
 		public float ScoreMultiplier
 		{
-			get { return (float) Math.Round((float) (varianceMultiplier * focusMultiplier),2); }
+			get { return (float)Math.Round((float)(varianceMultiplier * focusMultiplier), 2); }
 		}
 
 		//Methods
@@ -186,7 +186,7 @@ namespace GDAPSIIGame
 			//Update player movement
 			UpdateInput(gameTime, camw);
 
-            UpdateWeapon(gameTime, camw);
+			UpdateWeapon(gameTime, camw);
 
 			//Fire weapon only if previous frame didn't have left button being pressed
 			if (controlManager.ControlPressed(Control_Types.Fire))
@@ -222,6 +222,26 @@ namespace GDAPSIIGame
 				Camera.Instance.Shake(Position, 0.5f);
 			}
 
+			if (focusTimer > 0)
+			{
+				focusTimer -= (float)gameTime.ElapsedGameTime.TotalMilliseconds / 1000;
+			}
+			else
+			{
+				focusMultiplier = 1.0f;
+			}
+
+			if (varianceTimer > 0)
+			{
+				varianceTimer -= (float)gameTime.ElapsedGameTime.TotalMilliseconds / 1000;
+				updateVariance = false;
+			}
+			else
+			{
+				varianceMultiplier = 1.0f;
+			}
+
+			
 			//Determine if the player hurting color should be playing
 			if (IsHurting)
 			{
@@ -229,17 +249,17 @@ namespace GDAPSIIGame
 				hurting -= (float)gameTime.ElapsedGameTime.TotalMilliseconds / 1000;
 				//Increment the blink timer
 				hurtBlink += (float)gameTime.ElapsedGameTime.TotalMilliseconds / 1000;
-				
+
 				//Shake the screen
 				if (hurting > 1.3)
 				{
 					Camera.Instance.Shake(Position, 2);
 				}
 
-				if (hurtBlink > ((float)1/15))
+				if (hurtBlink > ((float)1 / 15))
 				{
 					//Reset blink timer
-					hurtBlink -= ((float)1/15);
+					hurtBlink -= ((float)1 / 15);
 					//Find the correct color
 					if (color == Color.Red)
 					{
@@ -247,9 +267,13 @@ namespace GDAPSIIGame
 					}
 					else color = Color.Red;
 				}
+			}else if (ScoreMultiplier >= 3 && Health < 100)
+			{
+				Health += 1;
+				color = Color.LightGreen;
 			}
 			//Change the color back to the default at the end
-			else if (color == Color.Red || color == Color.LightGray)
+			else if (color == Color.Red || color == Color.LightGray || color == Color.LightGreen)
 			{
 				color = Color.White;
 			}
@@ -262,40 +286,20 @@ namespace GDAPSIIGame
 			}
 
 			//update score multiplier timers
-			if(focusTimer > 0)
-			{
-				focusTimer -= (float) gameTime.ElapsedGameTime.TotalMilliseconds/1000;
-			}
-			else
-			{
-				focusMultiplier = 1.0f;
-			}
 
-			if(varianceTimer > 0)
-			{
-				varianceTimer -= (float)gameTime.ElapsedGameTime.TotalMilliseconds/1000;
-                updateVariance = false;
-			}else
-			{
-				varianceMultiplier = 1.0f;
-			}
-
-			if(ScoreMultiplier >= 3 && Health < 100)
-			{
-				Health += 1;
-			}
 
 			base.Update(gameTime);
-        }
+		}
 
 		public void updateMultiplier(Enemy e)
 		{
-			if(lastHit == e)
+			if (lastHit == e)
 			{
 				focusMultiplier += 0.05f;
 				focusTimer = 3f;
 				updateVariance = false;
-			}else
+			}
+			else
 			{
 				if (updateVariance)
 				{
@@ -308,7 +312,7 @@ namespace GDAPSIIGame
 		}
 
 		public override void Draw(SpriteBatch spriteBatch)
-        {
+		{
 			//Find the right sprite to draw
 			//Determine player direction and get the corresponding sprite
 			switch (this.Dir)
@@ -349,8 +353,8 @@ namespace GDAPSIIGame
 				color,
 				effect);
 
-			 currWeapon.Draw(spriteBatch);
-        }
+			currWeapon.Draw(spriteBatch);
+		}
 
 		/// <summary>
 		/// Parses Input during updates
@@ -530,7 +534,7 @@ namespace GDAPSIIGame
 			}
 			else if (obj is Enemy)
 			{
-				if ((obj is MeleeEnemy)|(obj is DashEnemy && (obj as DashEnemy).Dashing))
+				if ((obj is MeleeEnemy) | (obj is DashEnemy && (obj as DashEnemy).Dashing))
 				{
 					if (!IsHurting)
 					{
@@ -580,10 +584,10 @@ namespace GDAPSIIGame
 			focusMultiplier = 1;
 			focusTimer = 0;
 
-            foreach (Weapon w in weapons)
-            {
-                w.ResetWeapon();
-            }
+			foreach (Weapon w in weapons)
+			{
+				w.ResetWeapon();
+			}
 		}
 
 		/// <summary>
@@ -609,20 +613,20 @@ namespace GDAPSIIGame
 			focusMultiplier = 1;
 			focusTimer = 0;
 
-            foreach (Weapon w in weapons)
-            {
-                w.ResetWeapon();
-            }
-        }
+			foreach (Weapon w in weapons)
+			{
+				w.ResetWeapon();
+			}
+		}
 
 		//Interupts the current weapon's reload
 		private void InteruptReload()
 		{
 			currWeapon.Reload = false;
 		}
-		
-        private void UpdateWeapon(GameTime gameTime, Vector2 camw)
-        {
+
+		private void UpdateWeapon(GameTime gameTime, Vector2 camw)
+		{
 			//Update the weapons rotation
 			if (controlManager.Mode == Control_Mode.GamePad)
 			{
@@ -635,9 +639,9 @@ namespace GDAPSIIGame
 			}
 			//Update weapon position
 			currWeapon.X = this.X;
-            currWeapon.Y = this.Y + 35;
-            //Update weapon
-            currWeapon.Update(gameTime);
-        }
+			currWeapon.Y = this.Y + 35;
+			//Update weapon
+			currWeapon.Update(gameTime);
+		}
 	}
 }
