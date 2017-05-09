@@ -76,6 +76,7 @@ namespace GDAPSIIGame.Controls
 			mControl = MouseButtons.None;
             isAlternate = false;
             hasGamePadControl = false;
+			gpControl = Buttons.BigButton;
 		}
 
 		/// <summary>
@@ -103,6 +104,7 @@ namespace GDAPSIIGame.Controls
             this.mControl = mControl;
 			kbControl = Keys.None;
 			hasGamePadControl = false;
+			gpControl = Buttons.BigButton;
 		}
 
 		public void SetControl(Keys kbc, bool alt)

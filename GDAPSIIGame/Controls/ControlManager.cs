@@ -30,6 +30,7 @@ namespace GDAPSIIGame
 		private KeyboardState prevKbs;
 		private GamePadState gps;
 		private GamePadState prevGps;
+		private bool setting;
 
 		/// <summary>
 		/// Singleton Constructor
@@ -72,6 +73,15 @@ namespace GDAPSIIGame
 
 		public Control_Mode Mode
 		{ get { return mode; } }
+
+		/// <summary>
+		/// Whether the game is setting a new control or not
+		/// </summary>
+		public bool Setting
+		{
+			get { return setting; }
+			set { setting = value; }
+		}
 
 		public void Update()
 		{
@@ -283,6 +293,62 @@ namespace GDAPSIIGame
 		public Buttons GetGamePadControl(Control_Types cont)
 		{
 			return controls[(int)cont].GamePadControl;
+		}
+
+		public bool SetControl(Control_Types cont, bool alt)
+		{
+			if (setting)
+			{
+				//Get if alternate
+				Control c;
+				if (!alt)
+				{
+					c = controls[(int)cont];
+				}
+				else c = alternateControls[(int)cont];
+
+				if (mode == Control_Mode.KBM)
+				{
+					//Get pressed stuff
+					MouseButtons m = GetMouseButton();
+					Keys k = GetKey();
+
+					//Check if they're not "null"
+					if (m != MouseButtons.None)
+					{
+						c.SetControl(m, false);
+						Console.WriteLine("Set: " + cont + " to " + m);
+						setting = false;
+						return true;
+					}
+					else if (k != Keys.None)
+					{
+						c.SetControl(k, false);
+						Console.WriteLine("Set: " + cont + " to " + k);
+						setting = false;
+						return true;
+					}
+				}
+				else if (mode == Control_Mode.GamePad)
+				{
+					//Get pressed stuff
+					Buttons b = GetGPButton();
+
+					//The BigButton never gets used	
+					if (b != Buttons.BigButton)
+					{
+						c.SetControl(b, false);
+						setting = false;
+						return true;
+					}
+				}
+				return false;
+			}
+			else
+			{
+				setting = true;
+				return false;
+			}
 		}
 
         /// <summary>
@@ -583,6 +649,129 @@ namespace GDAPSIIGame
                 }
             }
 			return false;
+		}
+
+		/// <summary>
+		/// Returns the currently pressed mouse button
+		/// </summary>
+		private MouseButtons GetMouseButton()
+		{
+			if (ms.LeftButton == ButtonState.Pressed && prevMs.LeftButton == ButtonState.Released)
+			{
+				return MouseButtons.LeftButton;
+			}
+			else if (ms.MiddleButton == ButtonState.Pressed && prevMs.MiddleButton == ButtonState.Released)
+			{
+				return MouseButtons.MiddleButton;
+			}
+			else if (ms.RightButton == ButtonState.Pressed && prevMs.RightButton == ButtonState.Released)
+			{
+				return MouseButtons.RightButton;
+			}
+			else if (ms.XButton1 == ButtonState.Pressed && prevMs.XButton1 == ButtonState.Released)
+			{
+				return MouseButtons.XButton1;
+			}
+			else if (ms.XButton2 == ButtonState.Pressed && prevMs.XButton2 == ButtonState.Released)
+			{
+				return MouseButtons.XButton2;
+			}
+			else if (ms.ScrollWheelValue > prevMs.ScrollWheelValue)
+			{
+				return MouseButtons.ScrollUp;
+			}
+			else if (ms.ScrollWheelValue < prevMs.ScrollWheelValue)
+			{
+				return MouseButtons.ScrollDown;
+			}
+			else return MouseButtons.None;
+		}
+
+		/// <summary>
+		/// Returns the currently pressed key
+		/// </summary>
+		private Keys GetKey()
+		{
+			foreach (Keys k in kbs.GetPressedKeys())
+			{
+				if (kbs.IsKeyDown(k) && prevKbs.IsKeyUp(k))
+				{
+					return k;
+				}
+			}
+			return Keys.None;
+		}
+
+		/// <summary>
+		/// Returns the currently pressed gamepad button
+		/// </summary>
+		private Buttons GetGPButton()
+		{
+			if (gps.Buttons.A == ButtonState.Pressed && prevGps.Buttons.A == ButtonState.Released)
+			{
+				return Buttons.A;
+			}
+			else if (gps.Buttons.B == ButtonState.Pressed && prevGps.Buttons.B == ButtonState.Released)
+			{
+				return Buttons.B;
+			}
+			else if (gps.Buttons.X == ButtonState.Pressed && prevGps.Buttons.X == ButtonState.Released)
+			{
+				return Buttons.X;
+			}
+			else if (gps.Buttons.Y == ButtonState.Pressed && prevGps.Buttons.Y == ButtonState.Released)
+			{
+				return Buttons.Y;
+			}
+			else if (gps.Buttons.LeftShoulder == ButtonState.Pressed && prevGps.Buttons.LeftShoulder == ButtonState.Released)
+			{
+				return Buttons.LeftShoulder;
+			}
+			else if (gps.Buttons.LeftStick == ButtonState.Pressed && prevGps.Buttons.LeftStick == ButtonState.Released)
+			{
+				return Buttons.LeftStick;
+			}
+			else if (gps.Buttons.RightShoulder == ButtonState.Pressed && prevGps.Buttons.RightShoulder == ButtonState.Released)
+			{
+				return Buttons.RightShoulder;
+			}
+			else if (gps.Buttons.RightStick == ButtonState.Pressed && prevGps.Buttons.RightStick == ButtonState.Released)
+			{
+				return Buttons.RightStick;
+			}
+			else if (gps.Buttons.Start == ButtonState.Pressed && prevGps.Buttons.Start == ButtonState.Released)
+			{
+				return Buttons.Start;
+			}
+			else if (gps.Buttons.Back == ButtonState.Pressed && prevGps.Buttons.Back == ButtonState.Released)
+			{
+				return Buttons.Back;
+			}
+			else if (gps.DPad.Up == ButtonState.Pressed && prevGps.DPad.Up == ButtonState.Released)
+			{
+				return Buttons.DPadUp;
+			}
+			else if (gps.DPad.Down == ButtonState.Pressed && prevGps.DPad.Down == ButtonState.Released)
+			{
+				return Buttons.DPadDown;
+			}
+			else if (gps.DPad.Left == ButtonState.Pressed && prevGps.DPad.Left == ButtonState.Released)
+			{
+				return Buttons.DPadLeft;
+			}
+			else if (gps.DPad.Right == ButtonState.Pressed && prevGps.DPad.Right == ButtonState.Released)
+			{
+				return Buttons.DPadRight;
+			}
+			else if (gps.Triggers.Left > 0 && prevGps.Triggers.Left == 0)
+			{
+				return Buttons.LeftTrigger;
+			}
+			else if (gps.Triggers.Right > 0 && prevGps.Triggers.Right == 0)
+			{
+				return Buttons.RightTrigger;
+			}
+			else return Buttons.BigButton;
 		}
 	}
 }

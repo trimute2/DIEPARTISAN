@@ -127,14 +127,27 @@ namespace GDAPSIIGame
 			fonts.Add("uifont", Content.Load<SpriteFont>("font"));
 		}
 
+
 		/// <summary>
-		/// Gets any texture in the menuTextures dictionary
+		/// Gets any texture in the enemyTextures dictionary
 		/// </summary>
-		public Texture2D GetMenuTexture(String name)
+		public Texture2D GetEnemyTexture(String name)
 		{
-			if (menuTextures.ContainsKey(name))
+			if (enemyTextures.ContainsKey(name))
 			{
-				return menuTextures[name];
+				return enemyTextures[name];
+			}
+			else return null;
+		}
+
+		/// <summary>
+		/// Gets any texture in the enemyTextures dictionary
+		/// </summary>
+		public Texture2D GetBulletTexture(String name)
+		{
+			if (bulletTextures.ContainsKey(name))
+			{
+				return bulletTextures[name];
 			}
 			else return null;
 		}
@@ -152,13 +165,13 @@ namespace GDAPSIIGame
 		}
 
 		/// <summary>
-		/// Gets any texture in the enemyTextures dictionary
+		/// Gets any texture in the menuTextures dictionary
 		/// </summary>
-		public Texture2D GetEnemyTexture(String name)
+		public Texture2D GetMenuTexture(String name)
 		{
-			if (enemyTextures.ContainsKey(name))
+			if (menuTextures.ContainsKey(name))
 			{
-				return enemyTextures[name];
+				return menuTextures[name];
 			}
 			else return null;
 		}

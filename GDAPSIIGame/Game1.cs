@@ -38,6 +38,7 @@ namespace GDAPSIIGame
 		WeaponManager weaponManager;
 		TextureManager textureManager;
 		ControlManager controlManager;
+		MenuManager menuManager;
         int mapSize;
 		Thread l;
 		bool startLoad;
@@ -72,6 +73,7 @@ namespace GDAPSIIGame
             //Initialize entity manager
             entityManager = EntityManager.Instance;
 
+			//Initialize control manager
 			controlManager = ControlManager.Instance;
 
             //Initialize the chunk manager
@@ -79,6 +81,9 @@ namespace GDAPSIIGame
 
 			//Initialize projectile manager
 			projectileManager = ProjectileManager.Instance;
+
+			//Initialize menu manager
+			menuManager = MenuManager.Instance;
 
 			//Initialize map manager
 			mapManager = MapManager.Instance;
@@ -139,6 +144,7 @@ namespace GDAPSIIGame
 				case GameState.Menu:
 					//Update controls
 					controlManager.Update();
+					//menuManager.UpdateMainMenu();
 
                     //Get input
                     if (controlManager.ControlPressedControlPrevReleased(Control_Types.Interact))
@@ -293,6 +299,8 @@ namespace GDAPSIIGame
 					//Draw the menu
 					spriteBatch.Draw(textureManager.GetMenuTexture("Logo"), new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
 
+					//menuManager.DrawMainMenu(spriteBatch);
+
 					//Draw the mouse texture
 					spriteBatch.Draw(mouseTex,
 							mousePos - new Vector2(10, 13),
@@ -438,6 +446,9 @@ namespace GDAPSIIGame
 			Thread proj = new Thread(() => projectileManager.LoadContent(Content));
 			proj.Name = "Name";
 			threads.Add(proj);
+			Thread menu = new Thread(() => menuManager.LoadContent(Content));
+			menu.Name = "UI";
+			threads.Add(menu);
 			Thread ui = new Thread(() => uiManager.LoadContent(Content));
 			ui.Name = "UI";
 			threads.Add(ui);
