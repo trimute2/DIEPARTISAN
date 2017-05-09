@@ -35,6 +35,7 @@ namespace GDAPSIIGame.Entities
 
         public override void Update(GameTime gameTime)
         {
+			previousPosition = Position;
             if (Awake)
             {
                 if (CurrentTarget == Vector2.Zero || Vector2.Distance(CurrentTarget, Position) < 5)

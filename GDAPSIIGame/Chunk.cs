@@ -208,7 +208,16 @@ namespace GDAPSIIGame
 				{
 					otherObj.OnCollision(obj);
 					recLevl++;
-					ContainCollision(otherObj, obj);
+					if (recLevl > 10)
+					{
+						List<GameObject> callers = new List<GameObject>();
+						callers.Add(obj);
+						ContainCollision(otherObj, callers);
+					}
+					else
+					{
+						ContainCollision(otherObj, obj);
+					}
 				}
 			}
 		}
@@ -221,7 +230,32 @@ namespace GDAPSIIGame
 				{
 					otherObj.OnCollision(obj);
 					recLevl++;
-					ContainCollision(otherObj , obj);
+					if (recLevl > 10)
+					{
+						List<GameObject> callers = new List<GameObject>();
+						callers.Add(obj);
+						callers.Add(caller);
+						ContainCollision(otherObj, callers);
+					}else
+					{
+						ContainCollision(otherObj , obj);
+					}
+					Console.WriteLine(recLevl.ToString());
+				}
+			}
+		}
+
+		private void ContainCollision(GameObject obj, List<GameObject> previous)
+		{
+			foreach (GameObject otherObj in objects)
+			{
+				if (obj.Collide(otherObj) && !(otherObj is Projectile) && !previous.Contains(otherObj) && otherObj != obj)
+				{
+					otherObj.OnCollision(obj);
+					recLevl++;
+					previous.Add(obj);
+					ContainCollision(otherObj, previous);
+					Console.WriteLine(recLevl.ToString());
 				}
 			}
 		}
