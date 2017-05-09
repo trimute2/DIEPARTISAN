@@ -25,6 +25,7 @@ namespace GDAPSIIGame
         private Texture2D pistolIcon;
         private Texture2D shotgunIcon;
         private Texture2D reloadIcon;
+        private Texture2D clockIcon;
 		//Creating the max health for the player for draw reference
 		private int playerMaxHealth;
         private float healthBarWidth;
@@ -92,6 +93,7 @@ namespace GDAPSIIGame
             shotgunIcon = Content.Load<Texture2D>("shotgunicon");
             reloadIcon = Content.Load<Texture2D>("reloadIcon");
             font = Content.Load<SpriteFont>("UIText");
+            clockIcon = Content.Load<Texture2D>("clockicon");
         }
 
         /// <summary>
@@ -141,18 +143,18 @@ namespace GDAPSIIGame
 
             spriteBatch.Draw(
                 texture: healthbarForeground,
-                position: new Vector2(43,23),
+                position: new Vector2(44,24),
                 sourceRectangle: new Rectangle(new Point(0,0), new Point((int)healthBarWidth,15)), 
                 color: Color.White
                 );
 
-            spriteBatch.Draw(healthbarHead, new Vector2(14, 10), Color.White);
+            spriteBatch.Draw(healthbarHead, new Vector2(14, 9), Color.White);
             
             if(Player.Instance.CurrWeapon is Weapons.Pistol)
             {
                 spriteBatch.Draw(
                     pistolIcon, 
-                    new Vector2(14, 50), 
+                    new Vector2(14, 49), 
                     Color.White
                     );
             }
@@ -161,12 +163,12 @@ namespace GDAPSIIGame
             {
                 spriteBatch.Draw(
                     shotgunIcon, 
-                    new Vector2(14, 50), 
+                    new Vector2(14, 49), 
                     Color.White
                     );
             }
 
-            spriteBatch.Draw(ammoIcon, new Vector2(14, 110), Color.White);
+            spriteBatch.Draw(ammoIcon, new Vector2(14, 109), Color.White);
 
             if (MapManager.Instance.State == MapState.Enter || MapManager.Instance.State == MapState.Exit)
 			{
@@ -176,6 +178,11 @@ namespace GDAPSIIGame
                     new Color(Color.White, fade)
                     );
 			}
+
+            spriteBatch.Draw(
+                texture: clockIcon,
+                position: new Vector2(1100, 10)
+                );
 
             spriteBatch.DrawString(
                 spriteFont: font,
