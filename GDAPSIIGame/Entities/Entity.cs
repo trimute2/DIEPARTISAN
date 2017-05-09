@@ -12,7 +12,7 @@ namespace GDAPSIIGame.Entities
 	/// <summary>
 	/// The direction the entity is facing
 	/// </summary>
-	public enum Entity_Dir { Up, UpLeft, Left, DownLeft, Down, DownRight, Right, UpRight }
+	public enum Entity_Dir { UpEast, UpWest, UpLeft, Left, DownLeft, DownWest, DownEast, DownRight, Right, UpRight }
 	public enum Entity_State { Idling, Moving}
 
     public class Entity : GameObject
@@ -30,7 +30,7 @@ namespace GDAPSIIGame.Entities
         {
             this.health = health;
             this.moveSpeed = moveSpeed;
-			dir = Entity_Dir.Down;
+			dir = Entity_Dir.DownEast;
 			knockBackTime = 0.0f;
 			knockBack = Vector2.Zero;
 			knockBackable = true;

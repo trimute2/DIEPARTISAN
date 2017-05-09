@@ -24,6 +24,7 @@ namespace GDAPSIIGame
 	
 		private GameState menuState;
 		private Button selected;
+		private List<Button> mainMenuButtons;
 
 		//Control setting vars
 		Control_Types cont;
@@ -44,6 +45,7 @@ namespace GDAPSIIGame
 		public void LoadContent(ContentManager Content)
 		{
 			playButton = new Button(TextureManager.Instance.GetBulletTexture("PlayerBullet"), new Rectangle(20, 20, 100, 100), "Set Fire Button");
+			mainMenuButtons.Add(playButton);
 		}
 
 		public GameState MenuState
@@ -64,6 +66,8 @@ namespace GDAPSIIGame
 			gpState = GamePad.GetState(PlayerIndex.One, GamePadDeadZone.Circular);
 			prevGpState = gpState;
 			alt = false;
+
+			mainMenuButtons = new List<Button>();
 		}
 
 		public void UpdateMainMenu()

@@ -317,7 +317,10 @@ namespace GDAPSIIGame
 			//Determine player direction and get the corresponding sprite
 			switch (this.Dir)
 			{
-				case Entity_Dir.Up:
+				case Entity_Dir.UpWest:
+					effect = SpriteEffects.FlipHorizontally;
+					break;
+				case Entity_Dir.UpEast:
 					effect = SpriteEffects.None;
 					break;
 				case Entity_Dir.UpLeft:
@@ -329,7 +332,10 @@ namespace GDAPSIIGame
 				case Entity_Dir.DownLeft:
 					effect = SpriteEffects.FlipHorizontally;
 					break;
-				case Entity_Dir.Down:
+				case Entity_Dir.DownWest:
+					effect = SpriteEffects.FlipHorizontally;
+					break;
+				case Entity_Dir.DownEast:
 					effect = SpriteEffects.None;
 					break;
 				case Entity_Dir.DownRight:
@@ -427,12 +433,16 @@ namespace GDAPSIIGame
 				//Use angle to find player direction
 				if ((angle < -157.5) || (angle > 157.5))
 				{
-					this.Dir = Entity_Dir.Up;
 					if (angle < -157.5)
 					{
 						currWeapon.Dir = Weapon_Dir.UpWest;
+						this.Dir = Entity_Dir.UpWest;
 					}
-					else currWeapon.Dir = Weapon_Dir.UpEast;
+					else
+					{
+						currWeapon.Dir = Weapon_Dir.UpEast;
+						this.Dir = Entity_Dir.UpEast;
+					}
 				}
 				else if ((angle < 157.5) && (angle > 112.5) && this.Dir != Entity_Dir.UpRight)
 				{
@@ -466,12 +476,16 @@ namespace GDAPSIIGame
 				}
 				else if ((angle < 22.5) && (angle > -22.5))
 				{
-					this.Dir = Entity_Dir.Down;
 					if (angle < 0)
 					{
 						currWeapon.Dir = Weapon_Dir.DownWest;
+						this.Dir = Entity_Dir.DownWest;
 					}
-					else currWeapon.Dir = Weapon_Dir.DownEast;
+					else
+					{
+						currWeapon.Dir = Weapon_Dir.DownEast;
+						this.Dir = Entity_Dir.DownEast;
+					}
 				}
 			}
 
