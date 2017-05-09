@@ -505,5 +505,10 @@ namespace GDAPSIIGame
 			//Go to gameplay
 			gameState = GameState.GamePlay;
 		}
+
+        public int GetTotalLevelTime()
+        {
+            return (mapSize ^ 2) * 15;
+        }
 	}
 }
