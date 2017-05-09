@@ -234,11 +234,14 @@ namespace GDAPSIIGame
 							//Update chunks
 							chunkManager.Update();
 
-							//Update UI
-							uiManager.Update(gameTime);
+                            //Update UI
+                            uiManager.Update(gameTime);
 
-							PodManager.Instance.Update(gameTime);
-							break;
+                            PodManager.Instance.Update(gameTime);
+
+                            uiManager.SetMapSize((int)(Math.Pow((double)mapSize, 2.0) * 15));
+
+                            break;
 						
 						//The player is exiting the level after beating it
 						case MapState.Exit:
@@ -505,10 +508,5 @@ namespace GDAPSIIGame
 			//Go to gameplay
 			gameState = GameState.GamePlay;
 		}
-
-        public int GetTotalLevelTime()
-        {
-            return (mapSize ^ 2) * 15;
-        }
 	}
 }
