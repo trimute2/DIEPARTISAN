@@ -452,13 +452,20 @@ namespace ExternalEditor
                             break;
 
                         case '2':
-                            b.BackColor = Color.OrangeRed;
+                            b.BackColor = Color.LightGreen;
                             break;
 
                         case '3':
-                            b.BackColor = Color.LightGreen;
+                            b.BackColor = Color.OrangeRed;
                             break;
-                    }
+						case '4':
+							b.BackColor = Color.DarkOrange;
+							break;
+						case '5':
+							b.BackColor = Color.DarkRed;
+							break;
+
+					}
                     b.ForeColor = SystemColors.ButtonHighlight;
                     b.Size = new Size(tileSize, tileSize);
                     b.FlatStyle = FlatStyle.Flat;
