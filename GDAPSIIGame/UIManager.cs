@@ -34,9 +34,7 @@ namespace GDAPSIIGame
         //Fading
         private float fadeTimer;
         private float fade;
-
         private float scalar;
-
         private static UIManager instance;
 
         /// <summary>
@@ -186,15 +184,6 @@ namespace GDAPSIIGame
 
             spriteBatch.Draw(ammoIcon, new Vector2(14, 109), Color.White);
 
-            if (MapManager.Instance.State == MapState.Enter || MapManager.Instance.State == MapState.Exit)
-            {
-                spriteBatch.Draw(
-                    TextureManager.Instance.GetMenuTexture("Black"),
-                    new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height),
-                    new Color(Color.White, fade)
-                    );
-            }
-
             spriteBatch.Draw(
                 texture: clockIcon,
                 position: new Vector2(1100, 10)
@@ -231,6 +220,15 @@ namespace GDAPSIIGame
                     origin: new Vector2(reloadIcon.Width / 2, reloadIcon.Height / 2),
                     position: Camera.Instance.GetViewportPosition(Player.Instance),
                     rotation: scalar
+                    );
+            }
+
+            if (MapManager.Instance.State == MapState.Enter || MapManager.Instance.State == MapState.Exit)
+            {
+                spriteBatch.Draw(
+                    TextureManager.Instance.GetMenuTexture("Black"),
+                    new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height),
+                    new Color(Color.White, fade)
                     );
             }
         }
