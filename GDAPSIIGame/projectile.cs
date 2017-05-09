@@ -121,8 +121,11 @@ namespace GDAPSIIGame
 
 		public override void OnCollision(ICollidable obj)
 		{
-			if ((!(owner == Owners.Player && (obj is Player || (obj is Projectile && (obj as Projectile).owner == Owners.Player)))
-				&& !(obj is Enemy && owner == Owners.Enemy)) && !(destroyType == Destroy_Type.None && obj is Projectile))
+			//if ((!(owner == Owners.Player && (obj is Player || (obj is Projectile && (obj as Projectile).owner == Owners.Player)))
+			//	&& !(obj is Enemy && owner == Owners.Enemy)) && !(destroyType == Destroy_Type.None && obj is Projectile))
+			if((!(obj is Projectile &&
+				((owner == Owners.Player && (obj as Projectile).owner == owner) || (obj as Projectile).destroyType != destroyType))
+				&& !(obj is Enemy && owner == Owners.Enemy)) && !(obj is Player && owner == Owners.Player))
 			{
 				active = false;
 			}
