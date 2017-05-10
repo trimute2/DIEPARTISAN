@@ -95,7 +95,7 @@ namespace GDAPSIIGame
 			playerTextures.Add("PlayerTexture", Content.Load<Texture2D>("spr_player"));
 
 			//Load enemy textures
-			enemyTextures.Add("EnemyTexture", Content.Load<Texture2D>("playerNew"));
+			enemyTextures.Add("EnemyTexture", Content.Load<Texture2D>("enemy1"));
 
 			//Load bullet textures
 			bulletTextures.Add("PlayerBullet", Content.Load<Texture2D>("bullet"));

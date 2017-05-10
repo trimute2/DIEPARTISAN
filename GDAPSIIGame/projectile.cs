@@ -103,7 +103,7 @@ namespace GDAPSIIGame
 				null,
 				null,
 				angle,
-				this.Scale,
+				null,
 				Color.White,
 				SpriteEffects.None);
 			}

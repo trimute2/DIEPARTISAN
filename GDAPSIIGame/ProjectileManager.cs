@@ -17,6 +17,7 @@ namespace GDAPSIIGame
 		TURRET = 3,
 		SHOTGUN = 4
     }
+
     class ProjectileManager
     {
         //Fields-----------------
