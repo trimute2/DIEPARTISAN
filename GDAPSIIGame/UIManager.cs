@@ -24,8 +24,11 @@ namespace GDAPSIIGame
         private Texture2D ammoIcon;
         private Texture2D pistolIcon;
         private Texture2D shotgunIcon;
+        private Texture2D rifleIcon;
         private Texture2D reloadIcon;
         private Texture2D clockIcon;
+        private Texture2D enemiesLeftIcon;
+
         //Creating the max health for the player for draw reference
         private int playerMaxHealth;
         private int mapTime;
@@ -105,9 +108,11 @@ namespace GDAPSIIGame
             ammoIcon = Content.Load<Texture2D>("bullets");
             pistolIcon = Content.Load<Texture2D>("pistolicon");
             shotgunIcon = Content.Load<Texture2D>("shotgunicon");
+            rifleIcon = Content.Load<Texture2D>("rifleicon");
             reloadIcon = Content.Load<Texture2D>("reloadIcon");
             font = Content.Load<SpriteFont>("UIText");
             clockIcon = Content.Load<Texture2D>("clockicon");
+            enemiesLeftIcon = Content.Load<Texture2D>("enemieslefticon");
         }
 
         /// <summary>
@@ -181,6 +186,15 @@ namespace GDAPSIIGame
                     Color.White
                     );
             }
+            else
+            if (Player.Instance.CurrWeapon is Weapons.Rifle)
+            {
+                spriteBatch.Draw(
+                    rifleIcon,
+                    new Vector2(14, 49),
+                    Color.White
+                    );
+            }
 
             spriteBatch.Draw(ammoIcon, new Vector2(14, 109), Color.White);
 
@@ -194,10 +208,22 @@ namespace GDAPSIIGame
                 spriteBatch.DrawString(
                     spriteFont: font,
                     text: (int)(mapTime - PodManager.Instance.LevelTime) + "",
-                    position: new Vector2(1050, 14),
+                    position: new Vector2(1040, 14),
                     color: Color.White
                     );
             }
+
+            spriteBatch.Draw(
+                texture: enemiesLeftIcon,
+                position: new Vector2(14, 590)
+                );
+
+            spriteBatch.DrawString(
+                spriteFont: font,
+                text: EntityManager.Instance.NumEnemies + "",
+                position: new Vector2(60, 594),
+                color: Color.White
+                );
 
             spriteBatch.DrawString(
                 spriteFont: font,
