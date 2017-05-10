@@ -38,7 +38,7 @@ namespace GDAPSIIGame.Entities
 			dashTime = 1.5f;
 			bumpTime = 0.01f;
 			dashing = false;
-			dashSpeed = 8f;
+			dashSpeed = 6.0f;
 			color = Color.Red;
 			RecentTargets = new List<Vector2>();
 			CurrentTarget = Vector2.Zero;
@@ -120,16 +120,16 @@ namespace GDAPSIIGame.Entities
 						dashing = true;
 					}
 				}
-				Move(Player.Instance);
+				Move(gameTime);
 			}
 			base.Update(gameTime);
 		}
 
-		public void Move(GameObject thingToMoveTo)
+		public void Move(GameTime gameTime)
 		{
 			if (!(knockBackTime > 0))
 			{
-				Vector2 diff = Position - thingToMoveTo.Position;
+				Vector2 diff = Position - CurrentTarget;
 				/*float speed = MoveSpeed;
 				if(dashing && !bump)
 				{
@@ -148,7 +148,7 @@ namespace GDAPSIIGame.Entities
 				{
 					if (MoveSpeed * dashSpeed > Math.Abs(diff.X))
 					{
-						X = thingToMoveTo.Position.X;
+						X = CurrentTarget.X;
 					}
 					else
 					{
@@ -163,7 +163,7 @@ namespace GDAPSIIGame.Entities
 					}
 					if (MoveSpeed * dashSpeed > Math.Abs(diff.Y))
 					{
-						Y = thingToMoveTo.Position.Y;
+						Y = CurrentTarget.Y;
 					}
 					else
 					{
@@ -181,7 +181,7 @@ namespace GDAPSIIGame.Entities
 				{
 					if (MoveSpeed > Math.Abs(diff.X))
 					{
-						X = thingToMoveTo.X;
+						X = CurrentTarget.X;
 					}
 					else
 					{
@@ -196,7 +196,7 @@ namespace GDAPSIIGame.Entities
 					}
 					if (MoveSpeed > Math.Abs(diff.Y))
 					{
-						Y = thingToMoveTo.Y;
+						Y = CurrentTarget.Y;
 					}
 					else
 					{
