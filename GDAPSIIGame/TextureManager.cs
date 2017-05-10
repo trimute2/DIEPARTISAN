@@ -99,6 +99,7 @@ namespace GDAPSIIGame
 
 			//Load bullet textures
 			bulletTextures.Add("PlayerBullet", Content.Load<Texture2D>("bullet"));
+			bulletTextures.Add("Sparkle", Content.Load<Texture2D>("sparkle"));
 
 			//Load pistol texture
 			weaponTextures.Add("PistolTexture", Content.Load<Texture2D>("pistolweapon"));

@@ -38,6 +38,7 @@ namespace GDAPSIIGame
 		private float timeMult;
 		private float firing;
 		private ControlManager controlManager;
+		private Random rand;
 
 		private float focusMultiplier;
 		private float focusTimer;
@@ -71,6 +72,7 @@ namespace GDAPSIIGame
 			timeMult = 0;
 			firing = 0;
 			controlManager = ControlManager.Instance;
+			rand = new Random();
 		}
 
 		static public Player Instantiate(Weapon weapon, Weapon weapon2, Weapon weapon3, int health, int moveSpeed, Texture2D texture, Vector2 position, Rectangle boundingBox)
@@ -272,6 +274,13 @@ namespace GDAPSIIGame
 			{
 				Health += 1;
 				color = Color.LightGreen;
+				
+					Vector2 pistion = new Vector2(rand.Next(BoundingBox.Left, BoundingBox.Right), rand.Next(BoundingBox.Top, BoundingBox.Bottom));
+					Particle p = new Particle(
+						TextureManager.Instance.BulletTextures["Sparkle"],
+						pistion, new Rectangle((int)pistion.X, (int)pistion.Y, 6, 6),
+						new Vector2(0, -1), 1.5f);
+					ProjectileManager.Instance.AddParticle(p);
 			}
 			//Change the color back to the default at the end
 			else if (color == Color.Red || color == Color.LightGray || color == Color.LightGreen)

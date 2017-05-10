@@ -25,6 +25,7 @@ namespace GDAPSIIGame
         static ProjectileManager instance;
         //List of Projectiles in game
         volatile private static List<Projectile> projectiles;
+		private List<Particle> particles;
         //List of one of every projectile type for cloning
         private static List<Projectile> hiddenProjectiles;
 
@@ -41,6 +42,7 @@ namespace GDAPSIIGame
         private ProjectileManager()
         {
             projectiles = new List<Projectile>();
+			particles = new List<Particle>();
             hiddenProjectiles = new List<Projectile>();
         }
 
@@ -88,7 +90,17 @@ namespace GDAPSIIGame
 					projectiles.Remove(projectiles[i]);
 				}
 			}
-
+			for(int i = particles.Count -1; i >= 0; i--)
+			{
+				if (particles[i].IsActive)
+				{
+					particles[i].Update(gameTime);
+				}
+				else
+				{
+					particles.Remove(particles[i]);
+				}
+			}
 			/*foreach (Projectile p in Projectiles)
 			{
 				p.Update(gameTime);
@@ -108,6 +120,13 @@ namespace GDAPSIIGame
 					p.Draw(spriteBatch);
 				}
 			}
+			foreach(Particle p in particles)
+			{
+				if (p.Drawable())
+				{
+					p.Draw(spriteBatch);
+				}
+			}
         }
 
         internal void Add(Projectile p)
@@ -116,6 +135,10 @@ namespace GDAPSIIGame
             ChunkManager.Instance.Add(p);
         }
 
+		internal void AddParticle(Particle p)
+		{
+			particles.Add(p);
+		}
 		/// <summary>
 		/// removes a projectile
 		/// </summary>
