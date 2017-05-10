@@ -34,7 +34,7 @@ namespace GDAPSIIGame.Weapons
 			this.origin = origin; //The origin point of the weapon (where the player holds it)
 								  //this.bulletOffset = new Vector2(-boundingBox.Width / 2, boundingBox.Height / 4);
 								  //this.bulletOffset = Vector2.Zero;
-			this.bulletOffset = new Vector2(boundingBox.Height / 4, boundingBox.Width / 2);
+			this.bulletOffset = new Vector2(boundingBox.Height / 2, boundingBox.Width / 2);
 			this.owner = owner;
 			effects = SpriteEffects.None;
 			rand = new Random();
@@ -94,6 +94,7 @@ namespace GDAPSIIGame.Weapons
 				case Weapons.Weapon_Dir.Left:
 				case Weapons.Weapon_Dir.DownLeft:
 				case Weapons.Weapon_Dir.DownWest:
+					effects = SpriteEffects.None;
 					this.X += 25;
 					//this.bulletOffset = new Vector2(-BoundingBox.Width / 2, BoundingBox.Height / 4);
 					//bulletOffset.Y = -BoundingBox.Width / 2;
@@ -103,6 +104,7 @@ namespace GDAPSIIGame.Weapons
 				case Weapons.Weapon_Dir.Right:
 				case Weapons.Weapon_Dir.UpRight:
 				case Weapon_Dir.UpEast:
+					effects = SpriteEffects.FlipVertically;
 					this.X += 10;
 					//this.bulletOffset = new Vector2(BoundingBox.Width, BoundingBox.Height / 4);
 					//bulletOffset.Y = -BoundingBox.Width;
@@ -138,49 +140,16 @@ namespace GDAPSIIGame.Weapons
 
 		public override void Draw(SpriteBatch spriteBatch)
 		{
-            switch (Dir)
-            {
-                case Weapons.Weapon_Dir.UpWest:
-                case Weapons.Weapon_Dir.UpLeft:
-                case Weapons.Weapon_Dir.Left:
-                case Weapons.Weapon_Dir.DownLeft:
-                case Weapons.Weapon_Dir.DownWest:
-                    effects = SpriteEffects.None;
-                    break;
-
-                case Weapons.Weapon_Dir.UpEast:
-                case Weapons.Weapon_Dir.DownEast:
-                case Weapons.Weapon_Dir.DownRight:
-                case Weapons.Weapon_Dir.Right:
-                case Weapons.Weapon_Dir.UpRight:
-                    effects = SpriteEffects.FlipVertically;
-                    break;
-            }
-
-            if (effects == SpriteEffects.FlipVertically)
-            {
-                spriteBatch.Draw(
-                texture: this.Texture,
-				//position: new Vector2(Camera.Instance.GetViewportPosition(Player.Instance).X + 10, Camera.Instance.GetViewportPosition(Player.Instance).Y + 35),
-				position: Camera.Instance.GetViewportPosition(this.Position),
-				origin: new Vector2(0, this.Texture.Height / 2),
-                rotation: Angle - 4.8f,
-                effects: effects,
-                color: Color.White
-                );
-            }
-            else if (effects == SpriteEffects.None)
-            {
-                spriteBatch.Draw(
-                texture: this.Texture,
-				//position: new Vector2(Camera.Instance.GetViewportPosition(Player.Instance).X + 30, Camera.Instance.GetViewportPosition(Player.Instance).Y + 35),
-				position: Camera.Instance.GetViewportPosition(this.Position),
-				origin: new Vector2(0, this.Texture.Height / 2),
-                rotation: Angle - 4.8f,
-                effects: effects,
-                color: Color.White
-                );
-            }
+			spriteBatch.Draw(
+			texture: this.Texture,
+			//position: new Vector2(Camera.Instance.GetViewportPosition(Player.Instance).X + 10, Camera.Instance.GetViewportPosition(Player.Instance).Y + 35),
+			position: Camera.Instance.GetViewportPosition(this.Position),
+			origin: new Vector2(0, this.Texture.Height / 2),
+			scale: Scale,
+			rotation: Angle - 4.8f,
+			effects: effects,
+			color: Color.White
+			);
         }
 
 		/// <summary>
@@ -220,6 +189,17 @@ namespace GDAPSIIGame.Weapons
 					float degree = (float)(Math.PI / 180);
 					//Take the gun's current angle (a property) and create a rotation matrix out of it
 					Matrix rotationMatrix = Matrix.CreateRotationZ(Angle);
+					switch (Dir)
+					{
+						case Weapons.Weapon_Dir.UpEast:
+						case Weapons.Weapon_Dir.DownEast:
+						case Weapons.Weapon_Dir.DownRight:
+						case Weapons.Weapon_Dir.Right:
+						case Weapons.Weapon_Dir.UpRight:
+							rotationMatrix.M21 = (float)Math.Sin(Angle + Math.PI);
+							rotationMatrix.M22 = -(float)Math.Cos(Angle - Math.PI);
+							break;
+					}
 					Matrix b1 = Matrix.CreateRotationZ(degree * rand.Next(-10, 11));
 					Matrix b2 = Matrix.CreateRotationZ(degree * rand.Next(-10, 11));
 					Matrix b3 = Matrix.CreateRotationZ(degree * rand.Next(-10, 11));

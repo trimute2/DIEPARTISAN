@@ -27,7 +27,7 @@ namespace GDAPSIIGame.Weapons
 
 		public Rifle(ProjectileType pT, Texture2D texture, Vector2 position, Rectangle boundingBox, float fireRate, int clipSize, float reloadSpeed, Vector2 origin, Owners owner, Range range)
 			: base(pT, texture, position, boundingBox, range)
-        {
+		{
 			this.fireRate = fireRate; //How fast until the weapon can fire again
 			this.clipSize = clipSize; //How large the clip is
 			this.clip = clipSize; //The current amount of bullets in the clip
@@ -37,7 +37,7 @@ namespace GDAPSIIGame.Weapons
 			this.origin = origin; //The origin point of the weapon (where the player holds it)
 								  //this.bulletOffset = new Vector2(-boundingBox.Width / 2, boundingBox.Height / 4);
 								  //this.bulletOffset = Vector2.Zero;
-			this.bulletOffset = new Vector2(boundingBox.Height / 4, 2*boundingBox.Width);
+			this.bulletOffset = new Vector2(boundingBox.Height / 4, 3 * boundingBox.Width / 4);
 			this.owner = owner;
 			effects = SpriteEffects.None;
 		}
@@ -92,7 +92,7 @@ namespace GDAPSIIGame.Weapons
 
 		public override void Update(GameTime gameTime)
 		{
-			
+
 
 			switch (Dir)
 			{
@@ -101,6 +101,7 @@ namespace GDAPSIIGame.Weapons
 				case Weapons.Weapon_Dir.Left:
 				case Weapons.Weapon_Dir.DownLeft:
 				case Weapons.Weapon_Dir.DownWest:
+					effects = SpriteEffects.None;
 					this.X += 25;
 					//this.bulletOffset = new Vector2(-BoundingBox.Width / 2, BoundingBox.Height / 4);
 					//bulletOffset.Y = -BoundingBox.Width / 2;
@@ -110,6 +111,7 @@ namespace GDAPSIIGame.Weapons
 				case Weapons.Weapon_Dir.Right:
 				case Weapons.Weapon_Dir.UpRight:
 				case Weapon_Dir.UpEast:
+					effects = SpriteEffects.FlipVertically;
 					this.X += 10;
 					//this.bulletOffset = new Vector2(BoundingBox.Width, BoundingBox.Height / 4);
 					//bulletOffset.Y = -BoundingBox.Width;
@@ -145,50 +147,18 @@ namespace GDAPSIIGame.Weapons
 
 		public override void Draw(SpriteBatch spriteBatch)
 		{
-            switch (Dir)
-            {
-                case Weapons.Weapon_Dir.UpWest:
-                case Weapons.Weapon_Dir.UpLeft:
-                case Weapons.Weapon_Dir.Left:
-                case Weapons.Weapon_Dir.DownLeft:
-                case Weapons.Weapon_Dir.DownWest:
-                    effects = SpriteEffects.None;
-                    break;
+			spriteBatch.Draw(
+			texture: this.Texture,
+			//position: new Vector2(Camera.Instance.GetViewportPosition(Player.Instance).X + 10, Camera.Instance.GetViewportPosition(Player.Instance).Y + 35),
+			position: Camera.Instance.GetViewportPosition(this.Position),
+			origin: new Vector2(0, this.Texture.Height / 2),
+			scale: Scale,
+			rotation: Angle - 4.8f,
+			effects: effects,
+			color: Color.White
+			);
 
-                case Weapons.Weapon_Dir.UpEast:
-                case Weapons.Weapon_Dir.DownEast:
-                case Weapons.Weapon_Dir.DownRight:
-                case Weapons.Weapon_Dir.Right:
-                case Weapons.Weapon_Dir.UpRight:
-                    effects = SpriteEffects.FlipVertically;
-                    break;
-            }
-
-            if(effects == SpriteEffects.FlipVertically)
-            {
-                spriteBatch.Draw(
-                texture: this.Texture,
-				//position: new Vector2(Camera.Instance.GetViewportPosition(Player.Instance).X + 10, Camera.Instance.GetViewportPosition(Player.Instance).Y + 35),
-				position: Camera.Instance.GetViewportPosition(this.Position),
-				origin: new Vector2(0, this.Texture.Height / 2),
-                rotation: Angle - 4.8f,
-                effects: effects,
-                color: Color.White
-                );
-            }
-            else if(effects == SpriteEffects.None)
-            {
-                spriteBatch.Draw(
-                texture: this.Texture,
-				//position: new Vector2(Camera.Instance.GetViewportPosition(Player.Instance).X + 30, Camera.Instance.GetViewportPosition(Player.Instance).Y + 35),
-				position: Camera.Instance.GetViewportPosition(this.Position),
-				origin: new Vector2(0, this.Texture.Height / 2),
-                rotation: Angle - 4.8f,
-                effects: effects,
-                color: Color.White
-                );
-            }
-        }
+		}
 
 		/// <summary>
 		/// Tell the weapon it is time to reload
@@ -227,10 +197,22 @@ namespace GDAPSIIGame.Weapons
 
 					//Take the gun's current angle (a property) and create a rotation matrix out of it
 					Matrix rotationMatrix = Matrix.CreateRotationZ(Angle);
+					switch (Dir)
+					{
+						case Weapons.Weapon_Dir.UpEast:
+						case Weapons.Weapon_Dir.DownEast:
+						case Weapons.Weapon_Dir.DownRight:
+						case Weapons.Weapon_Dir.Right:
+						case Weapons.Weapon_Dir.UpRight:
+							rotationMatrix.M21 = (float)Math.Sin(Angle + Math.PI);
+							rotationMatrix.M22 = -(float)Math.Cos(Angle - Math.PI);
+							break;
+					}
 					//Take the rotation matrix and transform the offset vector by it
 					//The offset vector is an approximation of where the muzzle should be when added to the bullet's position
 					//Remember the bullet's position is the top left of its bouunding box
 					Vector2 bulletPosition = Vector2.Transform(bulletOffset, rotationMatrix);
+					
 
 					//Create the bullet at the actual position of the bullet + the rotated position
 					ProjectileManager.Instance.Clone(ProjType, Position + bulletPosition, direction, Angle + ((float)Math.PI / 2), owner, WeapRange);
@@ -242,8 +224,8 @@ namespace GDAPSIIGame.Weapons
 
 		public override void ResetWeapon()
 		{
-            Reload = false;
-            clip = clipSize;
+			Reload = false;
+			clip = clipSize;
 			Angle = 0;
 		}
 	}
