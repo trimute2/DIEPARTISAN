@@ -25,7 +25,7 @@ namespace GDAPSIIGame.Weapons
 				TextureManager.Instance.WeaponTextures["PistolTexture"],
 				Vector2.Zero,
 				new Rectangle(0, 0, 20, 30),
-				0.15f, 6, 0.45f,
+				0f, 6, 0.45f,
 				new Vector2(playerTexture.Bounds.X + playerTexture.Bounds.Width, playerTexture.Bounds.Top + playerTexture.Bounds.Height / 2),
 				Owners.Player,
 				Range.Medium);
