@@ -122,6 +122,8 @@ namespace GDAPSIIGame
 
 			//Load menu textures
 			menuTextures.Add("Logo", Content.Load<Texture2D>("tempLogo"));
+			menuTextures.Add("MenuBackground", Content.Load<Texture2D>("menuBackground"));
+			menuTextures.Add("Play", Content.Load<Texture2D>("PLAY"));
 
 			//Add fonts
 			fonts.Add("uifont", Content.Load<SpriteFont>("font"));

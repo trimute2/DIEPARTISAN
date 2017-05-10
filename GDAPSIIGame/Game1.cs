@@ -144,10 +144,10 @@ namespace GDAPSIIGame
 				case GameState.Menu:
 					//Update controls
 					controlManager.Update();
-					//menuManager.UpdateMainMenu();
+					menuManager.UpdateMainMenu(gameTime);
 
                     //Get input
-                    if (controlManager.ControlPressedControlPrevReleased(Control_Types.Interact))
+                    if (menuManager.MainMenuChange)
 					{
 						gameState = GameState.NewGame;
 					}
@@ -300,9 +300,7 @@ namespace GDAPSIIGame
 				//Drawing for main menu
 				case GameState.Menu:
 					//Draw the menu
-					spriteBatch.Draw(textureManager.GetMenuTexture("Logo"), new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
-
-					//menuManager.DrawMainMenu(spriteBatch);
+					menuManager.DrawMainMenu(spriteBatch);
 
 					//Draw the mouse texture
 					spriteBatch.Draw(mouseTex,
@@ -449,8 +447,8 @@ namespace GDAPSIIGame
 			Thread proj = new Thread(() => projectileManager.LoadContent(Content));
 			proj.Name = "Name";
 			threads.Add(proj);
-			Thread menu = new Thread(() => menuManager.LoadContent(Content));
-			menu.Name = "UI";
+			Thread menu = new Thread(() => menuManager.LoadContent(Content, GraphicsDevice));
+			menu.Name = "Menu";
 			threads.Add(menu);
 			Thread ui = new Thread(() => uiManager.LoadContent(Content));
 			ui.Name = "UI";
