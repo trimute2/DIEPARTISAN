@@ -27,6 +27,7 @@ namespace GDAPSIIGame
 		//Main Menu
 		private Texture2D title;
 		private Vector2 titlePos;
+		private float titleTimer;
 		private Button playButton;
 		private Button exitButton;
 		private Button optionsButton;
@@ -157,6 +158,7 @@ namespace GDAPSIIGame
 			mainMenuChange = false;
 			exit = false;
 			mainMenuOptions = false;
+			titleTimer = 0;
 
 			mainMenuButtons = new List<Button>();
 			optionsMenuButtons = new List<Button>();
@@ -169,7 +171,8 @@ namespace GDAPSIIGame
 		/// </summary>
 		public void UpdateMainMenu(GameTime gameTime)
 		{
-			titlePos.Y = (10*((float)Math.Sin(gameTime.TotalGameTime.TotalSeconds*1.5f)))+20;
+			titlePos.Y = (10*((float)Math.Sin(titleTimer*1.5f)))+20;
+			titleTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
 
 			if (ControlManager.Instance.Mode == Control_Mode.KBM)
 			{
