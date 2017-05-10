@@ -280,13 +280,24 @@ namespace GDAPSIIGame
 			return controls[(int)cont].ToString();
 		}
 
-		public String GetKBMControl(Control_Types cont)
+		public String GetKBMControl(Control_Types cont, bool alt)
 		{
-			if(controls[(int)cont].IsMouseControl)
+			if (!alt)
 			{
-				return controls[(int)cont].MouseControl.ToString();
+				if (controls[(int)cont].IsMouseControl)
+				{
+					return controls[(int)cont].MouseControl.ToString();
+				}
+				else return controls[(int)cont].KeyboardControl.ToString();
 			}
-			else return controls[(int)cont].KeyboardControl.ToString();
+			else
+			{
+				if (alternateControls[(int)cont].IsMouseControl)
+				{
+					return alternateControls[(int)cont].MouseControl.ToString();
+				}
+				else return alternateControls[(int)cont].KeyboardControl.ToString();
+			}
 		}
 
 		public Keys GetKeyControl(Control_Types cont)
@@ -313,8 +324,13 @@ namespace GDAPSIIGame
 				if (!alt)
 				{
 					c = controls[(int)cont];
+					result = controls[(int)cont].Name + ": ";
 				}
-				else c = alternateControls[(int)cont];
+				else
+				{
+					c = alternateControls[(int)cont];
+					result = controls[(int)cont].Name + "(Alternate): ";
+				}
 
 				if (mode == Control_Mode.KBM)
 				{
@@ -325,18 +341,18 @@ namespace GDAPSIIGame
 					//Check if they're not "null"
 					if (m != MouseButtons.None)
 					{
-						c.SetControl(m, false);
+						c.SetControl(m, alt);
 						Console.WriteLine("Set: " + cont + " to " + m);
 						setting = false;
-						result = m.ToString();
+						result += m.ToString();
 						return true;
 					}
 					else if (k != Keys.None)
 					{
-						c.SetControl(k, false);
+						c.SetControl(k, alt);
 						Console.WriteLine("Set: " + cont + " to " + k);
 						setting = false;
-						result = k.ToString();
+						result += k.ToString();
 						return true;
 					}
 				}
@@ -348,17 +364,23 @@ namespace GDAPSIIGame
 					//The BigButton never gets used	
 					if (b != Buttons.BigButton)
 					{
-						c.SetControl(b, false);
+						c.SetControl(b, alt);
 						setting = false;
-						result = b.ToString();
+						result += b.ToString();
 						return true;
 					}
 				}
-				result = "Setting...";
+				result += "Setting...";
 				return false;
 			}
 			else
 			{
+				Control c;
+				if (!alt)
+				{
+					c = controls[(int)cont];
+					result = controls[(int)cont].Name + ": ";
+				}
 				setting = true;
 				result = "None";
 				return false;

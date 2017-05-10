@@ -109,18 +109,6 @@
 /processorParam:TextureFormat=Color
 /build:indoorTileset.png
 
-#begin indoorFloorTileset.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:indoorFloorTileset.png
-
 #begin spawnRoomForeground.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -336,4 +324,16 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:PLAY.png
+
+#begin indoorFloorTileset.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:indoorFloorTileset.png
 

@@ -38,11 +38,11 @@ namespace GDAPSIIGame
 
 		//Options Menu
 		private List<Button> optionsMenuButtons;
-		private List<Button> optionsControlButtons;
 		private Button optionsBackButton;
 
 		//Controls Menu
 		private Button settingButton;
+		private Button fireButton;
 		private Button fireAltButton;
 
 		//Pause Menu
@@ -119,10 +119,13 @@ namespace GDAPSIIGame
 			optionsMenuButtons.Add(optionsBackButton);
 
 			Texture2D black = TextureManager.Instance.GetMenuTexture("Black");
-			fireAltButton = new Button(black, new Rectangle((GraphicsDevice.Viewport.Width / 2) - play.Width / 2, 225, 160, 60),
-				Color.LightPink, "Fire: " + ControlManager.Instance.GetKBMControl(Control_Types.Fire));
+			fireButton = new Button(black, new Rectangle(((GraphicsDevice.Viewport.Width / 2) - play.Width / 2) - 100, 225, 160, 60),
+				Color.LightPink, "Fire: " + ControlManager.Instance.GetKBMControl(Control_Types.Fire, false));
+			optionsMenuButtons.Add(fireButton);
+
+			fireAltButton = new Button(black, new Rectangle(((GraphicsDevice.Viewport.Width / 2) - play.Width / 2) + 100, 225, 160, 60),
+				Color.LightPink, "Fire (Alternate): " + ControlManager.Instance.GetKBMControl(Control_Types.Fire, true));
 			optionsMenuButtons.Add(fireAltButton);
-			optionsControlButtons.Add(fireAltButton);
 
 
 			//Pause Menu
@@ -162,7 +165,6 @@ namespace GDAPSIIGame
 
 			mainMenuButtons = new List<Button>();
 			optionsMenuButtons = new List<Button>();
-			optionsControlButtons = new List<Button>();
 			pauseMenuButtons = new List<Button>();
 		}
 
@@ -265,8 +267,10 @@ namespace GDAPSIIGame
 				//Check if the player is currently setting a control
 				if (ControlManager.Instance.Setting)
 				{
-					ControlManager.Instance.SetControl(cont, alt, out result);
-					ControlManager.Instance.SaveControlFile();
+					if (ControlManager.Instance.SetControl(cont, alt, out result))
+					{
+						ControlManager.Instance.SaveControlFile();
+					}
 					settingButton.Text = result;
 				}
 				else
@@ -291,13 +295,22 @@ namespace GDAPSIIGame
 							mainMenuChange = true;
 						}
 					}
-					else if(fireAltButton.Selected &&
+					else if(fireButton.Selected &&
+						((mState.LeftButton == ButtonState.Pressed && prevMState.LeftButton == ButtonState.Released)
+						|| (kbState.IsKeyDown(Keys.Enter) && prevKbState.IsKeyUp(Keys.Enter))))
+					{
+						settingButton = fireButton;
+						cont = Control_Types.Fire;
+						alt = false;
+						ControlManager.Instance.Setting = true;
+					}
+					else if (fireAltButton.Selected &&
 						((mState.LeftButton == ButtonState.Pressed && prevMState.LeftButton == ButtonState.Released)
 						|| (kbState.IsKeyDown(Keys.Enter) && prevKbState.IsKeyUp(Keys.Enter))))
 					{
 						settingButton = fireAltButton;
 						cont = Control_Types.Fire;
-						alt = false;
+						alt = true;
 						ControlManager.Instance.Setting = true;
 					}
 				}
@@ -317,6 +330,7 @@ namespace GDAPSIIGame
 				);
 
 			optionsBackButton.Draw(spriteBatch);
+			fireButton.Draw(spriteBatch);
 			fireAltButton.Draw(spriteBatch);
 		}
 
