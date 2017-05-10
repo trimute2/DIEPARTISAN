@@ -84,7 +84,7 @@ namespace GDAPSIIGame.Entities
 				null,
 				null,
 				origin,
-				gun.Angle,
+				gun.Angle-(float)(Math.PI/2),
 				this.Scale,
 				Color.White);
 		}

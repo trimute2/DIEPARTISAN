@@ -95,7 +95,7 @@ namespace GDAPSIIGame.Weapons
 				case Weapons.Weapon_Dir.Left:
 				case Weapons.Weapon_Dir.DownLeft:
 				case Weapons.Weapon_Dir.DownWest:
-					this.X += 30;
+					this.X += 25;
 					//this.bulletOffset = new Vector2(-BoundingBox.Width / 2, BoundingBox.Height / 4);
 					//bulletOffset.Y = -BoundingBox.Width / 2;
 					break;
