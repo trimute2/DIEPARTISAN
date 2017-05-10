@@ -104,12 +104,14 @@ namespace GDAPSIIGame
 				Color.LightPink);
 			mainMenuButtons.Add(playButton);
 
-			optionsButton = new Button(play, new Rectangle((GraphicsDevice.Viewport.Width / 2) - play.Width / 2, (GraphicsDevice.Viewport.Height / 2) + 163, 160, 60),
-				Color.LightPink, "OPTIONS OPTIONS OPTIONS");
+            Texture2D options = textureManager.GetMenuTexture("Options");
+            optionsButton = new Button(options, new Rectangle((GraphicsDevice.Viewport.Width / 2) - play.Width / 2, (GraphicsDevice.Viewport.Height / 2) + 163, 160, 60),
+				Color.LightPink, "");
 			mainMenuButtons.Add(optionsButton);
 
-			exitButton = new Button(play, new Rectangle((GraphicsDevice.Viewport.Width / 2) - play.Width / 2, (GraphicsDevice.Viewport.Height / 2) + 225, 160, 60),
-				Color.LightPink, "EXIT EXIT EXIT");
+            Texture2D exit = textureManager.GetMenuTexture("Exit");
+            exitButton = new Button(exit, new Rectangle((GraphicsDevice.Viewport.Width / 2) - play.Width / 2, (GraphicsDevice.Viewport.Height / 2) + 225, 160, 60),
+				Color.LightPink, "");
 			mainMenuButtons.Add(exitButton);
 
 
