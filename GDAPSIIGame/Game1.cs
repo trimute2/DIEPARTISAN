@@ -7,6 +7,7 @@ using GDAPSIIGame.Map;
 using GDAPSIIGame.Pods;
 using System.Threading;
 using GDAPSIIGame.Weapons;
+using GDAPSIIGame.Audio;
 using Microsoft.Xna.Framework.Content;
 
 namespace GDAPSIIGame
@@ -27,7 +28,8 @@ namespace GDAPSIIGame
 		GamePadState previousGpState;
 		ChunkManager chunkManager;
 		MapManager mapManager;
-        UIManager uiManager;
+		AudioManager audioManager;
+		UIManager uiManager;
         Camera mainCamera;
 		GameState gameState;
 		Texture2D mouseTex;
@@ -69,6 +71,9 @@ namespace GDAPSIIGame
 
 			//Initialize texture manager
 			textureManager = TextureManager.Instance;
+
+			//Initialize audio manager
+			audioManager = AudioManager.Instance;
 
             //Initialize entity manager
             entityManager = EntityManager.Instance;
@@ -501,6 +506,9 @@ namespace GDAPSIIGame
 			Thread tex = new Thread(() => textureManager.LoadContent(Content));
 			tex.Name = "Textures";
 			threads.Add(tex);
+			Thread audio = new Thread(() => audioManager.LoadContent(Content));
+			audio.Name = "Textures";
+			threads.Add(audio);
 			Thread weap = new Thread(() => weaponManager.LoadContent(Content));
 			weap.Name = "Weapons";
 			threads.Add(weap);

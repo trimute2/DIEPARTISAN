@@ -38,6 +38,7 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Audio\AudioManager.cs" />
     <Compile Include="Button.cs" />
     <Compile Include="Chunk.cs" />
     <Compile Include="ChunkManager.cs" />

@@ -7,6 +7,8 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Audio;
+using GDAPSIIGame.Audio;
 
 namespace GDAPSIIGame
 {
@@ -191,9 +193,19 @@ namespace GDAPSIIGame
 				{
 					if (b.Contains(mState.Position.ToVector2()))
 					{
+						b.PrevSelected = b.Selected;
 						b.Selected = true;
+
+						if (!b.PrevSelected)
+						{
+							AudioManager.Instance.GetSoundEffect("Blip").Play();
+						}
 					}
-					else b.Selected = false;
+					else
+					{
+						b.PrevSelected = b.Selected;
+						b.Selected = false;
+					}
 				}
 				
 				//Check if button is clicked
@@ -282,9 +294,19 @@ namespace GDAPSIIGame
 					{
 						if (b.Contains(mState.Position.ToVector2()))
 						{
+							b.PrevSelected = b.Selected;
 							b.Selected = true;
+
+							if (!b.PrevSelected)
+							{
+								AudioManager.Instance.GetSoundEffect("Blip").Play();
+							}
 						}
-						else b.Selected = false;
+						else
+						{
+							b.PrevSelected = b.Selected;
+							b.Selected = false;
+						}
 					}
 
 					//Check if button is clicked
@@ -353,10 +375,21 @@ namespace GDAPSIIGame
 				foreach (Button b in pauseMenuButtons)
 				{
 					if (b.Contains(mState.Position.ToVector2()))
-					{
-						b.Selected = true;
-					}
-					else b.Selected = false;
+						if (b.Contains(mState.Position.ToVector2()))
+						{
+							b.PrevSelected = b.Selected;
+							b.Selected = true;
+
+							if (!b.PrevSelected)
+							{
+								AudioManager.Instance.GetSoundEffect("Blip").Play();
+							}
+						}
+						else
+						{
+							b.PrevSelected = b.Selected;
+							b.Selected = false;
+						}
 				}
 				
 				//Check if button is clicked

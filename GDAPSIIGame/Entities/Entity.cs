@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using GDAPSIIGame.Interface;
+using GDAPSIIGame.Audio;
 
 namespace GDAPSIIGame.Entities
 {
@@ -190,6 +191,7 @@ namespace GDAPSIIGame.Entities
 					this.Damage(((Projectile)obj).Damage);
 					if ((obj as Projectile).Knockback != 0)
 					{
+						AudioManager.Instance.GetSoundEffect("Hurt").Play();
 						knockBack = (obj as Projectile).Direction * (obj as Projectile).Knockback;
 						knockBackTime = 0.2f;
 					}

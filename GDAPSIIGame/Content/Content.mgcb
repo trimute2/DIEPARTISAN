@@ -397,3 +397,21 @@
 /processorParam:TextureFormat=Color
 /build:OPTIONS.png
 
+#begin SoundEffects/blip.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SoundEffects/blip.wav
+
+#begin SoundEffects/damagesound.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SoundEffects/damagesound.wav
+
+#begin SoundEffects/hurt.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SoundEffects/hurt.wav
+

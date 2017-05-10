@@ -12,6 +12,7 @@ using System.Runtime.CompilerServices;
 using GDAPSIIGame.Map;
 using GDAPSIIGame.Interface;
 using GDAPSIIGame.Weapons;
+using GDAPSIIGame.Audio;
 
 namespace GDAPSIIGame
 {
@@ -543,6 +544,7 @@ namespace GDAPSIIGame
 						IsHurting = true;
 						knockBack = (obj as Projectile).Direction * 216;
 						knockBackTime = 0.2f;
+						AudioManager.Instance.GetSoundEffect("DamageSound").Play();
 					}
 				}
 			}
@@ -564,6 +566,7 @@ namespace GDAPSIIGame
 						{
 							varianceMultiplier = 1.0f;
 						}
+						AudioManager.Instance.GetSoundEffect("DamageSound").Play();
 					}
 				}
 			}

@@ -14,13 +14,20 @@ namespace GDAPSIIGame
         private Texture2D texture;
         private Rectangle area;
 		private bool selected;
-        private string text;
+		private bool prevSelected;
+		private string text;
 		Color colorSelected;
 
 		public bool Selected
 		{
 			get { return selected; }
 			set { selected = value; }
+		}
+
+		public bool PrevSelected
+		{
+			get { return prevSelected; }
+			set { prevSelected = value; }
 		}
 
 		public String Text
