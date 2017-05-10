@@ -239,12 +239,19 @@ namespace GDAPSIIGame
 
                             PodManager.Instance.Update(gameTime);
 
-                            uiManager.SetMapSize((int)(Math.Pow((double)mapSize, 2.0) * 15));
+                            
 
                             break;
 						
 						//The player is exiting the level after beating it
 						case MapState.Exit:
+							//Update projectiles
+							projectileManager.Update(gameTime, previousKbState, kbState);
+
+							//Update chunks
+							chunkManager.Update();
+
+							//Update UI
 							uiManager.Update(gameTime);
 							if (!uiManager.Fade)
 							{
@@ -503,6 +510,7 @@ namespace GDAPSIIGame
 			PodManager.Instance.Reset();
 			//Add the player to chunk
 			chunkManager.Add(Player.Instance);
+			uiManager.SetMapSize((int)(Math.Pow((double)mapSize, 2.0) * 15));
 			//Go to gameplay
 			gameState = GameState.GamePlay;
 		}
