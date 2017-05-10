@@ -23,8 +23,14 @@ namespace GDAPSIIGame
 			set { selected = value; }
 		}
 
+		public String Text
+		{
+			get { return text; }
+			set { text = value; }
+		}
 
-        public Button(Texture2D texture, Rectangle area, Color colorSelected, string text)
+
+		public Button(Texture2D texture, Rectangle area, Color colorSelected, string text)
         {
             this.texture = texture;
             this.area = area;

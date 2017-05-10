@@ -280,6 +280,15 @@ namespace GDAPSIIGame
 			return controls[(int)cont].ToString();
 		}
 
+		public String GetKBMControl(Control_Types cont)
+		{
+			if(controls[(int)cont].IsMouseControl)
+			{
+				return controls[(int)cont].MouseControl.ToString();
+			}
+			else return controls[(int)cont].KeyboardControl.ToString();
+		}
+
 		public Keys GetKeyControl(Control_Types cont)
 		{
 			return controls[(int)cont].KeyboardControl;
@@ -295,7 +304,7 @@ namespace GDAPSIIGame
 			return controls[(int)cont].GamePadControl;
 		}
 
-		public bool SetControl(Control_Types cont, bool alt)
+		public bool SetControl(Control_Types cont, bool alt, out String result)
 		{
 			if (setting)
 			{
@@ -319,6 +328,7 @@ namespace GDAPSIIGame
 						c.SetControl(m, false);
 						Console.WriteLine("Set: " + cont + " to " + m);
 						setting = false;
+						result = m.ToString();
 						return true;
 					}
 					else if (k != Keys.None)
@@ -326,6 +336,7 @@ namespace GDAPSIIGame
 						c.SetControl(k, false);
 						Console.WriteLine("Set: " + cont + " to " + k);
 						setting = false;
+						result = k.ToString();
 						return true;
 					}
 				}
@@ -339,14 +350,17 @@ namespace GDAPSIIGame
 					{
 						c.SetControl(b, false);
 						setting = false;
+						result = b.ToString();
 						return true;
 					}
 				}
+				result = "Setting...";
 				return false;
 			}
 			else
 			{
 				setting = true;
+				result = "None";
 				return false;
 			}
 		}

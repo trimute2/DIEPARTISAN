@@ -11,7 +11,7 @@ using Microsoft.Xna.Framework.Content;
 
 namespace GDAPSIIGame
 {
-    enum GameState { InitialLoad, Menu, NewGame, LoadingScreen, GamePlay, GameOver, PauseMenu }
+    enum GameState { InitialLoad, Menu, OptionsMenu, NewGame, LoadingScreen, GamePlay, GameOver, PauseMenu }
 
 	public class Game1 : Game
     {
@@ -142,14 +142,40 @@ namespace GDAPSIIGame
 
 				//The menu of the game
 				case GameState.Menu:
-					//Update controls
+					//Update controls and menu
 					controlManager.Update();
 					menuManager.UpdateMainMenu(gameTime);
 
                     //Get input
                     if (menuManager.MainMenuChange)
 					{
+						menuManager.MainMenuChange = false;
 						gameState = GameState.NewGame;
+					}
+					//Get input
+					else if (menuManager.MainMenuOptions)
+					{
+						menuManager.MainMenuOptions = false;
+						gameState = GameState.OptionsMenu;
+					}
+					else if (menuManager.Exit)
+					{
+						menuManager.Exit = false;
+						Exit();
+					}
+					break;
+
+				//The options menu of the game
+				case GameState.OptionsMenu:
+					//Update controls and menu
+					controlManager.Update();
+					menuManager.UpdateOptionsMenu(gameTime);
+
+					//Get input
+					if (menuManager.MainMenuChange)
+					{
+						menuManager.MainMenuChange = false;
+						gameState = GameState.Menu;
 					}
 					break;
 
@@ -268,12 +294,19 @@ namespace GDAPSIIGame
 
 				//When the game is paused
 				case GameState.PauseMenu:
+					//Update controls and menu
 					controlManager.Update();
+					menuManager.UpdatePauseMenu(gameTime);
 
 					//Get input
 					if (controlManager.ControlPressedControlPrevReleased(Control_Types.Interact))
 					{
 						gameState = GameState.GamePlay;
+					}
+					else if (menuManager.MainMenuChange)
+					{
+						menuManager.MainMenuChange = false;
+						gameState = GameState.Menu;
 					}
 					break;
 
@@ -304,6 +337,7 @@ namespace GDAPSIIGame
 						new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height),
 						Color.White);
 					break;
+
 				//Drawing for main menu
 				case GameState.Menu:
 					//Draw the menu
@@ -320,7 +354,24 @@ namespace GDAPSIIGame
 							null,
 							0);
 					break;
-				
+
+				//Drawing for options menu
+				case GameState.OptionsMenu:
+					//Draw the menu
+					menuManager.DrawOptionsMenu(spriteBatch);
+
+					//Draw the mouse texture
+					spriteBatch.Draw(mouseTex,
+							mousePos - new Vector2(10, 13),
+							null,
+							null,
+							Vector2.Zero,
+							0.0f,
+							mouseScale,
+							null,
+							0);
+					break;
+
 				//Drawing for loading screen
 				case GameState.LoadingScreen:
 					spriteBatch.Draw(TextureManager.Instance.GetMenuTexture("Black"),
@@ -367,11 +418,16 @@ namespace GDAPSIIGame
 					//Draw projectiles
 					projectileManager.Draw(gameTime, spriteBatch);
 
+					mapManager.DrawForeground(spriteBatch);
+
 					//Draw UI
 					uiManager.Draw(gameTime, spriteBatch, GraphicsDevice);
 
 					//Make the screen gray
 					spriteBatch.Draw(pauseRect, Vector2.Zero, Color.White);
+
+					//Draw the menu
+					menuManager.DrawPauseMenu(spriteBatch);
 
 					//Draw the mouse texture
 					spriteBatch.Draw(mouseTex,
