@@ -77,6 +77,9 @@ namespace GDAPSIIGame
             mapTime = mapSize;
         }
 
+		/// <summary>
+		/// Number for controlling splash screens
+		/// </summary>
 		public int SplashScreen
 		{
 			get { return splashFade; }
@@ -298,7 +301,7 @@ namespace GDAPSIIGame
 					new Color(Color.White, fade)
 					);
 			}
-			else if (splashFade == 4)
+			else if (splashFade > 3)
 			{
 				spriteBatch.Draw(
 					TextureManager.Instance.GetMenuTexture("Black2"),

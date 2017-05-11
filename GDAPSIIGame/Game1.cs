@@ -35,6 +35,7 @@ namespace GDAPSIIGame
 		Texture2D mouseTex;
         Vector2 mousePos;
 		MouseState mState;
+		MouseState prevmState;
 		Vector2 mouseScale;
 		SpriteFont font;
 		WeaponManager weaponManager;
@@ -44,6 +45,7 @@ namespace GDAPSIIGame
         int mapSize;
 		Thread l;
 		bool startLoad;
+		bool loadingDone;
 
 		public Game1()
         {
@@ -99,6 +101,11 @@ namespace GDAPSIIGame
             //Initialize ui manager
             uiManager = UIManager.Instance;
 
+			prevmState = Mouse.GetState();
+			mState = Mouse.GetState();
+			previousGpState = GamePad.GetState(PlayerIndex.One, GamePadDeadZone.Circular);
+			gpState = GamePad.GetState(PlayerIndex.One, GamePadDeadZone.Circular);
+
 			gameState = GameState.InitialLoad;
 			base.Initialize();
         }
@@ -107,6 +114,7 @@ namespace GDAPSIIGame
         {
 			spriteBatch = new SpriteBatch(GraphicsDevice);
 			startLoad = true;
+			loadingDone = false;
 			textureManager.InitialLoadContent(Content);
 		}
 
@@ -118,7 +126,9 @@ namespace GDAPSIIGame
             base.Update(gameTime);
 
 			//Update mouse texture's position
+			prevmState = mState;
 			mState = Mouse.GetState();
+
 			//ContainMouse(mState);
 			if (controlManager.Mode == Control_Mode.KBM)
 			{
@@ -138,22 +148,33 @@ namespace GDAPSIIGame
             {
 				//The initial loading of the game
 				case GameState.InitialLoad:
+
 					previousKbState = kbState;
 					kbState = Keyboard.GetState();
+					previousGpState = gpState;
+					gpState = GamePad.GetState(PlayerIndex.One, GamePadDeadZone.Circular);
+
+					//Start multithreading the load
 					if (startLoad)
 					{
 						InitialLoad();
 						startLoad = false;
 					}
+					//Splash screen logic
 					uiManager.UpdateSplashScreens(gameTime);
-					if(uiManager.SplashScreen > 4)
-					{
-						gameState = GameState.Menu;
-					}
-					if(kbState.GetPressedKeys().Length > 0 && previousKbState.GetPressedKeys().Length == 0)
+
+					//Skipping splash screen stuff
+					if((kbState.GetPressedKeys().Length > 0 && previousKbState.GetPressedKeys().Length == 0)
+						|| (mState.LeftButton == ButtonState.Pressed && prevmState.LeftButton == ButtonState.Released)
+						|| (gpState.IsConnected && gpState.IsButtonDown(Buttons.A) && previousGpState.IsButtonUp(Buttons.A)))
 					{
 						if (uiManager.SplashScreen < 2) { uiManager.SplashScreen = 2; }
 						else if (uiManager.SplashScreen < 5) { uiManager.SplashScreen = 5; }
+					}
+					//If splashscreen is done and done loading
+					if (uiManager.SplashScreen > 4 && loadingDone)
+					{
+						gameState = GameState.Menu;
 					}
 					break;
 
@@ -568,7 +589,7 @@ namespace GDAPSIIGame
 			mouseTex = textureManager.MouseTextures["MousePointer"];
 			mousePos = new Vector2(mState.X, mState.Y);
 			mouseScale = new Vector2((float)21 / mouseTex.Width, (float)22 / mouseTex.Height);
-			//gameState = GameState.Menu;
+			loadingDone = true;
 		}
 
 		private void Loading()
