@@ -83,7 +83,8 @@ namespace GDAPSIIGame
 
 		internal void InitialLoadContent(ContentManager Content)
 		{
-			menuTextures.Add("Black", Content.Load<Texture2D>("black"));
+			menuTextures.Add("Brickchop", Content.Load<Texture2D>("brickchop"));
+			menuTextures.Add("Black2", Content.Load<Texture2D>("black2"));
 		}
 
 		/// <summary>
@@ -122,6 +123,7 @@ namespace GDAPSIIGame
 			roomTextures.Add("playerSpawnForeground", Content.Load<Texture2D>("spawnRoomForeground"));
 
 			//Load menu textures
+			menuTextures.Add("Black", Content.Load<Texture2D>("black"));
 			menuTextures.Add("Logo", Content.Load<Texture2D>("tempLogo"));
 			menuTextures.Add("MenuBackground", Content.Load<Texture2D>("menuBackground"));
 			menuTextures.Add("Play", Content.Load<Texture2D>("PLAY"));

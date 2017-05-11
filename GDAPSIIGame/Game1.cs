@@ -138,10 +138,22 @@ namespace GDAPSIIGame
             {
 				//The initial loading of the game
 				case GameState.InitialLoad:
+					previousKbState = kbState;
+					kbState = Keyboard.GetState();
 					if (startLoad)
 					{
 						InitialLoad();
 						startLoad = false;
+					}
+					uiManager.UpdateSplashScreens(gameTime);
+					if(uiManager.SplashScreen > 4)
+					{
+						gameState = GameState.Menu;
+					}
+					if(kbState.GetPressedKeys().Length > 0 && previousKbState.GetPressedKeys().Length == 0)
+					{
+						if (uiManager.SplashScreen < 2) { uiManager.SplashScreen = 2; }
+						else if (uiManager.SplashScreen < 5) { uiManager.SplashScreen = 5; }
 					}
 					break;
 
@@ -338,9 +350,7 @@ namespace GDAPSIIGame
 			switch (gameState)
 			{
 				case GameState.InitialLoad:
-					spriteBatch.Draw(TextureManager.Instance.GetMenuTexture("Black"),
-						new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height),
-						Color.White);
+					uiManager.DrawSplashScreens(spriteBatch, GraphicsDevice);
 					break;
 
 				//Drawing for main menu
@@ -507,7 +517,7 @@ namespace GDAPSIIGame
 			tex.Name = "Textures";
 			threads.Add(tex);
 			Thread audio = new Thread(() => audioManager.LoadContent(Content));
-			audio.Name = "Textures";
+			audio.Name = "Audio";
 			threads.Add(audio);
 			Thread weap = new Thread(() => weaponManager.LoadContent(Content));
 			weap.Name = "Weapons";
@@ -558,7 +568,7 @@ namespace GDAPSIIGame
 			mouseTex = textureManager.MouseTextures["MousePointer"];
 			mousePos = new Vector2(mState.X, mState.Y);
 			mouseScale = new Vector2((float)21 / mouseTex.Width, (float)22 / mouseTex.Height);
-			gameState = GameState.Menu;
+			//gameState = GameState.Menu;
 		}
 
 		private void Loading()

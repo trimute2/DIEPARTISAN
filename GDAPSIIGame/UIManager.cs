@@ -34,10 +34,13 @@ namespace GDAPSIIGame
         private int mapTime;
         private float healthBarWidth;
 
-        //Fading
+		//Fading
+		private int splashFade;
+		private float splashTimer;
         private float fadeTimer;
         private float fade;
         private float scalar;
+
         private static UIManager instance;
 
         /// <summary>
@@ -60,7 +63,10 @@ namespace GDAPSIIGame
         /// empty private instantiation
         /// </summary>
         private UIManager()
-        { }
+        {
+			splashFade = 0;
+			splashTimer = 1.5f;
+		}
 
         /// <summary>
         /// Sets the map size to calculate the map time
@@ -70,6 +76,33 @@ namespace GDAPSIIGame
         {
             mapTime = mapSize;
         }
+
+		public int SplashScreen
+		{
+			get { return splashFade; }
+			set
+			{
+				splashFade = value;
+				switch (value)
+				{
+					case 0:
+						splashTimer = 1.5f;
+						break;
+					case 1:
+						Fade = true;
+						break;
+					case 2:
+						splashTimer = 1.5f;
+						break;
+					case 3:
+						Fade = false;
+						break;
+					case 4:
+						splashTimer = 0.5f;
+						break;
+				}
+			}
+		}
 
         /// <summary>
         /// Screen fade for transitions
@@ -115,6 +148,59 @@ namespace GDAPSIIGame
             enemiesLeftIcon = Content.Load<Texture2D>("enemieslefticon");
         }
 
+		/// <summary>
+		/// Update the splash screens at the beggining of the game
+		/// </summary>
+		public void UpdateSplashScreens(GameTime gameTime)
+		{
+			if (splashFade == 0 && splashTimer > 0)
+			{
+				splashTimer -= (float)gameTime.ElapsedGameTime.TotalMilliseconds / 1000;
+			}
+			else if (splashFade == 0 && splashTimer <= 0)
+			{
+				splashFade = 1;
+				Fade = true;
+			}
+			else if (splashFade == 1 && Fade)
+			{
+				fadeTimer -= (float)gameTime.ElapsedGameTime.TotalMilliseconds / 1000;
+				fade -= ((float)gameTime.ElapsedGameTime.TotalMilliseconds / 1000) / 2;
+			}
+			else if (splashFade == 1 && !Fade)
+			{
+				splashFade = 2;
+				splashTimer = 1.5f;
+			}
+			else if (splashFade == 2 && splashTimer > 0)
+			{
+				splashTimer -= (float)gameTime.ElapsedGameTime.TotalMilliseconds / 1000;
+			}
+			else if (splashFade == 2 && splashTimer <= 0)
+			{
+				splashFade = 3;
+				Fade = false;
+			}
+			else if (splashFade == 3 && Fade)
+			{
+				fadeTimer -= (float)gameTime.ElapsedGameTime.TotalMilliseconds / 1000;
+				fade += ((float)gameTime.ElapsedGameTime.TotalMilliseconds / 1000) / 2;
+			}
+			else if (splashFade == 3 && !Fade)
+			{
+				splashFade = 4;
+				splashTimer = 0.5f;
+			}
+			else if (splashFade == 4 && splashTimer > 0)
+			{
+				splashTimer -= (float)gameTime.ElapsedGameTime.TotalMilliseconds / 1000;
+			}
+			else if (splashFade == 4 && splashTimer <= 0)
+			{
+				splashFade = 5;
+			}
+		}
+
         /// <summary>
         /// Update the UI Manager once per frame. Managed through Game1.cs.
         /// </summary>
@@ -151,12 +237,83 @@ namespace GDAPSIIGame
             }
         }
 
-        /// <summary>
-        /// Draw the UI assets on the screen.
-        /// </summary>
-        /// <param name="gameTime"></param>
-        /// <param name="spriteBatch"></param>
-        public void Draw(GameTime gameTime, SpriteBatch spriteBatch, GraphicsDevice GraphicsDevice)
+		/// <summary>
+		/// Draw the splash screens at the beggining of the game
+		/// </summary>
+		public void DrawSplashScreens(SpriteBatch spriteBatch, GraphicsDevice GraphicsDevice)
+		{
+			if (splashFade == 0)
+			{
+				spriteBatch.Draw(
+					TextureManager.Instance.GetMenuTexture("Black2"),
+					new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height),
+					Color.White
+					);
+			}
+			else if (splashFade == 1)
+			{
+				spriteBatch.Draw(
+					TextureManager.Instance.GetMenuTexture("Brickchop"),
+					new Rectangle((GraphicsDevice.Viewport.Width / 2) - TextureManager.Instance.GetMenuTexture("Brickchop").Width / 6,
+						(GraphicsDevice.Viewport.Height / 2) - TextureManager.Instance.GetMenuTexture("Brickchop").Height / 6,
+						TextureManager.Instance.GetMenuTexture("Brickchop").Width / 3, TextureManager.Instance.GetMenuTexture("Brickchop").Height / 3),
+					Color.White
+					);
+
+				spriteBatch.Draw(
+					TextureManager.Instance.GetMenuTexture("Black2"),
+					new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height),
+					new Color(Color.White, fade)
+					);
+			}
+			else if (splashFade == 2)
+			{
+				spriteBatch.Draw(
+					TextureManager.Instance.GetMenuTexture("Black2"),
+					new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height),
+					Color.White
+					);
+
+				spriteBatch.Draw(
+					TextureManager.Instance.GetMenuTexture("Brickchop"),
+					new Rectangle((GraphicsDevice.Viewport.Width / 2) - TextureManager.Instance.GetMenuTexture("Brickchop").Width / 6,
+						(GraphicsDevice.Viewport.Height / 2) - TextureManager.Instance.GetMenuTexture("Brickchop").Height / 6,
+						TextureManager.Instance.GetMenuTexture("Brickchop").Width / 3, TextureManager.Instance.GetMenuTexture("Brickchop").Height / 3),
+					Color.White
+					);
+			}
+			else if (splashFade == 3)
+			{
+				spriteBatch.Draw(
+					TextureManager.Instance.GetMenuTexture("Brickchop"),
+					new Rectangle((GraphicsDevice.Viewport.Width / 2) - TextureManager.Instance.GetMenuTexture("Brickchop").Width / 6,
+						(GraphicsDevice.Viewport.Height / 2) - TextureManager.Instance.GetMenuTexture("Brickchop").Height / 6,
+						TextureManager.Instance.GetMenuTexture("Brickchop").Width / 3, TextureManager.Instance.GetMenuTexture("Brickchop").Height / 3),
+					Color.White
+					);
+
+				spriteBatch.Draw(
+					TextureManager.Instance.GetMenuTexture("Black2"),
+					new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height),
+					new Color(Color.White, fade)
+					);
+			}
+			else if (splashFade == 4)
+			{
+				spriteBatch.Draw(
+					TextureManager.Instance.GetMenuTexture("Black2"),
+					new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height),
+					new Color(Color.White, fade)
+					);
+			}
+		}
+
+		/// <summary>
+		/// Draw the UI assets on the screen.
+		/// </summary>
+		/// <param name="gameTime"></param>
+		/// <param name="spriteBatch"></param>
+		public void Draw(GameTime gameTime, SpriteBatch spriteBatch, GraphicsDevice GraphicsDevice)
         {
             spriteBatch.Draw(healthbarBackground, new Vector2(40, 20), Color.White);
 

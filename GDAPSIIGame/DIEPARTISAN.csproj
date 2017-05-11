@@ -108,6 +108,7 @@
   <ItemGroup />
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="ClassDiagram1.cd" />
     <None Include="Levels\EnemyFilledRuins1.cmap" />
     <None Include="Levels\EnemyFilledRuins2.cmap" />
     <None Include="Levels\Star.cmap" />
