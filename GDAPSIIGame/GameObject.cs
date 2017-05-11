@@ -92,7 +92,7 @@ namespace GDAPSIIGame
                     null,
                     Vector2.Zero,
                     0.0f,
-                    null,
+                    scale,
                     color,
                     0);
             }

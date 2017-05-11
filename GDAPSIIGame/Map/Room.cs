@@ -191,8 +191,8 @@ namespace GDAPSIIGame.Map
 			//Should change this later
 			int tileSize = 64;
 			int roomSize = 10;
-			int enemySpriteWidth = 32;
-			int enemySpriteHeight = 32;
+			int enemySpriteWidth = 39;
+			int enemySpriteHeight = 38;
 			Pod pod = new Pod();
 			for (int i = 0; i < roomSize; i++)
 			{

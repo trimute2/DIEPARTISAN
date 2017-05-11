@@ -365,7 +365,7 @@ namespace GDAPSIIGame
 				null,
 				Vector2.Zero,
 				0.0f,
-				null,
+				Scale,
 				color,
 				effect);
 

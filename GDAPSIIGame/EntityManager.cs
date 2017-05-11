@@ -64,7 +64,7 @@ namespace GDAPSIIGame
 				5,
 				playerTexture,
 				new Vector2(playerTexture.Width, playerTexture.Height),
-				new Rectangle(playerTexture.Width, playerTexture.Height, 40, 60));
+				new Rectangle(playerTexture.Width, playerTexture.Height, 34, 54));
 			//Create the player's weapon and add it to the player
             ChunkManager.Instance.Add(player);
 		}
