@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GDAPSIIGame", "GDAPSIIGame.csproj", "{BD62890D-9B74-488F-9340-ECA214B61E82}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DIEPARTISAN", "DIEPARTISAN.csproj", "{BD62890D-9B74-488F-9340-ECA214B61E82}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExternalEditor", "ExternalEditor\ExternalEditor.csproj", "{25AE2EF6-6880-4ADB-9DBA-C11E75228D13}"
 EndProject

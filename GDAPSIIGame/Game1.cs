@@ -49,7 +49,7 @@ namespace GDAPSIIGame
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            this.Window.Title = "Die-Partisan";
+            this.Window.Title = "DIE-PARTISAN";
 			// Resize the screen to 1152 x 648.
 			graphics.PreferredBackBufferWidth = 1152;
 			graphics.PreferredBackBufferHeight = 648;

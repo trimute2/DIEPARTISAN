@@ -9,8 +9,8 @@
     <ProjectGuid>{BD62890D-9B74-488F-9340-ECA214B61E82}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>GDAPSIIGame</RootNamespace>
-    <AssemblyName>GDAPSIIGame</AssemblyName>
+    <RootNamespace>DIEPARTISAN</RootNamespace>
+    <AssemblyName>DIEPARTISAN</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MonoGamePlatform>Windows</MonoGamePlatform>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
