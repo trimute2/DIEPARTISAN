@@ -186,7 +186,7 @@ namespace GDAPSIIGame.Entities
             }
 			else if(obj is Projectile)
 			{
-				if( !(this is Player) &&((obj as Projectile).Owner == Owners.Player))
+				if (!(this is Player) && ((obj as Projectile).Owner == Owners.Player) && (obj as GameObject).IsActive)
 				{
 					this.Damage(((Projectile)obj).Damage);
 					AudioManager.Instance.GetSoundEffect("Hurt").Play();
