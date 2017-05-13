@@ -36,6 +36,23 @@ namespace GDAPSIIGame
 			set { text = value; }
 		}
 
+		public Rectangle Area
+		{
+			get { return area; }
+		}
+
+		public int Y
+		{
+			get { return area.Location.Y; }
+			set { area.Location = new Point(area.Location.X, value); }
+		}
+
+		public int X
+		{
+			get { return area.Location.X; }
+			set { area.Location = new Point(value, area.Location.Y); }
+		}
+
 
 		public Button(Texture2D texture, Rectangle area, Color colorSelected, string text)
         {
@@ -68,7 +85,14 @@ namespace GDAPSIIGame
 			}
             else sb.Draw(texture, area, Color.White);
 
-            sb.DrawString(TextureManager.Instance.GetFont("uifont"),text,area.Center.ToVector2(),Color.MediumSeaGreen);
+            sb.DrawString(TextureManager.Instance.GetFont("uifont"),
+				text,
+				new Vector2(area.Center.ToVector2().X - area.Width / 2, area.Center.ToVector2().Y - TextureManager.Instance.GetFont("uifont").LineSpacing/4),
+				Color.MediumSeaGreen, 
+				0, 
+				Vector2.Zero, 
+				0.5f, 
+				SpriteEffects.None, 0);
         }
     }
 }

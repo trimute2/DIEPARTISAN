@@ -26,6 +26,8 @@ namespace GDAPSIIGame
 		private Texture2D menuBackground;
 		private Vector2 menuBackgroundScale;
 
+		private SpriteFont font;
+
 		//Main Menu
 		private Texture2D title;
 		private Vector2 titlePos;
@@ -41,6 +43,13 @@ namespace GDAPSIIGame
 		//Options Menu
 		private List<Button> optionsMenuButtons;
 		private Button optionsBackButton;
+		private Vector2 bPosition;
+		private Vector2 altBPosition;
+		private Vector2 coverPos1;
+		private Vector2 coverPos2;
+		private Rectangle controlRectangle;
+		private bool canMoveUp;
+		private bool canMoveDown;
 
 		//Controls Menu
 		private Button settingButton;
@@ -96,6 +105,7 @@ namespace GDAPSIIGame
 			menuBackground = textureManager.GetMenuTexture("MenuBackground");
 			menuBackgroundScale = new Vector2((float)GraphicsDevice.Viewport.Width / menuBackground.Width, (float)GraphicsDevice.Viewport.Height / menuBackground.Height);
 
+			font = textureManager.GetFont("uifont");
 
 			//Main Menu
 			title = textureManager.GetMenuTexture("Logo");
@@ -107,12 +117,12 @@ namespace GDAPSIIGame
 			mainMenuButtons.Add(playButton);
 
             Texture2D options = textureManager.GetMenuTexture("Options");
-            optionsButton = new Button(options, new Rectangle((GraphicsDevice.Viewport.Width / 2) - play.Width / 2, (GraphicsDevice.Viewport.Height / 2) + 163, 160, 60),
+            optionsButton = new Button(options, new Rectangle((GraphicsDevice.Viewport.Width / 2) - options.Width / 2, (GraphicsDevice.Viewport.Height / 2) + 163, 244, 60),
 				Color.LightPink, "");
 			mainMenuButtons.Add(optionsButton);
 
             Texture2D exit = textureManager.GetMenuTexture("Exit");
-            exitButton = new Button(exit, new Rectangle((GraphicsDevice.Viewport.Width / 2) - play.Width / 2, (GraphicsDevice.Viewport.Height / 2) + 225, 160, 60),
+            exitButton = new Button(exit, new Rectangle((GraphicsDevice.Viewport.Width / 2) - exit.Width / 2, (GraphicsDevice.Viewport.Height / 2) + 225, 160, 60),
 				Color.LightPink, "");
 			mainMenuButtons.Add(exitButton);
 
@@ -122,13 +132,21 @@ namespace GDAPSIIGame
 				Color.LightPink, "BACK BUTTON");
 			optionsMenuButtons.Add(optionsBackButton);
 
+			bPosition = new Vector2(GraphicsDevice.Viewport.Width / 2 - 100, 50);
+			altBPosition = new Vector2(GraphicsDevice.Viewport.Width / 2 + 100, 50);
+			coverPos1 = new Vector2((GraphicsDevice.Viewport.Width / 2) - (menuBackground.Width/2), 50 - (menuBackground.Height/2));
+			coverPos2 = new Vector2((GraphicsDevice.Viewport.Width / 2) - (menuBackground.Width / 2), 352 + (menuBackground.Height / 2));
+			controlRectangle = new Rectangle((GraphicsDevice.Viewport.Width / 2) - (menuBackground.Width / 2), 50 + (menuBackground.Height / 2), 300, 300);
+			canMoveUp = false;
+			canMoveDown = true;
+
 			Texture2D black = TextureManager.Instance.GetMenuTexture("Black");
-			fireButton = new Button(black, new Rectangle(((GraphicsDevice.Viewport.Width / 2) - play.Width / 2) - 100, 225, 160, 60),
+			fireButton = new Button(black, new Rectangle(((GraphicsDevice.Viewport.Width / 2) - play.Width / 2) - 100, 155, 160, 60),
 				Color.LightPink, "Fire: " + ControlManager.Instance.GetKBMControl(Control_Types.Fire, false));
 			optionsMenuButtons.Add(fireButton);
 
-			fireAltButton = new Button(black, new Rectangle(((GraphicsDevice.Viewport.Width / 2) - play.Width / 2) + 100, 225, 160, 60),
-				Color.LightPink, "Fire (Alternate): " + ControlManager.Instance.GetKBMControl(Control_Types.Fire, true));
+			fireAltButton = new Button(black, new Rectangle(((GraphicsDevice.Viewport.Width / 2) - play.Width / 2) + 100, 155, 160, 60),
+				Color.LightPink, "Fire: " + ControlManager.Instance.GetKBMControl(Control_Types.Fire, true));
 			optionsMenuButtons.Add(fireAltButton);
 
 
@@ -264,11 +282,22 @@ namespace GDAPSIIGame
 			exitButton.Draw(spriteBatch);
 		}
 
+		private bool CanMoveUp()
+		{
+			return (fireButton.Y > 155 && fireAltButton.Y > 155);
+		}
+
+		private bool CanMoveDown()
+		{
+			return (fireButton.Y < 155 && fireAltButton.Y < 155);
+		}
+
 		/// <summary>
 		/// The update for the options menu of the game
 		/// </summary>
 		public void UpdateOptionsMenu(GameTime gameTime)
 		{
+
 			if (ControlManager.Instance.Mode == Control_Mode.KBM)
 			{
 				//Update states
@@ -289,10 +318,45 @@ namespace GDAPSIIGame
 				}
 				else
 				{
+					//Scrolling the buttons down
+					if (mState.ScrollWheelValue < prevMState.ScrollWheelValue)
+					{
+						foreach (Button b in optionsMenuButtons)
+						{
+							if (b != optionsBackButton && canMoveDown)
+							{
+								b.Y += 15;
+							}
+						}
+					}
+					//Scrolling the buttons up
+					else if (mState.ScrollWheelValue > prevMState.ScrollWheelValue && CanMoveUp())
+					{
+						foreach (Button b in optionsMenuButtons)
+						{
+							if (b != optionsBackButton)
+							{
+								b.Y -= 15;
+							}
+						}
+					}
+
 					//Check if the button is selected
 					foreach (Button b in optionsMenuButtons)
 					{
-						if (b.Contains(mState.Position.ToVector2()))
+						//If the button is the back button
+						if (b == optionsBackButton && b.Contains(mState.Position.ToVector2()))
+						{
+							b.PrevSelected = b.Selected;
+							b.Selected = true;
+
+							if (!b.PrevSelected)
+							{
+								AudioManager.Instance.GetSoundEffect("Blip").Play();
+							}
+						}
+						//If its for any other buttons
+						else if (b.Contains(mState.Position.ToVector2()) && controlRectangle.Contains(b.Area))
 						{
 							b.PrevSelected = b.Selected;
 							b.Selected = true;
@@ -319,6 +383,7 @@ namespace GDAPSIIGame
 							mainMenuChange = true;
 						}
 					}
+					//FIRE BUTTONS
 					else if(fireButton.Selected &&
 						((mState.LeftButton == ButtonState.Pressed && prevMState.LeftButton == ButtonState.Released)
 						|| (kbState.IsKeyDown(Keys.Enter) && prevKbState.IsKeyUp(Keys.Enter))))
@@ -341,11 +406,17 @@ namespace GDAPSIIGame
 			}
 		}
 
+		public void ResetOptionsPositions()
+		{
+
+		}
+
 		/// <summary>
 		/// The draw for the options menu of the game
 		/// </summary>
 		public void DrawOptionsMenu(SpriteBatch spriteBatch)
 		{
+			//Draw background
 			spriteBatch.Draw(
 				texture: menuBackground,
 				position: Vector2.Zero,
@@ -353,9 +424,41 @@ namespace GDAPSIIGame
 				scale: menuBackgroundScale
 				);
 
-			optionsBackButton.Draw(spriteBatch);
+			//Draw control buttons
 			fireButton.Draw(spriteBatch);
 			fireAltButton.Draw(spriteBatch);
+
+			//Draw covering backgrounds
+			spriteBatch.Draw(
+				texture: menuBackground,
+				position: coverPos1,
+				color: Color.White
+				);
+
+			//Draw covering backgrounds
+			spriteBatch.Draw(
+				texture: menuBackground,
+				position: coverPos2,
+				color: Color.White
+				);
+
+			//Draw options buttons
+			optionsBackButton.Draw(spriteBatch);
+
+			//Draw button labels
+			spriteBatch.DrawString(
+				spriteFont: font,
+				text: "Button",
+				position: bPosition,
+				color: Color.Black
+				);
+
+			spriteBatch.DrawString(
+				spriteFont: font,
+				text: "Alt. Button",
+				position: altBPosition,
+				color: Color.Black
+				);
 		}
 
 		/// <summary>
