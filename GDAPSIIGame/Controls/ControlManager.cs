@@ -324,12 +324,12 @@ namespace GDAPSIIGame
 				if (!alt)
 				{
 					c = controls[(int)cont];
-					result = controls[(int)cont].Name + ": ";
+					result = "";
 				}
 				else
 				{
 					c = alternateControls[(int)cont];
-					result = controls[(int)cont].Name + "(Alternate): ";
+					result = "";
 				}
 
 				if (mode == Control_Mode.KBM)
@@ -342,7 +342,6 @@ namespace GDAPSIIGame
 					if (m != MouseButtons.None)
 					{
 						c.SetControl(m, alt);
-						Console.WriteLine("Set: " + cont + " to " + m);
 						setting = false;
 						result += m.ToString();
 						return true;
@@ -350,7 +349,6 @@ namespace GDAPSIIGame
 					else if (k != Keys.None)
 					{
 						c.SetControl(k, alt);
-						Console.WriteLine("Set: " + cont + " to " + k);
 						setting = false;
 						result += k.ToString();
 						return true;
@@ -375,12 +373,6 @@ namespace GDAPSIIGame
 			}
 			else
 			{
-				Control c;
-				if (!alt)
-				{
-					c = controls[(int)cont];
-					result = controls[(int)cont].Name + ": ";
-				}
 				setting = true;
 				result = "None";
 				return false;

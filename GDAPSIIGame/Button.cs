@@ -79,20 +79,30 @@ namespace GDAPSIIGame
 
         public void Draw(SpriteBatch sb)
         {
-			if(selected)
+			if (selected)
 			{
 				sb.Draw(texture, area, colorSelected);
+				sb.DrawString(TextureManager.Instance.GetFont("uifont"),
+					text,
+					new Vector2(area.Center.ToVector2().X - area.Width / 2, area.Center.ToVector2().Y - TextureManager.Instance.GetFont("uifont").LineSpacing / 4),
+					colorSelected,
+					0,
+					Vector2.Zero,
+					0.5f,
+					SpriteEffects.None, 0);
 			}
-            else sb.Draw(texture, area, Color.White);
-
-            sb.DrawString(TextureManager.Instance.GetFont("uifont"),
-				text,
-				new Vector2(area.Center.ToVector2().X - area.Width / 2, area.Center.ToVector2().Y - TextureManager.Instance.GetFont("uifont").LineSpacing/4),
-				Color.MediumSeaGreen, 
-				0, 
-				Vector2.Zero, 
-				0.5f, 
-				SpriteEffects.None, 0);
+			else
+			{
+				sb.Draw(texture, area, Color.White);
+				sb.DrawString(TextureManager.Instance.GetFont("uifont"),
+					text,
+					new Vector2(area.Center.ToVector2().X - area.Width / 2, area.Center.ToVector2().Y - TextureManager.Instance.GetFont("uifont").LineSpacing / 4),
+					Color.MediumSeaGreen,
+					0,
+					Vector2.Zero,
+					0.5f,
+					SpriteEffects.None, 0);
+			}
         }
     }
 }

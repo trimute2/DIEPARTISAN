@@ -48,13 +48,25 @@ namespace GDAPSIIGame
 		private Vector2 coverPos1;
 		private Vector2 coverPos2;
 		private Rectangle controlRectangle;
-		private bool canMoveUp;
-		private bool canMoveDown;
 
 		//Controls Menu
 		private Button settingButton;
 		private Button fireButton;
 		private Button fireAltButton;
+		private Button reloadButton;
+		private Button reloadAltButton;
+		private Button nextWeaponButton;
+		private Button nextWeaponAltButton;
+		private Button prevWeaponButton;
+		private Button prevWeaponAltButton;
+		private Button interactButton;
+		private Button interactAltButton;
+		private Vector2 firePos;
+		private Vector2 reloadPos;
+		private Vector2 nextWeaponPos;
+		private Vector2 prevWeaponPos;
+		private Vector2 interactPos;
+		private List<Vector2> labelPositions;
 
 		//Pause Menu
 		private List<Button> pauseMenuButtons;
@@ -128,30 +140,68 @@ namespace GDAPSIIGame
 
 
 			//Options Menu
-			optionsBackButton = new Button(play, new Rectangle((GraphicsDevice.Viewport.Width / 2) - play.Width / 2, (GraphicsDevice.Viewport.Height / 2) + 225, 160, 60),
+			Texture2D black = TextureManager.Instance.GetMenuTexture("Black");
+
+			optionsBackButton = new Button(black, new Rectangle((GraphicsDevice.Viewport.Width / 2) - play.Width / 2, (GraphicsDevice.Viewport.Height / 2) + 225, 160, 60),
 				Color.LightPink, "BACK BUTTON");
 			optionsMenuButtons.Add(optionsBackButton);
 
-			bPosition = new Vector2(GraphicsDevice.Viewport.Width / 2 - 100, 50);
-			altBPosition = new Vector2(GraphicsDevice.Viewport.Width / 2 + 100, 50);
+			bPosition = new Vector2((GraphicsDevice.Viewport.Width / 2) - 175, 50);
+			altBPosition = new Vector2((GraphicsDevice.Viewport.Width / 2) +25 , 50);
 			coverPos1 = new Vector2((GraphicsDevice.Viewport.Width / 2) - (menuBackground.Width/2), 50 - (menuBackground.Height/2));
 			coverPos2 = new Vector2((GraphicsDevice.Viewport.Width / 2) - (menuBackground.Width / 2), 352 + (menuBackground.Height / 2));
-			controlRectangle = new Rectangle((GraphicsDevice.Viewport.Width / 2) - (menuBackground.Width / 2), 50 + (menuBackground.Height / 2), 300, 300);
-			canMoveUp = false;
-			canMoveDown = true;
+			controlRectangle = new Rectangle((GraphicsDevice.Viewport.Width / 2) - (menuBackground.Width / 2), 50 + (menuBackground.Height / 2), 380, 300);
 
-			Texture2D black = TextureManager.Instance.GetMenuTexture("Black");
+			//Controls
+			#region ControlCreation
 			fireButton = new Button(black, new Rectangle(((GraphicsDevice.Viewport.Width / 2) - play.Width / 2) - 100, 155, 160, 60),
-				Color.LightPink, "Fire: " + ControlManager.Instance.GetKBMControl(Control_Types.Fire, false));
+				Color.LightPink, ControlManager.Instance.GetKBMControl(Control_Types.Fire, false));
 			optionsMenuButtons.Add(fireButton);
-
 			fireAltButton = new Button(black, new Rectangle(((GraphicsDevice.Viewport.Width / 2) - play.Width / 2) + 100, 155, 160, 60),
-				Color.LightPink, "Fire: " + ControlManager.Instance.GetKBMControl(Control_Types.Fire, true));
+				Color.LightPink, ControlManager.Instance.GetKBMControl(Control_Types.Fire, true));
 			optionsMenuButtons.Add(fireAltButton);
+			firePos = new Vector2(fireButton.Area.Location.X - 50, 175);
+			labelPositions.Add(firePos);
 
+			reloadButton = new Button(black, new Rectangle(((GraphicsDevice.Viewport.Width / 2) - play.Width / 2) - 100, 235, 160, 60),
+				Color.LightPink, ControlManager.Instance.GetKBMControl(Control_Types.Reload, false));
+			optionsMenuButtons.Add(reloadButton);
+			reloadAltButton = new Button(black, new Rectangle(((GraphicsDevice.Viewport.Width / 2) - play.Width / 2) + 100, 235, 160, 60),
+				Color.LightPink, ControlManager.Instance.GetKBMControl(Control_Types.Reload, true));
+			optionsMenuButtons.Add(reloadAltButton);
+			reloadPos = new Vector2(reloadButton.Area.Location.X - 75, 255);
+			labelPositions.Add(reloadPos);
+
+			nextWeaponButton = new Button(black, new Rectangle(((GraphicsDevice.Viewport.Width / 2) - play.Width / 2) - 100, 315, 160, 60),
+				Color.LightPink, ControlManager.Instance.GetKBMControl(Control_Types.NextWeapon, false));
+			optionsMenuButtons.Add(nextWeaponButton);
+			nextWeaponAltButton = new Button(black, new Rectangle(((GraphicsDevice.Viewport.Width / 2) - play.Width / 2) + 100, 315, 160, 60),
+				Color.LightPink, ControlManager.Instance.GetKBMControl(Control_Types.NextWeapon, true));
+			optionsMenuButtons.Add(nextWeaponAltButton);
+			nextWeaponPos = new Vector2(nextWeaponButton.Area.Location.X - 135, 335);
+			labelPositions.Add(nextWeaponPos);
+
+			prevWeaponButton = new Button(black, new Rectangle(((GraphicsDevice.Viewport.Width / 2) - play.Width / 2) - 100, 395, 160, 60),
+				Color.LightPink, ControlManager.Instance.GetKBMControl(Control_Types.PrevWeapon, false));
+			optionsMenuButtons.Add(prevWeaponButton);
+			prevWeaponAltButton = new Button(black, new Rectangle(((GraphicsDevice.Viewport.Width / 2) - play.Width / 2) + 100, 395, 160, 60),
+				Color.LightPink, ControlManager.Instance.GetKBMControl(Control_Types.PrevWeapon, true));
+			optionsMenuButtons.Add(prevWeaponAltButton);
+			prevWeaponPos = new Vector2(prevWeaponButton.Area.Location.X - 172, 415);
+			labelPositions.Add(prevWeaponPos);
+
+			interactButton = new Button(black, new Rectangle(((GraphicsDevice.Viewport.Width / 2) - play.Width / 2) - 100, 475, 160, 60),
+				Color.LightPink, ControlManager.Instance.GetKBMControl(Control_Types.Interact, false));
+			optionsMenuButtons.Add(interactButton);
+			interactAltButton = new Button(black, new Rectangle(((GraphicsDevice.Viewport.Width / 2) - play.Width / 2) + 100, 475, 160, 60),
+				Color.LightPink, ControlManager.Instance.GetKBMControl(Control_Types.Interact, true));
+			optionsMenuButtons.Add(interactAltButton);
+			interactPos = new Vector2(interactButton.Area.Location.X - 150, 495);
+			labelPositions.Add(interactPos);
+			#endregion
 
 			//Pause Menu
-			pauseMainMenuButton = new Button(black, new Rectangle(200, 75, 160, 60),
+			pauseMainMenuButton = new Button(black, new Rectangle(GraphicsDevice.Viewport.Width / 2, GraphicsDevice.Viewport.Height / 2, 160, 60),
 				Color.LightPink, "Main Menu");
 			pauseMenuButtons.Add(pauseMainMenuButton);
 
@@ -188,6 +238,18 @@ namespace GDAPSIIGame
 			mainMenuButtons = new List<Button>();
 			optionsMenuButtons = new List<Button>();
 			pauseMenuButtons = new List<Button>();
+			labelPositions = new List<Vector2>();
+		}
+
+		public void UpdateInput()
+		{
+			//Update states
+			prevKbState = kbState;
+			kbState = Keyboard.GetState();
+			prevMState = mState;
+			mState = Mouse.GetState();
+			prevGpState = gpState;
+			gpState = GamePad.GetState(PlayerIndex.One, GamePadDeadZone.Circular);
 		}
 
 		/// <summary>
@@ -198,14 +260,10 @@ namespace GDAPSIIGame
 			titlePos.Y = (10*((float)Math.Sin(titleTimer*1.5f)))+20;
 			titleTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
 
+			UpdateInput();
+
 			if (ControlManager.Instance.Mode == Control_Mode.KBM)
 			{
-				//Update states
-				prevKbState = kbState;
-				kbState = Keyboard.GetState();
-				prevMState = mState;
-				mState = Mouse.GetState();
-
 				//Check if the button is selected
 				foreach (Button b in mainMenuButtons)
 				{
@@ -233,6 +291,7 @@ namespace GDAPSIIGame
 				{
 					if (!ControlManager.Instance.Setting)
 					{
+						playButton.Selected = false;
 						mainMenuChange = true;
 					}
 				}
@@ -242,6 +301,7 @@ namespace GDAPSIIGame
 				{
 					if (!ControlManager.Instance.Setting)
 					{
+						optionsButton.Selected = false;
 						mainMenuOptions = true;
 					}
 				}
@@ -251,6 +311,7 @@ namespace GDAPSIIGame
 				{
 					if (!ControlManager.Instance.Setting)
 					{
+						exitButton.Selected = false;
 						exit = true;
 					}
 				}
@@ -284,7 +345,7 @@ namespace GDAPSIIGame
 
 		private bool CanMoveUp()
 		{
-			return (fireButton.Y > 155 && fireAltButton.Y > 155);
+			return (interactPos.Y > 475 - interactButton.Area.Height && interactPos.Y > 475 - interactAltButton.Area.Height);
 		}
 
 		private bool CanMoveDown()
@@ -297,15 +358,10 @@ namespace GDAPSIIGame
 		/// </summary>
 		public void UpdateOptionsMenu(GameTime gameTime)
 		{
+			UpdateInput();
 
 			if (ControlManager.Instance.Mode == Control_Mode.KBM)
 			{
-				//Update states
-				prevKbState = kbState;
-				kbState = Keyboard.GetState();
-				prevMState = mState;
-				mState = Mouse.GetState();
-
 				String result;
 				//Check if the player is currently setting a control
 				if (ControlManager.Instance.Setting)
@@ -319,15 +375,21 @@ namespace GDAPSIIGame
 				else
 				{
 					//Scrolling the buttons down
-					if (mState.ScrollWheelValue < prevMState.ScrollWheelValue)
+					if (mState.ScrollWheelValue < prevMState.ScrollWheelValue && CanMoveDown())
 					{
 						foreach (Button b in optionsMenuButtons)
 						{
-							if (b != optionsBackButton && canMoveDown)
+							if (b != optionsBackButton)
 							{
 								b.Y += 15;
 							}
 						}
+						firePos.Y += 15;
+						reloadPos.Y += 15;
+						nextWeaponPos.Y += 15;
+						prevWeaponPos.Y += 15;
+						interactPos.Y += 15;
+
 					}
 					//Scrolling the buttons up
 					else if (mState.ScrollWheelValue > prevMState.ScrollWheelValue && CanMoveUp())
@@ -339,8 +401,12 @@ namespace GDAPSIIGame
 								b.Y -= 15;
 							}
 						}
+						firePos.Y -= 15;
+						reloadPos.Y -= 15;
+						nextWeaponPos.Y -= 15;
+						prevWeaponPos.Y -= 15;
+						interactPos.Y -= 15;
 					}
-
 					//Check if the button is selected
 					foreach (Button b in optionsMenuButtons)
 					{
@@ -380,6 +446,7 @@ namespace GDAPSIIGame
 					{
 						if (!ControlManager.Instance.Setting)
 						{
+							optionsBackButton.Selected = false;
 							mainMenuChange = true;
 						}
 					}
@@ -399,6 +466,82 @@ namespace GDAPSIIGame
 					{
 						settingButton = fireAltButton;
 						cont = Control_Types.Fire;
+						alt = true;
+						ControlManager.Instance.Setting = true;
+					}
+					//RELOAD BUTTONS
+					else if (reloadButton.Selected &&
+						((mState.LeftButton == ButtonState.Pressed && prevMState.LeftButton == ButtonState.Released)
+						|| (kbState.IsKeyDown(Keys.Enter) && prevKbState.IsKeyUp(Keys.Enter))))
+					{
+						settingButton = reloadButton;
+						cont = Control_Types.Reload;
+						alt = false;
+						ControlManager.Instance.Setting = true;
+					}
+					else if (reloadAltButton.Selected &&
+						((mState.LeftButton == ButtonState.Pressed && prevMState.LeftButton == ButtonState.Released)
+						|| (kbState.IsKeyDown(Keys.Enter) && prevKbState.IsKeyUp(Keys.Enter))))
+					{
+						settingButton = reloadAltButton;
+						cont = Control_Types.Reload;
+						alt = true;
+						ControlManager.Instance.Setting = true;
+					}
+					//NEXT WEAPON
+					else if (nextWeaponButton.Selected &&
+						((mState.LeftButton == ButtonState.Pressed && prevMState.LeftButton == ButtonState.Released)
+						|| (kbState.IsKeyDown(Keys.Enter) && prevKbState.IsKeyUp(Keys.Enter))))
+					{
+						settingButton = nextWeaponButton;
+						cont = Control_Types.NextWeapon;
+						alt = false;
+						ControlManager.Instance.Setting = true;
+					}
+					else if (nextWeaponAltButton.Selected &&
+						((mState.LeftButton == ButtonState.Pressed && prevMState.LeftButton == ButtonState.Released)
+						|| (kbState.IsKeyDown(Keys.Enter) && prevKbState.IsKeyUp(Keys.Enter))))
+					{
+						settingButton = nextWeaponAltButton;
+						cont = Control_Types.NextWeapon;
+						alt = true;
+						ControlManager.Instance.Setting = true;
+					}
+					//PREVIOUS WEAPON
+					else if (prevWeaponButton.Selected &&
+						((mState.LeftButton == ButtonState.Pressed && prevMState.LeftButton == ButtonState.Released)
+						|| (kbState.IsKeyDown(Keys.Enter) && prevKbState.IsKeyUp(Keys.Enter))))
+					{
+						settingButton = prevWeaponButton;
+						cont = Control_Types.PrevWeapon;
+						alt = false;
+						ControlManager.Instance.Setting = true;
+					}
+					else if (prevWeaponAltButton.Selected &&
+						((mState.LeftButton == ButtonState.Pressed && prevMState.LeftButton == ButtonState.Released)
+						|| (kbState.IsKeyDown(Keys.Enter) && prevKbState.IsKeyUp(Keys.Enter))))
+					{
+						settingButton = prevWeaponAltButton;
+						cont = Control_Types.PrevWeapon;
+						alt = true;
+						ControlManager.Instance.Setting = true;
+					}
+					//INTERACT
+					else if (interactButton.Selected &&
+						((mState.LeftButton == ButtonState.Pressed && prevMState.LeftButton == ButtonState.Released)
+						|| (kbState.IsKeyDown(Keys.Enter) && prevKbState.IsKeyUp(Keys.Enter))))
+					{
+						settingButton = interactButton;
+						cont = Control_Types.Interact;
+						alt = false;
+						ControlManager.Instance.Setting = true;
+					}
+					else if (interactAltButton.Selected &&
+						((mState.LeftButton == ButtonState.Pressed && prevMState.LeftButton == ButtonState.Released)
+						|| (kbState.IsKeyDown(Keys.Enter) && prevKbState.IsKeyUp(Keys.Enter))))
+					{
+						settingButton = interactAltButton;
+						cont = Control_Types.Interact;
 						alt = true;
 						ControlManager.Instance.Setting = true;
 					}
@@ -425,8 +568,71 @@ namespace GDAPSIIGame
 				);
 
 			//Draw control buttons
-			fireButton.Draw(spriteBatch);
-			fireAltButton.Draw(spriteBatch);
+			foreach (Button b in optionsMenuButtons)
+			{
+				if (b != optionsBackButton)
+				{
+					b.Draw(spriteBatch);
+				}
+			}
+
+			//Draw labels
+			spriteBatch.DrawString(
+				spriteFont: font,
+				text: "Fire:",
+				position: firePos,
+				color: Color.Black,
+				rotation: 0f,
+				origin: Vector2.Zero,
+				scale: 0.5f,
+				effects: SpriteEffects.None,
+				layerDepth: 0
+				);
+			spriteBatch.DrawString(
+				spriteFont: font,
+				text: "Reload:",
+				position: reloadPos,
+				color: Color.Black,
+				rotation: 0f,
+				origin: Vector2.Zero,
+				scale: 0.5f,
+				effects: SpriteEffects.None,
+				layerDepth: 0
+				);
+			spriteBatch.DrawString(
+				spriteFont: font,
+				text: "Next Weapon:",
+				position: nextWeaponPos,
+				color: Color.Black,
+				rotation: 0f,
+				origin: Vector2.Zero,
+				scale: 0.5f,
+				effects: SpriteEffects.None,
+				layerDepth: 0
+				);
+			spriteBatch.DrawString(
+				spriteFont: font,
+				text: "Previous Weapon:",
+				position: prevWeaponPos,
+				color: Color.Black,
+				rotation: 0f,
+				origin: Vector2.Zero,
+				scale: 0.5f,
+				effects: SpriteEffects.None,
+				layerDepth: 0
+				);
+			spriteBatch.DrawString(
+				spriteFont: font,
+				text: "Interact/Pause:",
+				position: interactPos,
+				color: Color.Black,
+				rotation: 0f,
+				origin: Vector2.Zero,
+				scale: 0.5f,
+				effects: SpriteEffects.None,
+				layerDepth: 0
+				);
+
 
 			//Draw covering backgrounds
 			spriteBatch.Draw(
@@ -466,33 +672,28 @@ namespace GDAPSIIGame
 		/// </summary>
 		public void UpdatePauseMenu(GameTime gameTime)
 		{
+			UpdateInput();
+
 			if (ControlManager.Instance.Mode == Control_Mode.KBM)
 			{
-				//Update states
-				prevKbState = kbState;
-				kbState = Keyboard.GetState();
-				prevMState = mState;
-				mState = Mouse.GetState();
-
 				//Check if the button is selected
 				foreach (Button b in pauseMenuButtons)
 				{
 					if (b.Contains(mState.Position.ToVector2()))
-						if (b.Contains(mState.Position.ToVector2()))
-						{
-							b.PrevSelected = b.Selected;
-							b.Selected = true;
+					{
+						b.PrevSelected = b.Selected;
+						b.Selected = true;
 
-							if (!b.PrevSelected)
-							{
-								AudioManager.Instance.GetSoundEffect("Blip").Play();
-							}
-						}
-						else
+						if (!b.PrevSelected)
 						{
-							b.PrevSelected = b.Selected;
-							b.Selected = false;
+							AudioManager.Instance.GetSoundEffect("Blip").Play();
 						}
+					}
+					else
+					{
+						b.PrevSelected = b.Selected;
+						b.Selected = false;
+					}
 				}
 				
 				//Check if button is clicked
@@ -502,6 +703,7 @@ namespace GDAPSIIGame
 				{
 					if (!ControlManager.Instance.Setting)
 					{
+						pauseMainMenuButton.Selected = false;
 						mainMenuChange = true;
 					}
 				}
