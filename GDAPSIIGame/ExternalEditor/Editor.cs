@@ -394,6 +394,11 @@ namespace ExternalEditor
 
 		public void InitializeGrid(int width, int height)
         {
+			for(int i = tileButtons.Count -1; i >= 0; i--)
+			{
+				Controls.Remove(tileButtons[i]);
+			}
+			tileButtons.Clear();
             int gridX = 195;
             int gridY = 17;
             for(int i = 0; i < width * tileSize; i += tileSize)
@@ -435,9 +440,11 @@ namespace ExternalEditor
             this.Width = (this.Width + (tileSize * read[0].Length) + 12);
             int gridX = 195;
             int gridY = 17;
-            for (int i = 0; i < read.Length; i++)
+			int tilesY = 0;
+			int tilesX = 0;
+            for (int j = 0; j < read.Length; j++)
             {
-                for(int j = 0; j < read[0].Length; j++)
+                for(int i = 0; i < read[0].Length; i++)
                 {
                     Button b = new Button();
                     b.Text = "";
@@ -481,10 +488,13 @@ namespace ExternalEditor
                     if (loadingBar.Value < loadingBar.Maximum)
                         loadingBar.Value++;
                     gridX += tileSize;
+					tilesY = i+1;
                 }
                 gridX = 195;
                 gridY += tileSize;
+				tilesX = j+1;
             }
+			tiles = new int[tilesX, tilesY];
         }
 
         /// <summary>
@@ -536,7 +546,7 @@ namespace ExternalEditor
                     {
                         sw.Write(tiles[j,i]);
                     }
-                    sw.Write("\n");
+                    sw.Write("\r\n");
                 }
                 System.Windows.Forms.MessageBox.Show("New Collision map saved as " + currentLevelNameTextbox.Text + ".cmap.",
                                  "Success!",
