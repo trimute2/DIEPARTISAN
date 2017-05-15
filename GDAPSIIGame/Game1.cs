@@ -153,6 +153,7 @@ namespace GDAPSIIGame
 					kbState = Keyboard.GetState();
 					previousGpState = gpState;
 					gpState = GamePad.GetState(PlayerIndex.One, GamePadDeadZone.Circular);
+					menuManager.UpdateInput();
 
 					//Start multithreading the load
 					if (startLoad)
