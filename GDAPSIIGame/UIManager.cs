@@ -399,6 +399,21 @@ namespace GDAPSIIGame
                 color: Color.White
                 );
 
+            //score
+            spriteBatch.DrawString(
+                spriteFont: font,
+                text: PodManager.Instance.GlobalScore + "",
+                position: new Vector2(1060, 600),
+                color: Color.White
+                );
+
+            spriteBatch.DrawString(
+                spriteFont: font,
+                text: "x" + Player.Instance.ScoreMultiplier,
+                position: new Vector2(1060, 540),
+                color: Color.White
+                );
+
             if (Player.Instance.CurrWeapon.Reload)
             {
                 spriteBatch.Draw(
