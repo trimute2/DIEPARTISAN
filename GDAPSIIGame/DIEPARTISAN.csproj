@@ -108,19 +108,45 @@
   <ItemGroup />
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="Levels\EnemyFilledRuins1.cmap" />
-    <None Include="Levels\EnemyFilledRuins2.cmap" />
-    <None Include="Levels\Star.cmap" />
-    <None Include="Levels\Symetrical.cmap" />
-    <None Include="Levels\2walls1melee.cmap" />
-    <None Include="Levels\cross1.cmap" />
-    <None Include="Levels\fourTurrets.cmap" />
-    <None Include="Levels\meleeandturret.cmap" />
-    <None Include="Levels\meleeAndTurretRoom1.cmap" />
-    <None Include="Levels\meleeRoom1.cmap" />
-    <None Include="Levels\playerSpawn.cmap" />
-    <None Include="Levels\SINtestine.cmap" />
-    <None Include="Levels\spiral1.cmap" />
+    <None Include="Levels\EnemyFilledRuins1.cmap">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Levels\EnemyFilledRuins2.cmap">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Levels\Star.cmap">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Levels\Symetrical.cmap">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Levels\2walls1melee.cmap">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Levels\cross1.cmap">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Levels\fourTurrets.cmap">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Levels\meleeandturret.cmap">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Levels\meleeAndTurretRoom1.cmap">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Levels\meleeRoom1.cmap">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Levels\playerSpawn.cmap">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Levels\SINtestine.cmap">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Levels\spiral1.cmap">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

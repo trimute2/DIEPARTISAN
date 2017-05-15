@@ -17,7 +17,7 @@ namespace GDAPSIIGame.Map
         public Map(int mapSize)
         {
 			//TODO: randomize choice of rooms
-			String[] files = Directory.GetFiles("../../../../Levels/", "*.cmap");
+			String[] files = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory + "Levels\\", "*.cmap");
             generateMap(files, this, mapSize);
 			state = MapState.Enter;
 			UIManager.Instance.Fade = true;
@@ -68,7 +68,8 @@ namespace GDAPSIIGame.Map
 					{
 						filename = "playerSpawn.cmap";
 
-						String[] lines = File.ReadAllLines("../../../../Levels/" + filename);
+						String[] lines = File.ReadAllLines("Levels\\" + filename);
+						
 						TileType[,] tiles = new TileType[10, 10];
 
 						for (int k = 0; k < lines.Length; k++)
@@ -97,7 +98,7 @@ namespace GDAPSIIGame.Map
 								break;
 							}
 						}
-						String[] lines = File.ReadAllLines("../Levels/" + filename);
+						String[] lines = File.ReadAllLines(filename);
 						TileType[,] tiles = new TileType[10, 10];
 
 						for (int k = 0; k < lines.Length; k++)

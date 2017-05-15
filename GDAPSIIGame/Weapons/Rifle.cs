@@ -217,7 +217,7 @@ namespace GDAPSIIGame.Weapons
 
 					//Create the bullet at the actual position of the bullet + the rotated position
 					ProjectileManager.Instance.Clone(ProjType, Position + bulletPosition, direction, Angle + ((float)Math.PI / 2), owner, WeapRange);
-                    AudioManager.Instance.GetSoundEffect("RifleShoot").Play();
+                    AudioManager.Instance.GetSoundEffect("RifleShoot").Play(0.4f, 0, 0);
                     return true;
 				}
 			}
