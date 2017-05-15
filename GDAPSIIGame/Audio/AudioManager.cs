@@ -40,7 +40,11 @@ namespace GDAPSIIGame.Audio
 			soundEffects.Add("Blip", Content.Load<SoundEffect>("SoundEffects\\blip"));
 			soundEffects.Add("Hurt", Content.Load<SoundEffect>("SoundEffects\\hurt"));
 			soundEffects.Add("DamageSound", Content.Load<SoundEffect>("SoundEffects\\damagesound"));
-		}
+
+            soundEffects.Add("PistolShoot", Content.Load<SoundEffect>("SoundEffects\\PistolShoot"));
+            soundEffects.Add("ShotgunShoot", Content.Load<SoundEffect>("SoundEffects\\ShotgunShoot"));
+            soundEffects.Add("RifleShoot", Content.Load<SoundEffect>("SoundEffects\\RifleShoot"));
+        }
 
 		public SoundEffect GetSoundEffect(String name)
 		{

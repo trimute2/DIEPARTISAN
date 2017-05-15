@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using GDAPSIIGame.Map;
 using Microsoft.Xna.Framework.Input;
+using GDAPSIIGame.Audio;
 
 namespace GDAPSIIGame.Weapons
 {
@@ -198,9 +199,9 @@ namespace GDAPSIIGame.Weapons
 							break;
 					}
 					Vector2 bulletPosition = Vector2.Transform(bulletOffset, rotationMatrix);
-
 					ProjectileManager.Instance.Clone(ProjType, Position + bulletPosition, direction, Angle + ((float)Math.PI / 2), owner, WeapRange);
-					return true;
+                    AudioManager.Instance.GetSoundEffect("PistolShoot").Play();
+                    return true;
 				}
 			}
 			return false;

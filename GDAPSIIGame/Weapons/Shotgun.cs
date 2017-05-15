@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Content;
 using GDAPSIIGame.Map;
 using Microsoft.Xna.Framework.Input;
 using System;
+using GDAPSIIGame.Audio;
 
 namespace GDAPSIIGame.Weapons
 {
@@ -216,7 +217,8 @@ namespace GDAPSIIGame.Weapons
 					ProjectileManager.Instance.Clone(ProjType, Position + bulletPosition, direction1, Angle + ((float)Math.PI / 2), owner, WeapRange);
 					ProjectileManager.Instance.Clone(ProjType, Position + bulletPosition, direction2, Angle + ((float)Math.PI / 2), owner, WeapRange);
 					ProjectileManager.Instance.Clone(ProjType, Position + bulletPosition, direction3, Angle + ((float)Math.PI / 2), owner, WeapRange);
-					return true;
+                    AudioManager.Instance.GetSoundEffect("ShotgunShoot").Play();
+                    return true;
 				}
 			}
 			return false;

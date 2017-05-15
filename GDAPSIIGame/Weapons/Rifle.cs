@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
 using GDAPSIIGame.Map;
 using Microsoft.Xna.Framework.Input;
+using GDAPSIIGame.Audio;
 
 namespace GDAPSIIGame.Weapons
 {
@@ -216,7 +217,8 @@ namespace GDAPSIIGame.Weapons
 
 					//Create the bullet at the actual position of the bullet + the rotated position
 					ProjectileManager.Instance.Clone(ProjType, Position + bulletPosition, direction, Angle + ((float)Math.PI / 2), owner, WeapRange);
-					return true;
+                    AudioManager.Instance.GetSoundEffect("RifleShoot").Play();
+                    return true;
 				}
 			}
 			return false;

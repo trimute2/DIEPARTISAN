@@ -451,3 +451,21 @@
 /processorParam:TextureFormat=Color
 /build:black2.png
 
+#begin SoundEffects/PistolShoot.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SoundEffects/PistolShoot.wav
+
+#begin SoundEffects/RifleShoot.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SoundEffects/RifleShoot.wav
+
+#begin SoundEffects/ShotgunShoot.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SoundEffects/ShotgunShoot.wav
+
