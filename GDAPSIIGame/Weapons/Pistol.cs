@@ -25,7 +25,7 @@ namespace GDAPSIIGame.Weapons
 		private Vector2 bulletOffset;
 		private Owners owner;
 		private SpriteEffects effects;
-
+		
 		public Pistol(ProjectileType pT, Texture2D texture, Vector2 position, Rectangle boundingBox, float fireRate, int clipSize, float reloadSpeed, Vector2 origin, Owners owner, Range range)
 			: base(pT, texture, position, boundingBox, range)
 		{
