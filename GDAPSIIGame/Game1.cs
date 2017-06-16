@@ -9,6 +9,7 @@ using System.Threading;
 using GDAPSIIGame.Weapons;
 using GDAPSIIGame.Audio;
 using Microsoft.Xna.Framework.Content;
+using MonoGame.Extended.ViewportAdapters;
 
 namespace GDAPSIIGame
 {
@@ -42,7 +43,9 @@ namespace GDAPSIIGame
 		TextureManager textureManager;
 		ControlManager controlManager;
 		MenuManager menuManager;
-        int mapSize;
+		ResolutionManager resolutionManager;
+
+		int mapSize;
 		Thread l;
 		bool startLoad;
 		bool loadingDone;
@@ -55,8 +58,10 @@ namespace GDAPSIIGame
 			// Resize the screen to 1152 x 648.
 			graphics.PreferredBackBufferWidth = 1152;
 			graphics.PreferredBackBufferHeight = 648;
+			//graphics.PreferredBackBufferWidth = 1920;
+			//graphics.PreferredBackBufferHeight = 1080;
 
-			graphics.ApplyChanges();
+			//graphics.ApplyChanges();
 		}
 
         protected override void Initialize()
@@ -68,8 +73,11 @@ namespace GDAPSIIGame
 			//graphics.PreferredBackBufferHeight = GraphicsDevice.DisplayMode.Height;
 			//graphics.ApplyChanges();
 
-            //this.graphics.IsFullScreen = true;
+			//this.graphics.IsFullScreen = true;
 			//graphics.ToggleFullScreen();
+
+			//Initialize resolution manager
+			resolutionManager = ResolutionManager.Instance;
 
 			//Initialize texture manager
 			textureManager = TextureManager.Instance;
@@ -367,7 +375,7 @@ namespace GDAPSIIGame
 			GraphicsDevice.Clear(Color.Black);
 
 			//Begin SpriteBatch
-			spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, null, null);
+			spriteBatch.Begin(sortMode: SpriteSortMode.Immediate, blendState: BlendState.AlphaBlend, samplerState: SamplerState.PointClamp);
 
 			switch (gameState)
 			{
